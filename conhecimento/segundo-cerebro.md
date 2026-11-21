@@ -35,7 +35,7 @@ Feitas no ramo `cerebro-pecas` e entregues à conversa "Servidor, voz e banco" p
 | **De onde veio cada lembrança** | Cada lembrança diz se a pessoa contou, se a família ensinou ou se a Dona Leda deduziu da conversa depois do fim (`lib/posConversa.ts`). A dedução vai pra instrução com "ninguém confirmou: pergunte antes de dar como certo", e o painel mostra numa parte própria com Está certo, Corrigir e Apagar. Vira fato quando a pessoa diz de novo ou confirma por voz, ou quando a família confirma. O que o pós-conversa gravou antes disto segue marcado como contado | `testes/origemDaLembranca.test.ts` |
 | **Aviso de privacidade fixo** | A saudação da primeira ligação, que a Agora fala como está escrita, diz: "Eu guardo o que a senhora me contar pra lembrar nas próximas conversas, a Marina recebe um resumo de como a senhora está, e é só pedir que eu esqueço o que a senhora quiser." Quando a conversa termina com o idoso tendo falado, a ficha grava a data e a versão do texto (`lib/privacidade.ts`), e o painel mostra quando o aviso foi dado. A linha que repetia isso na instrução sai de `lib/persona.ts` pela conversa de segurança | `testes/privacidade.test.ts` |
 
-As 282 provas do projeto passam no ramo. As telas novas (o fim dos minutos na tela do idoso e as duas partes novas do painel) não foram conferidas na tela por esta conversa; ficam pro teste da publicação.
+As 282 provas do projeto passam no ramo. As telas novas foram conferidas no Mac às 19h de 21/11, com o mesmo código que sobe, e ficam na galeria sem login: `/telas/ver/minutos-de-hoje-acabaram` (tela do idoso) e `/telas/ver/painel-memoria-e-minutos` (painel com os minutos acabados, uma dedução e a data do aviso de privacidade).
 
 ### O ciclo inteiro, 21/11 às 16h
 
