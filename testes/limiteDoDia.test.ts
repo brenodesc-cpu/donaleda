@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { avancarChamadas, chamadaTocando, pedirChamadaDaFamilia, situacaoDaChamada } from '@/lib/chamadas';
 import { montarPainel } from '@/lib/dados';
@@ -113,5 +115,23 @@ describe('limite de 10 minutos de conversa por dia', () => {
     const base = idosaCom([]);
     base.conversas.push({ id: 'ex-hoje', inicio: as('12:00').toISOString(), fim: as('12:11').toISOString(), falasDoIdoso: 9 });
     expect(limiteDoDia(base, as('14:00')).acabou).toBe(false);
+  });
+
+  it('toda rota que abre conversa confere o limite do dia antes', () => {
+    // Trava contra a volta: o modo direto nasceu abrindo conversa sem a conferência.
+    const rotas: string[] = [];
+    const andar = (pasta: string) => {
+      for (const nome of readdirSync(pasta)) {
+        const caminho = join(pasta, nome);
+        if (statSync(caminho).isDirectory()) andar(caminho);
+        else if (nome === 'route.ts') rotas.push(caminho);
+      }
+    };
+    andar(join(__dirname, '..', 'app', 'api'));
+    const abrem = rotas.filter((r) => readFileSync(r, 'utf8').includes('abrirConversa('));
+    expect(abrem.length).toBeGreaterThanOrEqual(2);
+    for (const rota of abrem) {
+      expect(readFileSync(rota, 'utf8'), rota).toContain('podeComecarConversa(');
+    }
   });
 });

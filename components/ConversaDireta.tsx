@@ -219,6 +219,7 @@ export default function ConversaDireta({
     falando,
     microfoneNaSala as IMicrophoneAudioTrack | null,
     onEncerrar,
+    dados.tetoMs,
   );
 
   const legenda = useMemo(
