@@ -178,19 +178,21 @@ Roteiro curto pro recurso em que a família entra na ligação quando a idosa pr
 
 **As cinco situações**
 
-1. **Queda.** A idosa diz: "Eu caí no banheiro e não consigo levantar." A Dona Leda tem que dizer com calma que avisou a família e que fica com ela na linha. **Meça** da fala até ela dizer que avisou.
-2. **O aviso no painel.** No computador aparece o aviso da queda com o botão verde "Entrar na ligação agora" (nome da primeira versão; conferir com a conversa do servidor quando o ramo for ao ar). **Meça** da fala da idosa até o aviso aparecer.
-3. **A família entra.** Toque em "Entrar na ligação agora". A Dona Leda tem que dizer que a Marina entrou e sair da conversa, sem falar mais. A idosa e a família se ouvem, e no celular 1 aparece a imagem da família. A câmera da idosa fica desligada: no computador não pode aparecer a imagem dela. **Meça** do toque no botão até a família ouvir a idosa. Depois repita numa ligação nova, entrando pelo celular 2.
-4. **"Chama a minha filha."** Numa ligação nova, a idosa diz: "Chama a minha filha." A Dona Leda tem que dizer que vai chamar a Marina, e o pedido aparece no painel. **Meça** da fala até o pedido aparecer.
-5. **Ninguém entra.** Numa ligação nova, a idosa repete a queda e ninguém toca no painel. Por volta dos 90 segundos, a Dona Leda tem que orientar a ligar pro 192 ou chamar um vizinho. Ela não pode dizer que a família ou a ambulância estão a caminho, porque ninguém está. **Meça** em que segundo ela falou do 192.
+1. **Queda.** A idosa diz: "Eu caí no banheiro e não consigo levantar." A Dona Leda tem que dizer, com estas palavras: "Dona Helena, eu avisei a Marina. Se ela puder agora, ela entra aqui na ligação com a gente. Enquanto isso, eu fico com a senhora." **Meça** da fala até ela dizer que avisou.
+2. **O aviso no painel.** No computador aparece o cartão do aviso urgente com o botão verde "Entrar na ligação agora". **Meça** da fala da idosa até o cartão aparecer.
+3. **A família entra.** Toque em "Entrar na ligação agora". Abre a página da ligação: toque em "Entrar na ligação". A Dona Leda tem que dizer "Dona Helena, a Marina entrou na ligação. Vou deixar vocês conversarem." e sair da conversa uns 10 segundos depois, sem falar mais. O celular 1 mostra "A Marina está na ligação" e a imagem da família. A idosa e a família se ouvem. A câmera da idosa fica desligada, e no computador não pode aparecer a imagem dela. Dentro da sala, confira os botões "Silenciar", "Desligar câmera" e "Sair da ligação". **Meça** do primeiro toque até a família ouvir a idosa. Depois repita numa ligação nova, entrando pelo celular 2.
+4. **"Chama a minha filha."** Numa ligação nova, a idosa diz: "Chama a minha filha." No topo do painel aparece o cartão "Dona Helena pediu pra falar com você agora", com o botão "Entrar na ligação". **Meça** da fala até o cartão aparecer.
+5. **Ninguém entra.** Numa ligação nova, a idosa repete a queda e ninguém toca no painel. Aos 90 segundos, a Dona Leda tem que dizer: "A Marina não conseguiu entrar agora. O aviso ficou com ela, e ela vê assim que pegar o celular. Se a senhora precisar de ajuda agora, liga pro um nove dois." Ela não pode dizer que a família ou a ambulância estão a caminho, porque ninguém está. **Meça** em que segundo ela falou do 192.
+
+As frases entre aspas são fixas: anote se ela falou igual, parecido ou outra coisa.
 
 | # | Situação | Funcionou? (sim, meio, não) | Tempo (s) | O que falhou |
 |---:|---|---|---|---|
-| 1 | Queda: avisou e ficou | | até dizer que avisou: | |
-| 2 | Aviso com o botão no painel | | até o aviso: | |
-| 3 | Família entra (computador) | | até se ouvirem: | câmera da idosa apareceu? |
+| 1 | Queda: avisou e ficou | | até dizer que avisou: | frase igual? |
+| 2 | Cartão do aviso no painel | | até o cartão: | |
+| 3 | Família entra (computador) | | até se ouvirem: | câmera da idosa apareceu? ela saiu em 10 s? |
 | 3 | Família entra (celular 2) | | até se ouvirem: | |
-| 4 | "Chama a minha filha" | | até o pedido: | |
+| 4 | "Chama a minha filha" | | até o cartão: | |
 | 5 | Ninguém entra em 90 s | | falou do 192 no segundo: | disse que alguém vinha? |
 
 Anote também o modo da voz em uso (o padrão do site, salvo se a dupla abrir outro). A tabela vai pro Breno, e as falhas entram na lista abaixo.
