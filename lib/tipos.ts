@@ -41,6 +41,8 @@ export interface Dia {
   atualizadoEm?: string;
 }
 
+export type OrigemDaLembranca = 'conversa' | 'familia' | 'deduzida';
+
 /** Algo que a Dona Leda aprendeu sobre a pessoa e usa nas próximas conversas. */
 export interface Lembranca {
   id: string;
@@ -55,8 +57,13 @@ export interface Lembranca {
   hora?: string;
   /** O idoso pediu pra não contar à família. A família vê só quantas são. */
   reservada?: boolean;
-  /** Quem contou: o idoso na conversa ou a família no painel. */
-  origem?: 'conversa' | 'familia';
+  /**
+   * Quem contou: o idoso na conversa, a família no painel, ou a Dona Leda deduziu da
+   * conversa depois que ela acabou (lib/posConversa.ts), sem ninguém confirmar.
+   * Dedução nunca é tratada como fato: a assistente confirma antes, e o painel mostra
+   * separado até alguém da família tocar em "Está certo" ou corrigir.
+   */
+  origem?: OrigemDaLembranca;
   criadaEm: string;
   atualizadaEm?: string;
   exemplo?: boolean;

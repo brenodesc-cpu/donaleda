@@ -43,15 +43,18 @@ export function Lembrancas({
   const corrigir = onCorrigir ?? (async () => NADA_FEITO);
   const apagar = onApagar ?? (async () => NADA_FEITO);
 
-  const agenda = compromissosComData(lembrancas);
+  // O que a Dona Leda só deduziu da conversa fica separado até alguém confirmar.
+  const deduzidas = lembrancas.filter((l) => l.origem === 'deduzida');
+  const contadas = lembrancas.filter((l) => l.origem !== 'deduzida');
+  const agenda = compromissosComData(contadas);
   const naAgenda = new Set(agenda.map((l) => l.id));
   const grupos = ORDEM_DAS_CATEGORIAS.map((categoria) => ({
     categoria,
-    itens: lembrancas.filter((l) => gavetaDe(l.categoria) === categoria && !naAgenda.has(l.id)),
+    itens: contadas.filter((l) => gavetaDe(l.categoria) === categoria && !naAgenda.has(l.id)),
   })).filter((grupo) => grupo.itens.length > 0);
 
   const temExemplo = lembrancas.some((l) => l.exemplo);
-  const vazio = agenda.length === 0 && grupos.length === 0;
+  const vazio = agenda.length === 0 && grupos.length === 0 && deduzidas.length === 0;
   const item = (lembranca: Lembranca) => (
     <ItemDaLembranca
       key={lembranca.id}
@@ -120,6 +123,19 @@ export function Lembrancas({
           <ul className="flex flex-col gap-3">{itens.map(item)}</ul>
         </div>
       ))}
+
+      {deduzidas.length > 0 ? (
+        <div className="flex flex-col gap-2 border-t border-border pt-4">
+          <h3 className="font-titulo text-lg font-semibold text-foreground">
+            O que a {assistente} entendeu das conversas
+          </h3>
+          <p className="text-base text-muted-foreground">
+            Ninguém confirmou ainda, e ela não trata isso como certo. Se estiver certo, toque em Está
+            certo. Se não, corrija ou apague.
+          </p>
+          <ul className="flex flex-col gap-3">{deduzidas.map(item)}</ul>
+        </div>
+      ) : null}
 
       {reservadas > 0 ? (
         <p className="flex items-start gap-3 text-base text-muted-foreground">

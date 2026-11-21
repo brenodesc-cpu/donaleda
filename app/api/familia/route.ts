@@ -183,6 +183,8 @@ export async function POST(request: Request) {
             sobre: typeof acao.sobre === 'string' ? acao.sobre : undefined,
             data: typeof acao.data === 'string' ? (dataPedida(acao.data) ?? '') : undefined,
             hora: typeof acao.hora === 'string' ? (horaPedida(acao.hora) ?? '') : undefined,
+            // A família corrigiu ou tocou em "Está certo": o que era dedução vira fato.
+            por: 'familia',
           });
     });
     if (!r.ok) return NextResponse.json({ ok: false, erro: r.motivo.startsWith('não achei') ? 'nao_achada' : 'recusada', motivo: r.motivo }, { status: r.motivo.startsWith('não achei') ? 404 : 422 });
