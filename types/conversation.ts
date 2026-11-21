@@ -1,5 +1,5 @@
 import type { RTMClient } from 'agora-rtm';
-import type { FalaDaSessao } from '@/lib/tipos';
+import type { FalaDaSessao, InicioDireto } from '@/lib/tipos';
 
 // Contratos do projeto-base da Agora, usados pelas rotas de token, início e fim.
 export interface AgoraTokenData {
@@ -45,8 +45,10 @@ export interface DadosDaLigacao {
   conversaId: string;
   /** true quando um avatar em vídeo entra na ligação junto com a voz. */
   avatar: boolean;
-  /** Qual jeito de voz o servidor ligou: Gemini Live ou as três peças. */
-  modo?: 'gemini' | 'tres';
+  /** Qual jeito de voz o servidor ligou: Gemini Live, as três peças ou o modo direto. */
+  modo?: 'gemini' | 'tres' | 'direto';
+  /** Só no modo direto: o passe e a abertura da conversa com o Gemini. */
+  direto?: InicioDireto;
 }
 
 export interface PropsDaConversa {

@@ -2,7 +2,7 @@
 // ligação: microfone, token da Agora, entrada da assistente e canal de mensagens.
 
 import type { RTMClient } from 'agora-rtm';
-import { fetchDoAparelho } from '@/lib/aparelho';
+import { fetchDoAparelho, modoPedido } from '@/lib/aparelho';
 import { avisarServidor } from '@/lib/avisarServidor';
 import type { FalaDaSessao, InicioDaConversa } from '@/lib/tipos';
 import type {
@@ -44,7 +44,10 @@ export async function chamarAssistente(
     // Só vai quando foi a assistente que ligou e o idoso atendeu.
     ...(chamadaId ? { chamada_id: chamadaId } : {}),
   };
-  const resposta = await fetchDoAparelho('/api/invite-agent', {
+  // No modo direto ninguém chama o motor de conversa da Agora: o servidor abre a
+  // conversa na ficha e entrega o passe do Gemini (app/api/direto/route.ts).
+  const rota = modoPedido() === 'direto' ? '/api/direto' : '/api/invite-agent';
+  const resposta = await fetchDoAparelho(rota, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(pedido),
@@ -88,5 +91,6 @@ export async function fecharNoServidor(
     conversaId,
     ...(falas && falas.length > 0 ? { falas } : {}),
   });
-  await pararAssistente(agentId);
+  // No modo direto não tem assistente da Agora na sala pra mandar embora.
+  if (agentId) await pararAssistente(agentId);
 }

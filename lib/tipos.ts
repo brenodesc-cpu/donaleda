@@ -95,6 +95,35 @@ export interface Conversa {
   resumo?: string;
   /** Vem da tela do idoso no fim da ligação, quando a Agora mandou medições. */
   tempos?: TemposDaConversa;
+  /** Só no modo direto: os tokens que o Google cobrou e o custo da ligação. */
+  uso?: UsoDaConversa;
+}
+
+/** Os tokens que o Gemini cobrou numa ligação do modo direto, somados resposta por resposta. */
+export interface UsoDoGemini {
+  /** Entrada que não é áudio: as instruções, as ações e a conversa até ali. */
+  entradaTexto: number;
+  /** A fala do idoso. */
+  entradaAudio: number;
+  /** A legenda e o que mais sair como texto. */
+  saidaTexto: number;
+  /** A voz da assistente, a parte mais cara. */
+  saidaAudio: number;
+  /** O que o modelo gastou pensando. O Google cobra como texto que sai. */
+  raciocinio: number;
+  /** Quantas respostas entraram na soma. */
+  respostas: number;
+}
+
+/** A conta de uma ligação do modo direto, guardada junto da conversa. */
+export interface UsoDaConversa extends UsoDoGemini {
+  /** Quanto tempo a conversa com o Gemini ficou aberta. */
+  segundos: number;
+  /** Custo no Google, em dólares, pelo preço publicado. */
+  dolares: number;
+  /** Dólares por minuto de ligação, ou null se ela não chegou a 1 segundo. */
+  dolaresPorMinuto: number | null;
+  modelo: string;
 }
 
 export interface Idoso {
@@ -263,8 +292,43 @@ export interface InicioDaConversa {
   ferramentas: boolean;
   /** true quando um avatar em vídeo entra na ligação junto com a voz. */
   avatar: boolean;
-  /** Como a conversa rodou: Gemini Live (um modelo só) ou as três peças. */
-  modo?: 'gemini' | 'tres';
+  /**
+   * Como a conversa rodou: Gemini Live pelo motor da Agora, as três peças, ou o
+   * modo direto, em que o aparelho fala com o Gemini e a Agora fica só com a sala.
+   */
+  modo?: 'gemini' | 'tres' | 'direto';
+  /** Só no modo direto: o que o aparelho precisa pra abrir a conversa com o Gemini. */
+  direto?: InicioDireto;
+}
+
+/** POST /api/direto devolve isto dentro de InicioDaConversa. */
+export interface InicioDireto {
+  /** Passe temporário do Google: abre uma conversa só e vence em minutos. */
+  passe: string;
+  /** A primeira mensagem da conversa: modelo, voz, instruções e ações. */
+  abertura: Record<string, unknown>;
+  /** A frase que a assistente diz ao atender. */
+  saudacao: string;
+  modelo: string;
+}
+
+/** POST /api/direto/acao: o Gemini pediu uma ação e o aparelho repassa. */
+export interface PedidoDeAcao {
+  nome: string;
+  argumentos?: unknown;
+}
+
+export interface RespostaDaAcao {
+  ok: boolean;
+  /** A frase curta que volta pro modelo. */
+  texto: string;
+}
+
+/** POST /api/direto/uso: a conta de tokens da ligação, mandada uma vez no fim. */
+export interface PedidoDeUso {
+  conversaId: string;
+  uso: UsoDoGemini;
+  segundos: number;
 }
 
 // ---------- Contas, idosos e aparelhos (21/11, contrato entre servidor, painel e app) ----------

@@ -102,6 +102,7 @@ export function useLigacao() {
         conversaId: inicio.value.conversa_id,
         avatar: Boolean(inicio.value.avatar),
         modo: inicio.value.modo,
+        direto: inicio.value.direto,
       });
       setFase('conversando');
     } catch (erro) {

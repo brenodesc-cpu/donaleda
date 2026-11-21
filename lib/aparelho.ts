@@ -100,14 +100,16 @@ export async function esquecerAparelho(): Promise<void> {
  * tela volta pra escolha entre família e idoso.
  */
 /**
- * Modo da conversa pedido pelo endereço (?modo=gemini ou ?modo=tres), guardado no
- * aparelho. Serve pra comparar os dois modos; sem pedido, o servidor escolhe.
+ * Modo da conversa pedido pelo endereço (?modo=gemini, ?modo=tres ou ?modo=direto),
+ * guardado no aparelho. Serve pra comparar os modos; sem pedido, o servidor escolhe.
+ * O direto só existe por este pedido: nele o aparelho fala com o Gemini sem o motor
+ * de conversa da Agora (ver lib/direto.ts). ?modo=auto volta ao padrão.
  */
-function modoPedido(): string | null {
+export function modoPedido(): string | null {
   if (typeof window === 'undefined') return null;
   try {
     const doEndereco = new URLSearchParams(window.location.search).get('modo');
-    if (doEndereco === 'gemini' || doEndereco === 'tres') {
+    if (doEndereco === 'gemini' || doEndereco === 'tres' || doEndereco === 'direto') {
       window.localStorage.setItem('donaleda-modo', doEndereco);
       return doEndereco;
     }

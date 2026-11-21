@@ -19,6 +19,8 @@ import {
 
 // A ligação da Agora só existe no navegador.
 const Conversa = dynamic(() => import('./Conversa'), { ssr: false });
+// A ligação do modo direto (?modo=direto), em que o aparelho fala com o Gemini.
+const ConversaDireta = dynamic(() => import('./ConversaDireta'), { ssr: false });
 const ProvedorDaAgora = dynamic(() => import('./ProvedorDaAgora'), {
   ssr: false,
 });
@@ -73,12 +75,13 @@ export default function TelaDoIdoso() {
 
   let conteudo: ReactNode;
   if (emLigacao) {
+    const Ligacao = dados.modo === 'direto' && dados.direto ? ConversaDireta : Conversa;
     conteudo = (
       <ErrorBoundary
         fallback={<AvisoDeFalha motivo="conexao" onTentar={recarregar} />}
       >
         <ProvedorDaAgora>
-          <Conversa
+          <Ligacao
             dados={dados}
             rtmClient={rtm}
             onRenovarTokens={ligacao.renovarTokens}
