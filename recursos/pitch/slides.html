@@ -9,97 +9,109 @@
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Gabarito:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --cafe:#33200F; --casca:#FFF8E8; --canela:#6A4628; --gema:#F7B90F;
-  --verde:#1B7A3D; --manteiga:#FDEBB5; --manteiga-txt:#7A4E00; --papel:#FFFDF7; --linha:#D9C9A8;
-  --furo:#FFF8E8; --cor-fio:#33200F;
+  --cafe:#33200F; --casca:#FFF8E8; --gema:#F7B90F; --verde:#1B7A3D; --manteiga:#FDEBB5;
+  --apoio:rgba(255,248,232,.78); --legenda:rgba(255,248,232,.55); --linha:rgba(255,248,232,.22); --cartao:#46301B;
+  --furo:#33200F;
 }
 *{box-sizing:border-box;margin:0}
-html,body{height:100%;background:#E6DCC6;color:var(--cafe);font-family:"Atkinson Hyperlegible Next",system-ui,sans-serif}
+html,body{height:100%;background:#1E1309;color:var(--casca);font-family:"Atkinson Hyperlegible Next",system-ui,sans-serif}
 body{display:flex;align-items:center;justify-content:center;overflow:hidden}
-.palco{position:relative;width:min(100vw,177.78vh);height:min(56.25vw,100vh);container-type:inline-size;background:var(--casca);overflow:hidden}
+.palco{position:relative;width:min(100vw,177.78vh);height:min(56.25vw,100vh);container-type:inline-size;background:var(--cafe);overflow:hidden}
 .s{position:absolute;inset:0;display:none}
 .s.ativo{display:block}
-.ttl{font-family:Gabarito,system-ui,sans-serif;font-weight:900;letter-spacing:-.015em;line-height:1.05}
-.t{position:absolute;left:6cqw;top:5.5cqw;font-size:5.6cqw;max-width:76cqw}
-.marca{position:absolute;right:5cqw;top:4.6cqw;width:5.4cqw;height:auto;aspect-ratio:1}
-.fio{position:absolute;left:6cqw;width:88cqw;bottom:1.8cqw;height:auto;aspect-ratio:600/24}
-.num{position:absolute;right:5.4cqw;bottom:5.6cqw;font-size:1.3cqw;color:var(--canela)}
-.fonte{position:absolute;left:6cqw;bottom:6cqw;font-size:1.35cqw;color:var(--canela);max-width:74cqw}
-.ph{border:.22cqw dashed currentColor;border-radius:.8cqw;padding:0 .9cqw}
+.ttl{font-family:Gabarito,system-ui,sans-serif;font-weight:900;letter-spacing:-.015em;line-height:1.04}
+em{font-style:normal;color:var(--gema)}
+.t{position:absolute;left:6cqw;top:5.5cqw;font-size:5.8cqw;max-width:80cqw}
+.marca{position:absolute;right:5cqw;top:4.6cqw;width:4.6cqw;height:auto;aspect-ratio:1}
+.legenda{position:absolute;left:6cqw;bottom:3cqw;font-size:1.15cqw;color:var(--legenda);max-width:80cqw;line-height:1.35}
+.num{position:absolute;right:5cqw;bottom:3cqw;font-size:1.15cqw;color:var(--legenda)}
+.ph{border:.2cqw dashed currentColor;border-radius:.7cqw;padding:0 .7cqw}
 
 /* 1 */
-.s1 .disco{position:absolute;left:6cqw;top:12.5cqw;width:27cqw;aspect-ratio:1;height:auto}
-.s1 .nome{position:absolute;left:38cqw;top:13cqw;font-size:10.5cqw}
-.s1 .linha{position:absolute;left:38.4cqw;font-size:3.6cqw;font-weight:700;line-height:1.2}
-.s1 .l1{top:27.5cqw}.s1 .l2{top:32.5cqw;color:var(--canela)}
+.s1 .disco{position:absolute;left:6cqw;top:13cqw;width:28cqw;height:auto;aspect-ratio:1}
+.s1 .nome{position:absolute;left:39cqw;top:14cqw;font-size:10.5cqw}
+.s1 .l{position:absolute;left:39.4cqw;font-size:3.8cqw;font-weight:700;line-height:1.2}
+.s1 .l1{top:29cqw}.s1 .l2{top:34cqw}
 /* 2 */
-.s2 .grande{position:absolute;left:6cqw;top:10cqw;font-size:19cqw;line-height:1}
-.s2 .barra{position:absolute;left:6.4cqw;top:31cqw;width:34cqw;height:1.6cqw;background:var(--gema);border-radius:1cqw}
-.s2 .sub{position:absolute;left:6cqw;top:35cqw;font-size:4.4cqw;font-weight:700;line-height:1.15}
+.s2 .grande{position:absolute;left:6cqw;top:7cqw;font-size:15.5cqw;line-height:1}
+.s2 .sub{position:absolute;left:6cqw;top:24cqw;font-size:5cqw}
+.s2 .anos{position:absolute;left:6cqw;right:40cqw;top:31.5cqw;display:flex;align-items:flex-end;gap:3cqw;height:17cqw}
+.s2 .anos div{display:flex;flex-direction:column;justify-content:flex-end;width:16cqw}
+.s2 .anos .b{display:block;background:rgba(247,185,15,.38);border-radius:.6cqw .6cqw 0 0}
+.s2 .anos .b.proj{background:repeating-linear-gradient(135deg,rgba(247,185,15,.55) 0 1cqw,transparent 1cqw 2cqw);border:.25cqw solid rgba(247,185,15,.6)}
+.s2 .anos p{font-size:2.4cqw;font-weight:700;margin-top:.6cqw}
+.s2 .anos small{display:block;font-size:1.7cqw;font-weight:400;color:var(--apoio)}
+.s2 .rot{position:absolute;right:6cqw;top:40cqw;width:30cqw;font-size:2.4cqw;color:var(--apoio);line-height:1.3}
 /* 3 */
-.s3 .grafico{position:absolute;left:6cqw;right:40cqw;top:15cqw;height:31cqw;display:flex;align-items:flex-end;gap:3cqw}
-.s3 .col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:15cqw;height:100%}
-.s3 .valor{font-family:Gabarito,sans-serif;font-weight:900;font-size:3.4cqw;margin-bottom:.8cqw;white-space:nowrap}
-.s3 .b{width:100%;background:var(--gema);border-radius:1cqw 1cqw 0 0}
-.s3 .b.proj{background:repeating-linear-gradient(135deg,var(--gema) 0 1.2cqw,var(--manteiga) 1.2cqw 2.4cqw);border:.3cqw solid var(--gema)}
-.s3 .ano{font-size:2.4cqw;font-weight:700;margin-top:.8cqw}
-.s3 .lado{position:absolute;right:6cqw;top:22cqw;width:28cqw;font-size:2.4cqw;line-height:1.3;color:var(--canela)}
-.s3 .lado b{display:block;font-family:Gabarito,sans-serif;font-size:3.6cqw;color:var(--cafe);line-height:1.1;margin-bottom:.6cqw}
+.s3 .t{font-size:4.8cqw}
+.s3 .linhas{position:absolute;left:6cqw;right:6cqw;top:19.5cqw}
+.s3 .linhas div{display:flex;justify-content:space-between;align-items:baseline;border-bottom:.2cqw solid var(--linha);padding:1.1cqw 0}
+.s3 .linhas span{font-size:3.2cqw;font-weight:700}
+.s3 .linhas small{display:block;font-size:1.8cqw;font-weight:400;color:var(--apoio);margin-top:.3cqw}
+.s3 .linhas b{font-family:Gabarito,sans-serif;font-size:4.4cqw;font-weight:900;white-space:nowrap}
+.s3 .fim{position:absolute;left:6cqw;top:45cqw;font-size:3.2cqw;font-weight:700;color:var(--apoio)}
 /* 4 */
-.s4 .linhas{position:absolute;left:6cqw;right:6cqw;top:14cqw}
-.s4 .linhas div{display:flex;justify-content:space-between;align-items:baseline;border-bottom:.25cqw solid var(--linha);padding:1.3cqw 0}
-.s4 .linhas span{font-size:3.2cqw;font-weight:700}
-.s4 .linhas small{display:block;font-size:1.7cqw;font-weight:400;color:var(--canela);margin-top:.3cqw}
-.s4 .linhas b{font-family:Gabarito,sans-serif;font-size:4.4cqw;font-weight:900;white-space:nowrap}
-.s4 .rodape{position:absolute;left:6cqw;top:40.5cqw;font-size:3cqw;font-weight:700;color:var(--canela)}
+.s4 .grande{position:absolute;left:6cqw;top:12cqw;font-size:8.6cqw;max-width:52cqw}
+.s4 .sub{position:absolute;left:6cqw;top:33cqw;font-size:3cqw;line-height:1.3;max-width:50cqw;color:var(--apoio)}
+.s4 .sub b{color:var(--casca)}
+.s4 .cel{position:absolute;right:9cqw;top:6cqw;width:24cqw;height:44cqw;background:var(--casca);border-radius:3.2cqw;border:.7cqw solid #1a1007;display:flex;flex-direction:column;align-items:center;color:var(--cafe);padding-top:6cqw;--furo:#FFF8E8}
+.s4 .cel svg{width:13cqw;height:auto;aspect-ratio:1}
+.s4 .cel .l1{font-family:Gabarito,sans-serif;font-weight:900;font-size:2.1cqw;margin-top:2.2cqw;text-align:center}
+.s4 .cel .at{margin-top:auto;margin-bottom:4cqw;width:18cqw;background:var(--verde);color:#fff;border-radius:1.6cqw;text-align:center;font-family:Gabarito,sans-serif;font-weight:800;font-size:2.6cqw;padding:1.6cqw 0}
 /* 5 */
-.s5 .passos{position:absolute;left:6cqw;right:6cqw;top:15.5cqw;display:flex;flex-direction:column;gap:2.6cqw}
-.s5 .passo{display:flex;align-items:center;gap:3cqw}
-.s5 .n{flex:none;width:8cqw;height:8cqw;border-radius:50%;background:var(--gema);display:flex;align-items:center;justify-content:center;font-family:Gabarito,sans-serif;font-weight:900;font-size:4.4cqw}
-.s5 .passo p{font-size:4.2cqw;font-weight:700}
+.s5 .aovivo{position:absolute;left:6cqw;top:7cqw;font-size:11cqw}
+.s5 .ponto{display:inline-block;width:3.6cqw;height:3.6cqw;border-radius:50%;background:var(--verde);margin-right:2.2cqw;vertical-align:middle;position:relative;top:-.8cqw;box-shadow:0 0 0 1cqw rgba(27,122,61,.25)}
+.s5 .itens{position:absolute;left:6cqw;right:6cqw;top:24cqw;display:flex;flex-direction:column;gap:2.2cqw}
+.s5 .itens p{font-size:4.2cqw;font-weight:700;display:flex;align-items:center;gap:2.4cqw}
+.s5 .itens p::before{content:"";flex:none;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--gema)}
 /* 6 */
-.s6 .aovivo{position:absolute;left:6cqw;top:14cqw;font-size:13cqw}
-.s6 .ponto{display:inline-block;width:4cqw;height:4cqw;border-radius:50%;background:var(--verde);margin-right:2.4cqw;vertical-align:middle;position:relative;top:-1cqw}
-.s6 .sub{position:absolute;left:6cqw;top:31cqw;font-size:3.4cqw;font-weight:700}
-.s6 .sub small{display:block;font-size:2.2cqw;font-weight:400;color:var(--canela);margin-top:.6cqw}
-.s6 .qr{position:absolute;right:7cqw;top:14cqw;width:22cqw;height:28cqw;border:.3cqw dashed var(--canela);border-radius:1.6cqw;display:flex;align-items:center;justify-content:center;text-align:center;padding:2cqw;font-size:1.8cqw;color:var(--canela)}
+.s6 .fluxo{position:absolute;left:6cqw;right:6cqw;top:16cqw;display:flex;align-items:center;gap:1.8cqw}
+.s6 .caixa{flex:1;border:.3cqw solid var(--casca);border-radius:1.6cqw;padding:2cqw 1.4cqw;text-align:center;font-size:2.6cqw;font-weight:700}
+.s6 .caixa.agora{background:var(--gema);border-color:var(--gema);color:var(--cafe);flex:1.25}
+.s6 .caixa.agora small{display:block;font-weight:600;font-size:1.8cqw;margin-top:.5cqw}
+.s6 .seta{font-family:Gabarito,sans-serif;font-size:3.6cqw;font-weight:900}
+.s6 .uso{position:absolute;left:6cqw;right:6cqw;top:30cqw;display:grid;grid-template-columns:repeat(4,1fr);gap:1.6cqw}
+.s6 .uso div{border-top:.3cqw solid var(--gema);padding-top:1cqw;font-size:2.2cqw;font-weight:700;line-height:1.2}
+.s6 .uso div.talvez{border-top-style:dashed;color:var(--apoio);font-weight:400}
+.s6 .noar{position:absolute;left:6cqw;top:42cqw;font-size:2.4cqw;color:var(--apoio)}
+.s6 .noar b{color:var(--casca)}
 /* 7 */
-.s7 .grade{position:absolute;left:6cqw;right:6cqw;top:14.5cqw;display:grid;grid-template-columns:1fr 1fr;gap:2.2cqw 5cqw}
-.s7 .grade div{border-top:.45cqw solid var(--cafe);padding-top:1.4cqw}
-.s7 .grade .v{font-family:Gabarito,sans-serif;font-weight:900;font-size:5.6cqw;line-height:1}
-.s7 .grade .l{font-size:2.4cqw;font-weight:700;margin-top:.6cqw}
+.s7 .grade{position:absolute;left:6cqw;right:6cqw;top:15cqw;display:grid;grid-template-columns:repeat(3,1fr);gap:2.6cqw 3cqw}
+.s7 .grade div{border-top:.3cqw solid var(--linha);padding-top:1.1cqw}
+.s7 .v{font-family:Gabarito,sans-serif;font-weight:900;font-size:4.6cqw;line-height:1;color:var(--gema)}
+.s7 .l{font-size:2cqw;font-weight:700;margin-top:.6cqw;line-height:1.25}
+.s7 .l small{display:block;font-weight:400;color:var(--apoio);font-size:1.6cqw;margin-top:.3cqw}
 /* 8 */
-.s8 .preco{position:absolute;left:6cqw;top:14cqw;font-size:12cqw;line-height:1}
-.s8 .preco small{font-family:"Atkinson Hyperlegible Next",sans-serif;font-size:3.2cqw;font-weight:700;letter-spacing:0;margin-left:1.4cqw}
-.s8 .quem{position:absolute;left:6cqw;top:28.5cqw;font-size:3cqw;font-weight:700;color:var(--canela)}
-.s8 .cards{position:absolute;left:6cqw;right:6cqw;top:35cqw;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:2.4cqw}
-.s8 .cards div{background:var(--papel);border:.25cqw solid var(--linha);border-radius:1.4cqw;padding:1.6cqw 2cqw}
-.s8 .cards b{display:block;font-family:Gabarito,sans-serif;font-weight:900;font-size:4cqw;line-height:1.05}
-.s8 .cards span{font-size:1.9cqw;color:var(--canela)}
+.s8 .aprend{position:absolute;left:6cqw;right:6cqw;top:15cqw;display:flex;flex-direction:column;gap:1.2cqw}
+.s8 .aprend div{display:grid;grid-template-columns:1fr 1fr;gap:3cqw;align-items:baseline;border-bottom:.2cqw solid var(--linha);padding-bottom:1.4cqw}
+.s8 .aprend p{font-size:2.4cqw;font-weight:700;line-height:1.22}
+.s8 .aprend span{font-size:2.1cqw;color:var(--apoio);line-height:1.3}
+.s8 .aprend span::before{content:"→ ";color:var(--gema);font-weight:700}
+.s8 .lim{position:absolute;left:6cqw;right:6cqw;top:41.5cqw;font-size:2.1cqw;color:var(--apoio)}
+.s8 .prox{position:absolute;left:6cqw;right:6cqw;top:45.5cqw;font-size:2.3cqw;font-weight:700}
+.s8 .lim b,.s8 .prox b{color:var(--gema)}
 /* 9 */
-.s9 .fluxo{position:absolute;left:6cqw;right:6cqw;top:16cqw;display:flex;align-items:center;gap:2cqw}
-.s9 .caixa{flex:1;border:.35cqw solid var(--cafe);border-radius:1.6cqw;padding:2cqw;text-align:center;font-size:2.6cqw;font-weight:700;background:var(--papel)}
-.s9 .caixa.agora{background:var(--cafe);color:var(--casca);flex:1.3}
-.s9 .caixa.agora small{display:block;font-weight:400;font-size:1.8cqw;margin-top:.6cqw;opacity:.9}
-.s9 .seta{font-family:Gabarito,sans-serif;font-size:4cqw;font-weight:900}
-.s9 .time{position:absolute;left:6cqw;right:6cqw;top:35cqw;display:grid;grid-template-columns:repeat(4,1fr);gap:2cqw}
-.s9 .time div{border-top:.35cqw solid var(--linha);padding-top:1cqw}
-.s9 .time b{display:block;font-family:Gabarito,sans-serif;font-size:2.8cqw}
-.s9 .time span{font-size:1.9cqw;color:var(--canela)}
+.s9 .preco{position:absolute;left:6cqw;top:10cqw;font-size:12cqw;line-height:1}
+.s9 .preco small{font-family:"Atkinson Hyperlegible Next",sans-serif;font-size:3.4cqw;font-weight:700;letter-spacing:0;margin-left:1.4cqw;color:var(--casca)}
+.s9 .quem{position:absolute;left:6cqw;top:24.5cqw;font-size:3cqw;font-weight:700;color:var(--apoio)}
+.s9 .cards{position:absolute;left:6cqw;right:6cqw;top:32cqw;display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:2.2cqw}
+.s9 .cards div{background:var(--cartao);border-radius:1.4cqw;padding:1.8cqw 2cqw}
+.s9 .cards b{display:block;font-family:Gabarito,sans-serif;font-weight:900;font-size:4.2cqw;line-height:1.05}
+.s9 .cards span{font-size:1.9cqw;color:var(--apoio);line-height:1.3;display:block;margin-top:.4cqw}
 /* 10 */
-.s10 .pontos{position:absolute;left:6cqw;right:6cqw;top:7cqw;display:flex;flex-direction:column;gap:1.6cqw}
-.s10 .pontos p{font-size:3.4cqw;font-weight:700;display:flex;align-items:center;gap:2cqw}
-.s10 .pontos p::before{content:"";flex:none;width:2.2cqw;height:2.2cqw;border-radius:50%;background:var(--gema)}
-.s10 .assin{position:absolute;left:6cqw;top:33cqw;font-size:5cqw;max-width:70cqw}
-.s10 .pedido{position:absolute;left:6cqw;top:45cqw;font-size:2.2cqw;color:var(--canela)}
-.s10 .disco{position:absolute;right:6cqw;top:30cqw;width:14cqw;height:auto;aspect-ratio:1}
+.s10 .avo{position:absolute;left:6cqw;top:9cqw;font-size:6cqw;max-width:62cqw}
+.s10 .pedido{position:absolute;left:6cqw;top:28.5cqw;font-size:3cqw;font-weight:700;max-width:58cqw}
+.s10 .time{position:absolute;left:6cqw;top:36cqw;font-size:2.2cqw;color:var(--apoio)}
+.s10 .assin{position:absolute;left:6cqw;top:42cqw;font-size:3.4cqw}
+.s10 .qr{position:absolute;right:6cqw;top:11cqw;width:22cqw;height:28cqw;border:.25cqw dashed var(--legenda);border-radius:1.6cqw;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2cqw;font-size:1.7cqw;color:var(--apoio);gap:1.4cqw}
+.s10 .qr svg{width:9cqw;height:auto;aspect-ratio:1}
 
-.dica{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);background:var(--cafe);color:var(--casca);font-size:13px;padding:6px 12px;border-radius:999px;opacity:.85;transition:opacity .6s}
+.dica{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);background:var(--gema);color:var(--cafe);font-size:13px;padding:6px 12px;border-radius:999px;opacity:.9;transition:opacity .6s}
 @media print{
   @page{size:1920px 1080px;margin:0}
-  html,body{background:var(--casca);display:block;overflow:visible;height:auto}
+  html,body{background:var(--cafe);display:block;overflow:visible;height:auto}
   .palco{width:1920px;height:auto;overflow:visible;background:none}
-  .s{display:block !important;position:relative;width:1920px;height:1080px;background:var(--casca);page-break-after:always;break-after:page;overflow:hidden}
+  .s{display:block !important;position:relative;width:1920px;height:1080px;background:var(--cafe);page-break-after:always;break-after:page;overflow:hidden}
   .dica{display:none}
 }
 </style>
@@ -115,121 +127,134 @@ body{display:flex;align-items:center;justify-content:center;overflow:hidden}
     <ellipse cx="68" cy="55.5" rx="2.75" ry="4.25" fill="#33200F"/>
     <path d="M 49.5 65 Q 60 75 70.5 65" fill="none" stroke="#33200F" stroke-width="3.25" stroke-linecap="round"/>
   </symbol>
-  <symbol id="fio" viewBox="0 0 600 24">
-    <path id="caminho-fio" d="" fill="none" stroke="var(--cor-fio)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-  </symbol>
 </svg>
 
 <div class="palco" id="palco">
 
+  <!-- 1. clareza -->
   <section class="s s1">
     <svg class="disco"><use href="#disco"/></svg>
     <p class="ttl nome">Dona Leda</p>
-    <p class="linha l1">Liga pros seus pais todo dia.</p>
-    <p class="linha l2">E te conta como eles estão.</p>
+    <p class="l l1">Liga pros seus pais <em>todo dia</em>.</p>
+    <p class="l l2">E te conta como eles estão.</p>
   </section>
 
+  <!-- 2. problema -->
   <section class="s s2">
     <svg class="marca"><use href="#disco"/></svg>
-    <p class="ttl grande">6 milhões</p>
-    <div class="barra"></div>
-    <p class="sub">de idosos moram sozinhos no Brasil</p>
-    <p class="fonte">IBGE, PNAD Contínua 2025. Pessoas com 60 anos ou mais.</p>
+    <p class="ttl grande"><em>6 milhões</em></p>
+    <p class="ttl sub">de idosos moram sozinhos</p>
+    <div class="anos">
+      <div><span class="b" style="height:2.7cqw"></span><p>2010<small>20,6 milhões</small></p></div>
+      <div><span class="b" style="height:4.3cqw"></span><p>2022<small>32,1 milhões</small></p></div>
+      <div><span class="b proj" style="height:10cqw"></span><p>2070<small>75 milhões</small></p></div>
+    </div>
+    <p class="rot">brasileiros com 60 anos ou mais</p>
+    <p class="legenda">IBGE: PNAD Contínua 2025 (moram sozinhos); Censos 2010 e 2022; Projeções da População, 2024 (2070 é projeção, 37,8% da população).</p>
   </section>
 
+  <!-- 3. problema e público -->
   <section class="s s3">
     <svg class="marca"><use href="#disco"/></svg>
-    <p class="ttl t">O Brasil está envelhecendo</p>
-    <div class="grafico">
-      <div class="col"><p class="valor">20,6 mi</p><div class="b" style="height:27%"></div><p class="ano">2010</p></div>
-      <div class="col"><p class="valor">32,1 mi</p><div class="b" style="height:43%"></div><p class="ano">2022</p></div>
-      <div class="col"><p class="valor">75,3 mi</p><div class="b proj" style="height:100%"></div><p class="ano">2070</p></div>
-    </div>
-    <p class="lado"><b>37,8% da população</b>vai ter 60 anos ou mais em 2070</p>
-    <p class="fonte">Brasileiros com 60 anos ou mais. IBGE: Censos 2010 e 2022; Projeções da População, 2024 (2070 é projeção).</p>
-  </section>
-
-  <section class="s s4">
-    <svg class="marca"><use href="#disco"/></svg>
-    <p class="ttl t">Hoje, cuidar custa caro</p>
+    <p class="ttl t">Hoje, saber como eles estão <em>custa caro</em></p>
     <div class="linhas">
       <div><span>Cuidador</span><b>R$ 2.800 a 4.500</b></div>
       <div><span>Casa de repouso</span><b>uns R$ 6 mil</b></div>
-      <div><span>Botão de emergência<small>só serve depois que algo deu errado</small></span><b>R$ 189 a 249</b></div>
+      <div><span>Botão de emergência<small>só depois que algo deu errado</small></span><b>R$ 189 a 249</b></div>
     </div>
-    <p class="rodape">Quem não pode pagar, liga quando dá.</p>
-    <p class="fonte">Por mês. Cuidador de 12 horas: Cidesp, mai/2026. Casa de repouso: média de R$ 5.955 em BH, Mercado Mineiro, ago/2026. Botão: Tecnosenior, 21/11/2026.</p>
+    <p class="fim">Quem não pode pagar liga quando dá.</p>
+    <p class="legenda">Por mês. Cuidador de 12 horas: Cidesp, maio de 2026. Casa de repouso: média de R$ 5.955 em Belo Horizonte, Mercado Mineiro, agosto de 2026. Botão: Tecnosenior, 21/11/2026.</p>
   </section>
 
+  <!-- 4. inovação -->
+  <section class="s s4">
+    <svg class="marca"><use href="#disco"/></svg>
+    <p class="ttl grande">Ela só precisa <em>atender</em>.</p>
+    <p class="sub"><b>Sem aplicativo pra aprender.</b> A Dona Leda liga, conversa e lembra do que a pessoa contou.</p>
+    <div class="cel"><svg><use href="#disco"/></svg><p class="l1">Dona Leda está ligando</p><p class="at">Atender</p></div>
+  </section>
+
+  <!-- 5. voz -->
   <section class="s s5">
     <svg class="marca"><use href="#disco"/></svg>
-    <p class="ttl t">Como funciona</p>
-    <div class="passos">
-      <div class="passo"><span class="n">1</span><p>Ela liga no horário combinado</p></div>
-      <div class="passo"><span class="n">2</span><p>Conversa e anota como a pessoa está</p></div>
-      <div class="passo"><span class="n">3</span><p>Avisa a família quando precisa</p></div>
+    <p class="ttl aovivo"><span class="ponto"></span>Ao vivo</p>
+    <div class="itens">
+      <p>Responde em <em>[X] segundos</em></p>
+      <p>Pode ser <em>interrompida</em></p>
+      <p>Avisa a família <em>na hora</em></p>
     </div>
+    <p class="legenda">A dona Helena é uma idosa de exemplo, e quem faz a voz dela é [nome]. Cada item só fica se o ensaio de domingo confirmar.</p>
   </section>
 
+  <!-- 6. técnica e Agora -->
   <section class="s s6">
     <svg class="marca"><use href="#disco"/></svg>
-    <p class="ttl aovivo"><span class="ponto"></span>Ao vivo</p>
-    <p class="sub">A ligação da dona Helena<small>idosa de exemplo, com a voz de [nome]</small></p>
-    <div class="qr">[Opcional: QR Code de /experimente, pros jurados receberem a ligação no próprio celular]</div>
-  </section>
-
-  <section class="s s7">
-    <svg class="marca"><use href="#disco"/></svg>
-    <p class="ttl t">O que já aconteceu</p>
-    <div class="grade">
-      <div><p class="v"><span class="ph">N</span></p><p class="l">avós atenderam no sábado</p></div>
-      <div><p class="v"><span class="ph">N</span></p><p class="l">atenderam de novo às 9h</p></div>
-      <div><p class="v"><span class="ph">N</span></p><p class="l">famílias aceitaram o teste</p></div>
-      <div><p class="v">1</p><p class="l">casa de repouso vai indicar</p></div>
-    </div>
-    <p class="fonte">A Dona Leda nasceu neste fim de semana. Avós do time, com alguém da família do lado. Até 21/12: quantas ligações por semana o idoso atende.</p>
-  </section>
-
-  <section class="s s8">
-    <svg class="marca"><use href="#disco"/></svg>
-    <p class="ttl preco">R$ 129,90<small>por mês</small></p>
-    <p class="quem">A família paga. A casa de repouso indica.</p>
-    <div class="cards">
-      <div><b>R$ 38</b><span>custo medido por idoso</span></div>
-      <div><b>R$ 67</b><span>sobram por família</span></div>
-      <div><b>R$ 1,1 a 1,4 bi</b><span>por ano, de 700 a 900 mil famílias (estimativa)</span></div>
-    </div>
-    <p class="fonte">Custo no uso médio de 3 min e 20 s por dia, medido numa ligação de teste em 21/11/2026.</p>
-  </section>
-
-  <section class="s s9">
-    <svg class="marca"><use href="#disco"/></svg>
-    <p class="ttl t">Feito na Agora, em português</p>
+    <p class="ttl t">Feito na <em>Agora</em></p>
     <div class="fluxo">
       <div class="caixa">Celular do idoso</div>
       <span class="seta">→</span>
-      <div class="caixa agora">Sala da Agora<small>o motor de conversa responde em [X] s</small></div>
+      <div class="caixa agora">Sala da Agora<small>com o motor de conversa</small></div>
       <span class="seta">←</span>
       <div class="caixa">Painel da família</div>
     </div>
-    <div class="time">
-      <div><b>Breno</b><span>produto e conversa</span></div>
-      <div><b>Vitor</b><span>casas de repouso</span></div>
-      <div><b>Stephanie</b><span>preço e dados</span></div>
-      <div><b>Gustavo</b><span>aplicativo e voz</span></div>
+    <div class="uso">
+      <div>Sala de áudio e vídeo</div>
+      <div>Motor de conversa</div>
+      <div>Mensagens em tempo real</div>
+      <div class="talvez">[Filtro de ruído, se provado no celular]</div>
     </div>
+    <p class="noar">No ar em <b>donaleda.vercel.app</b>, em teste no iPhone e no Android, código aberto.</p>
+    <p class="legenda">O que está em uso, confirmado pela conversa do servidor em [hora].</p>
   </section>
 
-  <section class="s s10">
-    <div class="pontos">
-      <p>6 milhões de idosos moram sozinhos</p>
-      <p>Ela liga todo dia e avisa a família</p>
-      <p>R$ 129,90 por mês, custo de R$ 38</p>
-      <p>Na Agora, em português</p>
+  <!-- 7. validação: testes com gente -->
+  <section class="s s7">
+    <svg class="marca"><use href="#disco"/></svg>
+    <p class="ttl t">Testamos <em>com gente</em></p>
+    <div class="grade">
+      <div><p class="v">[N] de [N]</p><p class="l">avós atenderam no sábado<small>[X] minutos de conversa na média</small></p></div>
+      <div><p class="v">[N]</p><p class="l">atenderam de novo no domingo, às 9h<small>sem ninguém pedir</small></p></div>
+      <div><p class="v">[N]</p><p class="l">famílias aceitaram começar o teste</p></div>
+      <div><p class="v">[N] de [N]</p><p class="l">famílias disseram sim aos R$ 129,90</p></div>
+      <div><p class="v">[N] de 2</p><p class="l">decidiram certo lendo o aviso<small>em [X] s, no teste das três versões, com 5 adultos</small></p></div>
+      <div><p class="v">1</p><p class="l">casa de repouso parceira<small>e [N] casas e cuidadoras ouvidas</small></p></div>
     </div>
-    <p class="ttl assin">Dona Leda: longevidade com qualidade de vida.</p>
+    <p class="legenda">Avós de 65 anos ou mais, de gente do time, com o sim deles e da família. Planilha das ligações de 21 e 22/11/2026.</p>
+  </section>
+
+  <!-- 8. validação: aprendizados, limites, próximos passos -->
+  <section class="s s8">
+    <svg class="marca"><use href="#disco"/></svg>
+    <p class="ttl t">O que a gente <em>aprendeu</em></p>
+    <div class="aprend">
+      <div><p>A casa de repouso indica, e a família paga</p><span>a primeira casa topou indicar as famílias que a procuram</span></div>
+      <div><p>Visitar toda semana não basta pra perceber</p><span>ela liga todo dia, na hora combinada</span></div>
+      <div><p>Aviso sem responsável não vira cuidado</p><span>o painel mostra quem assumiu e como terminou</span></div>
+    </div>
+    <p class="lim"><b>Limites:</b> uma noite, poucos avós, alguém da família do lado.</p>
+    <p class="prox"><b>Próximo:</b> a partir de 23/11, 30 dias com as famílias que a casa indicar.</p>
+  </section>
+
+  <!-- 9. benefício e negócio -->
+  <section class="s s9">
+    <svg class="marca"><use href="#disco"/></svg>
+    <p class="ttl preco"><em>R$ 129,90</em><small>por mês</small></p>
+    <p class="quem">A família paga. A casa de repouso indica.</p>
+    <div class="cards">
+      <div><b>R$ 38</b><span>custo por idoso, medido</span></div>
+      <div><b>R$ 67</b><span>sobram por família</span></div>
+      <div><b>R$ 1,1 a 1,4 bi</b><span>por ano, de 700 a 900 mil famílias (estimativa)</span></div>
+    </div>
+    <p class="legenda">Custo no uso médio de 3 min e 20 s por dia, medido numa ligação de teste em 21/11/2026; a sobra já tira imposto e cartão. Mercado: idosos que moram sozinhos, usam internet e têm família com renda pra pagar (estimativa do time).</p>
+  </section>
+
+  <!-- 10. fecho -->
+  <section class="s s10">
+    <p class="ttl avo">Dona Leda é o nome da <em>minha avó</em>.</p>
     <p class="pedido">[o pedido à banca]</p>
-    <svg class="disco"><use href="#disco"/></svg>
+    <p class="time">Breno, Vitor, Stephanie e Gustavo</p>
+    <p class="ttl assin">Dona Leda: longevidade com qualidade de vida.</p>
+    <div class="qr"><svg><use href="#disco"/></svg>[QR Code de /experimente, se a página estiver no ar]</div>
   </section>
 
 </div>
@@ -237,14 +262,8 @@ body{display:flex;align-items:center;justify-content:center;overflow:hidden}
 
 <script>
 (function(){
-  // o fio enrolado do telefone
-  var pts=[], r=3, d=7.5, t=0, x;
-  while(true){ x=r*t-d*Math.sin(t)+10; if(x>590) break; pts.push(x.toFixed(1)+','+(12-d*Math.cos(t)).toFixed(1)); t+=0.18; }
-  document.getElementById('caminho-fio').setAttribute('d','M'+pts.join(' L'));
   var s=[].slice.call(document.querySelectorAll('.s'));
-  s.forEach(function(el,i){
-    el.insertAdjacentHTML('beforeend','<svg class="fio" aria-hidden="true"><use href="#fio"/></svg>'+(i>0?'<p class="num">'+(i+1)+' / '+s.length+'</p>':''));
-  });
+  s.forEach(function(el,i){ if(i>0) el.insertAdjacentHTML('beforeend','<p class="num">'+(i+1)+' / '+s.length+'</p>'); });
   var atual=0;
   try{ var h=parseInt(location.hash.slice(1),10); if(h>=1&&h<=s.length) atual=h-1; }catch(e){}
   function mostra(n){ atual=Math.max(0,Math.min(s.length-1,n)); s.forEach(function(el,i){el.classList.toggle('ativo',i===atual)}); history.replaceState(null,'','#'+(atual+1)); }
