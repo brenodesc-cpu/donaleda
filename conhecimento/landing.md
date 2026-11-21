@@ -50,6 +50,6 @@ Skills de design instaladas em `~/.claude/skills/`, todas pra usar: `ui-ux-pro-m
 - **Arquivos:** `app/landing/` e `components/landing/`. As telas do idoso, o painel da família e as rotas de API pertencem a outras conversas.
 - **Cópia de trabalho:** uma pasta separada (`git worktree add ~/dev/lia-landing`), com o `node_modules` como link pro de `~/dev/lia`. O envio é `git push origin HEAD:main`, logo depois de buscar o `origin/main` e refazer a base.
 - **Conferência:** `next build --webpack` e `next start`, porque o `next dev` na cópia sai sem estilo. Olhar no celular (375 de largura) e no computador.
-- **Publicação:** `npx vercel deploy --prod --yes` de uma cópia em dia com o `origin/main`, com o `.vercel/project.json` copiado de `~/dev/lia`. Cópia velha desfaz o que as outras conversas puseram no ar.
+- **Publicação (regra de 21/11, 14h20):** quem publica na Vercel é só a conversa "Servidor, voz e banco". A conversa da landing grava no GitHub e pede a publicação a ela por mensagem, sem rodar `vercel deploy`. Publicação feita de outra cópia pode tirar do ar o trabalho de outra conversa.
 
-A entrega está pronta com as três direções no ar, cada uma inteira e funcionando no celular, e o link de `/landing` mandado ao Breno com uma linha sobre cada direção e a recomendação de qual seguir.
+A entrega está pronta com as três direções gravadas no `main`, cada uma inteira e funcionando no celular, a publicação pedida à conversa do servidor e o link de `/landing` mandado ao Breno depois de aberto e conferido, com uma linha sobre cada direção e a recomendação de qual seguir.
