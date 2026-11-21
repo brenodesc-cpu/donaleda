@@ -130,9 +130,9 @@ class GeminiLiveComAcoes extends GeminiLive {
   }
 }
 
-/** A voz do Gemini. LIA_VOZ_GEMINI troca; Aoede é feminina e calma. */
+/** A voz do Gemini. LIA_VOZ_GEMINI troca; Leda é o padrão, e Aoede e Kore são as outras pra testar. */
 function vozDoGemini(): string {
-  return process.env.LIA_VOZ_GEMINI?.trim() || 'Aoede';
+  return process.env.LIA_VOZ_GEMINI?.trim() || 'Leda';
 }
 
 export async function POST(request: NextRequest) {

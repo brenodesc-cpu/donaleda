@@ -1,10 +1,11 @@
-# Lia
+# Dona Leda
 
-Assistente que liga todo dia, por chamada de vídeo, pro idoso que mora sozinho. Ela conversa, anota como ele está e avisa a família quando algo sai do normal.
+Assistente de voz que liga todo dia pro idoso que mora sozinho. Ela conversa, anota como ele está e avisa a família quando algo sai do normal.
 
 Projeto do hackathon **UNMUTE by Agora** (NewHack e Agora), feito em 21 e 22 de novembro de 2026, na AI House Brasil, em São Paulo.
 
-Versão entregue: **0.1.0** (em construção até 12h de 22/11).
+- **No ar:** https://donaleda.vercel.app
+- **Versão entregue:** 0.2.0 (a gravação marcada com a etiqueta `entrega` é a que vale pra banca).
 
 ## O problema
 
@@ -14,64 +15,86 @@ Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (PNAD Cont
 
 A pessoa idosa que mora sozinha usa. O filho ou a filha que mora longe contrata e acompanha.
 
-## O que a Lia faz
+## O que a Dona Leda faz
 
-- **Ela liga.** O aparelho do idoso toca na hora marcada, ou quando a família toca em "Ligar agora" no painel. O idoso atende com um toque, ou a ligação atende sozinha depois de 10 segundos, pra quem tem dificuldade de tocar na tela. Ele também pode ligar pra Lia quando quiser.
+- **Ela liga.** O aparelho do idoso toca na hora marcada, ou quando a família toca em "Ligar agora" no painel. O idoso atende com um toque, ou a ligação atende sozinha depois de 10 segundos, se a família ligar essa opção.
 - **Ligação não atendida vira aviso.** Sem resposta, ela tenta de novo em 3 minutos e depois avisa a família.
-- **Conversa em português.** Ela fala devagar, em frases curtas, e espera quando a pessoa faz uma pausa.
-- **Diz que é uma assistente virtual.** Na primeira conversa ela se apresenta como um programa de computador e diz quem pediu a conversa. Nas outras, repete que é a assistente virtual.
+- **Conversa em português do Brasil.** Fala devagar, em frases curtas, e espera 650 milissegundos de silêncio antes de responder, porque quem tem mais idade faz pausas no meio da frase. A pessoa pode interromper.
+- **Diz que é uma assistente virtual.** Na primeira conversa ela se apresenta como assistente virtual e diz quem da família pediu as conversas.
 - **Pergunta do dia.** Sono, comida, remédio, dor e como a pessoa está se sentindo, no meio da conversa.
 - **Lembra.** O que a pessoa conta (o nome do neto, a consulta de quinta) volta nas conversas seguintes.
-- **Avisa a família na hora.** Queda, dor no peito, remédio não tomado, dor forte e pedido de dinheiro ou senha por telefone viram aviso no painel.
-- **Mostra o dia e a semana.** A família vê a ficha de hoje, a semana, os avisos e o resumo da conversa em `/familia`.
+- **Avisa a família na hora.** Queda, dor no peito, vontade de morrer, remédio não tomado, dor forte e pedido de dinheiro ou senha por telefone viram aviso no painel.
+- **Mostra o dia e a semana.** A família vê a ficha de hoje, a semana, os avisos e o resumo da conversa.
+
+## Os dois lados do app
+
+- **A família** cria a conta com e-mail e senha, cadastra o idoso (ou vê com a dona Helena de exemplo), acompanha o painel e ajusta horários e remédios.
+- **O aparelho do idoso** nunca faz login. A família gera um código de 6 números, ou manda pelo WhatsApp um link `/parear?codigo=`, e o aparelho fica ligado ao idoso.
+
+| Endereço | O que é |
+|---|---|
+| `/` | Aparelho ligado: a tela do idoso. Sem ligação: a escolha entre família e idoso |
+| `/parear` | O aparelho do idoso digita o código |
+| `/entrar` | Entrar ou criar a conta da família |
+| `/familia` | O painel |
+| `/familia/novo` | Cadastrar o idoso |
+| `/familia/aparelho` | Gerar o código ou mandar o link |
+| `/familia/ajustes` | Horários, atender sozinho, remédios, apagar os dados |
+| `/marca` | As três direções de marca estudadas |
 
 ## Como a Agora entra
 
 Toda a conversa passa pela Agora.
 
-1. Quando o idoso atende, o aparelho dele entra numa sala da Agora (SDK de RTC) e publica o microfone.
-2. O servidor chama o **Conversational AI Engine** da Agora, que põe a assistente na mesma sala. A fala vira texto (Deepgram), o modelo responde (OpenAI) e a resposta vira voz (OpenAI TTS), com as chaves gerenciadas pela Agora.
+1. O aparelho do idoso entra numa sala de áudio da Agora (SDK de RTC) e publica o microfone.
+2. O servidor chama o **Conversational AI Engine** da Agora, que põe a assistente na mesma sala. São dois modos, escolhidos pela variável `LIA_MODO`:
+   - **`gemini`:** o Gemini Live, dentro da Agora, escuta e fala num modelo só, com a voz Leda em português do Brasil. Precisa da chave do Google AI Studio em `LIA_GEMINI_KEY`.
+   - **`tres`:** Deepgram escuta, OpenAI responde e a voz da OpenAI fala, com as chaves gerenciadas pela Agora. É a reserva, e o único modo que aceita avatar em vídeo.
+   Sem `LIA_MODO`, vale o Gemini quando a chave existe. Abrir `/?modo=gemini` ou `/?modo=tres` no aparelho compara os dois na hora.
 3. A legenda e o estado da assistente (ouvindo, pensando, falando) chegam à tela pelo canal de mensagens da Agora (RTM), e o rosto mexe a boca pelo volume do áudio.
-4. Quando o modelo decide agir, a Agora chama as ações da Lia no endereço `/api/mcp` deste servidor (protocolo MCP): `registrar_bem_estar`, `guardar_lembranca`, `avisar_familia` e `resumir_conversa`.
-5. Com um avatar configurado (`LIA_AVATAR`), o vídeo da assistente entra na mesma sala pela Agora e ocupa a tela. Sem ele, a tela mostra o rosto desenhado.
-6. A detecção de fim de fala foi ajustada pra quem fala com pausas longas (900 ms de silêncio), e a pessoa pode interromper a Lia no meio da frase.
+4. Quando o modelo decide agir, a Agora chama as ações da Dona Leda em `/api/mcp` (protocolo MCP): `registrar_bem_estar`, `guardar_lembranca`, `avisar_familia` e `resumir_conversa`. Cada idoso tem a sua chave, então a chave de um não abre a ficha de outro.
 
 Além das ações decididas pelo modelo, cada fala do idoso passa por regras fixas do código (`lib/regras.ts`). Um aviso de queda ou de golpe sai mesmo se o modelo não chamar nenhuma ação.
 
 ## Como rodar
 
-Precisa de Node 22 ou mais novo, pnpm e uma conta na Agora (console.agora.io).
+Precisa de Node 22 ou mais novo, pnpm, uma conta na Agora (console.agora.io) e um projeto no Supabase (supabase.com).
 
 ```bash
 pnpm install
 cp env.local.example .env.local
 ```
 
-Abra `.env.local` e preencha `NEXT_PUBLIC_AGORA_APP_ID` e `NEXT_AGORA_APP_CERTIFICATE` com os valores do seu projeto na Agora. Depois:
+Preencha o `.env.local`:
+
+- `NEXT_PUBLIC_AGORA_APP_ID` e `NEXT_AGORA_APP_CERTIFICATE`: do seu projeto na Agora.
+- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`: do seu projeto no Supabase, em Project Settings, API.
+- `LIA_GEMINI_KEY`: opcional, pro modo Gemini.
+
+Crie as tabelas rodando `supabase/migrations/20261121130000_inicio.sql` no SQL Editor do Supabase. Depois:
 
 ```bash
 pnpm dev
 ```
 
-- Aparelho do idoso: http://localhost:3000 (abra no celular ou tablet e toque em "Deixar pronto" uma vez)
-- Painel da família: http://localhost:3000/familia
-
-Só com isso a ligação já funciona: toque em "Ligar agora" no painel da família e o aparelho do idoso toca. As regras fixas de segurança já avisam a família.
+Abra http://localhost:3000, toque em "Sou da família", crie a conta e escolha "Ver com um exemplo".
 
 ### Ligando as ações (ficha, lembranças, resumo)
 
-A nuvem da Agora precisa alcançar o endereço `/api/mcp` deste servidor. Rodando no seu computador, abra um túnel e ponha o endereço em `LIA_URL_PUBLICA`:
+A nuvem da Agora precisa alcançar `/api/mcp` deste servidor. Publicado na Vercel, o endereço é descoberto sozinho. Rodando no seu computador, abra um túnel e ponha o endereço em `LIA_URL_PUBLICA`:
 
 ```bash
 ngrok http 3000
 ```
 
-```bash
-# em .env.local
-LIA_URL_PUBLICA=https://seu-endereco.ngrok-free.dev
-```
+### App de celular
 
-Reinicie o `pnpm dev`. Publicado na Vercel, o endereço é descoberto sozinho.
+O app (Capacitor, `app.donaleda`) abre o endereço publicado. As pastas `ios/` e `android/` têm os projetos.
+
+```bash
+npx cap sync
+npx cap open ios
+```
 
 ### Conferências
 
@@ -85,7 +108,9 @@ pnpm lint
 
 - Next.js 16, React 19, TypeScript, Tailwind CSS
 - Da Agora: `agora-agents` (servidor), `agora-rtc-sdk-ng` e `agora-rtc-react` (áudio), `agora-rtm` (mensagens), `agora-agent-client-toolkit` (legenda e estado), `agora-token`
-- Vitest pras conferências automáticas
+- Supabase (`@supabase/supabase-js` e `@supabase/ssr`): banco e login da família
+- Capacitor 8: app de iPhone e Android
+- Vitest: conferências automáticas
 
 A lista completa com as versões está em `package.json` e `pnpm-lock.yaml`.
 
@@ -95,13 +120,16 @@ A lista completa com as versões está em `package.json` e `pnpm-lock.yaml`.
 
 **Feito no hackathon** (tudo depois da primeira gravação):
 
-- a personalidade e os limites da Lia em português, montados a cada conversa com a ficha do dia (`lib/persona.ts`);
+- a personalidade e os limites da Dona Leda em português, montados a cada conversa com a ficha do dia (`lib/persona.ts`);
+- os dois modos de conversa na Agora, Gemini Live e três peças (`app/api/invite-agent`);
 - as quatro ações e o servidor MCP que a Agora chama (`lib/ferramentas.ts`, `app/api/mcp`);
-- as ligações que a assistente faz: hora marcada, pedido da família, segunda tentativa e aviso de não atendida (`lib/chamadas.ts`, `lib/relogio.ts`, `app/api/chamada`);
 - as regras fixas de segurança (`lib/regras.ts`, `app/api/conversa`);
-- a ficha do idoso, as lembranças, os avisos e o resumo (`lib/dados.ts`);
-- o aparelho do idoso, que toca, atende e mostra a chamada de vídeo (`components/`, `hooks/`);
-- o painel da família (`app/familia`, `components/familia`);
+- a ligação na hora marcada, a segunda tentativa e o aviso de não atendida (`lib/chamadas.ts`, `app/api/chamada`);
+- o banco no Supabase, o login da família e o código que liga o aparelho do idoso (`supabase/`, `lib/dados.ts`, `lib/sessao.ts`, `app/api/idosos`, `app/api/aparelho`);
+- a tela do idoso com o rosto animado e a tela do código (`components/`, `hooks/`, `app/parear`);
+- o painel da família, o cadastro, o código do aparelho e os ajustes (`app/familia`, `app/entrar`, `components/familia`);
+- a marca: três direções, a aplicada, o rosto e o ícone (`app/marca`, `components/marca`, `conhecimento/marca.md`);
+- os apps de iPhone e Android (`capacitor.config.ts`, `ios/`, `android/`);
 - as conferências automáticas (`testes/`);
 - a base de conhecimento do time (`conhecimento/`).
 
@@ -109,28 +137,27 @@ O código foi escrito pelo time com ajuda do Claude Code.
 
 ## O que é simulação
 
-- **A dona Helena é inventada.** O perfil, as lembranças e os seis dias anteriores do painel são dados de exemplo (`lib/exemplo.ts`). O painel marca esses dias, e um dia deixa de ser exemplo quando recebe uma conversa de verdade.
-- **O rosto é um desenho.** O avatar em vídeo pela Agora está ligado no código, mas ainda sem teste com uma conta de avatar.
-- **A ligação toca com a página aberta.** O aparelho precisa estar com a página da Lia aberta pra tocar. Tocar com a tela bloqueada pede um aplicativo instalado, que é o próximo passo.
-- **Ligação pelo telefone comum ainda não existe.**
+- **A dona Helena é inventada.** O perfil, as lembranças e os seis dias anteriores do exemplo vêm de `lib/exemplo.ts`. O painel marca esses dias, e um dia deixa de ser exemplo quando recebe uma conversa de verdade.
+- **O rosto é um desenho**, sem avatar em vídeo.
+- **A ligação acontece pela internet**, no app ou no navegador do aparelho do idoso. Ligação pelo telefone comum ainda não existe.
 
 ## Privacidade e limites
 
-- A conversa inteira não é guardada. O servidor guarda a ficha do dia, as lembranças, os avisos e o resumo. A fala só fica registrada dentro de um aviso de segurança.
-- Os dados ficam num arquivo local (`dados/`), fora do GitHub.
-- A Lia não é médica, não dá diagnóstico e não muda remédio. Ela não substitui serviço de emergência: em urgência, orienta ligar pro 192 e avisa a família.
-- A Lia nunca pede dinheiro, senha ou dado de banco.
-- Esta versão não tem login. O painel da família precisa de login antes de ir pra gente de verdade.
-- O remédio é registrado como a pessoa disse. Se ela disser que tomou e não tomou, a Lia não tem como saber.
+- A conversa inteira não é guardada. O banco guarda a ficha do dia, as lembranças, os avisos e o resumo. A fala só fica registrada dentro de um aviso de segurança.
+- As tabelas do banco só são lidas pelo servidor. O navegador fala apenas com as rotas `/api`.
+- A família apaga todos os dados de um idoso em `/familia/ajustes`.
+- A Dona Leda não é médica, não dá diagnóstico e não muda remédio. Ela não substitui serviço de emergência: em urgência, orienta ligar pro 192 e avisa a família.
+- A Dona Leda nunca pede dinheiro, senha ou dado de banco.
+- O remédio é registrado como a pessoa disse. Se ela disser que tomou e não tomou, a assistente não tem como saber.
 
 ## Próximos passos
 
-- Testar com avós do time e medir quantos conversam até o fim e quantos voltam no dia seguinte.
-- Aplicativo instalado, pra ligação tocar com a tela bloqueada.
+- Medir com avós de verdade quantos conversam até o fim e quantos atendem no dia seguinte.
+- Passar a ligação pra uma pessoa da família na hora da urgência.
 - Ligação pelo telefone comum, pra quem não usa celular com internet.
-- Aviso à família por WhatsApp, além do painel.
-- Banco de dados na nuvem e login da família.
-- Testar o avatar em vídeo pela Agora com uma conta da Anam ou da HeyGen.
+- Aviso à família por notificação ou WhatsApp, além do painel.
+- Ligação tocando com a tela bloqueada no celular.
+- Baixar o custo por minuto da conversa (conta em `conhecimento/tese.md`).
 
 ## Licença
 
