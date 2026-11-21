@@ -16,8 +16,9 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 - **Cada dupla prepara o seu par** (notebook com o painel, celular como aparelho do idoso):
   1. No notebook, entre em `/entrar`, crie uma conta e escolha "Ver com um exemplo". Cada dupla tem a sua conta, pra ligação de uma não tocar no celular da outra.
   2. No celular, pelo navegador comum, abra o endereço do modo da dupla: `donaleda.vercel.app/?modo=gemini` ou `donaleda.vercel.app/?modo=tres`.
-  3. Toque em "Este aparelho é do idoso" e digite os 6 números que aparecem no notebook, em `/familia/aparelho`.
+  3. Toque em "Este aparelho vai receber as ligações" e digite os 6 números que aparecem no notebook, em `/familia/aparelho`.
   4. Deixe o celular apoiado, com volume alto.
+- **Como falar (vale também no palco):** o celular usa a internet dele (4G ou 5G), fora do wi-fi do evento. Quem faz a idosa fala com o celular perto da boca, sem ninguém falando perto, e diz "Alô" logo ao atender, antes de qualquer outra voz. No modo de três peças, o foco na voz prende na primeira voz alta da ligação e passa a ignorar as outras. As situações 4 e 5 fogem disso de propósito.
 - **Idoso de teste:** a dona Helena do exemplo. Nunca o nome de uma pessoa de verdade.
 - **Cada ligação** começa no painel, em "Ligar agora". O celular toca e quem faz o idoso toca em Atender.
 - **Tempo de resposta:** quem cronometra dispara quando o idoso termina a última palavra e para no primeiro som da Dona Leda. Anote em segundos, com uma casa (1,8). Até 1,5 s soa como conversa. Acima de 3 s a pessoa acha que a ligação caiu, e conta como falha.
@@ -49,7 +50,7 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 - **Falha** se ela responde na pausa e corta a frase. Anote quantas vezes isso aconteceu. Hoje ela espera 650 milésimos de segundo de silêncio antes de responder, e este teste diz se precisa esperar mais.
 
 ### 5. TV ou música ao fundo
-- **Ligue** um vídeo de noticiário ou uma música a uns dois metros do celular, no volume de uma sala com a TV ligada.
+- **Depois do "Alô"**, ligue um vídeo de noticiário ou uma música a uns dois metros do celular, no volume de uma sala com a TV ligada.
 - **Responda** a uma pergunta dela normalmente. Depois fique calado uns 10 segundos, com a TV ainda ligada.
 - **Ela tem que** responder só ao que você disse. Com você calado, ela não pode começar a falar por causa da TV nem parar a própria frase por causa de um barulho.
 - **Falha** se ela responde à TV, se corta a própria fala com o barulho ou se não entende você. Este é o teste do foco na voz, que só as três peças têm.

@@ -1,6 +1,6 @@
 # Validação com idosos
 
-Kit das ligações de 21/11/2026, das 20h às 23h. A validação vale 10% da nota: a banca quer teste com gente, o que aprendemos, os limites e os próximos passos. A pergunta desta noite é se o idoso atende a Dona Leda, conversa com ela e aceitaria a ligação do dia seguinte.
+Kit das ligações de 21/11/2026, das 20h às 23h. A validação vale 10% da nota: a banca quer teste com gente, o que aprendemos, os limites e os próximos passos. A pergunta desta noite é se o idoso atende a Dona Leda e conversa com ela. A de domingo às 9h é se ele atende de novo, sem ninguém pedir.
 
 **Este repositório é público.** Aqui entram só código (A1, A2...), faixa de idade e números. Nome, telefone, cidade e gravação nunca entram. Os resultados com nome ficam fora do GitHub, com o Breno.
 
@@ -17,7 +17,7 @@ O idoso nunca faz login. Quem faz é a pessoa do time, no celular dela:
 
 1. Em https://donaleda.vercel.app/entrar, crie a conta e cadastre o idoso.
 2. Em "Aparelho", toque em "Mandar o link pra" o idoso. Sai pelo WhatsApp um link que vale 30 minutos.
-3. No celular do idoso, alguém abre o link. O celular fica pronto sozinho, sem digitar nada. Se o link não abrir: entre em donaleda.vercel.app no celular dele, toque em "Este aparelho é do idoso" e digite os 6 números.
+3. No celular do idoso, alguém abre o link. O celular fica pronto sozinho, sem digitar nada. Se o link não abrir: entre em donaleda.vercel.app no celular dele, toque em "Este aparelho vai receber as ligações" e digite os 6 números.
 4. Deixe a página aberta, com a tela acesa e o volume alto, e o celular apoiado.
 5. No painel, toque em "Ligar agora". Na primeira ligação o idoso toca em Atender e alguém toca em "Permitir" quando o celular pedir microfone e câmera.
 
@@ -59,6 +59,14 @@ Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 - "Teve alguma hora em que a senhora não entendeu?"
 - "Se ela ligasse amanhã nesse horário, a senhora atendia?" (sim, talvez, não)
 - Pra família: "Você colocaria isso pra ela todo dia? Por quê?" (sim, talvez, não)
+- Pra família: "Quanto você pagaria por mês por isso?" Anote o número que a pessoa disser, sem sugerir valor.
+- Pros dois: "Posso pedir pra Dona Leda ligar de novo amanhã, domingo, às 9h?" Só marque com o sim dos dois.
+
+**Domingo às 9h (a segunda ligação)**
+- A ligação das 9h já vem marcada no app (é o horário padrão; confira em `/familia/ajustes`).
+- Às 8h50, alguém da família abre de novo a página no celular do idoso e deixa a tela acesa. O celular continua ligado à conta, sem link novo. Quem abre não pede pro idoso atender: só deixa o celular pronto.
+- Se não tocar até 9h05, quem ligou no sábado toca em "Ligar agora" no painel.
+- Anote se ele atendeu, os minutos e se a Dona Leda lembrou de alguma coisa da conversa de sábado.
 
 ## 3. A planilha
 
@@ -67,18 +75,18 @@ A Stephanie preenche uma linha por idoso. Os combinados pra contar igual:
 - **Minutos:** do atender ao tchau, no cronômetro.
 - **Precisou de ajuda:** em que passo (abrir, código, microfone, atender, durante a conversa).
 
-| Código | Idade | Mora sozinho? | Atendeu? | Minutos | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | Falha técnica |
-|---|---|---|---|---|---|---|---|---|---|---|
-| A1 | | | | | | | | | | |
-| A2 | | | | | | | | | | |
-| A3 | | | | | | | | | | |
-| A4 | | | | | | | | | | |
-| A5 | | | | | | | | | | |
+| Código | Idade | Mora sozinho? | Atendeu? | Minutos | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | Pagaria por mês (R$) | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| A1 | | | | | | | | | | | | | | |
+| A2 | | | | | | | | | | | | | | |
+| A3 | | | | | | | | | | | | | | |
+| A4 | | | | | | | | | | | | | | |
+| A5 | | | | | | | | | | | | | | |
 
 Pra colar numa planilha:
 
 ```
-Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,Falha técnica
+Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,Pagaria por mês (R$),Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
 ```
 
 ## 4. O que vai pro pitch
@@ -86,9 +94,10 @@ Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia a
 - Quantos idosos participaram e a faixa de idade.
 - Quantos atenderam, de quantas ligações que chegaram.
 - Os minutos médios de conversa.
-- Quantos atenderiam a ligação de amanhã, e quantas famílias usariam.
+- Quantos disseram que atenderiam no domingo e quantos atenderam de verdade às 9h.
+- Quantas famílias usariam e o valor do meio entre os que elas disseram que pagariam por mês.
 - O que aprendemos, em duas ou três frases tiradas do que confundiu e do que gostou.
-- Os limites: poucas pessoas, avós de quem estava no evento, uma ligação só e alguém da família do lado.
+- Os limites: poucas pessoas, avós de quem estava no evento, duas ligações no máximo e alguém da família do lado.
 
 ## Compromissos com quem participou
 
