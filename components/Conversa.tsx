@@ -185,6 +185,7 @@ export default function Conversa({
     estado === 'falando',
     localMicrophoneTrack,
     onEncerrar,
+    dados.tetoMs,
   );
   const legenda = useMemo(
     () => legendaDaAssistente(transcript, uidDaAssistente),

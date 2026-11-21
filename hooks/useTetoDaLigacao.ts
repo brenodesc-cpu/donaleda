@@ -17,6 +17,13 @@ function minutos(variavel: string | undefined, padrao: number): number {
 }
 
 export const TETO_DA_LIGACAO_MS = minutos(process.env.NEXT_PUBLIC_LIA_TETO_MIN, 10) * 60_000;
+
+/** O teto que vale: o do servidor (o que sobra do dia) quando vem e é menor que o normal. */
+export function tetoDaLigacao(tetoDoServidorMs?: number): number {
+  return typeof tetoDoServidorMs === 'number' && tetoDoServidorMs > 0
+    ? Math.min(TETO_DA_LIGACAO_MS, tetoDoServidorMs)
+    : TETO_DA_LIGACAO_MS;
+}
 // O corte por silêncio fica desligado até o teste com gente falando (21/11, 17h):
 // sem prova de que o microfone e a legenda chegam no celular, ele poderia derrubar
 // uma conversa de verdade. NEXT_PUBLIC_LIA_TETO_SEM_FALA_MIN=2 liga com 2 minutos.
@@ -45,6 +52,8 @@ export function useTetoDaLigacao(
   assistenteFalando: boolean,
   microfone: IMicrophoneAudioTrack | null,
   onEncerrar: () => void,
+  /** Teto desta ligação vindo do servidor (o que sobra dos minutos de hoje). */
+  tetoDoServidorMs?: number,
 ): void {
   // O relógio lê sempre o valor mais novo destas coisas, sem recomeçar a cada render.
   const encerrar = useRef(onEncerrar);
@@ -79,7 +88,7 @@ export function useTetoDaLigacao(
         relogios,
         { legendaMudou, volumeDoIdoso: volume, assistenteFalando: falando.current },
         PASSO_MS,
-        { tetoMs: TETO_DA_LIGACAO_MS, semFalaMs: TETO_SEM_FALA_MS },
+        { tetoMs: tetoDaLigacao(tetoDoServidorMs), semFalaMs: TETO_SEM_FALA_MS },
       );
       relogios = resultado.relogios;
       if (resultado.encerrar) {
@@ -89,5 +98,5 @@ export function useTetoDaLigacao(
     }, PASSO_MS);
 
     return () => clearInterval(passo);
-  }, [assistenteNaLinha]);
+  }, [assistenteNaLinha, tetoDoServidorMs]);
 }

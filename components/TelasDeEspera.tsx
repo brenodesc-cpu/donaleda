@@ -16,6 +16,7 @@ const AVISO_DE_FALHA: Record<MotivoDaFalha, string> = {
   microfone:
     'Não consegui usar o microfone. Toque em Tentar de novo e, se o aparelho perguntar, escolha Permitir. Se ele não perguntar, peça pra alguém da família liberar o microfone.',
   conexao: 'A ligação não deu certo. Toque em Tentar de novo.',
+  limite: `A conversa de hoje com a ${NOME_DA_ASSISTENTE} já acabou. Amanhã ela liga de novo.`,
 };
 
 function minutosAgoraEmBrasilia(): number {
@@ -69,15 +70,41 @@ export function PrepararAparelho({ negado, onPreparar }: PrepararAparelhoProps) 
 interface EsperandoProps {
   horarios: readonly string[];
   proxima: string | null;
+  /** O servidor diz se a próxima ligação marcada é só amanhã. */
+  proximaEAmanha?: boolean;
+  /** Os minutos de conversa de hoje acabaram: o idoso não começa outra conversa hoje. */
+  limiteAcabou?: boolean;
   onLigar: () => void;
 }
 
 /** O aparelho pronto, esperando a assistente ligar. O idoso também pode chamar. */
-export function Esperando({ horarios, proxima, onLigar }: EsperandoProps) {
+export function Esperando({
+  horarios,
+  proxima,
+  proximaEAmanha,
+  limiteAcabou = false,
+  onLigar,
+}: EsperandoProps) {
   const eAmanha =
-    proxima !== null &&
-    proxima === horarios[0] &&
-    emMinutos(proxima) <= minutosAgoraEmBrasilia();
+    proximaEAmanha ??
+    (proxima !== null &&
+      proxima === horarios[0] &&
+      emMinutos(proxima) <= minutosAgoraEmBrasilia());
+  if (limiteAcabou) {
+    return (
+      <div className={MIOLO}>
+        <Rosto estado="parada" nivel={0} />
+        <h1 className={TITULO}>
+          A conversa de hoje com a {NOME_DA_ASSISTENTE} já acabou.
+        </h1>
+        <p className={APOIO}>
+          {proxima
+            ? `Amanhã ela liga de novo ${comPreposicao(proxima)}.`
+            : 'Amanhã ela liga de novo.'}
+        </p>
+      </div>
+    );
+  }
   return (
     <>
       <div className={MIOLO}>
@@ -126,7 +153,10 @@ export function AvisoDeFalha({ motivo, onTentar, onVoltar }: AvisoDeFalhaProps) 
         {AVISO_DE_FALHA[motivo]}
       </p>
       <div className="flex w-full flex-col items-center gap-4">
-        <BotaoGrande onClick={onTentar}>Tentar de novo</BotaoGrande>
+        {/* Com os minutos de hoje acabados, tentar de novo não adianta. */}
+        {motivo === 'limite' ? null : (
+          <BotaoGrande onClick={onTentar}>Tentar de novo</BotaoGrande>
+        )}
         {onVoltar ? (
           <BotaoGrande tom="discreto" className="text-xl" onClick={onVoltar}>
             Voltar

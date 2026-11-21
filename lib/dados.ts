@@ -5,6 +5,7 @@ import { avisoAberto } from './avisos';
 import { randomUUID } from 'node:crypto';
 import { citaSegredo, guardar, normalizarLembrancas, paraOPainel } from './memoria';
 import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
+import { limiteDoDia } from './limiteDoDia';
 import type {
   Alerta,
   Alimentacao,
@@ -254,6 +255,7 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     ...paraOPainel(base),
     chamadaTocando: base.chamadas.find((c) => c.estado === 'tocando') ?? null,
     chamadas: [...base.chamadas].reverse().slice(0, 10),
+    limiteDoDia: limiteDoDia(base, agora),
     atualizadoEm: agora.toISOString(),
   };
 }
