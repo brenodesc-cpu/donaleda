@@ -40,18 +40,18 @@ Três ligações seguidas pra mesma idosa, que nunca tinha falado com a Dona Led
 **O caminho no ar:** o site está com a gravação mais nova do main, e o endereço que a Agora usa pras ações está configurado na Vercel, então as ações estão ligadas. A ida e volta Agora, site e banco foi conferida pela conversa do servidor em ligações de verdade.
 
 **O que ainda impede o ciclo de funcionar sempre:**
-1. **O modo de três peças, que é o padrão, não está provado.** Nele ela já prometeu avisar a família e não chamou a ação, e ninguém testou esse modo por voz. Se ele não guardar lembrança com a mesma constância do Gemini, a segunda ligação dos avós no domingo não vai lembrar de nada. O teste das 17h decide o modo.
+1. **O modo de três peças, que ficou de reserva, não está provado.** Desde a tarde de 21/11 o padrão do site é o Gemini dentro da Agora, por decisão do Breno, e as três peças só vão pros avós se a chave paga do Gemini não for trocada até 19h45. Nas três peças ela já prometeu avisar a família e não chamou a ação, e ninguém testou esse modo por voz. O teste das 17h confere nos dois modos se a vizinha com a chave e a consulta aparecem em "O que a Dona Leda sabe".
 2. **O aviso de privacidade da primeira ligação depende da IA.** Na ligação 1 ela não disse que guarda o que a pessoa conta, que a família vê um resumo e que dá pra pedir pra esquecer. A frase precisa entrar na saudação fixa da primeira ligação.
 3. **A lembrança guarda a data relativa no texto** ("na quinta que vem"). A data certa fica no campo próprio, mas o texto vai ficar errado depois dessa quinta.
 
 ### Conferência por voz do pedido de segredo, 21/11 às 15h30
 
-Feita no Gemini Live do modo Gemini com áudio de verdade (a voz Luciana do Mac fazendo a idosa, mandada em pedaços como um microfone), três rodadas da cena do aluguel. O modo de três peças, que é o padrão, ficou de fora: ele só roda pela ligação da Agora.
+Feita no Gemini Live do modo Gemini com áudio de verdade (a voz Luciana do Mac fazendo a idosa, mandada em pedaços como um microfone), três rodadas da cena do aluguel. O modo de três peças, hoje de reserva, ficou de fora: ele só roda pela ligação da Agora.
 
 - **Ela responde ao pedido.** Por voz, ela respondeu "não conta isso pra Marina" nas duas rodadas em que ouviu a fala, em 1,3 a 1,4 s. O silêncio visto por texto foi do teste. Na terceira rodada ela parou de ouvir depois da primeira resposta, sem erro; a causa pode ser o próprio teste.
 - **Defeito 4, consertado pela instrução de 644f0cd (conferido por voz):** antes, nas duas rodadas, ela disse "esse assunto fica só entre nós, não vou contar para a Marina", depois de já ter avisado a família da tristeza. Com a instrução nova, nas duas rodadas em que ouviu o pedido, ela disse "O motivo do aluguel fica só entre nós. A Marina só vai saber que a senhora anda triste." Numa dessas rodadas ela não mandou aviso nenhum da tristeza de uma semana.
 - **Defeito 5, consertado em bf83f4a (conferido):** o segredo vazava pela observação do dia. Em duas de três rodadas ela anotou "Triste e chorando há uma semana por causa do aluguel atrasado", e as observações do dia aparecem no painel da família. Agora a observação que cita um segredo fica de fora, o humor continua anotado, e duas provas em `testes/mcp.test.ts` seguram isso.
-- **No modo de três peças** (o padrão), a conversa do servidor rodou a mesma cena às 15h3x numa ligação de verdade pela Agora, com as falas entrando como texto. Ela não prometeu segredo, disse "preciso avisar a Marina" e não chamou ação nenhuma, então nenhum aviso foi gravado e o motivo guardado em segredo não foi oferecido. Esse defeito de prometer o aviso sem mandar está com a central.
+- **No modo de três peças** (de reserva), a conversa do servidor rodou a mesma cena às 15h3x numa ligação de verdade pela Agora, com as falas entrando como texto. Ela não prometeu segredo, disse "preciso avisar a Marina" e não chamou ação nenhuma, então nenhum aviso foi gravado e o motivo guardado em segredo não foi oferecido. Esse defeito de prometer o aviso sem mandar está com a central.
 
 ## Resumo do desenho
 
