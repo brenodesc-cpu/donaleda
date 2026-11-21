@@ -1,6 +1,7 @@
 // A ficha de cada idoso. As funções de cima são puras e mexem num objeto Base;
 // as de baixo leem e gravam a ficha no banco (Supabase), uma mudança de cada vez.
 
+import { avisoAberto } from './avisos';
 import { randomUUID } from 'node:crypto';
 import { citaSegredo, guardar, normalizarLembrancas, paraOPainel } from './memoria';
 import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
@@ -231,7 +232,9 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
 
   const alertas = [...base.alertas]
     .sort((a, b) => {
-      if (a.visto !== b.visto) return a.visto ? 1 : -1;
+      // Aberto primeiro: ninguém viu, ou quem viu ainda não contou o que fez.
+      const abertoA = avisoAberto(a);
+      if (abertoA !== avisoAberto(b)) return abertoA ? -1 : 1;
       return b.criadoEm.localeCompare(a.criadoEm);
     })
     .slice(0, 20);

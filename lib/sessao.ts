@@ -10,6 +10,8 @@ import { clienteDaSessao, clienteDoServidor } from './supabase/servidor';
 export interface Familia {
   userId: string;
   email: string | null;
+  /** O nome dado no cadastro da conta, quando houver. */
+  nome: string | null;
 }
 
 export type Papel = 'responsavel' | 'familiar';
@@ -33,7 +35,12 @@ export async function familiaLogada(): Promise<Familia | null> {
       ? await clienteDoServidor().auth.getUser(token)
       : await (await clienteDaSessao()).auth.getUser();
     if (!data.user) return null;
-    return { userId: data.user.id, email: data.user.email ?? null };
+    const nome = data.user.user_metadata?.nome;
+    return {
+      userId: data.user.id,
+      email: data.user.email ?? null,
+      nome: typeof nome === 'string' && nome.trim() ? nome.trim() : null,
+    };
   } catch {
     return null;
   }

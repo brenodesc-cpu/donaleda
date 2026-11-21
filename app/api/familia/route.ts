@@ -5,6 +5,7 @@
 
 import { randomInt } from 'node:crypto';
 import { NextResponse } from 'next/server';
+import { marcarAvisoVisto, registrarDesfecho, respostaValida } from '@/lib/avisos';
 import { arrumarHorarios, avancarChamadas, pedirChamadaDaFamilia } from '@/lib/chamadas';
 import { montarPainel, mudarBase, mudarBaseQuando } from '@/lib/dados';
 import { dataPedida, GAVETAS, guardar, horaPedida, mudar } from '@/lib/memoria';
@@ -85,10 +86,24 @@ export async function POST(request: Request) {
   if (acao.acao === 'visto' && typeof acao.alertaId === 'string') {
     const achou = await mudarBase(idosoId, (base) => {
       const alerta = base.alertas.find((a) => a.id === acao.alertaId);
-      if (alerta) alerta.visto = true;
+      if (alerta) marcarAvisoVisto(alerta, familia.nome ?? '');
       return Boolean(alerta);
     });
     return NextResponse.json({ ok: achou }, { status: achou ? 200 : 404 });
+  }
+
+  if (acao.acao === 'desfecho' && typeof acao.alertaId === 'string') {
+    if (!respostaValida(acao.resposta)) {
+      return NextResponse.json({ ok: false, erro: 'resposta' }, { status: 400 });
+    }
+    const resposta = acao.resposta;
+    const alerta = await mudarBase(idosoId, (base) => {
+      const achado = base.alertas.find((a) => a.id === acao.alertaId);
+      if (achado) registrarDesfecho(achado, resposta, acao.nota, familia.nome ?? '');
+      return achado ?? null;
+    });
+    if (!alerta) return NextResponse.json({ ok: false, erro: 'nao_achei' }, { status: 404 });
+    return NextResponse.json({ ok: true, alerta });
   }
 
   if (acao.acao === 'ligar') {

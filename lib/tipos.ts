@@ -19,6 +19,8 @@ export type CategoriaDeLembranca =
 
 export type TipoDeAlerta = 'emergencia' | 'golpe' | 'remedio' | 'saude' | 'humor' | 'ligacao';
 export type Gravidade = 'urgente' | 'atencao';
+/** O que quem viu o aviso fez: ligou, foi até lá, chamou ajuda ou vai ver mais tarde. */
+export type RespostaDoAviso = 'liguei' | 'fui_la' | 'chamei_ajuda' | 'depois';
 
 /** O que a Lia soube do idoso num dia. Campo vazio quer dizer "ainda não respondeu". */
 export interface Dia {
@@ -69,6 +71,11 @@ export interface Alerta {
   /** 'assistente': a Lia decidiu avisar. 'regra': uma regra fixa do código disparou. */
   origem: 'assistente' | 'regra';
   visto: boolean;
+  /** Quem tocou em "Já vi" primeiro (o nome do cadastro) e quando. Aviso visto antes de 21/11 não tem. */
+  vistoPor?: string;
+  vistoEm?: string;
+  /** O que a pessoa fez depois de ver, com uma nota curta opcional. */
+  desfecho?: { resposta: RespostaDoAviso; nota?: string; por: string; em: string };
 }
 
 /** Uma conversa. O texto do que foi dito não é guardado: só a duração e o resumo. */
@@ -168,6 +175,8 @@ export interface PainelDaFamilia {
  */
 export type AcaoDaFamilia = (
   | { acao: 'visto'; alertaId: string }
+  /** Conta o que fez com o aviso. Responde `{ ok, alerta }`. */
+  | { acao: 'desfecho'; alertaId: string; resposta: RespostaDoAviso; nota?: string }
   /** Faz o aparelho do idoso tocar agora. Responde `{ ok, chamada }`, ou 409 se já está tocando. */
   | { acao: 'ligar' }
   /** Troca as horas das ligações de todo dia ("HH:MM"). Responde `{ ok, horarios }`. */
