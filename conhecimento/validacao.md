@@ -103,6 +103,23 @@ Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia a
 - O que aprendemos, em duas ou três frases tiradas do que confundiu e do que gostou.
 - Os limites: poucas pessoas, avós de quem estava no evento, duas ligações no máximo e alguém da família do lado.
 
+## O retorno escrito dos mentores (21/11)
+
+Os mentores mandaram por escrito, depois da rodada de 21/11, o que falta provar. O Breno ainda decide o que aplicar, e nada disto muda o roteiro das ligações de hoje.
+
+- **A promessa sugerida:** "ligação combinada que ajuda a família a coordenar o cuidado". Ela deixa de fora cobertura clínica e de emergência, que o protótipo não demonstrou.
+- **O idoso decide o que é compartilhado.** A família pode pagar, e mesmo assim não ganha acesso a todas as conversas. Ele precisa poder pausar, escolher quando falar e escolher o que vai pra família.
+- **O que a banca quer ver:** uma família inventada, uma pendência, um responsável por ela e o desfecho. O pitch fecha com quem compra e com o custo por família acompanhada.
+- **Aviso entregue e cuidado prestado são coisas diferentes,** e o painel deve mostrar as duas.
+- **Três testes sugeridos:**
+  1. *Resumo contra transcrição:* o mesmo check-in inventado em três versões (conversa completa, resumo e pendência com responsável), mostrado a cinco adultos. Mede se a pessoa decide certo e quanto tempo leva pra entender.
+  2. *Duas contra cinco perguntas:* mede abandono, repetição e informação útil, separando "não respondeu", "não entendeu" e "respondeu sem pendência". Silêncio não conta como tudo bem.
+  3. *Comprador com orçamento:* entrevistar à parte um familiar e uma empresa de cuidado em casa. Qual problema acontece hoje, com que frequência, o que usam no lugar, quanto custa e quem autoriza a compra.
+- **Voz não serve de senha.** Alguém pode imitar a voz ou usar o celular desbloqueado, então a identidade e as permissões do familiar são conferidas fora da conversa.
+- **Dado de saúde pede um cuidado próprio na LGPD** (artigos 7, 11 e 46) antes de um piloto de verdade: finalidade, base legal, por quanto tempo guarda, quem acessa e quais fornecedores. O sim da família sozinho não resolve.
+
+O texto inteiro está com o Breno, fora do GitHub.
+
 ## Compromissos com quem participou
 
 - Nada é gravado sem o segundo sim.
