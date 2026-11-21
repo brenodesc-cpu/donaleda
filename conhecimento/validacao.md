@@ -160,6 +160,8 @@ Os mentores mandaram por escrito, depois da rodada de 21/11, o que falta provar.
 - **Voz não serve de senha.** Alguém pode imitar a voz ou usar o celular desbloqueado, então a identidade e as permissões do familiar são conferidas fora da conversa.
 - **Dado de saúde pede um cuidado próprio na LGPD** (artigos 7, 11 e 46) antes de um piloto de verdade: finalidade, base legal, por quanto tempo guarda, quem acessa e quais fornecedores. O sim da família sozinho não resolve.
 
+- **Da segunda conversa com um mentor, à noite:** os jurados podem testar por um QR Code que faz a Dona Leda ligar pra pessoa (hoje isso exige cadastrar um idoso antes). Sobre a Agora no pitch, na dúvida se pega mal dizer que a operação sai dela ao crescer, a orientação foi mudar o jeito de apresentar.
+
 O texto inteiro está com o Breno, fora do GitHub.
 
 ## Compromissos com quem participou
