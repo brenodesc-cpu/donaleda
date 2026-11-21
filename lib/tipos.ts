@@ -115,7 +115,8 @@ export interface Idoso {
 
 /** Quem pediu a ligação: a hora marcada ou alguém da família, pelo painel. */
 export type MotivoDaChamada = 'horario' | 'familia';
-export type EstadoDaChamada = 'tocando' | 'atendida' | 'perdida' | 'recusada';
+/** 'falhou': o idoso atendeu, mas a Agora recusou a assistente e ela não entrou. */
+export type EstadoDaChamada = 'tocando' | 'atendida' | 'perdida' | 'recusada' | 'falhou';
 
 /** Uma ligação que a assistente faz pro aparelho do idoso. */
 export interface Chamada {

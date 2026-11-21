@@ -208,3 +208,30 @@ describe('ligação que atende sozinha sem ninguém falar (verificador, 21/11)',
     expect(montarPainel(base, depois(NOVE_EM_PONTO, 310)).conversouHoje).toBe(true);
   });
 });
+
+describe('a Dona Leda não conseguiu entrar na ligação', () => {
+  it('a ligação atendida vira "não conseguiu entrar", a família é avisada e a segunda tentativa vem', async () => {
+    const { assistenteNaoEntrou, avancarChamadas, pedirChamadaDaFamilia, responderChamada } = await import('@/lib/chamadas');
+    const agora = new Date('2026-11-21T18:00:00.000Z');
+    const base = baseDeExemplo(agora, 'id');
+    base.idoso.horariosDeLigacao = ['15:00'];
+    avancarChamadas(base, agora);
+    const chamada = base.chamadas.at(-1)!;
+    responderChamada(base, chamada.id, 'atender', new Date(agora.getTime() + 5000));
+    assistenteNaoEntrou(base, chamada.id, new Date(agora.getTime() + 8000));
+    expect(chamada.estado).toBe('falhou');
+    expect(base.alertas.at(-1)?.texto).toContain('não conseguiu entrar na ligação das 15:00');
+    expect(montarPainel(base, new Date(agora.getTime() + 9000)).conversouHoje).toBe(false);
+    avancarChamadas(base, new Date(agora.getTime() + 4 * 60_000));
+    expect(base.chamadas.at(-1)?.tentativa).toBe(2);
+    expect(pedirChamadaDaFamilia).toBeDefined();
+  });
+
+  it('quando o idoso chamou e ela não entrou, o aviso diz que ele chamou', async () => {
+    const { assistenteNaoEntrou } = await import('@/lib/chamadas');
+    const agora = new Date('2026-11-21T18:00:00.000Z');
+    const base = baseDeExemplo(agora, 'id');
+    assistenteNaoEntrou(base, undefined, agora);
+    expect(base.alertas.at(-1)?.texto).toContain('Dona Helena chamou às 15:00, mas a Dona Leda não conseguiu entrar');
+  });
+});

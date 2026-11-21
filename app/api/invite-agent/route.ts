@@ -25,6 +25,7 @@ import {
 } from 'agora-agents';
 import type { ClientStartRequest } from '@/types/conversation';
 import { DEFAULT_AGENT_UID } from '@/lib/agora';
+import { assistenteNaoEntrou } from '@/lib/chamadas';
 import { abrirConversa, lerBase, mudarBase } from '@/lib/dados';
 import { FERRAMENTAS } from '@/lib/ferramentas';
 import { montarInstrucoes, montarSaudacao, type OrigemDaLigacao } from '@/lib/persona';
@@ -146,8 +147,11 @@ export async function POST(request: NextRequest) {
   if (!aparelho.ok) return aparelho.resposta;
   const idosoId = aparelho.valor;
 
+  // Guardado fora do try, pra quando a Agora recusar a assistente o aviso saber qual ligação era.
+  let chamadaId: string | undefined;
   try {
     const body: ClientStartRequest & { chamada_id?: string } = await request.json();
+    chamadaId = body.chamada_id;
     const { requester_id, channel_name } = body;
 
     const appId = exigirVariavel('NEXT_PUBLIC_AGORA_APP_ID');
@@ -316,6 +320,11 @@ export async function POST(request: NextRequest) {
     } satisfies InicioDaConversa);
   } catch (error) {
     console.error('Erro ao começar a conversa:', error);
+    try {
+      await mudarBase(idosoId, (b) => assistenteNaoEntrou(b, chamadaId, new Date()));
+    } catch (erroDoAviso) {
+      console.error('Também não consegui avisar a família:', erroDoAviso);
+    }
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Não foi possível começar a conversa' },
       { status: 500 },

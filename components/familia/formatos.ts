@@ -1,6 +1,7 @@
 // Como o painel da família transforma a ficha em palavras, horas e cores.
 // Tudo aqui é conta pura: nenhuma busca, nenhum estado.
 
+import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import type {
   CategoriaDeLembranca,
   Chamada,
@@ -301,6 +302,9 @@ export function resultadoDaLigacao(chamada: Chamada, hoje: string): Leitura | nu
   }
   if (chamada.estado === 'perdida') {
     return { texto: `Não atendeu a ligação ${daLigacao}`, tom: 'atencao' };
+  }
+  if (chamada.estado === 'falhou') {
+    return { texto: `A ${NOME_DA_ASSISTENTE} não conseguiu entrar na ligação ${daLigacao}`, tom: 'atencao' };
   }
   if (chamada.estado === 'recusada') {
     const quando = foiHoje ? `às ${hora}` : `${diaEMes(data)} às ${hora}`;

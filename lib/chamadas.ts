@@ -148,8 +148,9 @@ export function avancarChamadas(base: Base, agora: Date = new Date()): { mudou: 
       return { mudou: true };
     }
 
+    // Ligação em que a Dona Leda não conseguiu entrar também ganha a segunda tentativa.
     const podeTentarDeNovo =
-      ultima.estado === 'perdida' &&
+      (ultima.estado === 'perdida' || ultima.estado === 'falhou') &&
       doHorario.length < TENTATIVAS_POR_HORARIO &&
       agora.getTime() - new Date(ultima.resolvidaEm ?? ultima.pedidaEm).getTime() >=
         ESPERA_ENTRE_TENTATIVAS_MS;
@@ -217,4 +218,23 @@ export function situacaoDaChamada(base: Base, agora: Date = new Date()): Situaca
     proximaLigacao: proximaLigacao(base, agora),
     horariosDeLigacao: arrumarHorarios(base.idoso.horariosDeLigacao),
   };
+}
+
+/**
+ * A Agora recusou a assistente (cota, chave, fora do ar) depois de o aparelho atender.
+ * A ligação deixa de contar como atendida e a família recebe um aviso, pra não achar
+ * que houve conversa. Sem ligação (o idoso chamou), o aviso diz que ele chamou.
+ */
+export function assistenteNaoEntrou(base: Base, chamadaId: string | undefined, agora: Date = new Date()): void {
+  const chamada = chamadaId ? base.chamadas.find((c) => c.id === chamadaId) : undefined;
+  if (chamada && chamada.estado === 'atendida') {
+    chamada.estado = 'falhou';
+    chamada.resolvidaEm = agora.toISOString();
+  }
+  const hora = chamada?.horario ?? horaMinutoEmBrasilia(agora);
+  const { tratamento } = base.idoso;
+  const texto = chamada
+    ? `A ${NOME_DA_ASSISTENTE} não conseguiu entrar na ligação das ${hora}. Ligue pra ${tratamento} pra saber como está.`
+    : `${tratamento[0].toUpperCase()}${tratamento.slice(1)} chamou às ${hora}, mas a ${NOME_DA_ASSISTENTE} não conseguiu entrar na ligação.`;
+  criarAlerta(base, { tipo: 'ligacao', gravidade: 'atencao', texto, origem: 'regra' }, agora);
 }
