@@ -165,6 +165,36 @@ O Breno já escolheu o Gemini como padrão. O teste diz se ele aguenta ou se o p
 - **O link pelo WhatsApp, uma vez só:** no fim, uma das duplas manda pelo WhatsApp, de `/familia/aparelho`, o link pra um celular que ainda não foi usado no teste e abre direto do WhatsApp, como a avó vai abrir às 20h. Veja se o celular fica pronto sozinho e se o microfone funciona numa ligação. Se não funcionar, anote como falha.
 - **As duas tabelas** (foto do papel serve) vão pro Breno. As falhas viram a lista abaixo, que vai pra quem cuida da voz e do servidor, e a comparação dos dois modos vai pra central.
 
+## Teste da família entrando na ligação (depois das 23h)
+
+Roteiro curto pro recurso em que a família entra na ligação quando a idosa precisa. Roda quando a conversa do servidor puser o ramo `familia-na-ligacao` no ar, no endereço que ela indicar. Leva uns 15 minutos.
+
+**Antes de começar**
+- **Celular 1** é o aparelho da dona Helena, pareado como no teste das 17h.
+- **O computador** fica logado como família, com o painel aberto.
+- **Celular 2** fica logado como família também, pra repetir a situação 3 pelo celular, que é como a filha de verdade entra.
+- **A família fica em outra sala ou de fone.** Na mesma sala, o som de um aparelho entra no microfone do outro e vira eco.
+- **Uma pessoa faz a idosa** e a outra faz a família, cronometra e anota.
+
+**As cinco situações**
+
+1. **Queda.** A idosa diz: "Eu caí no banheiro e não consigo levantar." A Dona Leda tem que dizer com calma que avisou a família e que fica com ela na linha. **Meça** da fala até ela dizer que avisou.
+2. **O aviso no painel.** No computador aparece o aviso da queda com o botão de entrar na ligação. **Meça** da fala da idosa até o aviso aparecer.
+3. **A família entra.** Toque no botão. A Dona Leda tem que dizer que a Marina entrou e sair da conversa, sem falar mais. A idosa e a família se ouvem, e no celular 1 aparece a imagem da família. A câmera da idosa fica desligada: no computador não pode aparecer a imagem dela. **Meça** do toque no botão até a família ouvir a idosa. Depois repita numa ligação nova, entrando pelo celular 2.
+4. **"Chama a minha filha."** Numa ligação nova, a idosa diz: "Chama a minha filha." A Dona Leda tem que dizer que vai chamar a Marina, e o pedido aparece no painel. **Meça** da fala até o pedido aparecer.
+5. **Ninguém entra.** Numa ligação nova, a idosa repete a queda e ninguém toca no painel. Por volta dos 90 segundos, a Dona Leda tem que orientar a ligar pro 192 ou chamar um vizinho. Ela não pode dizer que a família ou a ambulância estão a caminho, porque ninguém está. **Meça** em que segundo ela falou do 192.
+
+| # | Situação | Funcionou? (sim, meio, não) | Tempo (s) | O que falhou |
+|---:|---|---|---|---|
+| 1 | Queda: avisou e ficou | | até dizer que avisou: | |
+| 2 | Aviso com o botão no painel | | até o aviso: | |
+| 3 | Família entra (computador) | | até se ouvirem: | câmera da idosa apareceu? |
+| 3 | Família entra (celular 2) | | até se ouvirem: | |
+| 4 | "Chama a minha filha" | | até o pedido: | |
+| 5 | Ninguém entra em 90 s | | falou do 192 no segundo: | disse que alguém vinha? |
+
+Anote também o modo da voz em uso (o padrão do site, salvo se a dupla abrir outro). A tabela vai pro Breno, e as falhas entram na lista abaixo.
+
 ## Falhas encontradas
 
 _Preencher depois do teste._
