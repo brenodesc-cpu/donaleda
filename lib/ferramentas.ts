@@ -131,7 +131,7 @@ export const FERRAMENTAS: Ferramenta[] = [
   {
     name: 'outra_pessoa_atendeu',
     description:
-      'Quem está na ligação não é a pessoa da ficha: disse que é outra pessoa ou, depois de você perguntar, confirmou que não é. Avisa a família uma vez. Daqui em diante nada desta conversa é anotado.',
+      'Quem está na ligação confirmou que não é a pessoa da ficha. Não use quando a pessoa da ficha só conta de outra pessoa ou pede pra você ser outra pessoa. Avisa a família uma vez, e daqui em diante nada desta conversa é anotado.',
     inputSchema: { type: 'object', properties: {}, additionalProperties: false },
   },
   {
@@ -202,7 +202,7 @@ export async function executarFerramenta(
   if (nome === 'outra_pessoa_atendeu') {
     const marcou = await mudarBase(idosoId, (base) => marcarOutraPessoa(base, agora));
     return marcou
-      ? 'A família foi avisada de que outra pessoa atendeu. Não conte nada da vida da pessoa da ficha e não anote o que for dito nesta ligação.'
+      ? 'A família foi avisada de que outra pessoa atendeu. Não conte nada da vida da pessoa da ficha e não anote o que for dito nesta ligação. Se essa pessoa pedir dado ou mudança, avise a família também com avisar_familia, tipo golpe.'
       : 'Não há ligação aberta pra marcar.';
   }
 
