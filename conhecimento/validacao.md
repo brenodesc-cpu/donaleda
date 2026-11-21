@@ -61,6 +61,7 @@ Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 - "Teve alguma hora em que a senhora não entendeu?"
 - "Se ela ligasse amanhã nesse horário, a senhora atendia?" (sim, talvez, não)
 - Pra família: "Você colocaria isso pra ela todo dia? Por quê?" (sim, talvez, não)
+- Pra família: "Quanto tempo por semana vocês gastam indo ver ou ligando pra checar se está tudo bem com ela?" Anote em horas, somando quem vai e quem liga.
 - Pra família: "Quanto você pagaria por mês por isso?" Anote o número que a pessoa disser, sem sugerir valor.
 - Pros dois: "Posso pedir pra Dona Leda ligar de novo amanhã, domingo, às 9h?" Só marque com o sim dos dois.
 
@@ -77,18 +78,18 @@ A Stephanie preenche uma linha por idoso. Os combinados pra contar igual:
 - **Minutos:** do atender ao tchau, no cronômetro.
 - **Precisou de ajuda:** em que passo (abrir, código, microfone, atender, durante a conversa).
 
-| Código | Idade | Mora sozinho? | Atendeu? | Minutos | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | Pagaria por mês (R$) | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| A1 | | | | | | | | | | | | | | |
-| A2 | | | | | | | | | | | | | | |
-| A3 | | | | | | | | | | | | | | |
-| A4 | | | | | | | | | | | | | | |
-| A5 | | | | | | | | | | | | | | |
+| Código | Idade | Mora sozinho? | Atendeu? | Minutos | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | Horas por semana checando | Pagaria por mês (R$) | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| A1 | | | | | | | | | | | | | | | |
+| A2 | | | | | | | | | | | | | | | |
+| A3 | | | | | | | | | | | | | | | |
+| A4 | | | | | | | | | | | | | | | |
+| A5 | | | | | | | | | | | | | | | |
 
 Pra colar numa planilha:
 
 ```
-Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,Pagaria por mês (R$),Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
+Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,Horas por semana checando,Pagaria por mês (R$),Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
 ```
 
 ## 4. O que vai pro pitch
@@ -98,6 +99,7 @@ Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia a
 - Os minutos médios de conversa.
 - Quantos disseram que atenderiam no domingo e quantos atenderam de verdade às 9h.
 - Quantas famílias usariam e o valor do meio entre os que elas disseram que pagariam por mês.
+- As horas por semana que a família gasta indo ver ou ligando pra checar, no valor do meio. É o número de tamanho do problema que os mentores pediram (ver "O que a banca vai querer ver" em [entrevistas.md](entrevistas.md)).
 - O que aprendemos, em duas ou três frases tiradas do que confundiu e do que gostou.
 - Os limites: poucas pessoas, avós de quem estava no evento, duas ligações no máximo e alguém da família do lado.
 
@@ -109,3 +111,5 @@ Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia a
 ## Resultados
 
 _Preencher depois das ligações, sem nome._
+
+**Fora das ligações, a primeira resposta de preço de alguém da família (21/11):** uma mentora do hackathon, com os pais de 82 e 81 anos morando sozinhos em outra cidade, disse que pagaria até R$ 500 por mês. Ela liga pra mãe todo sábado, e foi numa dessas ligações que percebeu um problema que a visita semanal da família não tinha pegado. O caso inteiro, sem nome, está em [entrevistas.md](entrevistas.md).

@@ -15,6 +15,32 @@ A responsável por uma rede pequena de casas de idosos topou ser parceira da Don
 5. **A casa está implantando um prontuário eletrônico agora**, e outra unidade usa há um ano. É a única tecnologia que eles têm, e ela pode liberar alguns prontuários pro nosso estudo. Pelo sistema de gestão a casa paga uma mensalidade fixa por casa, bem abaixo do que a Dona Leda cobraria por morador.
 6. **Ela vê mais valor na Dona Leda pro idoso que mora sozinho em casa, e se ofereceu pra indicar.** Chegam muitas famílias divididas na casa: uma parte quer levar o idoso pra lá e a outra não. A casa pode ser o caminho até esse idoso, e as perguntas 9 e 10 do roteiro A testam se isso se repete nas outras casas.
 
+## A primeira resposta de preço de uma família (21/11)
+
+Numa rodada de mentoria do hackathon, uma mentora contou o caso dos pais dela e respondeu quanto pagaria. É a primeira resposta de preço de alguém da família.
+
+- **Os pais:** 82 e 81 anos, moram sozinhos em outra cidade, estão bem e não aceitam morar com ninguém.
+- **O cuidado de hoje:** ela liga pra mãe todo sábado, e uma irmã, que mora em outra cidade, visita toda semana.
+- **O caso:** a mãe parou um remédio de uso contínuo por conta própria. Quem visitava toda semana não percebeu, e ela percebeu numa ligação de sábado, pela conversa. A mãe precisou ir pro hospital.
+- **O remédio:** na rodada ficou dito que o idoso esquece e mente sobre o remédio, e toma de novo porque esqueceu que já tinha tomado.
+- **Ela não está sozinha:** "eu tenho muitos amigos da minha idade que estão passando por isso".
+- **O preço:** comparou com a academia e disse "eu investiria até R$ 500" por mês, pra ter tranquilidade sobre como os pais estão. O time pensava em bem menos (o plano Essencial proposto é R$ 229,90). Plano de saúde pros pais passaria de R$ 5 mil por mês pra cada um, e ela não dá conta.
+- **O dado:** na rodada ficou dito que a rotina do idoso é informação muito valiosa pra plano de saúde.
+
+O que pesa mais é o que ela já faz (a ligação de todo sábado e a visita de toda semana). O R$ 500 é a opinião de uma pessoa que ainda não pagou nada e serve de referência de teto.
+
+**Pro pitch de domingo:** é o caso real mais forte do problema que o time tem. Só entra no palco se a mentora autorizar, e sem o nome dela.
+
+## O que a banca vai querer ver (mentor, 21/11)
+
+Na mesma rodada, outro mentor achou a validação fraca: o produto está pronto e o problema ainda não está medido. Ele disse que a banca vai querer três coisas, cada uma com um número:
+
+1. **Se o problema é real, e de que tamanho.** Vem da pergunta de horas por semana da família (C8 e o kit de [validacao.md](validacao.md)), das famílias que desistem da casa (A9) e de casos como o de cima.
+2. **Quanto tempo e dinheiro a Dona Leda poupa.** Vem das horas que a equipe gasta (A11 e B9) e de quantos moradores cada cuidadora atende. O ângulo que ele sugeriu pros residenciais é uma cuidadora a menos por casa, porque cada cuidadora passa a atender mais idosos sem cair a qualidade.
+3. **Se o idoso usaria de fato.** Vem de quantos avós atenderam e conversaram hoje e de quantos atenderam de novo no domingo, em [validacao.md](validacao.md), e de quantos moradores usam celular sozinhos (A1).
+
+Ele também disse que conta muito uma frase como "isso me custa tantas horas por semana" ou "tenho uma pessoa fazendo só isso, e é a tarefa mais chata do dia dela". Anote essas frases do jeito que a pessoa falou.
+
 ## Como conduzir
 
 - **Pergunte sobre a última vez que aconteceu.** "Da última vez que uma família ligou preocupada, o que você fez?" vale mais que "você acha que a família ia gostar?". Opinião sobre o futuro todo mundo dá de graça.
@@ -50,8 +76,10 @@ Pra cada casa que o time liga, e pra pessoa que está a par de tudo na primeira 
    Reforça: várias, porque a família está dividida ou porque o idoso não quer sair de casa. Esse idoso que fica em casa é o público da Dona Leda. Derruba: quase nenhuma, ou desistem só pelo preço e somem.
 10. **Quando uma família desiste, vocês indicam alguma coisa pra quem fica em casa, como cuidadora ou botão de emergência? Já indicaram algum serviço, e ganharam algo com isso?**
    Reforça: já indicam e topariam indicar a Dona Leda, de graça ou por comissão. Derruba: não indicam nada e não querem se envolver com quem não virou morador.
+11. **Quantos moradores cada cuidadora atende por turno? Quantas horas por semana a equipe gasta perguntando como o morador está, anotando e respondendo família? Tem alguém que faz só isso?**
+   Reforça: são várias horas, ou uma pessoa inteira, e aí cabe a conta de uma cuidadora a menos por casa. Derruba: menos de uma hora por semana, espalhada entre todos.
 
-Se o tempo apertar, faça a 1, a 2, a 3, a 9 e o fechamento.
+Se o tempo apertar, faça a 1, a 2, a 3, a 9, a 11 e o fechamento.
 
 **Pra fechar, mostre as telas (donaleda.vercel.app/telas) e peça: "Você deixa a gente testar com três moradores que usam celular, a partir da semana que vem? E me passa o contato de uma cuidadora e de uma família?"**
 
@@ -77,6 +105,8 @@ Pras cuidadoras que a primeira casa indicou e pra qualquer cuidadora que outra c
    Muda o produto: sem celular no plantão, a tela dos moradores tem que ficar num tablet do posto.
 8. **Os moradores que usam celular atendem sozinhos? Você já viu algum receber ligação estranha, golpe ou pedido de dinheiro?**
    Reforça: atendem sozinhos, e golpe já apareceu. Derruba: sempre alguém da equipe precisa ajudar a atender.
+9. **Qual é a tarefa mais chata do seu dia? Quantas horas por semana ela leva?**
+   Reforça: a tarefa é perguntar, anotar ou responder família, e leva horas. Derruba: a parte chata é física (banho, troca, levantar o idoso), que a Dona Leda não faz.
 
 **Pra fechar, mostre um aviso da Dona Leda e pergunte: "Se isto chegasse no seu celular de manhã, o que você faria?"**
 
@@ -100,6 +130,8 @@ Pra família que cada casa indicar. Serve também pra família de idoso que mora
    Mostra quanto ainda cabe no bolso da família.
 7. **Pra família de quem mora em casa: vocês já conversaram sobre levar ele pra uma casa de idosos? O que decidiram, e por quê?**
    Reforça: a família está dividida e ele ficou em casa, que é onde a Dona Leda entra. Derruba: nunca pensaram nisso, ou já decidiram e está resolvido.
+8. **Quanto tempo por semana a família gasta indo ver ou ligando pra checar se está tudo bem com ele?** Anote em horas, somando quem vai e quem liga.
+   Reforça: horas por semana, com viagem ou alguém que se reveza. Derruba: alguns minutos, e a família acha suficiente.
 
 **Pra fechar, mostre o painel da família e peça: "Quer que a Dona Leda ligue pro seu pai esta semana e te mande o resumo?"**
 
@@ -124,6 +156,8 @@ Cada ligação vira um bloco com estes campos, e a Stephanie junta os números p
 - Vezes que a família procurou a casa na última semana, e quem respondeu.
 - Famílias que procuraram a casa e desistiram ou adiaram no último mês, e se a casa indicaria um serviço pra quem fica em casa.
 - Quanto a casa paga hoje por sistema, por mês.
+- Horas por semana: da equipe perguntando, anotando e respondendo família, ou da família indo ver e ligando pra checar.
+- Moradores por cuidadora, por turno.
 - Próximo passo com data: sim ou não.
 - A frase que mais pesou, do jeito que a pessoa falou.
 
