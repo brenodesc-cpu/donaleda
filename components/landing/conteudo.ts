@@ -20,7 +20,7 @@ export const WHATSAPP_DE_CONTATO: string = process.env.NEXT_PUBLIC_WHATSAPP_DE_C
 
 export const TEXTO_DO_CONTATO = 'Fale conosco';
 export const MENSAGEM_DO_CONTATO = 'Olá! Quero conhecer a Dona Leda.';
-export const MENSAGEM_DO_RESIDENCIAL = 'Olá! Quero conhecer a Dona Leda pro meu residencial.';
+export const MENSAGEM_DA_CASA = 'Olá! Quero indicar a Dona Leda às famílias.';
 
 /** Só os dígitos do número, do jeito que o endereço do WhatsApp pede. */
 function soDigitos(numero: string): string {
@@ -142,81 +142,50 @@ export const CONFIANCA = [
 
 // --- Pra residenciais ---
 
-// O que o residencial leva hoje, tirado de conhecimento/proposta-de-valor.md
-// ("O que o residencial compra" e "O que muda no produto"). Só entra o que já existe:
-// uma conta acompanha vários moradores, e a tela "Todos os moradores" mostra a casa
-// inteira. O que ainda falta (o acesso da família de cada morador e as perguntas
-// ajustadas à casa) aparece como parte do piloto.
-
-/** A frase do topo, pra quem chega de um residencial. */
-export const FRASE_DO_RESIDENCIAL =
-  'No residencial sênior, a Dona Leda liga pra cada morador todo dia, e a casa vê todos numa tela só.';
-
-export const RESIDENCIAIS = {
-  titulo: 'Pra residenciais sênior',
-  texto: 'Cada morador recebe uma ligação por dia, e a casa acompanha todos na mesma tela.',
-  legendaDaTela: 'A tela "Todos os moradores", com oito moradores de exemplo.',
+// As casas de repouso parceiras, tirado de conhecimento/proposta-de-valor.md
+// ("Quem paga e quem indica"): a família contrata, e a casa indica. Só entra o que já
+// existe. O convite pra família liberar a casa a acompanhar o idoso ainda não existe
+// no código, então aparece como parte da fase de teste.
+export const CASAS = {
+  titulo: 'Pra casas de repouso parceiras',
+  texto:
+    'Toda semana chegam à casa famílias que ainda não querem levar o pai ou a mãe. A casa parceira indica a Dona Leda a elas, e o idoso continua na casa dele com cuidado todo dia.',
+  legendaDaTela: 'A tela "Todos os moradores", com oito pessoas de exemplo.',
   itens: [
     {
-      titulo: 'Uma conversa por dia pra cada morador',
-      texto: 'Ela liga na hora que a casa marcar, conversa e lembra do que o morador contou nos outros dias.',
+      titulo: 'A casa indica',
+      texto: 'A família que procura a casa conhece a Dona Leda ali e contrata direto, pela própria conta.',
     },
     {
-      titulo: 'A casa inteira numa tela só',
+      titulo: 'A casa acompanha quem indicou',
       texto:
-        'A tela separa quem tem aviso novo, quem ainda não conversou hoje e quem conversou sem aviso. Cada morador abre a ficha do dia, a semana e o resumo da conversa.',
+        'A tela "Todos os moradores" mostra num lugar só quem tem aviso novo, quem ainda não conversou hoje e quem conversou sem aviso. O convite pra família liberar esse acompanhamento entra na fase de teste.',
     },
     {
-      titulo: 'Notícia pra família todo dia',
+      titulo: 'Serve aos moradores lúcidos',
       texto:
-        'Com a ficha e o resumo, a casa tem o que contar à família de cada morador, sem depender de a equipe ter tempo de ligar.',
+        'A mesma conta acompanha os moradores da casa que usam celular e atendem a chamada de vídeo. O remédio continua com a equipe.',
     },
   ],
-  piloto:
-    'No piloto entram o acesso da família de cada morador só ao dela e as perguntas ajustadas à rotina da casa.',
-  nota: 'O remédio continua com a equipe da casa. A ficha informa a equipe e fica longe de diagnóstico.',
-} as const;
-
-// --- Pra família ---
-
-export const FAMILIA = {
-  titulo: 'Pra quem tem pai ou mãe morando sozinho',
-  texto:
-    'A família usa do mesmo jeito: você cria a conta, cadastra a pessoa e deixa o aparelho dela pronto. A Dona Leda liga nos horários que você marcar, e o painel mostra o dia, a semana e os avisos.',
 } as const;
 
 // --- Perguntas frequentes ---
 
 export const PERGUNTAS = [
   {
-    pergunta: 'Como um residencial começa?',
-    resposta:
-      'Falando com o time. O começo é um piloto com alguns moradores: a conta da casa é montada junto com a equipe, com os moradores cadastrados e os horários das ligações combinados.',
-  },
-  {
-    pergunta: 'Quem ajuda o morador na primeira ligação?',
-    resposta:
-      'Alguém da equipe deixa o celular ou o tablet pronto uma vez e fica ao lado na primeira ligação. Depois o morador só atende. O aparelho precisa de internet.',
-  },
-  {
-    pergunta: 'O que a equipe vê?',
-    resposta:
-      'A tela "Todos os moradores" mostra quem tem aviso novo, quem ainda não conversou hoje e quem conversou sem aviso. Cada morador abre a ficha do dia, a semana e os avisos dele, e dá pra pedir uma ligação na hora.',
-  },
-  {
-    pergunta: 'A família do morador acompanha?',
-    resposta:
-      'Hoje quem acompanha é a conta da casa, que tem a notícia do dia pra passar à família. O acesso de cada família só ao seu morador entra no piloto.',
-  },
-  {
     pergunta: 'A Dona Leda é uma pessoa?',
     resposta:
       'A Dona Leda é uma assistente virtual, um programa de computador, e ela diz isso em toda ligação. O rosto que aparece na tela é um desenho.',
   },
   {
+    pergunta: 'Meu pai ou minha mãe precisa saber mexer no celular?',
+    resposta:
+      'Só precisa atender. Você cria a conta, cadastra a pessoa e manda um link pelo WhatsApp pro celular ou tablet dela, que fica pronto sem digitar nada. O aparelho precisa de internet.',
+  },
+  {
     pergunta: 'E se ninguém atender?',
     resposta:
-      'A Dona Leda tenta de novo três minutos depois. Se a pessoa não atender nas duas tentativas, o aviso aparece pra quem acompanha.',
+      'A Dona Leda tenta de novo três minutos depois. Se a pessoa não atender nas duas tentativas, o aviso aparece no painel da família.',
   },
   {
     pergunta: 'A conversa fica gravada?',
@@ -226,17 +195,32 @@ export const PERGUNTAS = [
   {
     pergunta: 'Ela substitui o médico ou o socorro?',
     resposta:
-      'A Dona Leda cuida do dia a dia perguntando, lembrando e avisando. Ela não dá diagnóstico, não muda remédio e não é serviço de emergência: numa urgência, orienta ligar pro SAMU no 192 e avisa quem acompanha.',
+      'A Dona Leda cuida do dia a dia perguntando, lembrando e avisando. Ela não dá diagnóstico, não muda remédio e não é serviço de emergência: numa urgência, orienta ligar pro SAMU no 192 e avisa a família.',
   },
   {
     pergunta: 'Ela pede dinheiro ou senha?',
     resposta:
-      'Nunca. E quando a pessoa conta que alguém pediu dinheiro, senha ou código por telefone, quem acompanha recebe um aviso de que pode ser golpe.',
+      'Nunca. E quando a pessoa conta que alguém pediu dinheiro, senha ou código por telefone, a família recebe um aviso de que pode ser golpe.',
   },
   {
     pergunta: 'Quanto custa?',
     resposta:
-      'O valor por morador ainda está sendo definido. A referência é ficar em menos de um décimo do preço de um cuidador, que hoje custa de R$ 2.800 a 4.500 por mês (Cidesp, maio de 2026).',
+      'Menos de um décimo do preço de um cuidador, que hoje custa de R$ 2.800 a 4.500 por mês (Cidesp, maio de 2026). O valor dos planos ainda está sendo definido.',
+  },
+  {
+    pergunta: 'Como uma casa de repouso vira parceira?',
+    resposta:
+      'Falando com o time. A parceria está em fase de teste: a casa indica a Dona Leda às famílias que a procuram, e cada família contrata pela própria conta.',
+  },
+  {
+    pergunta: 'O que a casa parceira acompanha?',
+    resposta:
+      'Na tela "Todos os moradores", a casa vê num lugar só as pessoas que acompanha, com os avisos e a ficha do dia de cada uma. O convite pra família liberar esse acompanhamento entra na fase de teste.',
+  },
+  {
+    pergunta: 'A casa pode usar com os próprios moradores?',
+    resposta:
+      'Pode, com os moradores lúcidos. Alguém da equipe deixa o aparelho pronto uma vez e fica ao lado na primeira ligação. O remédio continua com a equipe da casa.',
   },
 ] as const;
 

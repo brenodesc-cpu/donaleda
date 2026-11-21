@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import {
   EMAIL_DE_CONTATO,
   MENSAGEM_DO_CONTATO,
-  MENSAGEM_DO_RESIDENCIAL,
+  MENSAGEM_DA_CASA,
   montarLinkDeContato,
 } from '@/components/landing/conteudo';
 
@@ -25,9 +25,9 @@ describe('link do Fale conosco', () => {
     );
   });
 
-  it('leva a mensagem do residencial inteira, com acento', () => {
-    const endereco = montarLinkDeContato(NUMERO_DE_TESTE, MENSAGEM_DO_RESIDENCIAL);
-    expect(decodeURIComponent(endereco.split('?text=')[1])).toBe(MENSAGEM_DO_RESIDENCIAL);
+  it('leva a mensagem da casa de repouso inteira, com acento', () => {
+    const endereco = montarLinkDeContato(NUMERO_DE_TESTE, MENSAGEM_DA_CASA);
+    expect(decodeURIComponent(endereco.split('?text=')[1])).toBe(MENSAGEM_DA_CASA);
   });
 
   it('abre o e-mail, com a mensagem no corpo, enquanto não tem número', () => {

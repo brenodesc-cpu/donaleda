@@ -4,15 +4,15 @@ Atualizado em 21/11/2026. A página mora em `/landing` e é a página inicial de
 
 ## Quem lê e o que a página pede
 
-Desde 21/11/2026 a página fala primeiro com o residencial, por pedido do Breno ("atualiza a landing pra falar com o residencial"), porque a primeira empresa é a rede de residenciais do contato do Vitor (ver `proposta-de-valor.md`, "Por onde a gente começa").
+Desde o fim da tarde de 21/11/2026 a página voltou a falar primeiro com a família, por decisão do Breno ("Sim, volta"), depois da conversa com a primeira casa de repouso parceira: a família contrata, e a casa indica (ver `proposta-de-valor.md`, "Quem paga e quem indica"). Mais cedo no mesmo dia ela chegou a falar primeiro com o residencial, e essa versão ficou no histórico.
 
-- **O dono e a equipe de um residencial sênior.** É quem compra primeiro, e a página fala com essa pessoa.
+- **A filha ou o filho** de quem é lúcido e mora sozinho. É quem contrata, e a página fala com essa pessoa.
 - **A banca do hackathon**, no domingo, 22/11, que abre o link depois de ouvir o pitch.
-- **A filha ou o filho** de quem mora sozinho, que continua podendo contratar direto e ganha uma parte curta, depois da do residencial.
+- **A casa de repouso parceira**, que indica a Dona Leda às famílias e ganha uma parte própria, mais abaixo.
 
-O botão principal é o "Fale conosco", que abre o WhatsApp com a mensagem do residencial. "Criar a conta da família" leva pra `/entrar` e fica na parte da família e no fim da página.
+O botão principal é "Criar a conta da família", que leva pra `/entrar`. O "Fale conosco" fica ao lado, como segunda opção, e abre o WhatsApp.
 
-Ficam de fora da página: o nome da rede de residenciais, preço em reais ou em porcentagem da mensalidade (o valor por morador ainda espera a Stephanie e o Breno) e promessa do que o app ainda não faz. O que falta pro residencial aparece como parte do piloto.
+Ficam de fora da página: nome de casa ou de pessoa, preço em reais e promessa do que o app ainda não faz. O convite pra família liberar a casa a acompanhar o idoso ainda não existe no código, então aparece como parte da fase de teste.
 
 ## O que a página diz
 
@@ -25,7 +25,7 @@ Blocos que a página precisa ter, na ordem que cada direção achar melhor:
 3. **A camada de cuidado:** companhia, segurança, saúde, comunicação e rotina, com o que ela faz hoje em cada uma (tabela "A camada, por dentro").
 4. **O dinheiro:** a frase aprovada e a conta do cuidador.
 5. **Confiança:** ela sempre diz que é assistente virtual, a conversa inteira não fica guardada, queda e golpe avisam a família por regra fixa, e ela não substitui médico.
-6. **Pra residenciais.**
+6. **Pra casas de repouso parceiras.**
 7. **Perguntas frequentes** e o botão de novo.
 
 ## Regras do conteúdo
@@ -40,15 +40,14 @@ Blocos que a página precisa ter, na ordem que cada direção achar melhor:
 
 A página usa a marca Gema de `marca.md`: Café e Casca, o amarelo só em área grande, Gabarito nos títulos, Atkinson Hyperlegible Next no texto e o disco de telefone como símbolo.
 
-- **Topo, em fundo Café:** o sonho, a definição, uma frase pro residencial, o botão "Fale conosco" e um celular desenhado com a tela da ligação tocando. O botão Atender do desenho funciona e leva pra tela da conversa.
-- **Pra residenciais sênior, em fundo Manteiga, logo depois do topo:** a tela "Todos os moradores" de verdade, com os oito moradores de exemplo, é a peça principal. Ela vem de `/telas/ver/casa`, a mesma página da `/telas`, com os botões travados. Embaixo, o que a casa leva hoje (uma conversa por dia pra cada morador, a casa inteira numa tela só e notícia pra família) e o que entra no piloto (o acesso da família de cada morador só ao dela e as perguntas ajustadas à rotina da casa).
-- **Como funciona, em fundo Café:** cinco passos (ela liga, a pessoa atende, o dia, os avisos, a semana), escritos pra servir à casa e à família ("quem acompanha"). Na tela larga o celular fica parado e troca de tela conforme a pessoa rola. No celular de quem lê, cada passo traz a sua tela.
+- **Topo, em fundo Café:** o sonho, a definição, os botões "Criar a conta da família" e "Fale conosco" e um celular desenhado com a tela da ligação tocando. O botão Atender do desenho funciona e leva pra tela da conversa.
+- **Como funciona, no mesmo fundo:** cinco passos (ela liga, a pessoa atende, o dia, os avisos, a semana), escritos pra família. Na tela larga o celular fica parado e troca de tela conforme a pessoa rola. No celular de quem lê, cada passo traz a sua tela.
 - **A camada de cuidado:** uma aba por necessidade, com o que ela faz hoje.
 - **O dinheiro, em fundo amarelo:** a frase aprovada e duas barras, a do cuidador de 12 horas e a da Dona Leda.
 - **Confiança.**
-- **Pra família:** curta, com "Criar a conta da família".
-- **Perguntas frequentes:** primeiro as do residencial (como começa, quem ajuda o morador na primeira ligação, o que a equipe vê, se a família acompanha), depois as gerais. "Quanto custa?" diz que o valor por morador está sendo definido.
-- **Fim:** a assinatura, o "Fale conosco" e "Criar a conta da família".
+- **Pra casas de repouso parceiras, em fundo Manteiga:** a casa indica a Dona Leda às famílias que a procuram, acompanha quem indicou na tela "Todos os moradores" e pode usar com os próprios moradores lúcidos. A tela de verdade, com pessoas de exemplo, aparece ali, vinda de `/telas/ver/casa`. O botão "Fale conosco" dessa parte leva a mensagem "Olá! Quero indicar a Dona Leda às famílias."
+- **Perguntas frequentes:** primeiro as da família, depois as das casas (como virar parceira, o que a casa acompanha e se pode usar com os próprios moradores).
+- **Fim:** a assinatura, "Criar a conta da família" e o "Fale conosco".
 
 As telas do celular desenhado repetem os textos das telas reais (`components/ChamadaTocando.tsx`, `components/familia/formatos.ts` e `lib/regras.ts`) e usam a pessoa de exemplo de `lib/exemplo.ts`, com a marca "Exemplo". Quando uma tela real mudar de texto, o desenho em `components/landing/Aparelho.tsx` muda junto.
 
@@ -56,7 +55,7 @@ As outras duas direções ficaram no histórico do repositório, na gravação "
 
 **Na página inicial desde 21/11/2026 (decisão do Breno, "Já agora"):** quem abre `/` sem aparelho ligado a um idoso vê a landing, com dois botões grandes no topo, os mesmos da antiga tela de boas-vindas: "Sou da família", que leva pra `/entrar`, e "Este aparelho vai receber as ligações", que leva pra `/parear`, onde entram os 6 números. Aparelho já ligado continua abrindo direto a tela do idoso, sem passar pela landing. Dentro do app de iPhone e Android, o aparelho sem par continua na tela de boas-vindas, sem landing. Quem decide é `components/Inicio.tsx`, que recebe a landing de `app/page.tsx`. Em `/landing` a página aparece sem esses dois botões.
 
-**Fale conosco pelo WhatsApp (decisão do Breno em 21/11/2026, "Sim, pelo WhatsApp"):** o botão "Fale conosco" fica no topo, ao lado de "Criar a conta da família", e no bloco final. Na seção dos residenciais, "Falar com o time" usa o mesmo caminho. A mensagem já vai escrita: "Olá! Quero conhecer a Dona Leda." Na seção dos residenciais ela termina com "pro meu residencial". O número é o que o Breno mandou em 21/11/2026 e fica fora do repositório, que é público: vem da variável `NEXT_PUBLIC_WHATSAPP_DE_CONTATO`, gravada nas variáveis da Vercel e no `.env.local` de quem roda no computador. Sem a variável, os botões abrem um e-mail pro suporte@virte.com.br com a mesma mensagem. Pra trocar o número, basta mudar a variável e publicar de novo. A prova do endereço está em `testes/landing.test.ts`.
+**Fale conosco pelo WhatsApp (decisão do Breno em 21/11/2026, "Sim, pelo WhatsApp"):** o botão "Fale conosco" fica no topo, ao lado de "Criar a conta da família", e no bloco final. Na parte das casas de repouso parceiras o botão é o mesmo. A mensagem já vai escrita: "Olá! Quero conhecer a Dona Leda." Na parte das casas de repouso, o texto fala em indicar a Dona Leda às famílias. O número é o que o Breno mandou em 21/11/2026 e fica fora do repositório, que é público: vem da variável `NEXT_PUBLIC_WHATSAPP_DE_CONTATO`, gravada nas variáveis da Vercel e no `.env.local` de quem roda no computador. Sem a variável, os botões abrem um e-mail pro suporte@virte.com.br com a mesma mensagem. Pra trocar o número, basta mudar a variável e publicar de novo. A prova do endereço está em `testes/landing.test.ts`.
 
 Skills de design instaladas em `~/.claude/skills/`: `ui-ux-pro-max`, `impeccable`, `frontend-design`, `brand`, `design-system`, `theme-factory`, `web-design-guidelines`, `apple-design` e `frontend-project-style`.
 
