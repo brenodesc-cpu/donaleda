@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import type { Base, InicioDaConversa } from '@/lib/tipos';
 import {
+  avancarFala,
   base64ParaSom,
   criarReamostrador,
   custoEmDolar,
@@ -12,6 +13,7 @@ import {
   LEGENDA_VAZIA,
   limparUso,
   montarAbertura,
+  SEM_FALA,
   somarUso,
   somParaBase64,
   usoZerado,
@@ -139,7 +141,7 @@ describe('a abertura mandada ao Gemini', () => {
   });
 
   it('pede a legenda das duas falas e espera o silêncio combinado', () => {
-    expect(abertura.setup.inputAudioTranscription).toEqual({});
+    expect(abertura.setup.inputAudioTranscription).toEqual({ languageCodes: ['pt-BR'] });
     expect(abertura.setup.outputAudioTranscription).toEqual({});
     expect(abertura.setup.realtimeInputConfig.automaticActivityDetection.silenceDurationMs).toBe(650);
     expect(abertura.setup.model).toBe('models/gemini-3.8-live');
@@ -229,6 +231,44 @@ describe('a legenda das duas falas', () => {
     const doIdoso = falas.filter((f) => f.uid !== ASSISTENTE);
     expect(doIdoso).toHaveLength(1);
     expect(doIdoso[0].text).toBe('Espera, eu caí ontem.');
+  });
+});
+
+describe('o aviso de que a fala acabou', () => {
+  // Um bloco de som a cada 40 ms, com o volume de cada um.
+  const rodar = (volumes: number[], silencioMs = 650) => {
+    let estado = SEM_FALA;
+    const avisos: number[] = [];
+    volumes.forEach((pico, i) => {
+      const passo = avancarFala(estado, pico, 1000 + i * 40, silencioMs);
+      estado = passo.estado;
+      if (passo.avisarFim) avisos.push(i * 40);
+    });
+    return avisos;
+  };
+  const voz = (blocos: number) => Array<number>(blocos).fill(0.3);
+  const silencio = (blocos: number) => Array<number>(blocos).fill(0);
+
+  it('avisa uma vez, 650 ms depois da última voz', () => {
+    // 2 s de fala e 13 s de silêncio, como no teste em que o Google não percebeu o fim.
+    const avisos = rodar([...voz(50), ...silencio(325)]);
+    expect(avisos).toHaveLength(1);
+    expect(avisos[0] - 49 * 40).toBeGreaterThanOrEqual(650);
+    expect(avisos[0] - 49 * 40).toBeLessThan(650 + 80);
+  });
+
+  it('não avisa no meio de uma pausa curta, e avisa de novo na fala seguinte', () => {
+    const avisos = rodar([...voz(30), ...silencio(10), ...voz(30), ...silencio(40), ...voz(20), ...silencio(40)]);
+    expect(avisos).toHaveLength(2);
+  });
+
+  it('não avisa quando ninguém falou', () => {
+    expect(rodar(silencio(200))).toEqual([]);
+  });
+
+  it('espera mais quando o silêncio combinado é maior', () => {
+    expect(rodar([...voz(10), ...silencio(20)], 1200)).toEqual([]);
+    expect(rodar([...voz(10), ...silencio(40)], 1200)).toHaveLength(1);
   });
 });
 

@@ -310,6 +310,8 @@ export interface InicioDireto {
   /** A frase que a assistente diz ao atender. */
   saudacao: string;
   modelo: string;
+  /** Quanto silêncio o aparelho espera antes de avisar o Gemini que a fala acabou. */
+  silencioMs: number;
 }
 
 /** POST /api/direto/acao: o Gemini pediu uma ação e o aparelho repassa. */

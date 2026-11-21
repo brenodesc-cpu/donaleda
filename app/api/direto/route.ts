@@ -77,6 +77,7 @@ export async function POST(request: NextRequest) {
         }),
         saudacao,
         modelo,
+        silencioMs: esperaDeSilencio(),
       },
     } satisfies InicioDaConversa);
   } catch (error) {

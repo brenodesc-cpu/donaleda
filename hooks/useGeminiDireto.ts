@@ -4,12 +4,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { fetchDoAparelho } from '@/lib/aparelho';
 import type { ItemDoTranscript } from '@/lib/conversation';
 import {
+  avancarFala,
   base64ParaSom,
   criarReamostrador,
   ENDERECO_DO_GEMINI,
   juntarLegenda,
   LEGENDA_VAZIA,
   pedidoDaSaudacao,
+  picoDoSom,
+  SEM_FALA,
   somarUso,
   somParaBase64,
   TAXA_DA_VOZ,
@@ -170,6 +173,8 @@ export function useGeminiDireto({ direto, conversaId, uidDaAssistente, microfone
     // mandado antes disso é descartado.
     const ligarMicrofone = () => {
       const reamostrar = criarReamostrador(ctx.sampleRate, TAXA_DO_MICROFONE);
+      const silencioMs = inicio.current.silencioMs;
+      let fala = SEM_FALA;
       origem = ctx.createMediaStreamSource(new MediaStream([microfone]));
       processador = ctx.createScriptProcessor(2048, 1, 1);
       processador.onaudioprocess = (evento) => {
@@ -180,6 +185,11 @@ export function useGeminiDireto({ direto, conversaId, uidDaAssistente, microfone
             audio: { data: somParaBase64(amostras), mimeType: `audio/pcm;rate=${TAXA_DO_MICROFONE}` },
           },
         });
+        // Depois do silêncio combinado, o aparelho avisa que a fala acabou. O som
+        // continua indo, e a próxima fala reabre a escuta sozinha.
+        const passo = avancarFala(fala, picoDoSom(amostras), Date.now(), silencioMs);
+        fala = passo.estado;
+        if (passo.avisarFim) mandar({ realtimeInput: { audioStreamEnd: true } });
       };
       origem.connect(processador);
       // O processador só roda ligado na saída. Ele não escreve nada nela, então sai silêncio.

@@ -82,8 +82,10 @@ export function montarAbertura(pedido: PedidoDeAbertura): Record<string, unknown
           }
         : {}),
       // A legenda das duas falas: a do idoso vai pras regras fixas de segurança
-      // e as duas vão pro resumo do fim da ligação.
-      inputAudioTranscription: {},
+      // e as duas vão pro resumo do fim da ligação. O português fica fixo na
+      // legenda do idoso: sem isso, num teste de 21/11 ela veio em espanhol, e as
+      // regras de queda e de golpe leem português.
+      inputAudioTranscription: { languageCodes: ['pt-BR'] },
       outputAudioTranscription: {},
     },
   };
@@ -109,6 +111,51 @@ export function pedidoDaSaudacao(saudacao: string): Record<string, unknown> {
       turnComplete: true,
     },
   };
+}
+
+// ---------- O fim da fala ----------
+
+/** Volume a partir do qual o aparelho conta que tem alguém falando (o mesmo que o Virte usa). */
+export const VOZ_AUDIVEL = 0.02;
+
+export interface EstadoDaFala {
+  /** Tem uma fala começada que o Gemini ainda não sabe que acabou. */
+  pendente: boolean;
+  /** Quando o microfone ouviu voz pela última vez, em milissegundos. */
+  ultimaVozEm: number;
+}
+
+export const SEM_FALA: EstadoDaFala = { pendente: false, ultimaVozEm: 0 };
+
+/**
+ * Decide, a cada bloco de som do microfone, se já é hora de avisar o Gemini de
+ * que a pessoa parou de falar. O Google tem a detecção dele, e ela falhou no
+ * teste de 21/11: com fala curta ele juntou quatro falas e só respondeu 55
+ * segundos depois. Por isso o aparelho avisa sozinho, depois do silêncio
+ * combinado (650 ms por padrão), e a detecção do Google fica de reserva. É o que
+ * o Virte faz em produção.
+ */
+export function avancarFala(
+  estado: EstadoDaFala,
+  pico: number,
+  agora: number,
+  silencioMs: number,
+): { estado: EstadoDaFala; avisarFim: boolean } {
+  if (pico > VOZ_AUDIVEL) return { estado: { pendente: true, ultimaVozEm: agora }, avisarFim: false };
+  if (estado.pendente && agora - estado.ultimaVozEm >= silencioMs) {
+    return { estado: { pendente: false, ultimaVozEm: estado.ultimaVozEm }, avisarFim: true };
+  }
+  return { estado, avisarFim: false };
+}
+
+/** O maior volume de um bloco de som, de 0 a 1. */
+export function picoDoSom(amostras: Float32Array): number {
+  let pico = 0;
+  for (let i = 0; i < amostras.length; i += 1) {
+    const valor = Math.abs(amostras[i]);
+    if (valor > pico) pico = valor;
+  }
+  return pico;
 }
 
 // ---------- A legenda das duas falas ----------
