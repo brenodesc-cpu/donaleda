@@ -39,6 +39,56 @@ export interface PedidoDeAbertura {
   ferramentas: Ferramenta[];
   /** Quanto silêncio ela espera antes de responder, em milissegundos. */
   silencioMs: number;
+  /** Quando descartar as falas mais antigas. Sem isto, a conversa inteira fica até o fim. */
+  compressao?: Compressao | null;
+}
+
+// ---------- A compressão da conversa ----------
+
+/** Os dois números que o Gemini recebe: quando começar a descartar e quanto deixar. */
+export interface Compressao {
+  gatilho: number;
+  alvo: number;
+}
+
+/**
+ * Minutos de conversa que ela guarda antes de descartar as falas mais antigas.
+ * Com 4, a ligação média de 3 minutos e 20 segundos nunca é cortada, e ela não
+ * esquece nada do que a pessoa disse. LIA_COMPRESSAO_MIN troca, e 0 desliga.
+ */
+export const MINUTOS_ANTES_DE_COMPRIMIR = 4;
+
+/**
+ * Quanto um minuto de conversa pesa na conta que o Gemini usa pra comprimir.
+ * Medido em 21/11: a conta dele soma o texto inteiro e uns 32% do áudio cobrado.
+ * Uma ligação de teste juntou 730 por minuto e outra, com mais ações, 940. Fica
+ * o número de cima, pra ligação com muita ação também chegar aos 4 minutos inteira.
+ */
+const PESO_DE_UM_MINUTO = 1000;
+
+/** Letras por token no português das instruções e das ações (medido em 21/11: 17.710 letras, 5.148 tokens). */
+const LETRAS_POR_TOKEN = 3.4;
+
+/** Quantos tokens as instruções e as ações ocupam, estimados pelo tamanho do texto. */
+export function estimarTokens(instrucoes: string, ferramentas: Ferramenta[]): number {
+  const acoes = JSON.stringify(
+    ferramentas.map((f) => ({ name: f.name, description: f.description, parameters: esquemaParaGemini(f.inputSchema) })),
+  );
+  return Math.ceil((instrucoes.length + acoes.length) / LETRAS_POR_TOKEN);
+}
+
+/**
+ * A compressão descarta as falas mais antigas quando a conversa cresce, pra o
+ * Google não cobrar de novo a ligação inteira a cada resposta. As instruções
+ * nunca são descartadas. O preço é a memória: no teste de 21/11, com a janela
+ * curta, ela esqueceu o que a pessoa tinha comido no café da manhã, dito minutos
+ * antes. Por isso ela só começa depois de `minutos` de conversa, e deixa a
+ * metade mais nova.
+ */
+export function calcularCompressao(tokensFixos: number, minutos: number = MINUTOS_ANTES_DE_COMPRIMIR): Compressao | null {
+  if (!Number.isFinite(minutos) || minutos <= 0) return null;
+  const conversa = Math.round(minutos * PESO_DE_UM_MINUTO);
+  return { gatilho: tokensFixos + conversa, alvo: tokensFixos + Math.round(conversa / 2) };
 }
 
 /**
@@ -87,6 +137,14 @@ export function montarAbertura(pedido: PedidoDeAbertura): Record<string, unknown
       // regras de queda e de golpe leem português.
       inputAudioTranscription: { languageCodes: ['pt-BR'] },
       outputAudioTranscription: {},
+      ...(pedido.compressao
+        ? {
+            contextWindowCompression: {
+              triggerTokens: pedido.compressao.gatilho,
+              slidingWindow: { targetTokens: pedido.compressao.alvo },
+            },
+          }
+        : {}),
     },
   };
 }
