@@ -1,9 +1,13 @@
 package app.donaleda;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
@@ -29,9 +33,12 @@ import org.json.JSONObject;
 )
 public class DonaLedaCallPushPlugin extends Plugin {
     private static final String PREFS = "donaleda_call_push";
+    private static final String CAPACITOR_PREFS = "CapacitorStorage";
+    private static final String CAPACITOR_APARELHO_KEY = "donaleda:aparelho";
     private static final String KEY_TOKEN = "fcm_token";
     private static final String KEY_APARELHO_TOKEN = "aparelho_token";
     private static final String KEY_SERVER_URL = "server_url";
+    private static final String KEY_ASKED_FULLSCREEN = "asked_fullscreen_intent";
     private static final String KEY_PENDING_ACTION = "pending_action";
     private static final String KEY_PENDING_CALL_ID = "pending_call_id";
     private static final String DEFAULT_SERVER_URL = "https://donaleda.vercel.app";
@@ -42,6 +49,8 @@ public class DonaLedaCallPushPlugin extends Plugin {
     public void load() {
         super.load();
         activeInstance = new WeakReference<>(this);
+        DonaLedaConnectionService.ensurePhoneAccount(getContext());
+        DonaLedaConnectionService.ensureCallChannel(getContext());
     }
 
     @Override
@@ -67,17 +76,46 @@ public class DonaLedaCallPushPlugin extends Plugin {
         }
         editor.apply();
 
+        DonaLedaConnectionService.ensurePhoneAccount(getContext());
+        DonaLedaConnectionService.ensureCallChannel(getContext());
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && getPermissionState("notifications") != PermissionState.GRANTED) {
             requestPermissionForAlias("notifications", call, "onNotificationPermissionResult");
             return;
         }
+        promptFullScreenIntentIfNeeded();
         fetchFcmToken(call);
     }
 
     @PermissionCallback
     private void onNotificationPermissionResult(PluginCall call) {
+        promptFullScreenIntentIfNeeded();
         fetchFcmToken(call);
+    }
+
+    /**
+     * No Android 14+ (API 34+), USE_FULL_SCREEN_INTENT não é liberado automaticamente
+     * em APKs instalados fora da Play Store. Abre o ajuste do sistema uma única vez
+     * para o usuário ativar "Notificações em tela cheia" (tela de ligação sobre bloqueio).
+     */
+    private void promptFullScreenIntentIfNeeded() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return;
+        try {
+            NotificationManager manager = getContext().getSystemService(NotificationManager.class);
+            if (manager == null || manager.canUseFullScreenIntent()) return;
+
+            SharedPreferences prefs = getContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+            if (prefs.getBoolean(KEY_ASKED_FULLSCREEN, false)) return;
+            prefs.edit().putBoolean(KEY_ASKED_FULLSCREEN, true).apply();
+
+            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT);
+            intent.setData(Uri.parse("package:" + getContext().getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(intent);
+        } catch (Exception ignored) {
+            // Aparelho sem essa tela de configuração: segue com a notificação CallStyle.
+        }
     }
 
     private void fetchFcmToken(PluginCall call) {
@@ -160,6 +198,26 @@ public class DonaLedaCallPushPlugin extends Plugin {
             .apply();
     }
 
+    /** Lê o x-aparelho-token salvo pelo plugin ou direto do CapacitorStorage (fallback imediato). */
+    private static String resolveAparelhoToken(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String token = prefs.getString(KEY_APARELHO_TOKEN, null);
+        if (token != null && !token.trim().isEmpty()) {
+            return token.trim();
+        }
+        try {
+            SharedPreferences capPrefs = context.getSharedPreferences(CAPACITOR_PREFS, Context.MODE_PRIVATE);
+            String raw = capPrefs.getString(CAPACITOR_APARELHO_KEY, null);
+            if (raw != null && !raw.trim().isEmpty()) {
+                JSONObject obj = new JSONObject(raw);
+                String fromCap = obj.optString("token", "").trim();
+                if (!fromCap.isEmpty()) return fromCap;
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
     /** Envia POST /api/chamada em thread de fundo (para recusar/atender com app fechado). */
     public static void sendCallResponseAsync(Context context, String acao, String chamadaId) {
         Context appContext = context.getApplicationContext();
@@ -168,11 +226,11 @@ public class DonaLedaCallPushPlugin extends Plugin {
 
     /** Envia POST /api/chamada de forma síncrona (usado em BroadcastReceiver.goAsync). */
     public static void sendCallResponseSync(Context context, String acao, String chamadaId) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        String aparelhoToken = prefs.getString(KEY_APARELHO_TOKEN, null);
-        if (aparelhoToken == null || aparelhoToken.trim().isEmpty()) {
+        String aparelhoToken = resolveAparelhoToken(context);
+        if (aparelhoToken == null || aparelhoToken.isEmpty()) {
             return;
         }
+        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         String serverUrl = prefs.getString(KEY_SERVER_URL, DEFAULT_SERVER_URL);
         if (serverUrl == null || serverUrl.trim().isEmpty()) {
             serverUrl = DEFAULT_SERVER_URL;
@@ -187,7 +245,7 @@ public class DonaLedaCallPushPlugin extends Plugin {
             conn.setReadTimeout(8_000);
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("x-aparelho-token", aparelhoToken.trim());
+            conn.setRequestProperty("x-aparelho-token", aparelhoToken);
 
             JSONObject body = new JSONObject();
             body.put("acao", acao);

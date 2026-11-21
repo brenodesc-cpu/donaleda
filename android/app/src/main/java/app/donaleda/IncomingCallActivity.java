@@ -151,7 +151,7 @@ public class IncomingCallActivity extends AppCompatActivity {
 
     private void onAnswerClicked() {
         handler.removeCallbacks(timeoutTask);
-        IncomingCallRingtoneService.stop(getApplicationContext());
+        DonaLedaConnectionService.endIncomingCall(getApplicationContext(), true);
         if (!chamadaId.isEmpty()) {
             DonaLedaCallPushPlugin.sendCallResponseAsync(getApplicationContext(), "atender", chamadaId);
             DonaLedaCallPushPlugin.dispatchCallAction(getApplicationContext(), "atender", chamadaId);
@@ -167,7 +167,7 @@ public class IncomingCallActivity extends AppCompatActivity {
 
     private void onDeclineClicked() {
         handler.removeCallbacks(timeoutTask);
-        IncomingCallRingtoneService.stop(getApplicationContext());
+        DonaLedaConnectionService.endIncomingCall(getApplicationContext(), false);
         if (!chamadaId.isEmpty()) {
             // Avisa o servidor direto em segundo plano (funciona mesmo com o app fechado!)
             DonaLedaCallPushPlugin.sendCallResponseAsync(getApplicationContext(), "recusar", chamadaId);
@@ -178,7 +178,7 @@ public class IncomingCallActivity extends AppCompatActivity {
 
     private void finishCallScreen() {
         handler.removeCallbacks(timeoutTask);
-        IncomingCallRingtoneService.stop(getApplicationContext());
+        DonaLedaConnectionService.endIncomingCall(getApplicationContext(), false);
         finish();
     }
 

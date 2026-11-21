@@ -1,7 +1,5 @@
 package app.donaleda;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import androidx.annotation.NonNull;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -30,26 +28,11 @@ public class DonaLedaFirebaseMessagingService extends FirebaseMessagingService {
             assistente = "Dona Leda";
         }
 
-        String idLimpo = chamadaId.trim();
-        String nomeLimpo = assistente.trim();
-
-        try {
-            // Toca como ligação real (toque contínuo em loop + vibração contínua + CallStyle).
-            IncomingCallRingtoneService.start(getApplicationContext(), idLimpo, nomeLimpo);
-        } catch (Exception ignored) {
-            // Reserva caso o aparelho bloqueie ForegroundService em segundo plano:
-            // notificação insistente (repete toque e vibração até atender/recusar).
-            IncomingCallRingtoneService.ensureCallChannel(getApplicationContext(), true);
-            Notification notification = IncomingCallRingtoneService.buildIncomingCallNotification(
-                getApplicationContext(),
-                idLimpo,
-                nomeLimpo,
-                true
-            );
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            if (manager != null) {
-                manager.notify(IncomingCallRingtoneService.NOTIFICATION_ID_CALL, notification);
-            }
-        }
+        // Reporta ao Android Telecom Framework (ConnectionService) + CallStyle FLAG_INSISTENT.
+        DonaLedaConnectionService.reportIncomingCall(
+            getApplicationContext(),
+            chamadaId.trim(),
+            assistente.trim()
+        );
     }
 }

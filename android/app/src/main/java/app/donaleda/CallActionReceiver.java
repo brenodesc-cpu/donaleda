@@ -6,7 +6,8 @@ import android.content.Intent;
 
 /**
  * Recebe o toque em "Recusar / Agora não" diretamente da notificação de chamada,
- * para o toque na hora e avisa o servidor (POST /api/chamada) mesmo com o app fechado.
+ * encerra o toque/conexão Telecom na hora e avisa o servidor (POST /api/chamada)
+ * mesmo com o app 100% fechado.
  */
 public class CallActionReceiver extends BroadcastReceiver {
     public static final String ACTION_DECLINE = "app.donaleda.ACTION_DECLINE_CALL";
@@ -16,12 +17,11 @@ public class CallActionReceiver extends BroadcastReceiver {
         if (intent == null || !ACTION_DECLINE.equals(intent.getAction())) return;
 
         String chamadaId = intent.getStringExtra(IncomingCallActivity.EXTRA_CHAMADA_ID);
-        IncomingCallRingtoneService.stop(context);
+        DonaLedaConnectionService.endIncomingCall(context, false);
 
         if (chamadaId == null || chamadaId.trim().isEmpty()) return;
         String idLimpo = chamadaId.trim();
 
-        // Notifica o WebView se estiver ativo; se estiver fechado, avisa o servidor direto.
         DonaLedaCallPushPlugin.notifyIfActive(context, "recusar", idLimpo);
 
         PendingResult pending = goAsync();
