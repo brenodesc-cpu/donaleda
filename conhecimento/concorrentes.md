@@ -45,14 +45,14 @@ Pesquisa de 21/11/2026, feita abrindo o site de cada empresa. Número marcado co
 | **Sanii** | Liga famílias a cuidadores selecionados | Família | R$ 13 milhões captados |
 | **Home Angels** | Franquia de cuidadores: o filho volta a ser família | Família | Mais de 270 unidades |
 | **Prevent Senior e MedSênior** | Planos de saúde pra idoso | O idoso ou a família | 549 mil e 310 mil vidas |
-| **Terça da Serra** | Franquia de residenciais sênior | Família. No setor, de R$ 6 mil a R$ 11 mil por mês | 160 unidades em operação e implantação, mais de 2 mil residentes |
+| **Terça da Serra** | Franquia de residenciais sênior | Família. Casa de repouso custa em média R$ 5.955 por mês em Belo Horizonte (Mercado Mineiro, agosto de 2026) | 160 unidades em operação e implantação, mais de 2 mil residentes |
 
 ## Os números do público no Brasil
 
 - **32,1 milhões** de pessoas com 60 anos ou mais (Censo 2022), e **5,66 milhões** moram sozinhas.
 - **Solidão:** entre pessoas de 50 anos ou mais, 16,8% se sentem sós sempre e 31,7% às vezes (estudo ELSI-Brasil, coleta de 2015 e 2016). Quem mora só tem 2,44 vezes mais solidão constante.
 - **Internet:** de 59% (TIC Domicílios 2025) a 74,5% (IBGE 2025) dos 60+ usam. Dos que usam, 76% fazem chamada de voz ou vídeo. 78,1% tinham celular em 2024, e 60% dos que não têm dizem que não sabem usar.
-- **Quanto a família já paga:** de R$ 100 a R$ 230 por mês pelo botão de emergência, de R$ 2.800 a R$ 4.500 por um cuidador de 12 horas, de R$ 6 mil a R$ 11 mil por um residencial.
+- **Quanto a família já paga:** de R$ 100 a R$ 230 por mês pelo botão de emergência, de R$ 2.800 a R$ 4.500 por um cuidador de 12 horas, em média R$ 5.955 por uma casa de repouso numa capital, Belo Horizonte (Mercado Mineiro, agosto de 2026).
 - **Renda do idoso:** aposentadoria média de R$ 2.697 por mês (IBGE 2025), e 62,5% dos beneficiários do INSS recebem um salário mínimo.
 - **Plano de saúde:** 8,7 milhões de pessoas com 60 anos ou mais têm plano (IESS, fevereiro de 2026).
 - **Quedas:** 194 mil internações de idosos no SUS em 2025, cerca de 530 por dia.

@@ -37,7 +37,7 @@ Isso vem de uma entrevista com uma família, da conversa com a primeira casa par
 
 **O cuidado custa caro.**
 - Cuidador de 12 horas por dia: de R$ 2.800 a 4.500 por mês como autônomo, e de R$ 2.260 a 3.200 de custo total com carteira (Cidesp, artigo de 18/5/2026). O próprio artigo diz que adaptou os valores de outras fontes, sem pesquisa própria.
-- Casa de repouso: a faixa de R$ 6 mil a 11 mil por mês que a base usava não teve fonte encontrada em 21/11. O número com fonte é o de Belo Horizonte e região: mensalidade média de R$ 5.955, entre R$ 3,5 mil e 13,5 mil, numa pesquisa do site Mercado Mineiro com 36 casas em agosto de 2026 (Diário do Comércio, 17/8/2026). É um número regional.
+- Casa de repouso: mensalidade média de R$ 5.955 em Belo Horizonte e região, entre R$ 3,5 mil e 13,5 mil, numa pesquisa do site Mercado Mineiro com 36 casas em agosto de 2026 (Diário do Comércio, 17/8/2026). É um número regional.
 
 **O que não achamos:** um número oficial de quantos idosos que moram sozinhos têm filhos morando em outra casa. O IBGE liga o aumento de idosos sozinhos à saída dos filhos de casa e à viuvez, sem dar a proporção. Pra medir, os microdados do ELSI-Brasil, o estudo da Fiocruz sobre envelhecimento, ou da PNAD Contínua.
 
@@ -115,7 +115,7 @@ Fontes desta página: as de `concorrentes.md` (PNAD Contínua 2025, TIC Domicíl
 
 ## O problema
 
-Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (40% dos 15,6 milhões de pessoas que moram sozinhas, PNAD Contínua 2025, divulgada em abril de 2026). Quem envelhece precisa de cuidado todo dia, com companhia, segurança, saúde, comunicação e rotina. Hoje esse cuidado é feito por gente: a filha, de graça, o cuidador por R$ 2.800 a 4.500 por mês, ou o residencial por R$ 6 mil a 11 mil. 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged), e quase todo idoso envelhece sem esse cuidado ou com um filho fazendo o papel dele. O filho mora longe, liga quando dá e fica sem saber se a mãe comeu, tomou o remédio ou caiu. O idoso passa dias sem conversar com ninguém.
+Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (40% dos 15,6 milhões de pessoas que moram sozinhas, PNAD Contínua 2025, divulgada em abril de 2026). Quem envelhece precisa de cuidado todo dia, com companhia, segurança, saúde, comunicação e rotina. Hoje esse cuidado é feito por gente: a filha, de graça, o cuidador por R$ 2.800 a 4.500 por mês, ou a casa de repouso, que custa em média R$ 5.955 por mês numa capital, Belo Horizonte (Mercado Mineiro, agosto de 2026). 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged), e quase todo idoso envelhece sem esse cuidado ou com um filho fazendo o papel dele. O filho mora longe, liga quando dá e fica sem saber se a mãe comeu, tomou o remédio ou caiu. O idoso passa dias sem conversar com ninguém.
 
 ## Pra quem
 

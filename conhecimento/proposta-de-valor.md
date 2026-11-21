@@ -149,10 +149,10 @@ Tudo isso alimenta a ficha de cada idoso. Em cima dela, a família acompanha, a 
 
 ## Onde está o dinheiro
 
-Hoje essa camada é feita por gente: a filha, de graça, o cuidador por R$ 2.800 a 4.500 por mês, ou o residencial por R$ 6 mil a 11 mil. 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged). A aposentadoria média é de R$ 2.697 (IBGE 2025). Quase todo idoso do país envelhece sem essa camada, ou com um filho fazendo o papel dela.
+Hoje essa camada é feita por gente: a filha, de graça, o cuidador por R$ 2.800 a 4.500 por mês, ou a casa de repouso, que custa em média R$ 5.955 por mês numa capital, Belo Horizonte (Mercado Mineiro, agosto de 2026). 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged). A aposentadoria média é de R$ 2.697 (IBGE 2025). Quase todo idoso do país envelhece sem essa camada, ou com um filho fazendo o papel dela.
 
 **Números pro slide de mercado**
-- 36 milhões de brasileiros com 60 anos ou mais. A partir de 2029 o país tem mais idosos que crianças, e em 2070 serão 75 milhões (IBGE, Projeções 2024).
+- 32,1 milhões de brasileiros com 60 anos ou mais em 2022 (IBGE, Censo 2022). Em 2070 serão 75,3 milhões, 37,8% da população (IBGE, Projeções 2024).
 - Cuidado com idosos no Brasil estimado em US$ 82,6 bilhões por ano (2023), a caminho de US$ 124 bilhões em 2030. Estimativa de consultoria citada na imprensa, sem método publicado.
 - Quem tem 50 anos ou mais consumiu R$ 1,8 trilhão em 2024, 24% do consumo das famílias (Data8, estudo Brasil Prateado).
 - 840 mil cuidadores de idosos, 547% a mais que dez anos atrás (imprensa, 2025).
@@ -165,7 +165,7 @@ Hoje essa camada é feita por gente: a filha, de graça, o cuidador por R$ 2.800
 | Ligar ela mesma | Tempo | Não acontece todo dia |
 | Botão de emergência | De R$ 189 a 249 por mês (Tecnosenior, conferido em 21/11) | Só serve depois que algo deu errado |
 | Cuidador | De R$ 2.800 a 4.500 por mês | Caro pra quem ainda vive sozinho e bem |
-| Residencial | De R$ 6 mil a 11 mil por mês | É pra quando a autonomia acabou |
+| Casa de repouso | Em média R$ 5.955 por mês numa capital, Belo Horizonte (Mercado Mineiro, agosto de 2026) | É pra quando a autonomia acabou |
 
 A Dona Leda entra no espaço entre a família ligar quando dá e contratar um cuidador: o idoso ainda mora sozinho e precisa de cuidado todo dia.
 
