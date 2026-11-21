@@ -22,7 +22,16 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
 
 ### 2. Quanto cobrar
 
-- **O custo por idoso:** de R$ 59 a 89 por mês no modo de três peças e de R$ 84 a 139 no Gemini, com 100 a 150 minutos de conversa por mês (conta de 21/11, com o dólar de 19/11, na seção do preço abaixo).
+- **O custo por idoso, por mês,** separado entre a Agora e o Google (conta de 21/11, com o dólar de 19/11, detalhada na seção do preço abaixo):
+
+  | Conversa por dia | Agora | Google, só no Gemini | Total no Gemini | Total no modo de três peças |
+  |---|---:|---:|---:|---:|
+  | 3 minutos e 20 segundos (100 por mês) | R$ 59 | R$ 25 | R$ 84 | R$ 59 |
+  | 5 minutos (150 por mês) | R$ 89 | R$ 50 | R$ 139 | R$ 89 |
+
+  A parte da Agora é o motor de conversa, a US$ 0,10 por minuto, mais a sala de áudio, que dá menos de R$ 1 por mês. A página de preço da Agora diz que o motor custa o mesmo com chave própria e não cita o caminho do Gemini Live. No modo de três peças a escuta, o modelo e a voz já vêm dentro do preço da Agora, então o Google não entra. O Google cobra de novo a conversa inteira a cada fala (guia do Live API, lido em 21/11), e por isso a ligação longa custa mais por minuto. Se cada minuto fosse contado uma vez só, custaria US$ 0,005 do áudio que entra e US$ 0,018 do que sai.
+
+  **Onde o custo cai:** na resposta da Agora sobre o preço do motor no caminho do Gemini e por volume, na compressão ligada, que corta a conversa recontada pelo Google, e na primeira fatura de verdade do Google depois das ligações de hoje com a chave paga.
 - **O que a família já paga por algo parecido:** o botão de emergência custa de R$ 189 a 249 por mês (Tecnosenior, conferido em 21/11). Nos EUA, a ligação diária da CheckWellCall custa US$ 29,99, uns R$ 177. O cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 (Cidesp, maio de 2026).
 - **As respostas de preço que temos:** uma só. Uma mentora com os pais morando longe disse "eu investiria até R$ 500" por mês (21/11, `entrevistas.md`). As ligações das 20h trazem mais.
 - **A recomendação:** o plano Essencial, R$ 229,90 por mês com 150 minutos. Ele fica na faixa do botão de emergência que a família já compra, é menos de um décimo do cuidador e deixa de margem, no teto, R$ 48 no Gemini e R$ 98 no modo de três peças.
