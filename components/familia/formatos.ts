@@ -3,6 +3,7 @@
 
 import type {
   CategoriaDeLembranca,
+  Chamada,
   Dia,
   TipoDeAlerta,
 } from '@/lib/tipos';
@@ -145,6 +146,8 @@ export function rotuloDoAlerta(tipo: TipoDeAlerta, tratamento: string): string {
       return 'Saúde';
     case 'humor':
       return `Como ${pronomeDe(tratamento)} está`;
+    case 'ligacao':
+      return 'Ligação';
   }
 }
 
@@ -242,4 +245,36 @@ export function duracaoEmPalavras(minutos: number | null): string {
   const inteiro = Math.round(minutos);
   if (inteiro < 1) return 'menos de um minuto';
   return inteiro === 1 ? '1 minuto' : `${inteiro} minutos`;
+}
+
+/** true pra "09:00" e "19:30"; false pra hora que não existe. */
+export function horarioValido(horario: string): boolean {
+  return /^([01]\d|2[0-3]):[0-5]\d$/.test(horario);
+}
+
+/** A lista de horários como o servidor espera: válidos, sem repetir, em ordem. */
+export function arrumarHorarios(horarios: readonly string[]): string[] {
+  const validos = horarios.map((h) => h.trim()).filter(horarioValido);
+  return [...new Set(validos)].sort();
+}
+
+/** O que aconteceu com a última ligação, em uma frase. Tocando não tem frase. */
+export function resultadoDaLigacao(chamada: Chamada, hoje: string): Leitura | null {
+  const hora = horaDeBrasilia(chamada.pedidaEm);
+  if (!hora) return null;
+  const data = dataDeBrasilia(chamada.pedidaEm);
+  const foiHoje = data === hoje;
+  const daLigacao = foiHoje ? `das ${hora}` : `de ${diaEMes(data)} às ${hora}`;
+
+  if (chamada.estado === 'atendida') {
+    return { texto: `Atendeu a ligação ${daLigacao}`, tom: 'bom' };
+  }
+  if (chamada.estado === 'perdida') {
+    return { texto: `Não atendeu a ligação ${daLigacao}`, tom: 'atencao' };
+  }
+  if (chamada.estado === 'recusada') {
+    const quando = foiHoje ? `às ${hora}` : `${diaEMes(data)} às ${hora}`;
+    return { texto: `Disse que agora não, ${quando}`, tom: 'neutro' };
+  }
+  return null;
 }

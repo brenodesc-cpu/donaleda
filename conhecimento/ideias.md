@@ -6,6 +6,8 @@ Ideias e conselhos que chegaram depois da tese. Nada aqui está decidido: o que 
 
 ### 1. O idoso não deveria precisar clicar
 
+Virou decisão em 21/11: a assistente liga, e a ligação pode atender sozinha. Ver `decisoes.md`.
+
 O mentor disse que celular é difícil pra idoso e que um senhor de 100 anos não vai tocar em botão nenhum. A sugestão dele: o aparelho liga e a assistente já começa a conversa sozinha.
 
 O que isso muda na nossa versão de hoje, que pede um toque em "Conversar":

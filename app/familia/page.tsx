@@ -10,11 +10,20 @@ import {
 import { Cabecalho } from '@/components/familia/Cabecalho';
 import { DiaDeHoje } from '@/components/familia/DiaDeHoje';
 import { Lembrancas } from '@/components/familia/Lembrancas';
+import { Ligacoes } from '@/components/familia/Ligacoes';
 import { Semana } from '@/components/familia/Semana';
 import { usePainel } from '@/components/familia/usePainel';
 
 export default function PainelDaFamiliaPage() {
-  const { painel, semConexao, marcarVisto } = usePainel();
+  const {
+    painel,
+    semConexao,
+    marcarVisto,
+    pedidoDeLigacao,
+    ligar,
+    trocarHorarios,
+    trocarAtenderSozinho,
+  } = usePainel();
   const resumo = painel?.ultimaConversa?.resumo?.trim();
 
   return (
@@ -25,6 +34,13 @@ export default function PainelDaFamiliaPage() {
         {painel ? (
           <>
             <Cabecalho painel={painel} />
+            <Ligacoes
+              painel={painel}
+              pedido={pedidoDeLigacao}
+              onLigar={ligar}
+              onTrocarHorarios={trocarHorarios}
+              onTrocarAtenderSozinho={trocarAtenderSozinho}
+            />
             <Alertas
               alertas={painel.alertas}
               assistente={painel.assistente}

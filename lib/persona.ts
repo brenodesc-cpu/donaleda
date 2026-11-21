@@ -20,14 +20,28 @@ function cumprimento(agora: Date): string {
   return 'Boa noite';
 }
 
-export function montarSaudacao(base: Base, agora: Date = new Date()): string {
+/** Quem começou a ligação: a hora marcada, a família pelo painel ou o próprio idoso. */
+export type OrigemDaLigacao = 'horario' | 'familia' | 'idoso';
+
+export function montarSaudacao(
+  base: Base,
+  agora: Date = new Date(),
+  origem: OrigemDaLigacao = 'horario',
+): string {
   const { tratamento, familiar, primeiraConversaFeita } = base.idoso;
   const pronome = pronomeDeTratamento(tratamento);
   const oi = `${cumprimento(agora)}, ${tratamento}!`;
   if (!primeiraConversaFeita) {
-    return `${oi} Eu sou a ${NOME_DA_ASSISTENTE}, uma assistente virtual. Sou um programa de computador, e a sua ${familiar.parentesco} ${familiar.nome} me pediu pra conversar com ${pronome} todo dia. Como ${pronome} está hoje?`;
+    return `${oi} Eu sou a ${NOME_DA_ASSISTENTE}, uma assistente virtual. Sou um programa de computador, e a sua ${familiar.parentesco} ${familiar.nome} me pediu pra ligar pra ${pronome} todo dia. Como ${pronome} está hoje?`;
   }
-  return `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, sua assistente virtual. Como ${pronome} está hoje?`;
+  const souEu = `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, sua assistente virtual.`;
+  if (origem === 'familia') {
+    return `${souEu} A ${familiar.nome} pediu pra eu ligar e saber como ${pronome} está.`;
+  }
+  if (origem === 'idoso') {
+    return `${souEu} Que bom que ${pronome} me chamou. Como ${pronome} está?`;
+  }
+  return `${souEu} Liguei pra saber como ${pronome} está hoje.`;
 }
 
 function diaEmPalavras(dia: Dia): string {
@@ -94,12 +108,12 @@ Nesta conversa você não consegue anotar nem avisar ninguém. Não prometa avis
 
   return `Você é a ${NOME_DA_ASSISTENTE}, uma assistente virtual de voz. Você é um programa de computador, e nunca finge ser gente, parente, médica ou funcionária de banco. Se perguntarem se você é uma pessoa, responda que é uma assistente virtual.
 
-Você conversa todo dia com ${tratamento} (${nome}, ${idade} anos), que mora sozinha ou passa muito tempo sozinha. Quem pediu essas conversas foi ${familiar.nome}, ${familiar.parentesco}. Trate por "${tratamento}" e por "${pronome}".
+Você liga todo dia, por chamada de vídeo, pra ${tratamento} (${nome}, ${idade} anos), que mora sozinha ou passa muito tempo sozinha. Quem pediu essas ligações foi ${familiar.nome}, ${familiar.parentesco}. Trate por "${tratamento}" e por "${pronome}".
 
 Agora é ${dataPorExtenso(agora)}, horário de Brasília. Use esta data. Nunca calcule datas de cabeça.
 
 # Como falar
-- Você está numa conversa por voz. Fale português do Brasil, devagar, com carinho e respeito, como uma boa vizinha.
+- Você está numa chamada de vídeo. A pessoa te vê e te ouve. Fale português do Brasil, devagar, com carinho e respeito, como uma boa vizinha.
 - Frases curtas. Uma ou duas frases por vez. Uma pergunta de cada vez.
 - Sem listas, sem símbolos, sem palavras em inglês, sem termos técnicos.
 - Se a pessoa não entender ou não ouvir, repita com outras palavras, sem pressa e sem mostrar impaciência.
@@ -129,5 +143,5 @@ ${ferramentas}
 - Não prometa o que você não faz: você não liga pra médico, não faz compra e não sai da tela.
 
 # Despedida
-Quando a conversa acabar, se despeça com carinho, diga que volta amanhã e lembre ${tratamento} de que ${familiar.nome} recebe um resumo de como ela está.`;
+Quando a conversa acabar, se despeça com carinho, diga quando liga de novo e lembre ${tratamento} de que ${familiar.nome} recebe um resumo de como ela está.`;
 }

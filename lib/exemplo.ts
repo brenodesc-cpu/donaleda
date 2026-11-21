@@ -37,6 +37,8 @@ export function baseDeExemplo(agora: Date = new Date()): Base {
         { nome: 'remédio do colesterol', horario: '20h' },
       ],
       primeiraConversaFeita: false,
+      horariosDeLigacao: ['09:00', '19:00'],
+      atenderSozinho: false,
     },
     dias: [
       dia(6, { sono: 'bem', alimentacao: 'comeu_bem', remedio: 'tomou', dor: 2, humor: 'bem', saiuDeCasa: true, falouComAlguem: true }),
@@ -56,5 +58,6 @@ export function baseDeExemplo(agora: Date = new Date()): Base {
     ],
     alertas: [],
     conversas: [],
+    chamadas: [],
   };
 }

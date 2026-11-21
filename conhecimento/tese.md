@@ -14,7 +14,7 @@ Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (40% dos 1
 
 ## A solução
 
-A Lia é uma assistente de voz com rosto. O idoso toca num botão, o rosto aparece e a conversa começa. Na conversa ela:
+A Lia liga pro idoso por chamada de vídeo. O aparelho toca na hora marcada, ou quando a família pede, e o rosto da assistente aparece na tela. O idoso atende com um toque, ou a ligação atende sozinha pra quem tem dificuldade de tocar na tela. Ele também pode ligar pra Lia quando quiser. Se ninguém atende, a família é avisada. Na conversa ela:
 
 1. pergunta do sono, da comida, do remédio, da dor e de como ele está se sentindo;
 2. lembra do que ele contou nos outros dias (o neto, a consulta, o joelho);
@@ -26,7 +26,7 @@ A Lia diz que é uma assistente virtual. O time decidiu isso no brainstorm: esco
 
 ## Por que por voz
 
-Muitos idosos não usam aplicativo nem WhatsApp, mas conversam. A voz é o único jeito de chegar em boa parte desse público. O primeiro produto é uma tela simples no celular com um botão. A ligação pelo telefone comum vem depois.
+Muitos idosos não usam aplicativo nem WhatsApp, mas atendem uma ligação. Por isso o produto gira em torno de a assistente ligar: o idoso não precisa abrir nada nem lembrar de nada. O primeiro produto é um aplicativo que recebe a chamada de vídeo num celular ou tablet. A ligação pelo telefone comum vem depois.
 
 ## Como a gente ganha dinheiro
 

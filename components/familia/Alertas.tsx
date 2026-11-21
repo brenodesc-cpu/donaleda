@@ -2,6 +2,7 @@ import {
   Check,
   Frown,
   HeartPulse,
+  PhoneMissed,
   Pill,
   ShieldAlert,
   Siren,
@@ -24,6 +25,7 @@ const ICONE_DO_TIPO: Record<TipoDeAlerta, LucideIcon> = {
   remedio: Pill,
   saude: HeartPulse,
   humor: Frown,
+  ligacao: PhoneMissed,
 };
 
 function maisNovoPrimeiro(a: Alerta, b: Alerta): number {

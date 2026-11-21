@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Este é o projeto da Lia, feito no hackathon UNMUTE by Agora (21 e 22/11/2026). A Lia é uma assistente de voz que conversa todo dia com o idoso que mora sozinho, anota como ele está e avisa a família quando algo sai do normal.
+Este é o projeto da Lia, feito no hackathon UNMUTE by Agora (21 e 22/11/2026). A Lia é uma assistente que liga todo dia, por chamada de vídeo, pro idoso que mora sozinho, anota como ele está e avisa a família quando algo sai do normal. O produto gira em torno de a assistente começar a ligação: o idoso só atende.
 
 Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta `conhecimento/`. Ela diz o que estamos construindo, pra quem, com quem e até quando.
 
@@ -28,7 +28,8 @@ Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da b
 
 ## Onde fica cada coisa
 
-- `app/page.tsx` e `components/TelaDoIdoso.tsx`, `Conversa.tsx`, `Rosto.tsx`: a tela do idoso.
+- `app/page.tsx`, `components/` e `hooks/`: o aparelho do idoso, que espera a ligação, toca, atende e mostra a chamada de vídeo.
+- `app/api/chamada/route.ts`, `lib/chamadas.ts` e `lib/relogio.ts`: as ligações que a assistente faz (hora marcada, pedido da família, segunda tentativa e aviso de não atendida).
 - `app/familia/` e `components/familia/`: o painel da família.
 - `app/api/invite-agent/route.ts`: começa a conversa na Agora (escuta, modelo, voz e ações).
 - `app/api/mcp/route.ts` e `lib/ferramentas.ts`: as ações que a Lia faz durante a conversa (anotar, lembrar, avisar, resumir).

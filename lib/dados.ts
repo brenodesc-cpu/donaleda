@@ -258,6 +258,8 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     alertas,
     semana,
     lembrancas: [...base.lembrancas].sort((a, b) => b.criadaEm.localeCompare(a.criadaEm)),
+    chamadaTocando: base.chamadas.find((c) => c.estado === 'tocando') ?? null,
+    chamadas: [...base.chamadas].reverse().slice(0, 10),
     atualizadoEm: agora.toISOString(),
   };
 }
@@ -276,9 +278,17 @@ async function gravar(base: Base): Promise<void> {
   await fs.rename(provisorio, destino);
 }
 
+/** Completa uma ficha gravada por versão mais antiga, que não tinha as ligações. */
+function completar(base: Base): Base {
+  base.chamadas ??= [];
+  base.idoso.horariosDeLigacao ??= ['09:00', '19:00'];
+  base.idoso.atenderSozinho ??= false;
+  return base;
+}
+
 export async function lerBase(): Promise<Base> {
   try {
-    return JSON.parse(await fs.readFile(caminhoDaBase(), 'utf8')) as Base;
+    return completar(JSON.parse(await fs.readFile(caminhoDaBase(), 'utf8')) as Base);
   } catch (erro) {
     if ((erro as NodeJS.ErrnoException).code !== 'ENOENT') throw erro;
     const base = baseDeExemplo();
@@ -291,15 +301,25 @@ export async function lerBase(): Promise<Base> {
 // Next pode carregar este arquivo mais de uma vez no modo de desenvolvimento.
 const global = globalThis as typeof globalThis & { __filaDaLia?: Promise<unknown> };
 
-/** Lê, aplica a mudança e grava, uma mudança por vez. */
-export function mudarBase<T>(mudanca: (base: Base) => T): Promise<T> {
+/**
+ * Lê, aplica a mudança e grava só quando ela pede, uma mudança por vez.
+ * Serve pras rotas chamadas a cada 2 segundos, que quase nunca mudam nada.
+ */
+export function mudarBaseQuando<T>(
+  mudanca: (base: Base) => { gravar: boolean; resultado: T },
+): Promise<T> {
   const anterior = global.__filaDaLia ?? Promise.resolve();
   const proxima = anterior.then(async () => {
     const base = await lerBase();
-    const resultado = mudanca(base);
-    await gravar(base);
+    const { gravar: precisaGravar, resultado } = mudanca(base);
+    if (precisaGravar) await gravar(base);
     return resultado;
   });
   global.__filaDaLia = proxima.catch(() => undefined);
   return proxima;
+}
+
+/** Lê, aplica a mudança e grava, uma mudança por vez. */
+export function mudarBase<T>(mudanca: (base: Base) => T): Promise<T> {
+  return mudarBaseQuando((base) => ({ gravar: true, resultado: mudanca(base) }));
 }

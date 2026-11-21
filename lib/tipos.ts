@@ -14,7 +14,7 @@ export type CategoriaDeLembranca =
   | 'rotina'
   | 'compromisso';
 
-export type TipoDeAlerta = 'emergencia' | 'golpe' | 'remedio' | 'saude' | 'humor';
+export type TipoDeAlerta = 'emergencia' | 'golpe' | 'remedio' | 'saude' | 'humor' | 'ligacao';
 export type Gravidade = 'urgente' | 'atencao';
 
 /** O que a Lia soube do idoso num dia. Campo vazio quer dizer "ainda não respondeu". */
@@ -75,6 +75,27 @@ export interface Idoso {
   remedios: { nome: string; horario: string }[];
   /** A primeira conversa leva a apresentação completa da Lia como assistente virtual. */
   primeiraConversaFeita: boolean;
+  /** Horas em que a assistente liga todo dia, "HH:MM" no horário de Brasília. */
+  horariosDeLigacao: string[];
+  /** Quando ligado, a ligação é atendida sozinha depois de alguns segundos tocando. */
+  atenderSozinho: boolean;
+}
+
+/** Quem pediu a ligação: a hora marcada ou alguém da família, pelo painel. */
+export type MotivoDaChamada = 'horario' | 'familia';
+export type EstadoDaChamada = 'tocando' | 'atendida' | 'perdida' | 'recusada';
+
+/** Uma ligação que a assistente faz pro aparelho do idoso. */
+export interface Chamada {
+  id: string;
+  motivo: MotivoDaChamada;
+  /** Só nas ligações de hora marcada: "HH:MM". */
+  horario?: string;
+  /** 1 na primeira tentativa, 2 na segunda. */
+  tentativa: number;
+  estado: EstadoDaChamada;
+  pedidaEm: string;
+  resolvidaEm?: string;
 }
 
 export interface Base {
@@ -83,6 +104,7 @@ export interface Base {
   lembrancas: Lembranca[];
   alertas: Alerta[];
   conversas: Conversa[];
+  chamadas: Chamada[];
 }
 
 /** Resposta de GET /api/familia. O painel da família lê só isto. */
@@ -105,11 +127,39 @@ export interface PainelDaFamilia {
   /** Sete dias, do mais antigo até hoje. Dia sem dado vem com os campos vazios. */
   semana: Dia[];
   lembrancas: Lembranca[];
+  /** A ligação que está tocando agora no aparelho do idoso, se houver. */
+  chamadaTocando: Chamada | null;
+  /** As últimas ligações, da mais nova pra mais antiga. */
+  chamadas: Chamada[];
   atualizadoEm: string;
 }
 
 /** POST /api/familia */
-export type AcaoDaFamilia = { acao: 'visto'; alertaId: string };
+export type AcaoDaFamilia =
+  | { acao: 'visto'; alertaId: string }
+  /** Faz o aparelho do idoso tocar agora. */
+  | { acao: 'ligar' }
+  /** Troca as horas das ligações de todo dia ("HH:MM"). */
+  | { acao: 'horarios'; horarios: string[] }
+  | { acao: 'atender_sozinho'; ligado: boolean };
+
+/** GET /api/chamada: o aparelho do idoso pergunta isto a cada 2 segundos. */
+export interface SituacaoDaChamada {
+  assistente: string;
+  tratamento: string;
+  /** A ligação tocando agora, ou null. */
+  chamada: Chamada | null;
+  /** Segundos tocando até atender sozinha, ou null quando o idoso precisa tocar em Atender. */
+  atenderSozinhoEm: number | null;
+  /** Próxima hora marcada de hoje ou de amanhã, "HH:MM", ou null. */
+  proximaLigacao: string | null;
+  horariosDeLigacao: string[];
+}
+
+/** POST /api/chamada: o aparelho do idoso conta o que aconteceu com a ligação. */
+export type RespostaDaChamada =
+  | { acao: 'atender'; chamadaId: string }
+  | { acao: 'recusar'; chamadaId: string };
 
 /** POST /api/conversa (a tela do idoso avisa o servidor do que acontece na conversa). */
 export type EventoDaConversa =
@@ -130,4 +180,6 @@ export interface InicioDaConversa {
   conversa_id: string;
   /** false quando a Lia está sem as ações (falta o endereço público do servidor). */
   ferramentas: boolean;
+  /** true quando um avatar em vídeo entra na ligação junto com a voz. */
+  avatar: boolean;
 }

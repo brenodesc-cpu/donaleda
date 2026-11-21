@@ -7,10 +7,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   AgoraClient,
   Agent,
+  AnamAvatar,
   Area,
   DeepgramSTT,
   ElevenLabsTTS,
   ExpiresIn,
+  HeyGenAvatar,
   MiniMaxTTS,
   OpenAI,
   OpenAITTS,
@@ -19,7 +21,7 @@ import type { ClientStartRequest } from '@/types/conversation';
 import { DEFAULT_AGENT_UID } from '@/lib/agora';
 import { abrirConversa, lerBase, mudarBase } from '@/lib/dados';
 import { FERRAMENTAS } from '@/lib/ferramentas';
-import { montarInstrucoes, montarSaudacao } from '@/lib/persona';
+import { montarInstrucoes, montarSaudacao, type OrigemDaLigacao } from '@/lib/persona';
 import { chaveDasFerramentas, exigirVariavel, urlPublica } from '@/lib/servidor';
 import type { InicioDaConversa } from '@/lib/tipos';
 
@@ -66,9 +68,29 @@ function voz() {
   });
 }
 
+/**
+ * O vídeo da assistente. LIA_AVATAR escolhe o fornecedor e o avatar, no formato
+ * "fornecedor:id", e LIA_AVATAR_KEY leva a chave dele. Sem isso, a tela mostra o
+ * rosto desenhado. Fornecedores ligados aqui: anam e heygen.
+ */
+function avatar() {
+  const [fornecedor, ...resto] = (process.env.LIA_AVATAR || '').split(':');
+  const id = resto.join(':').trim();
+  const chave = process.env.LIA_AVATAR_KEY;
+  if (!fornecedor || !id || !chave) return null;
+  if (fornecedor === 'anam') return new AnamAvatar({ apiKey: chave, avatarId: id });
+  if (fornecedor === 'heygen') {
+    return new HeyGenAvatar({ apiKey: chave, avatarId: id, quality: 'medium', agoraUid: AVATAR_UID });
+  }
+  return null;
+}
+
+// O avatar entra na sala como mais um participante, com este número.
+const AVATAR_UID = '654321';
+
 export async function POST(request: NextRequest) {
   try {
-    const body: ClientStartRequest = await request.json();
+    const body: ClientStartRequest & { chamada_id?: string } = await request.json();
     const { requester_id, channel_name } = body;
 
     const appId = exigirVariavel('NEXT_PUBLIC_AGORA_APP_ID');
@@ -87,7 +109,12 @@ export async function POST(request: NextRequest) {
     const chave = chaveDasFerramentas();
     const comFerramentas = Boolean(enderecoPublico && chave);
     const instrucoes = montarInstrucoes(base, agora, comFerramentas);
-    const saudacao = montarSaudacao(base, agora);
+    // A saudação muda conforme quem começou a ligação.
+    const chamada = body.chamada_id
+      ? base.chamadas.find((c) => c.id === body.chamada_id)
+      : undefined;
+    const origem: OrigemDaLigacao = chamada ? chamada.motivo : 'idoso';
+    const saudacao = montarSaudacao(base, agora, origem);
 
     const client = new AgoraClient({ area: Area.US, appId, appCertificate });
 
@@ -148,7 +175,14 @@ export async function POST(request: NextRequest) {
       )
       .withTts(voz());
 
-    const session = agent.createSession({
+    // Com um avatar configurado, a assistente aparece em vídeo na chamada.
+    const video = avatar();
+    type AceitaAvatar = { withAvatar(vendor: unknown): typeof agent };
+    const agenteDaLigacao = video
+      ? (agent as unknown as AceitaAvatar).withAvatar(video)
+      : agent;
+
+    const session = agenteDaLigacao.createSession({
       channel: channel_name,
       agentUid,
       remoteUids: [requester_id],
@@ -167,6 +201,7 @@ export async function POST(request: NextRequest) {
       state: 'RUNNING',
       conversa_id: conversa.id,
       ferramentas: comFerramentas,
+      avatar: Boolean(video),
     } satisfies InicioDaConversa);
   } catch (error) {
     console.error('Erro ao começar a conversa:', error);
