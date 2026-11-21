@@ -39,8 +39,12 @@ const CLARO_NO_ESCURO = 'text-[#F3E3C3]';
 /** O botão de contato cheio, em cima do fundo Café: é o botão principal da página. */
 const CHEIO_NO_ESCURO = 'border-background bg-background text-foreground hover:bg-white';
 
+// No celular os dois caminhos viram uma linha só, pra o topo caber na primeira tela.
 const CAMINHO =
-  'flex min-h-24 items-center gap-4 rounded-2xl px-6 py-5 text-left font-titulo text-2xl font-semibold leading-tight transition-[background-color,transform] duration-150 active:scale-[0.98]';
+  'flex min-h-12 items-center gap-2 rounded-xl px-3 py-2 text-left font-titulo text-[0.95rem] font-semibold leading-tight transition-[background-color,transform] duration-150 active:scale-[0.98] md:min-h-24 md:gap-4 md:rounded-2xl md:px-6 md:py-5 md:text-2xl';
+// O ícone some no celular, pra o nome do caminho caber em duas linhas.
+const ICONE_DO_CAMINHO = 'hidden h-9 w-9 shrink-0 md:block';
+const APOIO_DO_CAMINHO = 'hidden font-sans text-lg font-normal md:block';
 
 /**
  * Os dois caminhos de quem já usa a Dona Leda, os mesmos da tela de boas-vindas
@@ -49,23 +53,22 @@ const CAMINHO =
  */
 function Caminhos() {
   return (
-    <nav aria-label="Entrar na Dona Leda" className={`${LARGURA} grid gap-3 pb-4 pt-2 md:grid-cols-2 md:gap-4`}>
+    <nav
+      aria-label="Entrar na Dona Leda"
+      className={`${LARGURA} grid grid-cols-[auto_1fr] gap-2 pb-3 pt-1 md:grid-cols-2 md:gap-4 md:pb-4 md:pt-2`}
+    >
       <Link href="/entrar" className={`${CAMINHO} bg-background text-foreground hover:bg-white`}>
-        <HeartHandshake aria-hidden className="h-9 w-9 shrink-0" />
+        <HeartHandshake aria-hidden className={ICONE_DO_CAMINHO} />
         <span>
           Sou da família
-          <span className="block font-sans text-lg font-normal text-muted-foreground">
-            Quero acompanhar quem eu cuido
-          </span>
+          <span className={`${APOIO_DO_CAMINHO} text-muted-foreground`}>Quero acompanhar quem eu cuido</span>
         </span>
       </Link>
       <Link href="/parear" className={`${CAMINHO} border-2 border-[#FFF8E8] hover:bg-white/10`}>
-        <Smartphone aria-hidden className="h-9 w-9 shrink-0" />
+        <Smartphone aria-hidden className={ICONE_DO_CAMINHO} />
         <span>
           Este aparelho vai receber as ligações
-          <span className={`block font-sans text-lg font-normal ${CLARO_NO_ESCURO}`}>
-            Vou digitar o código que a família mandou
-          </span>
+          <span className={`${APOIO_DO_CAMINHO} ${CLARO_NO_ESCURO}`}>Vou digitar o código que a família mandou</span>
         </span>
       </Link>
     </nav>
@@ -90,21 +93,21 @@ export function Landing({ comCaminhos = false }: LandingProps) {
 
         {comCaminhos ? <Caminhos /> : null}
 
-        <section className={`${LARGURA} grid items-center gap-14 pb-20 pt-8 lg:grid-cols-[1fr_auto] lg:gap-20 lg:pb-24 lg:pt-6`}>
+        <section className={`${LARGURA} grid items-center gap-14 pb-20 pt-4 sm:pt-8 lg:grid-cols-[1fr_auto] lg:gap-20 lg:pb-24 lg:pt-6`}>
           <div>
-            <h1 className="font-titulo text-[clamp(2.25rem,4.6vw,3.25rem)] font-extrabold leading-[1.04] tracking-[-0.025em]">
+            <h1 className="font-titulo text-[1.75rem] font-extrabold leading-[1.06] tracking-[-0.025em] sm:text-[clamp(2.25rem,4.6vw,3.25rem)] sm:leading-[1.04]">
               <SemViuva texto={SONHO[0]} palavras={2} />
               <span className="mt-[0.4em] block">
                 <SemViuva texto={SONHO[1]} />
               </span>
             </h1>
-            <p className={`mt-7 max-w-[36rem] text-xl leading-relaxed sm:text-[1.375rem] ${CLARO_NO_ESCURO}`}>
+            <p className={`mt-5 max-w-[36rem] text-lg leading-normal sm:mt-7 sm:text-[1.375rem] sm:leading-relaxed ${CLARO_NO_ESCURO}`}>
               {DEFINICAO}
             </p>
-            <p className="mt-5 max-w-[36rem] font-titulo text-[1.375rem] font-bold leading-snug tracking-[-0.01em] sm:text-2xl">
+            <p className="mt-4 max-w-[36rem] font-titulo text-xl font-bold leading-snug tracking-[-0.01em] sm:mt-5 sm:text-2xl">
               {FRASE_DO_RESIDENCIAL}
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+            <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
               <BotaoDeContato tom="escuro" mensagem={MENSAGEM_DO_RESIDENCIAL} className={CHEIO_NO_ESCURO} />
               <a
                 href="#como-funciona"
