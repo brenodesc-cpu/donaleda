@@ -6,6 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { citaSegredo, guardar, normalizarLembrancas, paraOPainel } from './memoria';
 import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
 import { limiteDoDia } from './limiteDoDia';
+import { VERSAO_DO_AVISO_DE_PRIVACIDADE } from './privacidade';
 import type {
   Alerta,
   Alimentacao,
@@ -193,7 +194,13 @@ export function fecharConversa(
   const conversa = base.conversas.find((c) => c.id === conversaId);
   if (!conversa) return null;
   if (!conversa.fim) conversa.fim = agora.toISOString();
-  if (conversa.falasDoIdoso > 0) base.idoso.primeiraConversaFeita = true;
+  if (conversa.falasDoIdoso > 0) {
+    // A saudação desta conversa levou o aviso de privacidade: fica a data na ficha.
+    if (!base.idoso.primeiraConversaFeita) {
+      base.idoso.avisoDePrivacidade ??= { dadoEm: conversa.inicio, versao: VERSAO_DO_AVISO_DE_PRIVACIDADE };
+    }
+    base.idoso.primeiraConversaFeita = true;
+  }
   return conversa;
 }
 

@@ -52,6 +52,7 @@ export default function PainelDaFamiliaPage() {
           <Lembrancas
             lembrancas={painel.lembrancas}
             reservadas={painel.reservadas}
+            avisoDePrivacidadeEm={painel.idoso.avisoDePrivacidade?.dadoEm}
             assistente={painel.assistente}
             tratamento={painel.idoso.tratamento}
             onEnsinar={ensinarLembranca}

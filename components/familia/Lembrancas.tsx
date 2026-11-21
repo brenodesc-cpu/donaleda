@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { BookHeart, Lock, Plus } from 'lucide-react';
 import type { CategoriaDeLembranca, Lembranca } from '@/lib/tipos';
 import { CLASSE_DO_BOTAO_SECUNDARIO } from './campos';
-import { comMaiuscula, dataDeBrasilia, gavetaDe, NOME_DA_CATEGORIA, ORDEM_DAS_CATEGORIAS } from './formatos';
+import { comMaiuscula, dataDeBrasilia, diaEMes, gavetaDe, NOME_DA_CATEGORIA, ORDEM_DAS_CATEGORIAS } from './formatos';
 import { FormularioDaLembranca } from './FormularioDaLembranca';
 import { ItemDaLembranca } from './ItemDaLembranca';
 import type { CamposDaLembranca, ResultadoDaLembranca } from './usePainel';
@@ -13,6 +13,8 @@ interface LembrancasProps {
   lembrancas: Lembranca[];
   /** Quantas lembranças o idoso pediu pra guardar só com a assistente. */
   reservadas?: number;
+  /** Quando o idoso ouviu o aviso de privacidade na primeira ligação. */
+  avisoDePrivacidadeEm?: string;
   assistente: string;
   tratamento: string;
   onEnsinar?: (campos: CamposDaLembranca & { texto: string; categoria: CategoriaDeLembranca }) => Promise<ResultadoDaLembranca>;
@@ -21,6 +23,13 @@ interface LembrancasProps {
 }
 
 const NADA_FEITO: ResultadoDaLembranca = { ok: false, motivo: null };
+
+/** O que a família lê sobre o aviso de privacidade que o idoso ouviu. */
+export function frasesDoAvisoDePrivacidade(dadoEm: string, assistente: string, tratamento: string): string {
+  const quando = dataDeBrasilia(dadoEm);
+  const dia = quando ? ` em ${diaEMes(quando)}` : '';
+  return `Na primeira ligação${dia}, a ${assistente} avisou ${tratamento} que guarda o que for contado nas conversas, que a família recebe um resumo e que é só pedir pra esquecer alguma coisa.`;
+}
 
 function compromissosComData(lembrancas: Lembranca[]): Lembranca[] {
   const hoje = dataDeBrasilia(new Date().toISOString());
@@ -33,6 +42,7 @@ function compromissosComData(lembrancas: Lembranca[]): Lembranca[] {
 export function Lembrancas({
   lembrancas,
   reservadas = 0,
+  avisoDePrivacidadeEm,
   assistente,
   tratamento,
   onEnsinar,
@@ -142,6 +152,12 @@ export function Lembrancas({
           <Lock aria-hidden="true" className="mt-1 h-5 w-5 shrink-0" />
           {comMaiuscula(tratamento)} pediu pra guardar {reservadas}{' '}
           {reservadas === 1 ? 'assunto' : 'assuntos'} só com a {assistente}.
+        </p>
+      ) : null}
+
+      {avisoDePrivacidadeEm ? (
+        <p className="text-base text-muted-foreground">
+          {frasesDoAvisoDePrivacidade(avisoDePrivacidadeEm, assistente, tratamento)}
         </p>
       ) : null}
 
