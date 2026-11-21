@@ -11,17 +11,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- * Tela cheia de chamada recebida sobre a tela bloqueada (paleta Gema da Dona
- * Leda).
- * O toque contínuo e a vibração são controlados pelo
- * IncomingCallRingtoneService.
+ * Tela cheia de chamada recebida sobre a tela bloqueada (estilo ligação nativa / WhatsApp,
+ * na paleta Gema da Dona Leda). O toque contínuo e a vibração são controlados pelo
+ * sistema Android via DonaLedaConnectionService (TelecomManager + FLAG_INSISTENT).
  */
 public class IncomingCallActivity extends AppCompatActivity {
     public static final String EXTRA_CHAMADA_ID = "chamadaId";
@@ -38,14 +38,12 @@ public class IncomingCallActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        configureLockScreenWakeup();
+        configureLockScreenDisplay();
 
         chamadaId = getIntent().getStringExtra(EXTRA_CHAMADA_ID);
-        if (chamadaId == null)
-            chamadaId = "";
+        if (chamadaId == null) chamadaId = "";
         String assistente = getIntent().getStringExtra(EXTRA_ASSISTENTE);
-        if (assistente == null || assistente.trim().isEmpty())
-            assistente = "Dona Leda";
+        if (assistente == null || assistente.trim().isEmpty()) assistente = "Dona Leda";
 
         String autoAction = getIntent().getStringExtra(EXTRA_AUTO_ACTION);
         if ("atender".equals(autoAction)) {
@@ -57,96 +55,157 @@ public class IncomingCallActivity extends AppCompatActivity {
             return;
         }
 
-        setContentView(buildGemaCallLayout(assistente));
+        setContentView(buildCallScreenLayout(assistente));
         handler.postDelayed(timeoutTask, TIMEOUT_MS);
     }
 
-    private void configureLockScreenWakeup() {
+    /** Exibe a tela de ligação por cima da tela bloqueada e acende o visor (sem pedir PIN antes de atender). */
+    private void configureLockScreenDisplay() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true);
             setTurnScreenOn(true);
-            KeyguardManager km = getSystemService(KeyguardManager.class);
-            if (km != null) {
-                km.requestDismissKeyguard(this, null);
-            }
         } else {
             getWindow().addFlags(
-                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                            | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                            | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                    | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+            );
         }
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    private LinearLayout buildGemaCallLayout(String assistente) {
-        // Paleta Gema: Casca #FFF8E8, Café #33200F, Atender #1B7A3D, Goiabada #B03A22
-        int pad = dp(28);
+    private LinearLayout buildCallScreenLayout(String assistente) {
+        // Paleta Gema escura/quente de alto contraste para tela bloqueada:
+        // Fundo Café #33200F, texto Casca #FFF8E8, destaque Gema #F7B90F,
+        // Atender #1B7A3D, Recusar #C92A2A.
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setGravity(Gravity.CENTER);
-        root.setBackgroundColor(Color.parseColor("#FFF8E8"));
-        root.setPadding(pad, dp(48), pad, dp(48));
-
-        TextView subtitle = new TextView(this);
-        subtitle.setText("Ligação da assistente virtual");
-        subtitle.setTextColor(Color.parseColor("#6B4E35"));
-        subtitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        subtitle.setGravity(Gravity.CENTER);
-        root.addView(subtitle);
+        root.setGravity(Gravity.CENTER_HORIZONTAL);
+        root.setBackgroundColor(Color.parseColor("#33200F"));
+        root.setPadding(dp(28), dp(64), dp(28), dp(52));
 
         TextView title = new TextView(this);
-        title.setText(assistente + "\nestá ligando");
-        title.setTextColor(Color.parseColor("#33200F"));
+        title.setText(assistente);
+        title.setTextColor(Color.parseColor("#FFF8E8"));
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34);
         title.setTypeface(Typeface.DEFAULT_BOLD);
         title.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams titleLp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        titleLp.topMargin = dp(16);
-        titleLp.bottomMargin = dp(48);
-        root.addView(title, titleLp);
+        root.addView(title);
 
-        Button answerBtn = makeRoundedButton("Atender", "#1B7A3D", 24, dp(76));
-        answerBtn.setOnClickListener(v -> onAnswerClicked());
-        LinearLayout.LayoutParams answerLp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(76));
-        answerLp.bottomMargin = dp(20);
-        root.addView(answerBtn, answerLp);
+        TextView subtitle = new TextView(this);
+        subtitle.setText("Ligação da assistente virtual");
+        subtitle.setTextColor(Color.parseColor("#FDEBB5"));
+        subtitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        subtitle.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams subLp = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        subLp.topMargin = dp(8);
+        root.addView(subtitle, subLp);
 
-        Button declineBtn = makeRoundedButton("Agora não", "#B03A22", 20, dp(64));
-        declineBtn.setOnClickListener(v -> onDeclineClicked());
-        LinearLayout.LayoutParams declineLp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(64));
-        root.addView(declineBtn, declineLp);
+        // Espaço superior flexível
+        root.addView(spacer(1f));
+
+        // Avatar central circular grande (estilo tela de ligação WhatsApp)
+        LinearLayout avatarWrap = new LinearLayout(this);
+        avatarWrap.setGravity(Gravity.CENTER);
+        GradientDrawable ringBg = new GradientDrawable();
+        ringBg.setShape(GradientDrawable.OVAL);
+        ringBg.setColor(Color.parseColor("#FFF8E8"));
+        ringBg.setStroke(dp(5), Color.parseColor("#F7B90F"));
+        avatarWrap.setBackground(ringBg);
+        int avatarSize = dp(176);
+        LinearLayout.LayoutParams avatarWrapLp = new LinearLayout.LayoutParams(avatarSize, avatarSize);
+        avatarWrapLp.gravity = Gravity.CENTER_HORIZONTAL;
+
+        ImageView icon = new ImageView(this);
+        icon.setImageResource(R.mipmap.ic_launcher_round);
+        icon.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        int iconSize = dp(156);
+        avatarWrap.addView(icon, new LinearLayout.LayoutParams(iconSize, iconSize));
+        root.addView(avatarWrap, avatarWrapLp);
+
+        // Espaço inferior flexível
+        root.addView(spacer(1.2f));
+
+        // Linha inferior com dois botões grandes e claros: Recusar (esquerda) e Atender (direita)
+        LinearLayout actions = new LinearLayout(this);
+        actions.setOrientation(LinearLayout.HORIZONTAL);
+        actions.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams actionsLp = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        actionsLp.bottomMargin = dp(12);
+
+        actions.addView(
+            makeCallCircleAction("Recusar", "✕", "#C92A2A", v -> onDeclineClicked()),
+            new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        );
+        actions.addView(
+            makeCallCircleAction("Atender", "✓", "#1B7A3D", v -> onAnswerClicked()),
+            new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        );
+        root.addView(actions, actionsLp);
 
         return root;
     }
 
-    private Button makeRoundedButton(String text, String hexColor, int textSp, int heightPx) {
-        Button btn = new Button(this);
-        btn.setText(text);
-        btn.setAllCaps(false);
-        btn.setTextColor(Color.WHITE);
-        btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSp);
-        btn.setTypeface(Typeface.DEFAULT_BOLD);
-        btn.setMinHeight(heightPx);
+    private View spacer(float weight) {
+        View v = new View(this);
+        v.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, weight));
+        return v;
+    }
 
+    private LinearLayout makeCallCircleAction(
+        String label,
+        String symbol,
+        String hexColor,
+        View.OnClickListener listener
+    ) {
+        LinearLayout col = new LinearLayout(this);
+        col.setOrientation(LinearLayout.VERTICAL);
+        col.setGravity(Gravity.CENTER);
+        col.setOnClickListener(listener);
+
+        TextView circle = new TextView(this);
+        circle.setText(symbol);
+        circle.setTextColor(Color.WHITE);
+        circle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34);
+        circle.setTypeface(Typeface.DEFAULT_BOLD);
+        circle.setGravity(Gravity.CENTER);
         GradientDrawable bg = new GradientDrawable();
+        bg.setShape(GradientDrawable.OVAL);
         bg.setColor(Color.parseColor(hexColor));
-        bg.setCornerRadius(dp(20));
-        btn.setBackground(bg);
-        return btn;
+        circle.setBackground(bg);
+
+        int size = dp(82);
+        col.addView(circle, new LinearLayout.LayoutParams(size, size));
+
+        TextView caption = new TextView(this);
+        caption.setText(label);
+        caption.setTextColor(Color.parseColor("#FFF8E8"));
+        caption.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        caption.setTypeface(Typeface.DEFAULT_BOLD);
+        caption.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams capLp = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        capLp.topMargin = dp(12);
+        col.addView(caption, capLp);
+
+        return col;
     }
 
     private int dp(int value) {
         return Math.round(
-                TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        value,
-                        getResources().getDisplayMetrics()));
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                value,
+                getResources().getDisplayMetrics()
+            )
+        );
     }
 
     private void onAnswerClicked() {
@@ -156,11 +215,18 @@ public class IncomingCallActivity extends AppCompatActivity {
             DonaLedaCallPushPlugin.sendCallResponseAsync(getApplicationContext(), "atender", chamadaId);
             DonaLedaCallPushPlugin.dispatchCallAction(getApplicationContext(), "atender", chamadaId);
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            KeyguardManager km = getSystemService(KeyguardManager.class);
+            if (km != null && km.isKeyguardLocked()) {
+                km.requestDismissKeyguard(this, null);
+            }
+        }
         Intent openMain = new Intent(this, MainActivity.class);
         openMain.addFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK
-                        | Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+        );
         startActivity(openMain);
         finish();
     }
@@ -169,7 +235,6 @@ public class IncomingCallActivity extends AppCompatActivity {
         handler.removeCallbacks(timeoutTask);
         DonaLedaConnectionService.endIncomingCall(getApplicationContext(), false);
         if (!chamadaId.isEmpty()) {
-            // Avisa o servidor direto em segundo plano (funciona mesmo com o app fechado!)
             DonaLedaCallPushPlugin.sendCallResponseAsync(getApplicationContext(), "recusar", chamadaId);
             DonaLedaCallPushPlugin.notifyIfActive(getApplicationContext(), "recusar", chamadaId);
         }
