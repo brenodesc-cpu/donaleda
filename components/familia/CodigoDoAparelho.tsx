@@ -61,7 +61,7 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
   const handleCopiarLink = async () => {
     if (!codigo) return;
     const link = `${window.location.origin}/parear?codigo=${codigo.codigo}`;
-    const texto = `Abra este link no seu celular pra ligar a Dona Leda: ${link}`;
+    const texto = `Abra este link no seu celular pra receber as ligações da Dona Leda: ${link}`;
     try {
       if (navigator.share) await navigator.share({ text: texto });
       else await navigator.clipboard.writeText(texto);
@@ -86,7 +86,7 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
   if (!codigo || restam === 0) {
     return (
       <div className="flex flex-col gap-3">
-        {codigo ? <p className="text-base text-warning">O código venceu. Gere outro.</p> : null}
+        {codigo ? <p className="text-base font-medium text-foreground">O código venceu. Gere outro.</p> : null}
         <Erro texto={erro} />
         <button type="button" onClick={handleGerar} disabled={gerando} className={CLASSE_DO_BOTAO_PRINCIPAL}>
           {gerando ? 'Gerando...' : 'Gerar o código'}
@@ -100,7 +100,7 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
       <p className="text-base text-muted-foreground">Código do aparelho</p>
       <p
         aria-label={`Código ${codigo.codigo.split('').join(' ')}`}
-        className="font-mono text-6xl font-bold tracking-widest text-foreground md:text-7xl"
+        className="font-titulo tabular-nums text-6xl font-bold tracking-widest text-foreground md:text-7xl"
       >
         {separar(codigo.codigo)}
       </p>
@@ -111,7 +111,7 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
         <Link2 aria-hidden="true" className="h-5 w-5" />
         {copiado ? 'Link pronto pra mandar' : `Mandar o link pra ${idoso.tratamento}`}
       </button>
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-center text-base text-muted-foreground">
         Quem abre o link no celular de {idoso.tratamento} liga o aparelho sem digitar nada.
       </p>
       <button type="button" onClick={handleGerar} disabled={gerando} className={`${CLASSE_DO_BOTAO_SECUNDARIO} sm:w-auto`}>

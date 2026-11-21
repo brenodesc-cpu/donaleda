@@ -188,7 +188,7 @@ export default function Conversa({
 
       <div className="flex w-full flex-col items-center gap-2">
         <p role="status" className="text-xl font-medium text-muted-foreground">
-          {TEXTO_DO_ESTADO[estado]}
+          {estado === 'ligando' ? 'Só um instante...' : TEXTO_DO_ESTADO[estado]}
         </p>
         <p
           aria-live="polite"

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Phone, PhoneCall } from 'lucide-react';
 import type { PainelDaFamilia } from '@/lib/tipos';
+import { horariosEmFrase } from '@/components/horarios';
 import { enderecoCom } from './api';
 import { CLASSES_DO_TOM, resultadoDaLigacao } from './formatos';
 import type { PedidoDeLigacao } from './usePainel';
@@ -15,7 +16,7 @@ interface LigacoesProps {
 }
 
 const CLASSE_DO_BOTAO =
-  'inline-flex min-h-[60px] w-full items-center justify-center gap-3 rounded-xl bg-primary px-6 text-lg font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70';
+  'inline-flex min-h-[60px] w-full items-center justify-center gap-3 rounded-xl bg-primary px-6 font-titulo text-lg font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70';
 
 function BotaoDeLigar({ painel, pedido, onLigar }: Omit<LigacoesProps, 'idosoId'>) {
   const { tratamento } = painel.idoso;
@@ -55,10 +56,8 @@ function BotaoDeLigar({ painel, pedido, onLigar }: Omit<LigacoesProps, 'idosoId'
 }
 
 function horariosEmPalavras(horarios: string[]): string {
-  if (horarios.length === 0) return 'Nenhum horário marcado.';
-  if (horarios.length === 1) return `Liga todo dia às ${horarios[0]}.`;
-  const ultimos = horarios.slice(-1)[0];
-  return `Liga todo dia às ${horarios.slice(0, -1).join(', ')} e às ${ultimos}.`;
+  const frase = horariosEmFrase(horarios);
+  return frase ? `Liga todo dia ${frase}.` : 'Nenhum horário marcado.';
 }
 
 /** O botão grande de ligar, o resultado da última ligação e as horas de todo dia. */
@@ -72,19 +71,25 @@ export function Ligacoes({ painel, idosoId, pedido, onLigar }: LigacoesProps) {
       <BotaoDeLigar painel={painel} pedido={pedido} onLigar={onLigar} />
       <div aria-live="polite" className="flex flex-col gap-1">
         {naoDeu ? (
-          <p className="text-base text-warning">
+          <p className="text-base font-medium text-foreground">
             Não deu pra ligar agora. Confira se o aparelho está ligado na internet.
           </p>
         ) : null}
         {resultado ? (
-          <p className={`text-base ${CLASSES_DO_TOM[resultado.tom].valor}`}>{resultado.texto}</p>
+          <p
+            className={`text-base ${
+              resultado.tom === 'atencao'
+                ? 'text-foreground font-medium'
+                : CLASSES_DO_TOM[resultado.tom].valor
+            }`}
+          >{resultado.texto}</p>
         ) : null}
       </div>
       <p className="text-base text-muted-foreground">
         {horariosEmPalavras(painel.idoso.horariosDeLigacao)}{' '}
         <Link
           href={enderecoCom('/familia/ajustes', idosoId)}
-          className="font-medium text-foreground underline underline-offset-4 hover:text-muted-foreground"
+          className="inline-flex min-h-11 items-center px-1 font-medium text-foreground underline underline-offset-4 hover:text-muted-foreground"
         >
           Mudar
         </Link>

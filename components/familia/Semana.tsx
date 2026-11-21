@@ -83,6 +83,11 @@ function Celula({ linha, dia }: { linha: Linha; dia: Dia }) {
 
 export function Semana({ semana, hoje }: SemanaProps) {
   const temExemplo = semana.some((dia) => dia.exemplo);
+  const semDado =
+    semana.length === 0 ||
+    LINHAS.every((linha) =>
+      semana.every((dia) => linha.ler(dia).tom === 'vazio'),
+    );
 
   return (
     <section
@@ -93,73 +98,76 @@ export function Semana({ semana, hoje }: SemanaProps) {
         A semana
       </h2>
 
-      {semana.length > 0 ? <ResumoDaSemana semana={semana} /> : null}
-
-      {semana.length === 0 ? (
+      {semDado ? (
         <p className="text-base text-muted-foreground">
-          Ainda não há dias registrados.
+          Depois de cada conversa, o que a Dona Leda ouvir sobre sono, comida,
+          remédio, dor, humor e se saiu de casa aparece aqui, dia por dia. Com
+          alguns dias de conversa dá pra ver como foi a semana.
         </p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full table-fixed border-collapse">
-            <thead>
-              <tr>
-                <th scope="col" className="w-20 text-left">
-                  <span className="sr-only">O que foi perguntado</span>
-                </th>
-                {semana.map((dia) => (
-                  <th
-                    key={dia.data}
-                    scope="col"
-                    className={`rounded-t-lg px-1 py-2 text-center text-sm font-medium ${
-                      dia.data === hoje
-                        ? 'bg-muted text-foreground'
-                        : 'text-muted-foreground'
-                    }`}
-                  >
-                    <span className="block">{diaDaSemanaCurto(dia.data)}</span>
-                    <span className="block text-foreground">
-                      {diaEMes(dia.data).slice(0, 2)}
-                      {dia.exemplo ? (
-                        <>
-                          <span aria-hidden="true">*</span>
-                          <span className="sr-only"> (dado de exemplo)</span>
-                        </>
-                      ) : null}
-                    </span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {LINHAS.map((linha) => (
-                <tr key={linha.id} className="border-t border-border">
-                  <th
-                    scope="row"
-                    className="py-2 pr-2 text-left text-base font-medium text-foreground"
-                  >
-                    {linha.nome}
+        <>
+          <ResumoDaSemana semana={semana} />
+          <div className="overflow-x-auto">
+            <table className="w-full table-fixed border-collapse">
+              <thead>
+                <tr>
+                  <th scope="col" className="w-[4.5rem] text-left">
+                    <span className="sr-only">O que foi perguntado</span>
                   </th>
                   {semana.map((dia) => (
-                    <Celula key={dia.data} linha={linha} dia={dia} />
+                    <th
+                      key={dia.data}
+                      scope="col"
+                      className={`rounded-t-lg px-1 py-2 text-center text-sm font-medium md:text-base ${
+                        dia.data === hoje
+                          ? 'bg-muted text-foreground'
+                          : 'text-muted-foreground'
+                      }`}
+                    >
+                      <span className="block">{diaDaSemanaCurto(dia.data)}</span>
+                      <span className="block text-foreground">
+                        {diaEMes(dia.data).slice(0, 2)}
+                        {dia.exemplo ? (
+                          <>
+                            <span aria-hidden="true">*</span>
+                            <span className="sr-only"> (dado de exemplo)</span>
+                          </>
+                        ) : null}
+                      </span>
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+                {LINHAS.map((linha) => (
+                  <tr key={linha.id} className="border-t border-border">
+                    <th
+                      scope="row"
+                      className="py-2 pr-2 text-left text-base font-medium text-foreground"
+                    >
+                      {linha.nome}
+                    </th>
+                    {semana.map((dia) => (
+                      <Celula key={dia.data} linha={linha} dia={dia} />
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-      <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
-        {LEGENDA.map(({ tom, texto }) => (
-          <li key={tom} className="flex items-center gap-2">
-            <Ponto tom={tom} />
-            {texto}
-          </li>
-        ))}
-        <li>Na linha da dor aparece a nota de 0 a 10.</li>
-        {temExemplo ? <li>* Dias marcados são dados de exemplo.</li> : null}
-      </ul>
+          <ul className="flex flex-wrap gap-x-4 gap-y-2 text-base text-muted-foreground">
+            {LEGENDA.map(({ tom, texto }) => (
+              <li key={tom} className="flex items-center gap-2">
+                <Ponto tom={tom} />
+                {texto}
+              </li>
+            ))}
+            <li>Na linha da dor aparece a nota de 0 a 10.</li>
+            {temExemplo ? <li>* Dias marcados são dados de exemplo.</li> : null}
+          </ul>
+        </>
+      )}
     </section>
   );
 }

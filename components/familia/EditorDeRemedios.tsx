@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent, type KeyboardEvent } from 'react';
 import { Plus, X } from 'lucide-react';
 import type { Idoso } from '@/lib/tipos';
 import { CLASSE_DA_CAIXA } from './campos';
+import { horaCurta } from './formatos';
 
 type Remedios = Idoso['remedios'];
 
@@ -28,6 +29,13 @@ export function EditorDeRemedios({ remedios, onTrocar }: EditorDeRemediosProps) 
     setNome('');
   };
 
+  const handleEnter = (evento: KeyboardEvent<HTMLInputElement>) => {
+    if (evento.key !== 'Enter' || evento.nativeEvent.isComposing) return;
+    if (nome.trim().length === 0) return; // campo vazio: Enter segue enviando o formulário de fora
+    evento.preventDefault();
+    handleAdicionar();
+  };
+
   const handleTirar = (indice: number) => {
     onTrocar(remedios.filter((_, i) => i !== indice));
   };
@@ -42,7 +50,7 @@ export function EditorDeRemedios({ remedios, onTrocar }: EditorDeRemediosProps) 
               className="flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-4 py-2"
             >
               <span className="text-lg text-foreground">
-                {remedio.nome} <span className="text-muted-foreground">às {remedio.horario}</span>
+                {remedio.nome} <span className="text-muted-foreground">às {remedio.horario.includes(':') ? horaCurta(remedio.horario) : remedio.horario}</span>
               </span>
               <button
                 type="button"
@@ -65,13 +73,20 @@ export function EditorDeRemedios({ remedios, onTrocar }: EditorDeRemediosProps) 
           <input
             value={nome}
             onChange={handleNome}
-            placeholder="remédio da pressão"
-            className={CLASSE_DA_CAIXA}
+            onKeyDown={handleEnter}
+            placeholder="Ex.: remédio do coração"
+            className={`${CLASSE_DA_CAIXA} font-normal`}
           />
         </label>
         <label className="flex flex-col gap-1 text-base font-medium text-foreground sm:w-36">
           Horário
-          <input type="time" value={horario} onChange={handleHorario} className={CLASSE_DA_CAIXA} />
+          <input
+            type="time"
+            value={horario}
+            onChange={handleHorario}
+            onKeyDown={handleEnter}
+            className={`${CLASSE_DA_CAIXA} font-normal`}
+          />
         </label>
         <button
           type="button"

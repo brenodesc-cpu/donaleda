@@ -30,12 +30,12 @@ export function ApagarIdoso({ idosoId, tratamento }: ApagarIdosoProps) {
 
   return (
     <Cartao titulo={`Apagar os dados de ${tratamento}`}>
-      <p className=" text-base text-muted-foreground">
+      <p className="text-base text-muted-foreground">
         Apaga a ficha, as lembranças, os avisos e os aparelhos ligados. Não tem como desfazer.
       </p>
       <Erro texto={erro} />
       {confirmando ? (
-        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+        <div className="flex flex-col gap-3 sm:flex-row">
           <button
             type="button"
             onClick={handleApagar}
@@ -56,7 +56,7 @@ export function ApagarIdoso({ idosoId, tratamento }: ApagarIdosoProps) {
         <button
           type="button"
           onClick={() => setConfirmando(true)}
-          className="mt-4 min-h-12 rounded-xl border border-destructive px-5 text-base font-semibold text-destructive"
+          className="min-h-12 rounded-xl border border-destructive px-5 text-base font-semibold text-destructive"
         >
           Apagar os dados
         </button>

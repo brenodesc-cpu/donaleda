@@ -15,11 +15,13 @@ export default function NovoIdosoPage() {
   const { idosos, idoso, escolher, semConexao } = useIdosos({ exigirIdoso: false });
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+  const [origemDoErro, setOrigemDoErro] = useState<'exemplo' | 'formulario'>('formulario');
   const primeiraVez = idosos !== null && idosos.length === 0;
 
   const cadastrar = async (corpo: NovoIdoso | { exemplo: true }, depois: 'aparelho' | 'painel') => {
     setEnviando(true);
     setErro(null);
+    setOrigemDoErro(depois === 'painel' ? 'exemplo' : 'formulario');
     const { status, dado } = await criarIdoso(corpo);
     if (status === 401) {
       router.replace('/entrar');
@@ -44,22 +46,28 @@ export default function NovoIdosoPage() {
           {primeiraVez ? 'Vamos começar' : 'Cadastrar outra pessoa'}
         </h1>
         <p className="text-lg text-muted-foreground">
-          Conte quem a Dona Leda vai acompanhar. Depois você liga o celular ou o tablet dela.
+          Conte quem a Dona Leda vai acompanhar. Depois você prepara o celular ou o tablet em que a Dona Leda vai tocar.
         </p>
       </header>
 
-      <section className="flex flex-col gap-2 rounded-2xl border border-border bg-muted p-5">
-        <p className="text-base text-foreground">
-          Quer ver antes como fica? A Dona Leda monta um exemplo com a dona Helena, uma pessoa
-          inventada, com uma semana de conversas.
-        </p>
-        <button type="button" onClick={handleExemplo} disabled={enviando} className={CLASSE_DO_BOTAO_SECUNDARIO}>
-          Ver com um exemplo
-        </button>
-      </section>
+      {primeiraVez ? (
+        <section className="flex flex-col gap-2 rounded-2xl border border-border bg-muted p-5">
+          <p className="text-base text-foreground">
+            Quer ver antes como fica? A Dona Leda monta um exemplo com a dona Helena, uma pessoa
+            inventada, com uma semana de conversas.
+          </p>
+          <button type="button" onClick={handleExemplo} disabled={enviando} className={CLASSE_DO_BOTAO_SECUNDARIO}>
+            Ver com um exemplo
+          </button>
+          <Erro texto={origemDoErro === 'exemplo' ? erro : null} />
+        </section>
+      ) : null}
 
-      <Erro texto={erro} />
-      <FormularioDoIdoso enviando={enviando} erro={null} onEnviar={handleEnviar} />
+      <FormularioDoIdoso
+        enviando={enviando}
+        erro={origemDoErro === 'formulario' ? erro : null}
+        onEnviar={handleEnviar}
+      />
     </Moldura>
   );
 }

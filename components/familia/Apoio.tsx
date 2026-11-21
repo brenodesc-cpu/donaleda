@@ -9,7 +9,7 @@ export function AvisoSemConexao() {
       className="flex items-center gap-2 rounded-lg bg-muted px-4 py-2 text-base text-muted-foreground"
     >
       <WifiOff aria-hidden="true" className="h-5 w-5 shrink-0" />
-      Sem conexão com o servidor
+      Sem conexão agora. O que está na tela pode não estar atualizado.
     </p>
   );
 }
@@ -58,7 +58,9 @@ export function Rodape({ assistente }: { assistente: string }) {
     <footer className="flex flex-col gap-3 border-t border-border pt-5 text-base text-muted-foreground">
       <p>
         A {assistente} é uma assistente virtual e se apresenta assim. Este painel
-        mostra o resumo e os avisos. A conversa inteira não é guardada. A{' '}
+        mostra o dia, a semana, os avisos, o resumo da última conversa e as
+        lembranças que a{' '}{assistente} guarda. A conversa inteira não é
+        guardada. A{' '}
         {assistente} não substitui médico nem serviço de emergência: em caso de
         urgência, ligue 192.
       </p>
@@ -66,7 +68,7 @@ export function Rodape({ assistente }: { assistente: string }) {
         href="/"
         className="inline-flex min-h-11 items-center self-start font-medium text-foreground underline underline-offset-4 hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        Abrir a tela de conversa
+        Ir para a tela inicial do app
       </Link>
     </footer>
   );

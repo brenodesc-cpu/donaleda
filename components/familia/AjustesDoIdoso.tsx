@@ -63,6 +63,7 @@ export function AjustesDoIdoso({
   return (
     <div className="flex flex-col gap-5">
       <Cartao titulo="Ligações">
+        <p className="text-base text-muted-foreground">O que você muda aqui vale na hora, sem precisar salvar.</p>
         <HorariosDaLigacao horarios={idoso.horariosDeLigacao} onTrocar={onTrocarHorarios} />
         <ChaveAtenderSozinho ligado={idoso.atenderSozinho} onTrocar={onTrocarAtenderSozinho} />
       </Cartao>

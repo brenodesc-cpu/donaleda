@@ -35,7 +35,7 @@ export function FormularioDoIdoso({ enviando, erro, onEnviar }: FormularioDoIdos
     if (!nome.trim()) return setFaltou('Falta o nome.');
     if (!tratamento.trim()) return setFaltou('Falta como a Dona Leda deve chamar.');
     if (!Number.isFinite(anos) || anos < 40 || anos > 120) {
-      return setFaltou('Confira a idade.');
+      return setFaltou('A idade precisa ser um número entre 40 e 120.');
     }
     if (!seuNome.trim() || !parentesco.trim()) {
       return setFaltou('Falta o seu nome e o seu parentesco.');
@@ -54,13 +54,13 @@ export function FormularioDoIdoso({ enviando, erro, onEnviar }: FormularioDoIdos
   return (
     <form onSubmit={handleEnviar} className="flex flex-col gap-5" noValidate>
       <Cartao titulo="Quem a Dona Leda vai acompanhar">
-        <Campo id="nome" rotulo="Nome" value={nome} onChange={mudar(setNome)} placeholder="Helena" autoComplete="off" />
+        <Campo id="nome" rotulo="Nome" value={nome} onChange={mudar(setNome)} placeholder="Ex.: Helena" autoComplete="off" />
         <Campo
           id="tratamento"
-          rotulo="Como ela deve chamar"
+          rotulo="Como a Dona Leda deve chamar"
           value={tratamento}
           onChange={mudar(setTratamento)}
-          placeholder="dona Helena"
+          placeholder="Ex.: dona Helena"
           ajuda='Do jeito que a família fala: "dona Helena", "seu Antônio", "vó Lurdes".'
         />
         <Campo
@@ -72,19 +72,19 @@ export function FormularioDoIdoso({ enviando, erro, onEnviar }: FormularioDoIdos
           max={120}
           value={idade}
           onChange={mudar(setIdade)}
-          placeholder="78"
+          placeholder="Ex.: 78"
           className="sm:max-w-32"
         />
       </Cartao>
 
       <Cartao titulo="Quem está cadastrando">
-        <Campo id="seu-nome" rotulo="O seu nome" value={seuNome} onChange={mudar(setSeuNome)} placeholder="Marina" autoComplete="given-name" />
+        <Campo id="seu-nome" rotulo="O seu nome" value={seuNome} onChange={mudar(setSeuNome)} placeholder="Ex.: Marina" autoComplete="given-name" />
         <Campo
           id="parentesco"
-          rotulo="O que você é dela"
+          rotulo="Seu parentesco"
           value={parentesco}
           onChange={mudar(setParentesco)}
-          placeholder="filha"
+          placeholder="Ex.: filha"
           list="parentescos"
           ajuda="A Dona Leda fala de você nas conversas: a sua filha Marina me pediu pra ligar."
         />

@@ -3,13 +3,13 @@
 import type { InputHTMLAttributes, ReactNode } from 'react';
 
 export const CLASSE_DA_CAIXA =
-  'min-h-12 w-full rounded-lg border border-border bg-background px-3 text-lg text-foreground placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring';
+  'min-h-12 w-full rounded-lg border border-border bg-background px-3 text-lg text-foreground placeholder:text-muted-foreground/80 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring';
 
 export const CLASSE_DO_BOTAO_PRINCIPAL =
-  'inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 text-lg font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60';
+  'inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 font-titulo text-lg font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60';
 
 export const CLASSE_DO_BOTAO_SECUNDARIO =
-  'inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 text-lg font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60';
+  'inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 font-titulo text-lg font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-60';
 
 interface CampoProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;

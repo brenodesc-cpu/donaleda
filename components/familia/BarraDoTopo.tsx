@@ -92,7 +92,7 @@ export function BarraDoTopo({ idosos, idoso, onEscolher, ativa }: BarraDoTopoPro
             className={classeDo(ativa === 'aparelho')}
           >
             <Smartphone aria-hidden="true" className="h-5 w-5" />
-            Ligar o aparelho
+            Aparelho
           </Link>
           <Link href={enderecoCom('/familia/ajustes', id)} className={classeDo(ativa === 'ajustes')}>
             <Settings aria-hidden="true" className="h-5 w-5" />

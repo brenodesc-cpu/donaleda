@@ -12,9 +12,13 @@ const BOTAO =
 /** A primeira abertura do app num aparelho novo: quem está com ele na mão. */
 export function BoasVindas() {
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col items-center justify-center gap-10 bg-background px-6 py-10">
+    <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col items-center justify-center gap-8 bg-background px-6 py-10">
       <div className="flex flex-col items-center gap-6 text-center">
-        <Rosto estado="parada" nivel={0} />
+        <Rosto
+          estado="parada"
+          nivel={0}
+          className="sm:[@media(max-height:820px)]:h-40 sm:[@media(max-height:820px)]:w-40"
+        />
         <h1 className="max-w-md text-balance text-3xl font-semibold sm:text-4xl">
           Oi! Eu sou a {NOME_DA_ASSISTENTE}, uma assistente virtual.
         </h1>

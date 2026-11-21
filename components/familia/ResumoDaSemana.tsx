@@ -7,8 +7,8 @@ interface ResumoDaSemanaProps {
 
 function Numero({ valor, total, rotulo }: { valor: number; total: number; rotulo: string }) {
   return (
-    <div className="flex flex-1 flex-col gap-1 rounded-xl border border-success/30 bg-success-soft px-4 py-3">
-      <p className="text-3xl font-semibold text-success">
+    <div className="flex flex-1 flex-col gap-1 rounded-xl border border-border bg-card px-4 py-3">
+      <p className="text-3xl font-semibold text-foreground">
         {valor}
         <span className="text-lg font-medium text-muted-foreground"> de {total} dias</span>
       </p>

@@ -3,6 +3,7 @@ import {
   comMaiuscula,
   dataPorExtenso,
   duracaoEmPalavras,
+  horaCurta,
   horaDeBrasilia,
   quandoFoi,
 } from './formatos';
@@ -27,7 +28,7 @@ function Situacao({ painel }: CabecalhoProps) {
   }
 
   if (conversouHoje && ultimaConversa) {
-    const hora = horaDeBrasilia(ultimaConversa.inicio);
+    const hora = horaCurta(horaDeBrasilia(ultimaConversa.inicio));
     const duracao = duracaoEmPalavras(ultimaConversa.minutos);
     return (
       <p className="text-lg text-foreground">
@@ -38,14 +39,26 @@ function Situacao({ painel }: CabecalhoProps) {
     );
   }
 
+  if (!ultimaConversa) {
+    return (
+      <div>
+        <p className="text-lg font-medium text-foreground">
+          Ainda não conversou com a {assistente}
+        </p>
+        <p className="text-base text-muted-foreground">
+          A primeira conversa acontece na próxima ligação marcada, ou agora, se
+          você tocar em Ligar.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <p className="text-lg font-medium text-warning">Ainda não conversou hoje</p>
-      {ultimaConversa ? (
-        <p className="text-base text-muted-foreground">
-          Última conversa: {quandoFoi(ultimaConversa.inicio, hoje.data)}
-        </p>
-      ) : null}
+      <p className="text-lg font-medium text-foreground">Ainda não conversou hoje</p>
+      <p className="text-base text-muted-foreground">
+        Última conversa: {quandoFoi(ultimaConversa.inicio, hoje.data)}
+      </p>
     </div>
   );
 }

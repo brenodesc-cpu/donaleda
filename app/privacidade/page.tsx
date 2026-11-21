@@ -25,7 +25,8 @@ const PARTES: { titulo: string; texto: string[] }[] = [
   {
     titulo: 'Quem vê',
     texto: [
-      'Só as pessoas da família que cadastraram a pessoa idosa veem a ficha, os avisos e o resumo.',
+      'Só as pessoas da família que cadastraram a pessoa idosa veem a ficha, as lembranças, os avisos e o resumo.',
+      'Quando a pessoa pede pra algo ficar só entre ela e a Dona Leda, essa lembrança fica reservada: a família vê quantas existem, não o que dizem.',
       'A conversa por voz passa pela Agora, que leva o áudio, e pelo modelo de inteligência artificial que entende e responde (Google ou OpenAI, conforme a configuração). Os dados ficam guardados no Supabase.',
       'Nada é vendido nem usado para propaganda.',
     ],
@@ -40,6 +41,7 @@ const PARTES: { titulo: string; texto: string[] }[] = [
     titulo: 'Como apagar',
     texto: [
       'Quem cadastrou a pessoa idosa apaga todos os dados dela no aplicativo, em Ajustes, no botão "Apagar os dados". A ficha, as lembranças, os avisos e os aparelhos ligados somem na hora.',
+      'Cada lembrança também pode ser corrigida ou apagada uma por uma no painel da família, no quadro "O que a Dona Leda sabe de" seguido do nome da pessoa.',
       'Para apagar a conta da família ou tirar qualquer dúvida, escreva para suporte@virte.com.br.',
     ],
   },
@@ -48,7 +50,7 @@ const PARTES: { titulo: string; texto: string[] }[] = [
 export default function PrivacidadePage() {
   return (
     <main className="mx-auto flex min-h-dvh max-w-2xl flex-col gap-6 bg-background px-5 py-10 text-foreground">
-      <h1 className="text-3xl font-semibold">Privacidade da Dona Leda</h1>
+      <h1 className="text-2xl font-semibold md:text-3xl">Privacidade da Dona Leda</h1>
       <p className="text-base text-muted-foreground">Atualizado em 21 de novembro de 2026.</p>
       {PARTES.map((parte) => (
         <section key={parte.titulo} className="flex flex-col gap-2">
@@ -60,7 +62,7 @@ export default function PrivacidadePage() {
           ))}
         </section>
       ))}
-      <Link href="/" className="text-base text-primary underline underline-offset-4">
+      <Link href="/" className="inline-flex min-h-11 items-center self-start text-base text-primary underline underline-offset-4">
         Voltar para a Dona Leda
       </Link>
     </main>

@@ -54,8 +54,8 @@ export function FormularioDaLembranca({
     const resultado = await onSalvar({
       texto,
       categoria: valores.categoria,
-      ...(ehCompromisso && valores.data ? { data: valores.data } : {}),
-      ...(ehCompromisso && valores.hora ? { hora: valores.hora } : {}),
+      ...(ehCompromisso && (valores.data || !escolheGaveta) ? { data: valores.data } : {}),
+      ...(ehCompromisso && (valores.hora || !escolheGaveta) ? { hora: valores.hora } : {}),
     });
     setSalvando(false);
     if (resultado.ok) return;

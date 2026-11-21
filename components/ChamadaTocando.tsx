@@ -35,7 +35,7 @@ export function ChamadaTocando({
         <div className="relative flex items-center justify-center">
           <span
             aria-hidden
-            className="absolute h-48 w-48 rounded-full bg-accent/40 motion-safe:animate-ping sm:h-64 sm:w-64"
+            className="absolute -z-10 h-48 w-48 rounded-full bg-accent/40 motion-safe:animate-ping sm:h-64 sm:w-64"
           />
           <Rosto estado="ligando" nivel={0} className="relative" />
         </div>

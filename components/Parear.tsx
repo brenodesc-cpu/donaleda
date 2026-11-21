@@ -15,7 +15,7 @@ type Estado =
   | { fase: 'conferindo' }
   | { fase: 'pronto'; tratamento: string };
 
-const CODIGO_RUIM = 'Esse código não vale mais. Peça um novo pra sua família.';
+const CODIGO_RUIM = 'Esse código não deu certo. Confira os números ou peça um novo pra sua família.';
 const SEM_CONEXAO = 'Não consegui falar com a internet agora. Tente de novo.';
 
 function pareceAparelho(dado: unknown): dado is AparelhoPareado {
@@ -120,7 +120,7 @@ export function Parear() {
 
       <Link
         href="/"
-        className="inline-flex min-h-11 items-center rounded-lg px-3 text-lg text-muted-foreground underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex min-h-20 w-full max-w-md items-center justify-center rounded-2xl border-2 border-muted-foreground bg-card px-6 py-4 font-titulo text-xl font-semibold text-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]"
       >
         Voltar
       </Link>

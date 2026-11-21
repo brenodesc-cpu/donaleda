@@ -37,7 +37,7 @@ function blocosDoDia(hoje: Dia): Bloco[] {
     { id: 'sono', nome: 'Sono', icone: Moon, leitura: lerSono(hoje) },
     {
       id: 'alimentacao',
-      nome: 'Alimentação',
+      nome: 'Comida',
       icone: Utensils,
       leitura: lerAlimentacao(hoje),
     },
@@ -52,7 +52,7 @@ function blocosDoDia(hoje: Dia): Bloco[] {
     },
     {
       id: 'falou',
-      nome: 'Falou com alguém',
+      nome: 'Conversou',
       icone: MessagesSquare,
       leitura: lerFalouComAlguem(hoje),
     },
@@ -75,7 +75,7 @@ export function DiaDeHoje({ hoje }: DiaDeHojeProps) {
           O dia de hoje
         </h2>
         {hoje.exemplo ? (
-          <span className="rounded-full bg-muted px-3 py-1 text-sm text-muted-foreground">
+          <span className="rounded-full bg-muted px-3 py-1 text-base text-muted-foreground">
             dados de exemplo
           </span>
         ) : null}
@@ -87,15 +87,15 @@ export function DiaDeHoje({ hoje }: DiaDeHojeProps) {
           return (
             <li
               key={id}
-              className={`flex flex-col gap-2 rounded-xl border p-4 ${classes.bloco}`}
+              className={`flex flex-col gap-2 rounded-xl border p-3 sm:p-4 ${classes.bloco}`}
             >
-              <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Icone aria-hidden="true" className="h-5 w-5 shrink-0" />
-                {nome}
+              <span className="flex items-start gap-2 text-base leading-snug text-muted-foreground">
+                <Icone aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0" />
+                <span className="min-w-0 break-words">{nome}</span>
               </span>
               <span
-                className={`text-base font-semibold leading-snug ${classes.valor} ${
-                  leitura.tom === 'vazio' ? 'font-normal' : ''
+                className={`text-base leading-snug ${classes.valor} ${
+                  leitura.tom === 'vazio' ? 'font-normal' : 'font-semibold'
                 }`}
               >
                 {leitura.texto}

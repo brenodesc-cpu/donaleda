@@ -51,7 +51,7 @@ export function TecladoDoCodigo({ codigo, onMudar, desligado = false }: TecladoD
             aria-hidden
             className={cn(
               'flex h-16 w-12 items-center justify-center rounded-xl border-2 bg-card text-4xl font-semibold sm:h-20 sm:w-14',
-              casa.atual && !desligado ? 'border-primary' : 'border-border',
+              casa.atual && !desligado ? 'border-primary bg-secondary' : 'border-muted-foreground',
             )}
           >
             {casa.numero}
@@ -82,7 +82,7 @@ export function TecladoDoCodigo({ codigo, onMudar, desligado = false }: TecladoD
               type="button"
               disabled={desligado || codigo.length >= TAMANHO_DO_CODIGO}
               onClick={() => onMudar(codigo + tecla)}
-              className={cn(TECLA, 'border-2 border-border bg-card text-foreground hover:bg-secondary')}
+              className={cn(TECLA, 'border-2 border-muted-foreground bg-card text-foreground hover:bg-secondary')}
             >
               {tecla}
             </button>

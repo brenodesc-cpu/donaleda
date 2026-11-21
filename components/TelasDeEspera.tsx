@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Phone } from 'lucide-react';
-import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
+import { FUSO, NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import type { MotivoDaFalha } from '@/types/conversation';
 import { BotaoGrande } from './BotaoGrande';
 import { comPreposicao, quandoElaLiga } from './horarios';
@@ -15,9 +15,27 @@ const MIOLO = 'flex w-full flex-1 flex-col items-center justify-center gap-8';
 
 const AVISO_DE_FALHA: Record<MotivoDaFalha, string> = {
   microfone:
-    'Preciso do microfone pra te ouvir. Toque em Permitir quando o celular perguntar.',
-  conexao: 'Não consegui ligar agora.',
+    'Não consegui usar o microfone. Toque em Tentar de novo e, se o aparelho perguntar, escolha Permitir. Se ele não perguntar, peça pra alguém da família liberar o microfone.',
+  conexao: 'A ligação não deu certo. Toque em Tentar de novo.',
 };
+
+function minutosAgoraEmBrasilia(): number {
+  const [h, m] = new Intl.DateTimeFormat('en-GB', {
+    timeZone: FUSO,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+    .format(new Date())
+    .split(':')
+    .map(Number);
+  return (h % 24) * 60 + m;
+}
+
+function emMinutos(hhmm: string): number {
+  const [h, m] = hhmm.trim().split(':').map(Number);
+  return h * 60 + (m || 0);
+}
 
 interface PrepararAparelhoProps {
   negado: boolean;
@@ -35,7 +53,9 @@ export function PrepararAparelho({ negado, onPreparar }: PrepararAparelhoProps) 
       </h1>
       {negado ? (
         <p role="alert" className="max-w-md text-center text-xl font-medium">
-          {AVISO_DE_FALHA.microfone}
+          O microfone não foi liberado. Toque em Deixar pronto e escolha
+          Permitir. Se o aparelho não perguntar, libere o microfone nos ajustes
+          do aparelho e toque de novo.
         </p>
       ) : (
         <p className={APOIO}>
@@ -55,17 +75,24 @@ interface EsperandoProps {
 
 /** O aparelho pronto, esperando a assistente ligar. O idoso também pode chamar. */
 export function Esperando({ horarios, proxima, onLigar }: EsperandoProps) {
+  const eAmanha =
+    proxima !== null &&
+    proxima === horarios[0] &&
+    emMinutos(proxima) <= minutosAgoraEmBrasilia();
   return (
     <>
       <div className={MIOLO}>
         <Rosto estado="parada" nivel={0} />
         <h1 className={TITULO}>{quandoElaLiga(NOME_DA_ASSISTENTE, horarios)}</h1>
         {proxima && horarios.length > 1 ? (
-          <p className={APOIO}>A próxima ligação é {comPreposicao(proxima)}.</p>
+          <p className={APOIO}>
+            A próxima ligação é {eAmanha ? 'amanhã ' : ''}
+            {comPreposicao(proxima)}.
+          </p>
         ) : null}
-        <BotaoGrande onClick={onLigar}>
+        <BotaoGrande className="px-4" onClick={onLigar}>
           <Phone aria-hidden className="h-7 w-7 shrink-0" />
-          Ligar pra {NOME_DA_ASSISTENTE} agora
+          Ligar pra {NOME_DA_ASSISTENTE}
         </BotaoGrande>
       </div>
       <Link
@@ -84,7 +111,7 @@ export function Ligando() {
     <div className={MIOLO}>
       <Rosto estado="ligando" nivel={0} />
       <h1 role="status" className={TITULO}>
-        Ligando...
+        Só um instante...
       </h1>
     </div>
   );

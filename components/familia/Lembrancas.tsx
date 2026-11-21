@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { BookHeart, Lock, Plus } from 'lucide-react';
 import type { CategoriaDeLembranca, Lembranca } from '@/lib/tipos';
 import { CLASSE_DO_BOTAO_SECUNDARIO } from './campos';
-import { comMaiuscula, gavetaDe, NOME_DA_CATEGORIA, ORDEM_DAS_CATEGORIAS } from './formatos';
+import { comMaiuscula, dataDeBrasilia, gavetaDe, NOME_DA_CATEGORIA, ORDEM_DAS_CATEGORIAS } from './formatos';
 import { FormularioDaLembranca } from './FormularioDaLembranca';
 import { ItemDaLembranca } from './ItemDaLembranca';
 import type { CamposDaLembranca, ResultadoDaLembranca } from './usePainel';
@@ -23,8 +23,9 @@ interface LembrancasProps {
 const NADA_FEITO: ResultadoDaLembranca = { ok: false, motivo: null };
 
 function compromissosComData(lembrancas: Lembranca[]): Lembranca[] {
+  const hoje = dataDeBrasilia(new Date().toISOString());
   return lembrancas
-    .filter((l) => gavetaDe(l.categoria) === 'compromisso' && l.data)
+    .filter((l) => gavetaDe(l.categoria) === 'compromisso' && l.data && l.data >= hoje)
     .sort((a, b) => `${a.data}${a.hora ?? ''}`.localeCompare(`${b.data}${b.hora ?? ''}`));
 }
 
@@ -73,8 +74,9 @@ export function Lembrancas({
       {vazio ? (
         <p className="flex items-center gap-3 text-base text-muted-foreground">
           <BookHeart aria-hidden="true" className="h-6 w-6 shrink-0" />
-          A {assistente} ainda está conhecendo {tratamento}. O que for contado nas
-          conversas aparece aqui.
+          {reservadas > 0
+            ? `Ainda não tem nada aberto pra família. O que ${tratamento} contar nas próximas conversas aparece aqui.`
+            : `A ${assistente} ainda está conhecendo ${tratamento}. O que for contado nas conversas aparece aqui.`}
         </p>
       ) : null}
 
@@ -86,8 +88,14 @@ export function Lembrancas({
       ) : null}
 
       {grupos.map(({ categoria, itens }) => (
-        <div key={categoria} className="flex flex-col gap-2">
-          <h3 className="text-base font-semibold text-muted-foreground">{NOME_DA_CATEGORIA[categoria]}</h3>
+        <div key={categoria} className="flex flex-col gap-2 border-t border-border pt-4">
+          <h3 className="font-titulo text-lg font-semibold text-foreground">
+            {categoria === 'compromisso'
+              ? itens.some((l) => l.data)
+                ? 'Outros compromissos'
+                : 'Compromissos sem dia marcado'
+              : NOME_DA_CATEGORIA[categoria]}
+          </h3>
           <ul className="flex flex-col gap-3">{itens.map(item)}</ul>
         </div>
       ))}
@@ -122,7 +130,7 @@ export function Lembrancas({
       ) : null}
 
       {temExemplo ? (
-        <p className="text-sm text-muted-foreground">* Itens marcados são dados de exemplo.</p>
+        <p className="text-base text-muted-foreground">* Itens marcados são dados de exemplo.</p>
       ) : null}
     </section>
   );

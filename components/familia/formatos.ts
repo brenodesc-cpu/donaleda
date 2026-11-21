@@ -32,7 +32,7 @@ export const CLASSES_DO_TOM: Record<
   atencao: {
     bloco: 'bg-warning-soft border-warning/40',
     valor: 'text-warning',
-    ponto: 'bg-warning',
+    ponto: 'bg-accent border-2 border-foreground',
   },
   ruim: {
     bloco: 'bg-danger-soft border-destructive/40',
@@ -262,9 +262,9 @@ export function dataPorExtenso(data: string): string {
   }).format(quando);
 }
 
-/** "às 09:14" se foi hoje, "20/11 às 09:14" se foi em outro dia. */
+/** "às 9h14" se foi hoje, "20/11 às 9h14" se foi em outro dia. */
 export function quandoFoi(iso: string, hoje: string): string {
-  const hora = horaDeBrasilia(iso);
+  const hora = horaCurta(horaDeBrasilia(iso));
   if (!hora) return '';
   const data = dataDeBrasilia(iso);
   return data === hoje ? `às ${hora}` : `${diaEMes(data)} às ${hora}`;
@@ -290,7 +290,7 @@ export function arrumarHorarios(horarios: readonly string[]): string[] {
 
 /** O que aconteceu com a última ligação, em uma frase. Tocando não tem frase. */
 export function resultadoDaLigacao(chamada: Chamada, hoje: string): Leitura | null {
-  const hora = horaDeBrasilia(chamada.pedidaEm);
+  const hora = horaCurta(horaDeBrasilia(chamada.pedidaEm));
   if (!hora) return null;
   const data = dataDeBrasilia(chamada.pedidaEm);
   const foiHoje = data === hoje;

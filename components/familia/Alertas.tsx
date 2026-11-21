@@ -49,23 +49,26 @@ function CartaoDoAlerta({
 }: CartaoProps) {
   const Icone = ICONE_DO_TIPO[alerta.tipo] ?? HeartPulse;
   const urgente = alerta.gravidade === 'urgente';
+  const cheio = urgente && !alerta.visto;
   // Urgente é Goiabada cheia; atenção é Manteiga com contorno Café (brand book).
-  const cores = urgente
-    ? 'border-2 border-destructive bg-destructive'
-    : 'border-2 border-foreground bg-warning-soft';
-  const destaque = urgente ? 'text-destructive-foreground' : 'text-foreground';
+  const cores = alerta.visto
+    ? 'border border-border bg-card'
+    : urgente
+      ? 'border-2 border-destructive bg-destructive'
+      : 'border-2 border-foreground bg-warning-soft';
+  const destaque = cheio ? 'text-destructive-foreground' : 'text-foreground';
   const origem =
-    alerta.origem === 'assistente'
-      ? `avisado pela ${assistente}`
-      : 'regra automática';
+    alerta.tipo === 'ligacao'
+      ? null
+      : alerta.origem === 'assistente'
+        ? `avisado pela ${assistente}`
+        : `na conversa com a ${assistente}`;
 
   const handleMarcarVisto = () => onMarcarVisto?.(alerta.id);
 
   return (
     <li
-      className={`flex flex-col gap-3 rounded-2xl p-5 ${cores} ${
-        alerta.visto ? 'opacity-60' : ''
-      }`}
+      className={`flex flex-col gap-3 rounded-2xl p-5 ${cores}`}
     >
       <div className="flex items-start gap-3">
         <Icone aria-hidden="true" className={`mt-0.5 h-7 w-7 shrink-0 ${destaque}`} />
@@ -74,9 +77,9 @@ function CartaoDoAlerta({
             {rotuloDoAlerta(alerta.tipo, tratamento)}
             {urgente ? <span className="sr-only"> (urgente)</span> : null}
           </p>
-          <p className={`text-lg ${urgente ? 'text-destructive-foreground' : 'text-foreground'}`}>{alerta.texto}</p>
-          <p className={`text-base ${urgente ? 'text-destructive-foreground' : 'text-muted-foreground'}`}>
-            {quandoFoi(alerta.criadoEm, hoje)}, {origem}
+          <p className={`text-lg ${cheio ? 'text-destructive-foreground' : 'text-foreground'}`}>{alerta.texto}</p>
+          <p className={`text-base ${cheio ? 'text-destructive-foreground' : 'text-muted-foreground'}`}>
+            {quandoFoi(alerta.criadoEm, hoje)}{origem ? `, ${origem}` : ''}
           </p>
         </div>
       </div>
@@ -120,9 +123,11 @@ export function Alertas({
           ))}
         </ul>
       ) : (
-        <p className="flex items-center gap-2 rounded-2xl border border-border bg-card p-5 text-base text-muted-foreground">
-          <Check aria-hidden="true" className="h-5 w-5 text-success" />
-          {vistos.length > 0 ? 'Nenhum aviso novo' : 'Nenhum aviso hoje'}
+        <p className="flex items-start gap-2 rounded-2xl border border-border bg-card p-5 text-base text-muted-foreground">
+          <Check aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-success" />
+          {vistos.length > 0
+            ? 'Nenhum aviso novo'
+            : 'Nenhum aviso hoje. Se houver queda, dor no peito, pedido de dinheiro ou ligação não atendida, o aviso aparece aqui.'}
         </p>
       )}
 

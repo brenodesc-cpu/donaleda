@@ -3,7 +3,6 @@
 import { AjustesDoIdoso } from '@/components/familia/AjustesDoIdoso';
 import { ApagarIdoso } from '@/components/familia/ApagarIdoso';
 import { Esqueleto } from '@/components/familia/Apoio';
-import { comMaiuscula } from '@/components/familia/formatos';
 import { Moldura } from '@/components/familia/Moldura';
 import { useIdosos } from '@/components/familia/useIdosos';
 import { usePainel } from '@/components/familia/usePainel';
@@ -25,7 +24,7 @@ export default function AjustesPage() {
       {painel ? (
         <>
           <h1 className="text-2xl font-semibold text-foreground md:text-3xl">
-            Ajustes de {comMaiuscula(painel.idoso.tratamento)}
+            Ajustes de {painel.idoso.tratamento}
           </h1>
           <AjustesDoIdoso
             key={painel.idoso.id}

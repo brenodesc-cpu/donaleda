@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import { Logo } from '@/components/marca/Logo';
@@ -62,10 +63,10 @@ export default function EntrarPage() {
             <Logo className="text-3xl" />
           </p>
           <h1 className="text-xl font-semibold text-foreground">
-            {modo === 'entrar' ? 'Entre pra ver como ela está' : 'Crie a sua conta'}
+            {modo === 'entrar' ? 'Entre pra ver como está quem você ama' : 'Crie a sua conta'}
           </h1>
           <p className="text-base text-muted-foreground">
-            A {NOME_DA_ASSISTENTE} conversa todo dia com quem você ama e conta pra você como foi.
+            A {NOME_DA_ASSISTENTE} liga todo dia pro seu pai ou pra sua mãe e conta pra você como foi.
           </p>
         </header>
 
@@ -80,7 +81,7 @@ export default function EntrarPage() {
 
         <form onSubmit={handleEnviar} noValidate className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-5">
           {modo === 'criar' ? (
-            <Campo id="nome" rotulo="O seu nome" value={nome} onChange={mudar(setNome)} autoComplete="name" placeholder="Marina" />
+            <Campo id="nome" rotulo="O seu nome" value={nome} onChange={mudar(setNome)} autoComplete="name" placeholder="Ex.: Marina" />
           ) : null}
           <Campo
             id="email"
@@ -99,13 +100,23 @@ export default function EntrarPage() {
             autoComplete={modo === 'criar' ? 'new-password' : 'current-password'}
             value={senha}
             onChange={mudar(setSenha)}
-            ajuda={modo === 'criar' ? 'Pelo menos 6 letras ou números.' : undefined}
+            ajuda={
+              modo === 'criar'
+                ? 'Pelo menos 6 letras ou números.'
+                : 'Esqueceu a senha? Escreva para suporte@virte.com.br.'
+            }
           />
           <Erro texto={erro} />
           <button type="submit" disabled={enviando} className={CLASSE_DO_BOTAO_PRINCIPAL}>
             {enviando ? 'Só um instante...' : modo === 'entrar' ? 'Entrar' : 'Criar conta'}
           </button>
         </form>
+        <Link
+          href="/privacidade"
+          className="inline-flex min-h-11 items-center justify-center text-base text-foreground underline underline-offset-4"
+        >
+          O que a Dona Leda guarda e como apagar
+        </Link>
       </div>
     </main>
   );

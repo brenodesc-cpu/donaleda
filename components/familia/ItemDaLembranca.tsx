@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { Lembranca } from '@/lib/tipos';
 import { diaEMes, dataDeBrasilia, gavetaDe, quandoDoCompromisso } from './formatos';
+import { Erro } from './campos';
 import { FormularioDaLembranca } from './FormularioDaLembranca';
 import type { CamposDaLembranca, ResultadoDaLembranca } from './usePainel';
 
@@ -72,7 +73,7 @@ export function ItemDaLembranca({ lembranca, tratamento, onCorrigir, onApagar }:
           </>
         ) : null}
       </p>
-      <p className="text-sm text-muted-foreground">{quemContou(lembranca, tratamento)}</p>
+      <p className="text-base text-muted-foreground">{quemContou(lembranca, tratamento)}</p>
 
       {modo === 'confirmar_apagar' ? (
         <div className="flex flex-wrap items-center gap-2">
@@ -90,20 +91,26 @@ export function ItemDaLembranca({ lembranca, tratamento, onCorrigir, onApagar }:
           </button>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={() => setModo('corrigir')} className={`${CLASSE_DO_LINK} text-foreground`}>
+        <div className="-ml-2 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setModo('corrigir')}
+            aria-label={`Corrigir: ${lembranca.texto}`}
+            className={`${CLASSE_DO_LINK} text-foreground`}
+          >
             Corrigir
           </button>
           <button
             type="button"
             onClick={() => setModo('confirmar_apagar')}
+            aria-label={`Apagar: ${lembranca.texto}`}
             className={`${CLASSE_DO_LINK} text-muted-foreground`}
           >
             Apagar
           </button>
         </div>
       )}
-      {falhou ? <p className="text-sm text-destructive">Não deu pra apagar agora. Tente de novo.</p> : null}
+      <Erro texto={falhou ? 'Não deu pra apagar agora. Tente de novo.' : null} />
     </li>
   );
 }

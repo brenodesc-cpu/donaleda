@@ -14,7 +14,7 @@ const TONS: Record<NonNullable<BotaoGrandeProps['tom']>, string> = {
   atender: 'bg-success text-white hover:bg-success/90',
   encerrar: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
   discreto:
-    'border-2 border-border bg-card text-foreground shadow-none hover:bg-secondary',
+    'border-2 border-muted-foreground bg-card text-foreground shadow-none hover:bg-secondary',
 };
 
 /** Os botões da tela do idoso: altos, largos e com letra grande. */
