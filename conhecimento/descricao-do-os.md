@@ -8,11 +8,11 @@ Texto pra colar no OS, com o que o regulamento pede: problema, público-alvo, so
 
 Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim.
 
-Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (IBGE, PNAD Contínua 2025). O filho que mora longe não sabe se a mãe comeu, tomou o remédio ou caiu. Um cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 por mês (Cidesp, 2026). A aposentadoria da maioria dos brasileiros não paga um cuidador: 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged).
+Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (IBGE, PNAD Contínua 2025). A filha que passa a semana sem ver a mãe não sabe se ela comeu, tomou o remédio ou caiu. Um cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 por mês (Cidesp, 2026). A aposentadoria da maioria dos brasileiros não paga um cuidador: 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged).
 
 ### Pra quem
 
-O idoso lúcido que mora sozinho, com celular ou tablet com internet, só precisa atender. O filho ou a filha que mora longe contrata e acompanha pelo painel. As casas de repouso parceiras indicam a Dona Leda às famílias que as procuram e acompanham os idosos que indicaram.
+O idoso lúcido que mora sozinho, com celular ou tablet com internet, só precisa atender. A filha ou o filho que passa a semana sem ver o pai ou a mãe contrata e acompanha pelo painel. As casas de repouso parceiras indicam a Dona Leda às famílias que as procuram e acompanham os idosos que indicaram.
 
 ### A solução
 

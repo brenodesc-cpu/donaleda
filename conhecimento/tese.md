@@ -10,12 +10,20 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
 
 ### Pra quem (fechado pelo Breno em 21/11, às 20h10)
 
-- **Quem compra:** a filha ou o filho de 40 a 60 anos, com renda pra pagar R$ 130 por mês sem pensar, que mora longe o bastante pra não ver os pais toda semana.
+- **Quem compra:** a filha ou o filho de 40 a 60 anos, que trabalha, tem a própria casa e só consegue ver o pai ou a mãe no fim de semana, ou menos. Pode morar na mesma cidade, na cidade vizinha ou longe. Durante a semana, a família só sabe do idoso pelo telefone, quando dá tempo de ligar. Tem renda pra pagar R$ 130 por mês sem pensar.
 - **O pai ou a mãe:** de 75 a 90 anos, lúcido, que mora sozinho ou com o cônjuge e recusa morar com alguém ou ter cuidador.
 - **O que a família faz hoje:** liga quando dá e depende de um irmão ou de um vizinho pra ir ver.
 - **O que faz comprar:** um susto recente com o pai ou a mãe, como queda, remédio parado ou golpe, ou a morte de um dos dois.
 - **Onde achar:** nas casas de repouso que a família consulta e entre conhecidos da mesma idade.
 - **Fica de fora por enquanto:** idoso com demência, família que mora junto e quem não tem celular com internet.
+
+Três perguntas dizem se a pessoa está no perfil:
+
+1. Quantos dias seguidos ela fica sem ver o pai ou a mãe? Com cinco ou mais, está dentro.
+2. O pai ou a mãe mora sozinho ou com alguém da mesma idade?
+3. Num dia de semana, como ela sabe hoje se está tudo bem?
+
+O que define quem compra é a frequência com que a pessoa vê os pais (ajuste do Breno em 21/11, às 20h25). A entrevista com uma família, sem nome em `entrevistas.md`, mostra por quê: a irmã mora em outra cidade e visita a mãe toda semana, e a mãe tinha parado um remédio de uso contínuo sem ela perceber. Quem percebeu foi a outra filha, numa ligação de sábado. O caso fica fora do pitch, por decisão do Breno.
 
 Isso vem de uma entrevista com uma família, da conversa com a primeira casa parceira e do retorno dos mentores. A idade de 75 a 90 anos e o susto como o que faz comprar são hipóteses, ainda sem dado. As ligações de hoje à noite confirmam ou derrubam o perfil, principalmente o susto recente.
 
@@ -66,7 +74,7 @@ Isso vem de uma entrevista com uma família, da conversa com a primeira casa par
 ### 4. O problema a fundo
 
 - **O que a família faz hoje pra saber se está tudo bem:** liga quando dá, visita, pede pra um vizinho olhar, paga um botão de emergência ou contrata cuidador. Isso vem do que ouvimos e da pesquisa de concorrentes. Não achamos pesquisa nacional sobre filho que acompanha os pais de longe.
-- **Quanto tempo a família gasta por semana:** sem número publicado pra quem acompanha à distância. *Lugar pro número das ligações das 20h: o valor do meio das horas por semana que cada família gasta ligando ou indo ver.*
+- **Quanto tempo a família gasta por semana:** sem número publicado pra quem passa a semana sem ver os pais. *Lugar pro número das ligações das 20h: o valor do meio das horas por semana que cada família gasta ligando ou indo ver.*
 - **O que dá errado:**
   - Queda: 194 mil internações de idosos no SUS em 2025, cerca de 530 por dia.
   - Solidão: entre pessoas de 50 anos ou mais, 16,8% se sentem sós sempre, e quem mora só tem 2,44 vezes mais chance de solidão constante (ELSI-Brasil, coleta de 2015 e 2016).
@@ -96,7 +104,7 @@ Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (40% dos 1
 ## Pra quem
 
 - **Quem usa:** a pessoa idosa que mora sozinha ou passa o dia sozinha. Ela só precisa atender.
-- **Quem contrata (decisão de 21/11, às 17h):** o filho ou a filha que mora longe. É o mesmo comprador do botão de emergência.
+- **Quem contrata (decisão de 21/11, às 17h, com o perfil ajustado às 20h25):** a filha ou o filho que passa a semana sem ver o pai ou a mãe. É o mesmo comprador do botão de emergência.
 - **Quem indica:** a casa de repouso parceira, que recebe famílias decidindo o que fazer com o pai ou a mãe. A primeira topou em 21/11, sem cobrança na fase de teste.
 - **Quem pode contratar depois:** empresa de teleassistência e franquia de cuidadores, que já cobram a família do idoso que mora em casa, e plano de saúde de idoso e prefeitura, que compram resultado medido num piloto.
 

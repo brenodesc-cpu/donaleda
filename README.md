@@ -11,11 +11,11 @@ Projeto do hackathon **UNMUTE by Agora** (NewHack e Agora), feito em 21 e 22 de 
 
 Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim.
 
-Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (PNAD Contínua 2025). O filho que mora longe não sabe se a mãe comeu, tomou o remédio ou caiu, e o idoso passa dias sem conversar com ninguém. O cuidado de todo dia hoje é feito por gente: a filha, de graça, o cuidador, de R$ 2.800 a 4.500 por mês, ou o residencial, de R$ 6 mil a 11 mil. A aposentadoria da maioria dos brasileiros não paga um cuidador: 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged). A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
+Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (PNAD Contínua 2025). A filha que passa a semana sem ver a mãe não sabe se ela comeu, tomou o remédio ou caiu, e o idoso passa dias sem conversar com ninguém. O cuidado de todo dia hoje é feito por gente: a filha, de graça, o cuidador, de R$ 2.800 a 4.500 por mês, ou o residencial, de R$ 6 mil a 11 mil. A aposentadoria da maioria dos brasileiros não paga um cuidador: 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged). A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
 
 ## Pra quem
 
-A pessoa idosa lúcida que mora sozinha usa, e só precisa atender. O filho ou a filha que mora longe contrata e acompanha pelo painel. As casas de repouso parceiras indicam a Dona Leda às famílias que as procuram e acompanham os idosos que indicaram. Plano de saúde de idoso e prefeitura compram depois, quando houver resultado medido num piloto.
+A pessoa idosa lúcida que mora sozinha usa, e só precisa atender. A filha ou o filho que passa a semana sem ver o pai ou a mãe contrata e acompanha pelo painel. As casas de repouso parceiras indicam a Dona Leda às famílias que as procuram e acompanham os idosos que indicaram. Plano de saúde de idoso e prefeitura compram depois, quando houver resultado medido num piloto.
 
 ## O que a Dona Leda faz
 

@@ -182,7 +182,7 @@ Ordem decidida em 21/11, às 17h. O raciocínio está em "Quem paga e quem indic
 
 - **Quem usa:** pessoa de 60 anos ou mais que mora sozinha (cerca de 6 milhões pela PNAD 2025; o Censo 2022 contou 5,66 milhões), lúcida, com celular ou tablet com internet. Perto de 45% dos 60+ já fazem chamada pela internet.
 - **Quem fica de fora desta versão:** quem não tem internet (entre 25% e 41% dos 60+) e quem tem demência avançada. O primeiro grupo entra com a ligação pelo telefone comum. O segundo precisa de cuidado humano.
-- **Quem compra:** a filha ou o filho de 40 a 60 anos, com renda pra pagar R$ 130 por mês sem pensar, que mora longe o bastante pra não ver os pais toda semana. É o mesmo comprador do botão de emergência. O perfil inteiro, fechado pelo Breno em 21/11, está em `tese.md`.
+- **Quem compra:** a filha ou o filho de 40 a 60 anos, que trabalha, tem a própria casa e só consegue ver o pai ou a mãe no fim de semana, ou menos, more perto ou longe. Durante a semana, a família só sabe do idoso pelo telefone. É o mesmo comprador do botão de emergência. O perfil inteiro, fechado pelo Breno em 21/11, está em `tese.md`.
 - **Quem indica:** a casa de repouso. No país, 160.784 pessoas moram em instituições de longa permanência pra idosos (IBGE, Censo 2022), e cada casa recebe famílias que ainda estão decidindo.
 - **Quem compra depois:** teleassistência e franquia de cuidadores; plano de saúde de idoso (Prevent Senior com 549 mil vidas, MedSênior com 310 mil) e prefeitura, depois de um piloto com dado próprio.
 
