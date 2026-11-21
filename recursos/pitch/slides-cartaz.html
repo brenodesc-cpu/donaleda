@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dona Leda · pitch (cartaz)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Gabarito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--cafe:#33200F;--casca:#FFF8E8;--canela:#6A4628;--gema:#F7B90F;--verde:#1B7A3D;--manteiga:#FDEBB5;--linha:#D9C9A8;--papel:#FFFDF7;--furo:#F7B90F;--cor-fio:#33200F}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:#E6DCC6;color:var(--cafe);font-family:"Atkinson Hyperlegible Next",system-ui,sans-serif}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+.palco{position:relative;width:min(100vw,177.78vh);height:min(56.25vw,100vh);container-type:inline-size;background:var(--casca);overflow:hidden}
+.s{position:absolute;inset:0;display:none}
+.s.ativo{display:block}
+.bloco{position:absolute;left:0;top:0;bottom:0;width:42cqw;background:var(--gema);display:flex;flex-direction:column;justify-content:center;padding:0 4.5cqw}
+.bloco .g{font-family:Gabarito,sans-serif;font-weight:900;letter-spacing:-.02em;line-height:.95;font-size:10cqw}
+.bloco .g.m{font-size:7cqw}
+.bloco .g.p{font-size:5.4cqw}
+.bloco small{display:block;font-size:2.2cqw;font-weight:700;margin-top:1.2cqw}
+.bloco.escuro{background:var(--cafe);--furo:#33200F}
+.bloco svg{width:30cqw;height:auto;aspect-ratio:1;align-self:center}
+.dir{position:absolute;left:47cqw;right:5cqw;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center}
+.dir .f{font-family:Gabarito,sans-serif;font-weight:900;font-size:4.8cqw;line-height:1.08;letter-spacing:-.01em}
+.dir .apoio{font-size:2.3cqw;margin-top:2cqw;color:var(--canela);line-height:1.35}
+.dir ul{list-style:none;padding:0;margin-top:2.2cqw;display:flex;flex-direction:column;gap:1.2cqw}
+.dir li{font-size:2.5cqw;font-weight:700;display:flex;gap:1.4cqw;align-items:baseline}
+.dir li b{font-family:Gabarito,sans-serif;font-size:3cqw;min-width:3.6cqw}
+.fonte{position:absolute;left:47cqw;right:5cqw;bottom:5.6cqw;font-size:1.3cqw;color:var(--canela)}
+.fio{position:absolute;left:47cqw;width:48cqw;bottom:1.8cqw;height:auto;aspect-ratio:600/24}
+.num{position:absolute;right:5cqw;top:4cqw;font-size:1.3cqw;color:var(--canela)}
+.ph{border:.22cqw dashed currentColor;border-radius:.8cqw;padding:0 .9cqw}
+.ponto{display:inline-block;width:3.4cqw;height:3.4cqw;border-radius:50%;background:var(--verde);margin-right:1.6cqw;vertical-align:middle;position:relative;top:-.6cqw}
+.qr{margin-top:2.4cqw;width:16cqw;height:16cqw;border:.3cqw dashed var(--canela);border-radius:1.4cqw;display:flex;align-items:center;justify-content:center;text-align:center;padding:1.4cqw;font-size:1.4cqw;color:var(--canela)}
+.dica{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);background:var(--cafe);color:var(--casca);font-size:13px;padding:6px 12px;border-radius:999px;opacity:.85;transition:opacity .6s}
+@media print{
+  @page{size:1920px 1080px;margin:0}
+  html,body{background:var(--casca);display:block;overflow:visible;height:auto}
+  .palco{width:1920px;height:auto;overflow:visible;background:none}
+  .s{display:block !important;position:relative;width:1920px;height:1080px;background:var(--casca);page-break-after:always;break-after:page;overflow:hidden}
+  .dica{display:none}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="disco" viewBox="0 0 120 120">
+    <circle cx="60" cy="60" r="54" fill="#F7B90F"/>
+    <circle cx="70.35" cy="98.65" r="6.5" style="fill:var(--furo)"/><circle cx="49.65" cy="98.65" r="6.5" style="fill:var(--furo)"/><circle cx="31.7" cy="88.3" r="6.5" style="fill:var(--furo)"/><circle cx="21.35" cy="70.35" r="6.5" style="fill:var(--furo)"/><circle cx="21.35" cy="49.65" r="6.5" style="fill:var(--furo)"/><circle cx="31.7" cy="31.7" r="6.5" style="fill:var(--furo)"/><circle cx="49.65" cy="21.35" r="6.5" style="fill:var(--furo)"/><circle cx="70.35" cy="21.35" r="6.5" style="fill:var(--furo)"/><circle cx="88.3" cy="31.7" r="6.5" style="fill:var(--furo)"/><circle cx="98.65" cy="49.65" r="6.5" style="fill:var(--furo)"/>
+    <path d="M 97.25 81.5 L 111 89.5" fill="none" stroke="#33200F" stroke-width="4.5" stroke-linecap="round"/>
+    <circle cx="60" cy="60" r="25" fill="#FFFFFF"/>
+    <ellipse cx="52" cy="55.5" rx="2.75" ry="4.25" fill="#33200F"/>
+    <ellipse cx="68" cy="55.5" rx="2.75" ry="4.25" fill="#33200F"/>
+    <path d="M 49.5 65 Q 60 75 70.5 65" fill="none" stroke="#33200F" stroke-width="3.25" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="fio" viewBox="0 0 600 24">
+    <path id="caminho-fio" d="" fill="none" stroke="var(--cor-fio)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+</svg>
+<div class="palco" id="palco">
+  <section class="s"><div class="bloco escuro"><svg><use href="#disco"/></svg></div>
+    <div class="dir"><p class="f" style="font-size:8cqw">Dona Leda</p><p class="apoio" style="font-size:3cqw;color:var(--cafe);font-weight:700">Liga pros seus pais todo dia.<br>E te conta como eles estão.</p></div></section>
+
+  <section class="s"><div class="bloco"><p class="g">6 mi</p></div>
+    <div class="dir"><p class="f">de idosos moram sozinhos no Brasil</p></div>
+    <p class="fonte">IBGE, PNAD Contínua 2025. Pessoas com 60 anos ou mais.</p></section>
+
+  <section class="s"><div class="bloco"><p class="g">+56%</p><small>em 12 anos</small></div>
+    <div class="dir"><p class="f">O Brasil está envelhecendo</p><p class="apoio">20,6 milhões de pessoas com 60 anos ou mais em 2010, 32,1 milhões em 2022. Em 2070, 37,8% da população.</p></div>
+    <p class="fonte">IBGE: Censos 2010 e 2022; Projeções da População, 2024 (2070 é projeção).</p></section>
+
+  <section class="s"><div class="bloco"><p class="g p">R$ 2.800 a 4.500</p><small>por mês, um cuidador</small></div>
+    <div class="dir"><p class="f">Hoje, cuidar custa caro</p>
+      <ul><li>Casa de repouso: uns R$ 6 mil por mês</li><li>Botão de emergência: R$ 189 a 249, só depois do problema</li><li>Quem não pode pagar, liga quando dá</li></ul></div>
+    <p class="fonte">Cidesp, mai/2026. Média em BH, Mercado Mineiro, ago/2026. Tecnosenior, 21/11/2026.</p></section>
+
+  <section class="s"><div class="bloco"><p class="g m">Como funciona</p></div>
+    <div class="dir"><ul style="margin-top:0;gap:2.4cqw"><li style="font-size:3.4cqw"><b>1</b>Ela liga no horário combinado</li><li style="font-size:3.4cqw"><b>2</b>Conversa e anota como a pessoa está</li><li style="font-size:3.4cqw"><b>3</b>Avisa a família quando precisa</li></ul></div></section>
+
+  <section class="s"><div class="bloco"><p class="g m"><span class="ponto"></span>Ao vivo</p></div>
+    <div class="dir"><p class="f">A ligação da dona Helena</p><p class="apoio">idosa de exemplo, com a voz de [nome]</p><div class="qr">[Opcional: QR Code de /experimente]</div></div></section>
+
+  <section class="s"><div class="bloco"><p class="g"><span class="ph">N</span></p><small>avós atenderam de novo às 9h</small></div>
+    <div class="dir"><p class="f">O que já aconteceu</p>
+      <ul><li><b class="ph">N</b>avós atenderam no sábado</li><li><b class="ph">N</b>famílias aceitaram o teste</li><li><b>1</b>casa de repouso vai indicar</li></ul></div>
+    <p class="fonte">A Dona Leda nasceu neste fim de semana. Avós do time, com alguém da família do lado. Até 21/12: quantas ligações por semana o idoso atende.</p></section>
+
+  <section class="s"><div class="bloco"><p class="g p">R$ 129,90</p><small>por mês, a família paga</small></div>
+    <div class="dir"><p class="f">A casa de repouso indica</p>
+      <ul><li><b>R$ 38</b>custo medido por idoso</li><li><b>R$ 67</b>sobram por família</li><li>R$ 1,1 a 1,4 bilhão por ano, de 700 a 900 mil famílias (estimativa)</li></ul></div>
+    <p class="fonte">Custo no uso médio de 3 min e 20 s por dia, medido numa ligação de teste em 21/11/2026.</p></section>
+
+  <section class="s"><div class="bloco"><p class="g m">Agora</p><small>a chamada e a conversa</small></div>
+    <div class="dir"><p class="f">Feito na Agora, em português</p><p class="apoio">A sala da Agora liga o celular do idoso ao painel da família, e o motor de conversa responde em [X] segundos.</p>
+      <ul><li>Breno, produto e conversa</li><li>Vitor, casas de repouso</li><li>Stephanie, preço e dados</li><li>Gustavo, aplicativo e voz</li></ul></div></section>
+
+  <section class="s"><div class="bloco escuro"><svg><use href="#disco"/></svg></div>
+    <div class="dir"><ul style="margin-top:0"><li>6 milhões de idosos moram sozinhos</li><li>Ela liga todo dia e avisa a família</li><li>R$ 129,90 por mês, custo de R$ 38</li><li>Na Agora, em português</li></ul>
+      <p class="f" style="margin-top:3cqw;font-size:4cqw">Dona Leda: longevidade com qualidade de vida.</p><p class="apoio">[o pedido à banca]</p></div></section>
+</div>
+<div class="dica" id="dica">← → pra passar · F pra tela cheia</div>
+<script>
+(function(){
+  // o fio enrolado do telefone
+  var pts=[], r=3, d=7.5, t=0, x;
+  while(true){ x=r*t-d*Math.sin(t)+10; if(x>590) break; pts.push(x.toFixed(1)+','+(12-d*Math.cos(t)).toFixed(1)); t+=0.18; }
+  document.getElementById('caminho-fio').setAttribute('d','M'+pts.join(' L'));
+  var s=[].slice.call(document.querySelectorAll('.s'));
+  s.forEach(function(el,i){
+    el.insertAdjacentHTML('beforeend','<svg class="fio" aria-hidden="true"><use href="#fio"/></svg>'+(i>0?'<p class="num">'+(i+1)+' / '+s.length+'</p>':''));
+  });
+  var atual=0;
+  try{ var h=parseInt(location.hash.slice(1),10); if(h>=1&&h<=s.length) atual=h-1; }catch(e){}
+  function mostra(n){ atual=Math.max(0,Math.min(s.length-1,n)); s.forEach(function(el,i){el.classList.toggle('ativo',i===atual)}); history.replaceState(null,'','#'+(atual+1)); }
+  mostra(atual);
+  document.addEventListener('keydown',function(e){
+    if(['ArrowRight','PageDown',' ','Enter'].indexOf(e.key)>=0){e.preventDefault();mostra(atual+1)}
+    else if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>=0){e.preventDefault();mostra(atual-1)}
+    else if(e.key==='Home'){mostra(0)} else if(e.key==='End'){mostra(s.length-1)}
+    else if(e.key==='f'||e.key==='F'){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()} else {document.exitFullscreen()} }
+  });
+  document.getElementById('palco').addEventListener('click',function(e){ var r=this.getBoundingClientRect(); mostra(e.clientX-r.left<r.width/3?atual-1:atual+1); });
+  setTimeout(function(){document.getElementById('dica').style.opacity=0},4000);
+})();
+</script>
+</body>
+</html>
