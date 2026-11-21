@@ -40,12 +40,16 @@ function gravarLocal(aparelho: AparelhoGuardado | null) {
   }
 }
 
-async function preferencias() {
+// O plugin do Capacitor responde a qualquer nome, até "then". Devolvido solto de uma
+// função async, o JavaScript o trata como promessa, chama Preferences.then(), o plugin
+// recusa e a promessa nunca termina: a primeira tela do app ficava parada no disco.
+// Por isso ele volta embrulhado num objeto.
+async function preferencias(): Promise<{ plugin: typeof import('@capacitor/preferences').Preferences } | null> {
   try {
     const { Capacitor } = await import('@capacitor/core');
     if (!Capacitor.isNativePlatform()) return null;
     const { Preferences } = await import('@capacitor/preferences');
-    return Preferences;
+    return { plugin: Preferences };
   } catch {
     return null;
   }
@@ -67,7 +71,7 @@ export async function carregarAparelho(): Promise<AparelhoGuardado | null> {
   const prefs = await preferencias();
   if (!prefs) return null;
   try {
-    const { value } = await prefs.get({ key: CHAVE });
+    const { value } = await prefs.plugin.get({ key: CHAVE });
     if (!value) return null;
     const dado: unknown = JSON.parse(value);
     if (!pareceAparelho(dado)) return null;
@@ -81,13 +85,13 @@ export async function carregarAparelho(): Promise<AparelhoGuardado | null> {
 export async function guardarAparelho(aparelho: AparelhoPareado): Promise<void> {
   gravarLocal(aparelho);
   const prefs = await preferencias();
-  await prefs?.set({ key: CHAVE, value: JSON.stringify(aparelho) }).catch(() => undefined);
+  await prefs?.plugin.set({ key: CHAVE, value: JSON.stringify(aparelho) }).catch(() => undefined);
 }
 
 export async function esquecerAparelho(): Promise<void> {
   gravarLocal(null);
   const prefs = await preferencias();
-  await prefs?.remove({ key: CHAVE }).catch(() => undefined);
+  await prefs?.plugin.remove({ key: CHAVE }).catch(() => undefined);
 }
 
 /**

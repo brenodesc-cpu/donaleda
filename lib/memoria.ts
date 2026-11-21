@@ -68,15 +68,36 @@ const DATA_ESCRITA = /\b\d{1,2}[/.-]\d{1,2}[/.-](?:\d{4}|\d{2})\b|\b\d{4}-\d{2}-
 // disser X, você..."); "sempre que alguém visita, ela faz bolo" é rotina e fica guardada.
 const ORDEM =
   /\b(a partir de agora|de agora em diante|daqui pra frente voce|voce (deve|tem que|precisa)|sempre que [^.]*\bvoce\b|ignore|esqueca (as|suas) regras|finja|nao avise|nao conte (pra|para) (ninguem|a familia)|sua nova regra|nova instrucao)\b/;
-const DADO_SECRETO = /\b(senha|codigo de seguranca|codigo do banco|numero do cartao|cvv|token)\b/;
+const DADO_SECRETO =
+  /\b(senha|codigo de seguranca|codigo do banco|numero do cartao|cvv|token|cpf|rg|chave( do)? pix|agencia|codigo que chegou|codigo do celular)\b|\b(cartao|conta)\b[^.]{0,40}\d{3,}|\btermina em \d{3,}/;
+// Número ditado por extenso, como a transcrição da voz escreve: "quatro oito dois nove".
+const NUMERO_FALADO =
+  /\b(?:(?:zero|um|uma|dois|duas|tres|quatro|cinco|seis|meia|sete|oito|nove|\d)\b[\s,.-]*(?:e\s+)?){4,}/;
+const EMAIL = /[\w.+-]+@[\w-]+\.[\w.]+/;
+// Permissão pra passar dado a terceiro ("pode confirmar os dados dela", "autoriza a
+// assistente a dizer o endereço"): é ordem pra assistente, mesmo sem "você".
+const PERMISSAO = /\b(pode|podera|liberad[oa]|autoriz\w*|permit\w*|deixa)( \w+){0,5} (passar|dizer|informar|confirmar|contar|dar|falar|fornecer)\b/;
+const DADO_DE_TERCEIRO = /\b(conta|dados|senha|cartao|cpf|rg|endereco|documentos?|numero)\b/;
+// Onde a pessoa esconde dinheiro, dito em voz alta pra quem estiver na sala, ajuda ladrão.
+const ESCONDERIJO =
+  /\b(dinheiro|joias|economias)\b[^.]{0,40}\b(debaixo|embaixo|escondid\w*)\b|\b(esconde|escondeu|escondido)\b[^.]{0,30}\b(dinheiro|joias|economias)\b/;
 
 /** Por que a lembrança não pode ser guardada, ou null quando pode. */
 export function motivoDeRecusa(texto: string): string | null {
   const limpo = semAcento(texto);
-  if (NUMERO_LONGO.test(texto.replace(DATA_ESCRITA, ' ')) || DADO_SECRETO.test(limpo)) {
-    return 'número longo, senha ou dado de banco não ficam guardados';
+  const semData = texto.replace(DATA_ESCRITA, ' ');
+  if (
+    NUMERO_LONGO.test(semData) ||
+    NUMERO_FALADO.test(semAcento(semData)) ||
+    DADO_SECRETO.test(semAcento(semData)) ||
+    EMAIL.test(texto)
+  ) {
+    return 'número longo, senha, documento ou dado de banco não ficam guardados';
   }
-  if (ORDEM.test(limpo)) return 'ordem pra assistente não vira lembrança';
+  if (ORDEM.test(limpo) || (PERMISSAO.test(limpo) && DADO_DE_TERCEIRO.test(limpo))) {
+    return 'ordem pra assistente não vira lembrança';
+  }
+  if (ESCONDERIJO.test(limpo)) return 'onde a pessoa guarda dinheiro não fica guardado';
   return null;
 }
 

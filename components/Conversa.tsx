@@ -211,6 +211,7 @@ export default function Conversa({
 
       {mostrarMedicao ? (
         <p className="w-full text-center font-mono text-xs text-muted-foreground">
+          {`${dados.modo === 'gemini' ? 'Gemini' : dados.modo === 'tres' ? 'três peças' : 'modo ?'} · `}
           {linhaDaMedicao(medicao) || 'Esperando a primeira medição da Agora'}
         </p>
       ) : null}

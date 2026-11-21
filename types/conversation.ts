@@ -44,6 +44,8 @@ export interface DadosDaLigacao {
   conversaId: string;
   /** true quando um avatar em vídeo entra na ligação junto com a voz. */
   avatar: boolean;
+  /** Qual jeito de voz o servidor ligou: Gemini Live ou as três peças. */
+  modo?: 'gemini' | 'tres';
 }
 
 export interface PropsDaConversa {

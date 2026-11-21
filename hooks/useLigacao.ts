@@ -92,6 +92,7 @@ export function useLigacao() {
         agentId: inicio.value.agent_id,
         conversaId: inicio.value.conversa_id,
         avatar: Boolean(inicio.value.avatar),
+        modo: inicio.value.modo,
       });
       setFase('conversando');
     } catch (erro) {
