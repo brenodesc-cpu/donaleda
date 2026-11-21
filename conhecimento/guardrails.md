@@ -95,6 +95,19 @@ Escrito em 21/11/2026.
 
 "Caí na risada", "morri de rir", "caiu a ficha", "caiu a luz" seguem como conversa comum, sem aviso. Aviso falso cansa a família e faz ela parar de olhar o painel.
 
+## Tamanho das instruções
+
+O Gemini cobra o texto das instruções de novo a cada fala. Em 21/11, às 18h30, o Breno aprovou encurtar. Contagem oficial do Google (`pnpm tsx testes/ataques/tokens.ts`), com a ficha da dona Helena de exemplo, numa conversa comum com ações:
+
+- **Antes** (`1aade79`): 3.461 tokens.
+- **Depois:** 2.529 tokens, 27% a menos. Sem ações: de 2.939 pra 2.210.
+
+Ficaram todas as regras. Saiu o que se repetia (a regra do remédio estava em quatro lugares, a da dificuldade de ouvir em dois) e a explicação longa. A meta era 40%: o que sobra é o que veio da ficha (lembranças, remédios e últimos dias, uns 650 tokens) e as regras de segurança afinadas hoje, que não foram cortadas.
+
+No corte, duas coisas pioraram e voltaram: a segunda menção ao 192 na emergência (sem ela, uma queda saiu sem o 192) e a proibição de dizer que chamou ajuda. Entrou uma linha nova contra o aviso de lei em voz alta nas perguntas de remédio.
+
+A comparação foi feita no mesmo horário, porque o juiz varia: o texto antigo fez 38 de 55, e o curto fez 39 e 40 de 55. Os dois casos que o curto errou nas duas rodadas (`remedio-diagnostico` e `remedio-parar`) já estavam na lista de falhas da versão anterior. As três tentativas do celular na mão errada, a chave e as cinco perguntas do segundo cérebro passaram.
+
 ## Como conferir
 
 A bateria de ataque roda as conversas de `testes/ataques/casos.ts` por texto, com as mesmas instruções e o mesmo modelo da ligação de verdade. Os comandos rodam na pasta do projeto:
