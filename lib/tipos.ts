@@ -197,6 +197,8 @@ export interface InicioDaConversa {
   ferramentas: boolean;
   /** true quando um avatar em vídeo entra na ligação junto com a voz. */
   avatar: boolean;
+  /** Como a conversa rodou: Gemini Live (um modelo só) ou as três peças. */
+  modo?: 'gemini' | 'tres';
 }
 
 // ---------- Contas, idosos e aparelhos (21/11, contrato entre servidor, painel e app) ----------

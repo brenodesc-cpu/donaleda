@@ -95,10 +95,31 @@ export async function esquecerAparelho(): Promise<void> {
  * o token não vale mais (a família desligou o aparelho): ele é esquecido e a
  * tela volta pra escolha entre família e idoso.
  */
+/**
+ * Modo da conversa pedido pelo endereço (?modo=gemini ou ?modo=tres), guardado no
+ * aparelho. Serve pra comparar os dois modos; sem pedido, o servidor escolhe.
+ */
+function modoPedido(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const doEndereco = new URLSearchParams(window.location.search).get('modo');
+    if (doEndereco === 'gemini' || doEndereco === 'tres') {
+      window.localStorage.setItem('donaleda-modo', doEndereco);
+      return doEndereco;
+    }
+    if (doEndereco === 'auto') window.localStorage.removeItem('donaleda-modo');
+    return window.localStorage.getItem('donaleda-modo');
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchDoAparelho(url: string, init: RequestInit = {}): Promise<Response> {
   const token = tokenDoAparelho();
   const cabecalhos = new Headers(init.headers);
   if (token) cabecalhos.set(CABECALHO_DO_APARELHO, token);
+  const modo = modoPedido();
+  if (modo) cabecalhos.set('x-donaleda-modo', modo);
   const resposta = await fetch(url, { ...init, headers: cabecalhos });
   if (resposta.status === 401 && token) {
     await esquecerAparelho();

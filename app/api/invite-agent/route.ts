@@ -1,7 +1,12 @@
 // Começa a conversa: põe a assistente na mesma sala de áudio da Agora em que o
-// idoso entrou. A fala dele vira texto (Deepgram), o modelo responde (OpenAI) e a
-// resposta vira voz, tudo com as chaves gerenciadas pela Agora. As ações da
-// assistente (anotar na ficha, avisar a família) entram pelo endereço /api/mcp.
+// idoso entrou. Dois modos, os dois dentro do Conversational AI da Agora:
+// - gemini: o Gemini Live escuta e fala num modelo só (mais rápido e com voz natural).
+//   Precisa da chave do Google AI Studio em LIA_GEMINI_KEY.
+// - tres: Deepgram escuta, OpenAI responde e a voz da OpenAI fala, com as chaves
+//   gerenciadas pela Agora. É a reserva, e o único modo que aceita avatar em vídeo.
+// LIA_MODO escolhe; sem ele, usa gemini quando a chave existe. O aparelho pode pedir
+// um modo pelo cabeçalho x-donaleda-modo, pra comparar os dois na mesma hora.
+// As ações da assistente (anotar na ficha, avisar a família) entram por /api/mcp.
 
 import { NextRequest, NextResponse } from 'next/server';
 import {
@@ -12,6 +17,7 @@ import {
   DeepgramSTT,
   ElevenLabsTTS,
   ExpiresIn,
+  GeminiLive,
   HeyGenAvatar,
   MiniMaxTTS,
   OpenAI,
@@ -98,6 +104,37 @@ function avatar() {
 // O avatar entra na sala como mais um participante, com este número.
 const AVATAR_UID = '654321';
 
+type Modo = 'gemini' | 'tres';
+
+/** O modo da conversa: o pedido do aparelho vale primeiro, depois LIA_MODO, depois a chave. */
+function modoDaConversa(request: Request): Modo {
+  const temChave = Boolean(process.env.LIA_GEMINI_KEY?.trim());
+  const pedido = (request.headers.get('x-donaleda-modo') || process.env.LIA_MODO || '').trim();
+  if (pedido === 'tres') return 'tres';
+  if (pedido === 'gemini') return temChave ? 'gemini' : 'tres';
+  return temChave ? 'gemini' : 'tres';
+}
+
+/** O Gemini Live da Agora, com as ações da assistente (o SDK ainda não leva MCP nesse modo). */
+class GeminiLiveComAcoes extends GeminiLive {
+  constructor(
+    opcoes: ConstructorParameters<typeof GeminiLive>[0],
+    private readonly servidores: Record<string, unknown>[] | undefined,
+  ) {
+    super(opcoes);
+  }
+
+  toConfig() {
+    const config = super.toConfig();
+    return this.servidores ? { ...config, mcp_servers: this.servidores } : config;
+  }
+}
+
+/** A voz do Gemini. LIA_VOZ_GEMINI troca; Aoede é feminina e calma. */
+function vozDoGemini(): string {
+  return process.env.LIA_VOZ_GEMINI?.trim() || 'Aoede';
+}
+
 export async function POST(request: NextRequest) {
   const aparelho = await exigirAparelho(request);
   if (!aparelho.ok) return aparelho.resposta;
@@ -131,6 +168,65 @@ export async function POST(request: NextRequest) {
     const saudacao = montarSaudacao(base, agora, origem);
 
     const client = new AgoraClient({ area: Area.US, appId, appCertificate });
+    const modo = modoDaConversa(request);
+
+    const servidoresDeAcoes = comFerramentas
+      ? [
+          {
+            name: 'donaleda',
+            endpoint: `${enderecoPublico}/api/mcp?idoso=${encodeURIComponent(idosoId)}&chave=${chave}`,
+            transport: 'streamable_http',
+            headers: { Authorization: `Bearer ${chave}` },
+            allowed_tools: FERRAMENTAS.map((f) => f.name),
+            timeout_ms: 10000,
+          },
+        ]
+      : undefined;
+
+    const comum = {
+      // enable_rtm leva a legenda e o estado da assistente pra tela.
+      // enable_tools libera as ações em /api/mcp.
+      advancedFeatures: { enable_rtm: true, enable_tools: comFerramentas },
+      parameters: {
+        audio_scenario: 'chorus' as const,
+        data_channel: 'rtm' as const,
+        enable_error_message: true,
+        enable_metrics: true,
+      },
+    };
+
+    const agenteGemini =
+      modo === 'gemini'
+        ? new Agent({ client, ...comum }).withMllm(
+            new GeminiLiveComAcoes(
+              {
+                apiKey: exigirVariavel('LIA_GEMINI_KEY'),
+                model: process.env.LIA_MODELO_GEMINI?.trim() || 'models/gemini-3.8-live',
+                languageCodes: ['pt-BR'],
+                voice: vozDoGemini(),
+                instructions: instrucoes,
+                greetingMessage: saudacao,
+                failureMessage: SE_FALHAR,
+                transcribeAgent: true,
+                transcribeUser: true,
+                inputModalities: ['audio'],
+                outputModalities: ['audio'],
+                // Quem tem mais idade faz pausas no meio da frase: o Gemini espera
+                // o mesmo silêncio do outro modo antes de responder.
+                turnDetection: {
+                  mode: 'server_vad',
+                  server_vad_config: {
+                    prefix_padding_ms: 300,
+                    silence_duration_ms: esperaDeSilencio(),
+                    start_of_speech_sensitivity: 'START_SENSITIVITY_HIGH',
+                    end_of_speech_sensitivity: 'END_SENSITIVITY_LOW',
+                  },
+                } as never,
+              },
+              servidoresDeAcoes,
+            ),
+          )
+        : null;
 
     const agent = new Agent({
       client,
@@ -153,15 +249,7 @@ export async function POST(request: NextRequest) {
           },
         },
       },
-      // enable_rtm leva a legenda e o estado da assistente pra tela.
-      // enable_tools libera as ações em /api/mcp.
-      advancedFeatures: { enable_rtm: true, enable_tools: comFerramentas },
-      parameters: {
-        audio_scenario: 'chorus',
-        data_channel: 'rtm',
-        enable_error_message: true,
-        enable_metrics: true,
-      },
+      ...comum,
     })
       .withStt(new DeepgramSTT({ model: 'nova-3', language: 'pt-BR' }))
       .withLlm(
@@ -171,30 +259,17 @@ export async function POST(request: NextRequest) {
           failureMessage: SE_FALHAR,
           maxHistory: 30,
           params: { max_tokens: 220, temperature: 0.6 },
-          ...(comFerramentas
-            ? {
-                mcpServers: [
-                  {
-                    name: 'donaleda',
-                    endpoint: `${enderecoPublico}/api/mcp?idoso=${encodeURIComponent(idosoId)}&chave=${chave}`,
-                    transport: 'streamable_http',
-                    headers: { Authorization: `Bearer ${chave}` },
-                    allowed_tools: FERRAMENTAS.map((f) => f.name),
-                    timeout_ms: 10000,
-                  },
-                ],
-              }
-            : {}),
+          ...(servidoresDeAcoes ? { mcpServers: servidoresDeAcoes } : {}),
         }),
       )
       .withTts(voz());
 
     // Com um avatar configurado, a assistente aparece em vídeo na chamada.
-    const video = avatar();
+    // A Agora não junta avatar com o Gemini Live, então o avatar só entra no modo de três peças.
+    const video = modo === 'tres' ? avatar() : null;
     type AceitaAvatar = { withAvatar(vendor: unknown): typeof agent };
-    const agenteDaLigacao = video
-      ? (agent as unknown as AceitaAvatar).withAvatar(video)
-      : agent;
+    const agenteDaLigacao =
+      agenteGemini ?? (video ? (agent as unknown as AceitaAvatar).withAvatar(video) : agent);
 
     const session = agenteDaLigacao.createSession({
       channel: channel_name,
@@ -216,6 +291,7 @@ export async function POST(request: NextRequest) {
       conversa_id: conversa.id,
       ferramentas: comFerramentas,
       avatar: Boolean(video),
+      modo,
     } satisfies InicioDaConversa);
   } catch (error) {
     console.error('Erro ao começar a conversa:', error);
