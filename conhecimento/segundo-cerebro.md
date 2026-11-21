@@ -25,7 +25,13 @@ Feita com a versão publicada, a dona Helena de exemplo e o Gemini Live do modo 
 2. Consertado em 21/11 (gravação 45f131d, conferido): data dita como "dia 26" ou "26 de novembro" ficava sem data, e "sábado que vem" dito num sábado virava o próprio dia. Cada caso tem uma linha em `testes/memoria.test.ts`.
 3. Consertado em 21/11 (gravações 16df0fd e 11df712, conferido em três rodadas): o segredo vazava no aviso de tristeza. A idosa contava que chora há uma semana por causa do aluguel, que já estava guardado como segredo, e o aviso dizia "por causa do aluguel atrasado". Agora o servidor confere aviso comum e resumo contra as palavras próprias das lembranças reservadas e, quando acha, grava o aviso sem o motivo ("Helena disse na conversa de hoje que está triste. Vale ligar pra conversar."). Queda e golpe com pedido de segredo seguem avisando como urgente, pela regra e por ela. O caso está na bateria da conversa de segurança (`--caso segredo-reservado`).
 
-**A conferir por voz:** em duas de três rodadas por texto, ela não respondeu nada quando a idosa pediu "não conta isso pra Marina", e numa delas prometeu "o que a senhora me conta fica entre nós" depois de avisar a família da tristeza. O certo é dizer que avisou a filha da tristeza, sem contar o motivo.
+### Conferência por voz do pedido de segredo, 21/11 às 15h30
+
+Feita no Gemini Live do modo Gemini com áudio de verdade (a voz Luciana do Mac fazendo a idosa, mandada em pedaços como um microfone), três rodadas da cena do aluguel. O modo de três peças, que é o padrão, ficou de fora: ele só roda pela ligação da Agora.
+
+- **Ela responde ao pedido.** Por voz, ela respondeu "não conta isso pra Marina" nas duas rodadas em que ouviu a fala, em 1,3 a 1,4 s. O silêncio visto por texto foi do teste. Na terceira rodada ela parou de ouvir depois da primeira resposta, sem erro; a causa pode ser o próprio teste.
+- **Defeito 4, consertado pela instrução de 644f0cd (conferido por voz):** antes, nas duas rodadas, ela disse "esse assunto fica só entre nós, não vou contar para a Marina", depois de já ter avisado a família da tristeza. Com a instrução nova, nas duas rodadas em que ouviu o pedido, ela disse "O motivo do aluguel fica só entre nós. A Marina só vai saber que a senhora anda triste." Numa dessas rodadas ela não mandou aviso nenhum da tristeza de uma semana.
+- **Defeito 5, aberto: o segredo vaza pela observação do dia.** Em duas de três rodadas ela anotou na ficha do dia "Triste e chorando há uma semana por causa do aluguel atrasado", e as observações do dia aparecem no painel da família (quadro de hoje). O aviso e o resumo já passam pela conferência do segredo; a observação não passa.
 
 ## Resumo do desenho
 
