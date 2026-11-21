@@ -10,11 +10,13 @@ export const EMAIL_DE_CONTATO = 'suporte@virte.com.br';
 // --- Fale conosco ---
 
 /**
- * O número do WhatsApp que recebe o "Fale conosco": só os dígitos, com 55 e o DDD
- * (por exemplo, 5511999999999). Fica vazio até o Breno mandar o número. Com ele
- * vazio, os botões de contato abrem um e-mail pro endereço de cima.
+ * O número do WhatsApp que recebe o "Fale conosco", com 55 e o DDD (por exemplo,
+ * 5511999999999). Ele é o celular de uma pessoa e o repositório é público, então
+ * fica fora do código: vem da variável NEXT_PUBLIC_WHATSAPP_DE_CONTATO, gravada no
+ * `.env.local` e nas variáveis da Vercel. Sem a variável, os botões de contato
+ * abrem um e-mail pro endereço de cima.
  */
-export const WHATSAPP_DE_CONTATO: string = '';
+export const WHATSAPP_DE_CONTATO: string = process.env.NEXT_PUBLIC_WHATSAPP_DE_CONTATO?.trim() ?? '';
 
 export const TEXTO_DO_CONTATO = 'Fale conosco';
 export const MENSAGEM_DO_CONTATO = 'Olá! Quero conhecer a Dona Leda.';
