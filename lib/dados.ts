@@ -2,7 +2,7 @@
 // as de baixo leem e gravam a ficha no banco (Supabase), uma mudança de cada vez.
 
 import { randomUUID } from 'node:crypto';
-import { guardar, normalizarLembrancas, paraOPainel } from './memoria';
+import { citaSegredo, guardar, normalizarLembrancas, paraOPainel } from './memoria';
 import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
 import type {
   Alerta,
@@ -132,8 +132,10 @@ export function aplicarBemEstar(
     }
   }
 
+  // A anotação do dia aparece no painel da família, então não pode contar o assunto
+  // que a pessoa pediu segredo. O humor já foi anotado acima; a frase fica de fora.
   const observacao = parcial.observacao?.trim();
-  if (observacao && !dia.observacoes.includes(observacao)) {
+  if (observacao && !dia.observacoes.includes(observacao) && !citaSegredo(base, observacao)) {
     dia.observacoes.push(observacao);
   }
 

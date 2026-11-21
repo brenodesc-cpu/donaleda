@@ -226,3 +226,21 @@ describe('queda guardada como segredo continua indo pra família', () => {
     expect((await base()).alertas.at(-1)?.texto).toBe('Dona Helena escorregou no banho e bateu o joelho.');
   });
 });
+
+describe('o segredo não sai pela anotação do dia', () => {
+  it('a observação que cita o aluguel reservado fica fora do painel, e o humor vai', async () => {
+    const chamar = async (name: string, args: Record<string, unknown>) =>
+      (await (await POST(pedido({ jsonrpc: '2.0', id: 13, method: 'tools/call', params: { name, arguments: args } }))).json()).result.content[0].text as string;
+    await chamar('registrar_bem_estar', { humor: 'triste', observacao: 'Triste e chorando há uma semana por causa do aluguel atrasado.' });
+    const hoje = (await base()).dias.at(-1)!;
+    expect(hoje.humor).toBe('triste');
+    expect(hoje.observacoes.some((o) => /alugu/i.test(o))).toBe(false);
+  });
+
+  it('a observação sem o segredo continua indo', async () => {
+    const chamar = async (name: string, args: Record<string, unknown>) =>
+      (await (await POST(pedido({ jsonrpc: '2.0', id: 14, method: 'tools/call', params: { name, arguments: args } }))).json()).result.content[0].text as string;
+    await chamar('registrar_bem_estar', { observacao: 'Regou as orquídeas de manhã.' });
+    expect((await base()).dias.at(-1)!.observacoes).toContain('Regou as orquídeas de manhã.');
+  });
+});
