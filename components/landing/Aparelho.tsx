@@ -3,7 +3,8 @@
 // Os textos repetem os das telas reais: components/ChamadaTocando.tsx, components/Conversa.tsx,
 // components/familia/ (DiaDeHoje, Alertas, ResumoDaSemana, Ligacoes, Apoio e formatos.ts),
 // lib/regras.ts e lib/chamadas.ts. A pessoa é a do exemplo (lib/exemplo.ts).
-// Conferidos com as telas em 21/11/2026, depois da revisão de textos da gravação ace3b84.
+// Conferidos com as telas em 21/11/2026, depois da revisão de textos (ace3b84) e do aviso
+// que conta quem viu e o que fez (cf0ee73).
 
 import { Phone, PhoneOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -151,22 +152,22 @@ export function TelaPainel({ parte }: { parte: 'dia' | 'aviso' | 'semana' }) {
         {parte === 'aviso' ? (
           <>
             <p className="font-titulo text-lg font-bold">Avisos</p>
+            {/* Aviso aberto: fica na cor de urgente até alguém ver e contar o que fez. */}
             <div className="rounded-xl bg-destructive px-3.5 py-3 text-white">
               <p className="text-[0.8rem] font-semibold">Emergência</p>
               <p className="mt-1 text-[0.98rem] font-semibold leading-snug">
                 Pode ser uma emergência: “Eu caí no banheiro”. Ligue agora e, se precisar, chame o SAMU no 192.
               </p>
+              <p className="mt-1.5 text-[0.8rem] font-medium leading-snug">Ninguém viu ainda, há 2 min.</p>
             </div>
-            <div className="rounded-xl border border-foreground bg-warning-soft px-3.5 py-3 text-warning">
+            {/* Aviso respondido: a linha conta quem viu, em quanto tempo e o que fez (lib/avisos.ts). */}
+            <div className="rounded-xl border border-border bg-card px-3.5 py-3 text-foreground">
               <p className="text-[0.8rem] font-semibold">Possível golpe</p>
               <p className="mt-1 text-[0.98rem] font-semibold leading-snug">
                 Contou de um pedido de dinheiro ou de senha: “Me ligaram pedindo o código do cartão”. Pode ser golpe.
               </p>
-            </div>
-            <div className="rounded-xl border border-foreground bg-warning-soft px-3.5 py-3 text-warning">
-              <p className="text-[0.8rem] font-semibold">Ligação</p>
-              <p className="mt-1 text-[0.98rem] font-semibold leading-snug">
-                Não atendeu a ligação das 09:00, em 2 tentativas.
+              <p className="mt-1.5 text-[0.8rem] font-medium leading-snug text-muted-foreground">
+                Marina viu em 4 min. Ligou, está tudo bem.
               </p>
             </div>
           </>
