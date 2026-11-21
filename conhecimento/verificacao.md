@@ -1,102 +1,103 @@
 # Verificação contra o regulamento
 
-Conferido em 21/11/2026, às 13h20, sem mexer no código. Fontes: o regulamento de 17/11 (newhack.vc/hackathon/agora/regulamento, lido de novo hoje), o código na gravação `6bf287a`, o site donaleda.vercel.app aberto no Chrome, a documentação da Agora sobre o Gemini Live e as notas desta pasta.
+Primeira conferência em 21/11/2026, às 13h10. Refeita às 13h50 com nove agentes: seis checaram cada afirmação tentando derrubá-la, e três fizeram papel de jurado (um da Agora, um investidor da NewHack e um especialista em idoso) sem ver este relatório. Os achados graves foram conferidos de novo no código. Fontes: o regulamento de 17/11, o código até a gravação `7f77a7e`, o site donaleda.vercel.app, a documentação da Agora, o pacote `agora-agents` e as notas desta pasta.
 
 ## Resumo
 
-- **Nota provável hoje: 3,2 de 5.** Com as cinco ações da seção 3 feitas, perto de 4,4.
-- **Nenhuma regra que elimina está quebrada hoje.** Seis ainda dependem de entrega ou de conferência até 12h de domingo, e a mais arriscada é o README, que não ensina a rodar o app de agora.
-- **O que separa a gente do primeiro lugar** é provar a conversa com número (tempo de resposta e interrupção medidos) e mostrar, ao vivo, o aviso de queda chegando no painel da família em segundos. Voz e parte técnica valem metade da nota e são os dois primeiros critérios de desempate.
+- **Nota provável hoje: de 3,2 a 3,6 de 5.** Os três jurados deram 3,3, 3,6 e 3,2. Com as cinco ações da seção 4, perto de 4. A primeira conta (4,4) supunha técnica e problema em 5 e foi otimista.
+- **Nenhuma regra que elimina está quebrada no GitHub.** Faltam o time conferido no OS, as entregas do OS e a versão entregue certa (seção 2).
+- **O maior risco é a cena que vende.** A idosa conta que caiu ou que pediram dinheiro e o aviso aparece no painel da filha. Três defeitos do código fazem essa cena falhar sem mensagem nenhuma (seção 1).
+- **A narrativa de venda foi aprovada pelo Breno às 13h24** e está em `proposta-de-valor.md`.
 
-## 1. Regras que eliminam
+## 1. Três defeitos que derrubam a cena da queda e do golpe
 
-Fonte: itens 3, 5.1 e 5.5 do regulamento. A organização confere tudo isto antes da classificação final.
+Conferidos no código às 13h45. Valem nos dois modos da conversa.
 
-| # | Regra | Situação | Prova | O que falta |
-|---:|---|---|---|---|
-| 1 | Time de 3 a 5 pessoas inscritas, aprovadas e presentes nos dois dias | Falta conferir | Quatro pessoas em `time.md` | Abrir o OS e ver os quatro como aprovados e confirmados. Breno, 5 minutos |
-| 2 | Uso da Agora funcionando e demonstrado | Cumpre no código, falta conferir no ar | `app/api/invite-agent/route.ts` usa sala de áudio (RTC), o motor de conversa, o canal de mensagens (RTM) e as ações por MCP. Primeira conversa às 12h02 | Uma conversa por voz em donaleda.vercel.app num celular de verdade, que ainda não aconteceu |
-| 3 | Descrição no OS (problema, público, solução, uso da Agora) | Não cumpre ainda | | Escrever e cadastrar |
-| 4 | Slides, até 10 | Não cumpre ainda | | Montar. Sem logo de parceiro sem permissão (linha 9) |
-| 5 | Vídeo narrado de até 2 minutos, com conversa real e a Agora funcionando, em link que a banca abre | Não cumpre ainda | | Gravar no sábado à noite. YouTube não listado serve |
-| 6 | Repositório público com README: como rodar, dependências e versão | Cumpre em parte | Público, versão 0.1.0 e dependências listadas | O "como rodar" não fala do banco (Supabase), então quem seguir o passo a passo não abre o painel. O README ainda chama a assistente de Lia, diz que os dados ficam num arquivo local, que não tem login e que ela espera 900 ms, quando o código usa 650 |
-| 7 | Separar o que já existia do que foi feito no hackathon | Cumpre | A primeira gravação é o projeto de partida da Agora, e o README tem a seção | Pôr na lista o banco, o login, o código do aparelho e os apps de iPhone e Android |
-| 8 | Respeitar licenças | Cumpre | `LICENSE` (MIT) do projeto da Agora mantido | |
-| 9 | Nada de chave, dado pessoal, material confidencial ou de terceiro sem permissão | Cumpre hoje | As 21 gravações conferidas sem chave. `.env.local`, `dados/` e `.vercel` ficam fora do GitHub, e o exemplo de variáveis vai vazio | Repetir a conferência antes de entregar. Nome de avó, telefone e gravação nunca entram. A marca do Terça da Serra só entra em slide ou vídeo com permissão por escrito deles |
-| 10 | Repositório público na entrega e durante a avaliação | Cumpre | GitHub mostra público | Não fechar até o resultado |
-| 11 | Simulação declarada | Cumpre | README, seção "O que é simulação". O painel marca "dados de exemplo" | Dizer no vídeo e no pitch quando a dona Helena aparece |
-| 12 | Tudo entregue até 12h de 22/11, horário de Brasília | Pendente | | Enviar até 11h, com uma hora de folga |
+1. **O aviso recebe só o primeiro pedaço de cada fala da idosa.** A tela usa a legenda no modo de texto, que marca cada pedaço da fala do usuário como terminado na hora em que ele chega (`agora-agent-client-toolkit`, `handleTextMessage`). O `useEnviarFalas` manda cada fala ao servidor uma vez só, no primeiro pedaço (`hooks/useEnviarFalas.ts` e `falasTerminadasDoIdoso` em `lib/conversation.ts`). "Eu caí no banheiro" pode chegar às regras como "Eu" e não virar aviso. Conserto: mandar a fala quando ela termina de verdade, ou mandar de novo quando o texto do mesmo turno crescer.
+2. **A regra de golpe não conhece a palavra "dinheiro".** Ela exige uma palavra da lista (Pix, senha, código, cartão, transferência, depósito, boleto, empréstimo, consignado) junto de alguém pedindo (`lib/regras.ts`, linhas 31 e 63). "Me ligaram dizendo que era meu neto e pediram dinheiro" fica por conta da IA. Faltam também "golpe", "sequestro" e "CPF". Cada palavra nova entra com um caso em `testes/regras.test.ts`.
+3. **O mesmo aviso não aparece de novo no mesmo dia.** Aviso do mesmo tipo e com o mesmo texto no mesmo dia volta o antigo, e nenhuma regra repete em um minuto (`lib/dados.ts`, linhas 56 a 64). Se o time ensaiar a frase da demonstração no domingo de manhã com a mesma idosa, às 13h nenhum cartão novo aparece. Na demonstração, usar uma idosa de exemplo criada na hora ou apagar os dados dela antes do pitch.
 
-Fora das regras que eliminam: a cláusula 11 do regulamento não autoriza clonar a voz nem fazer avatar de ninguém do time. O mesmo cuidado vale pros avós.
+Quem faz: Gustavo, com a conversa "Servidor, voz e banco". Uns 45 minutos com o teste. Até 17h de sábado.
 
-## 2. Nota provável por critério
+## 2. Regras que eliminam
 
-A nota de cada jurado é a média ponderada das seis notas, de 1 a 5.
+Fonte: itens 3, 5.1 e 5.5 do regulamento. A organização confere antes da classificação final.
 
-| Critério | Peso | Hoje | Com as ações | Prova |
-|---|---:|---:|---:|---|
-| Conversa por voz | 25% | 3 | 4 | Funciona em português, aceita interrupção (240 ms de fala por cima) e espera 650 ms de silêncio. Tem frase de falha ("Só um instante"). Contra: são três peças em fila (Deepgram escuta, OpenAI pensa, voz da OpenAI fala), que em outubro levaram de 2 a 4 s por resposta; a voz `nova` tende a sotaque de fora; calado por 10 s, ela não retoma; e nada foi medido ainda (`teste-de-voz.md` está em branco) |
-| Execução técnica e Agora | 25% | 4 | 5 | Usa a Agora inteira: sala de áudio, motor de conversa, canal de mensagens pra legenda e estado, ações por MCP e token. No ar na Vercel, com banco, login, código do aparelho e 37 conferências automáticas. Contra: ninguém conversou por voz no endereço publicado nem em celular de verdade, e queda de conexão só mostra aviso, sem religar |
-| Problema e impacto | 20% | 4 | 5 | 6 milhões de idosos moram sozinhos (PNAD 2025), idosos foram 16% das vítimas de golpe digital em 2024 (Febraban) e o CareCall da Coreia está em mais de 100 prefeituras. Contra: a frase de venda ainda não foi aprovada e falta o comprador falando (o Terça da Serra) |
-| Inovação | 15% | 3 | 4 | A assistente liga, a ligação atende sozinha, ela lembra do que ouviu e as regras fixas avisam a família mesmo se a IA falhar. Contra: Meela, Callie e CareCall já fazem lá fora, então a novidade é o português e o aviso de golpe, e isso precisa aparecer na demonstração |
-| Validação | 10% | 1 | 4 | Nenhum teste com gente ainda. O kit das ligações está pronto em `validacao.md` |
-| Apresentação | 5% | 3 | 4 | Pitch, slides e vídeo por fazer |
-| **Total** | | **3,25** | **4,45** | |
+| # | Regra | Situação | O que falta |
+|---:|---|---|---|
+| 1 | Time de 3 a 5 inscritos, aprovados e presentes nos dois dias | Falta conferir | Breno abre o OS e vê os quatro aprovados e confirmados |
+| 2 | Uso da Agora funcionando e demonstrado | Falta conferir | Nenhuma conversa por voz no site publicado nem em celular de verdade, nos dois modos. A de 12h02 foi no Chrome do Mac |
+| 3 | Descrição, slides (até 10), vídeo de até 2 min e link do repositório cadastrados no OS | Não cumpre ainda | O vídeo precisa mostrar a conversa real e a Agora trabalhando (legenda, estado e o painel reagindo), em link que a banca abre |
+| 4 | README com como rodar, dependências e versão entregue | Cumpre em parte | O texto foi corrigido às 13h15. A versão não bate: o README diz 0.2.0 e a etiqueta `entrega`, o `package.json` diz 0.1.0, e a etiqueta não existe. Quem rodar de fora trava na criação da conta se não desligar a confirmação por e-mail no Supabase, e o README não diz isso |
+| 5 | Separar o que já existia do que foi feito | Cumpre | Uma linha dizendo que a primeira gravação já traz pequenas mudanças do time |
+| 6 | Respeitar licenças | Cumpre | |
+| 7 | Nada de chave, dado pessoal ou material de terceiro | Cumpre hoje | As 30 gravações foram varridas às 13h25 sem achar chave. Refazer na gravação final. E-mail e senha da conta de demonstração nunca entram no repositório, só no campo do OS. Concorrentes e o Terça da Serra só pelo nome, sem logo |
+| 8 | Repositório público na entrega e na avaliação | Cumpre | Não fechar |
+| 9 | Simulação declarada | Cumpre | Se alguém do time fizer o papel da idosa no vídeo, dizer isso no vídeo |
+| 10 | Prazo de 12h de 22/11 | Pendente | Enviar até 11h |
 
-> **Nota de 21/11/2026, fim da tarde:** depois desta conferência o Breno aprovou a narrativa de venda da Dona Leda (o sonho, o que ela é, o dinheiro e a assinatura). Ela está em `conhecimento/proposta-de-valor.md`, então o contra "a frase de venda ainda não foi aprovada", em Problema e impacto, já foi resolvido.
+Duas coisas fora das regras que eliminam e que podem custar caro:
+- **O site sai do Mac, sem passar pelo GitHub.** O que a banca vê no ar pode ser diferente do código entregue. Publicar o site a partir da gravação marcada com `entrega`.
+- **A promessa feita às famílias hoje à noite** diz que nada é gravado e que tudo é apagado. Se a chave do Gemini for do plano grátis do Google, o Google pode usar a conversa pra melhorar os produtos dele. Antes das 20h, confirmar que a chave é da conta paga, ou fazer as ligações com os avós no modo de três peças.
 
-## 3. As ações que mais sobem a nota
+## 3. Nota por critério
 
-Em ordem de pontos ganhos por hora gasta.
+| Critério | Peso | Eu | Jurado da Agora | Investidor | Especialista em idoso | Com as ações |
+|---|---:|---:|---:|---:|---:|---:|
+| Conversa por voz | 25% | 3 | 3 | 3,5 | 3 | 4 |
+| Execução técnica e Agora | 25% | 4 | 3,5 | 4 | 3,5 | 4 |
+| Problema e impacto | 20% | 4 | 4 | 4 | 3,5 | 4 |
+| Inovação | 15% | 3 | 3 | 3 | 3,5 | 4 |
+| Validação | 10% | 1 | 2,5 | 3 | 2 | 4 |
+| Apresentação | 5% | 3 | 3,5 | 3,5 | 3 | 4 |
+| **Total** | | **3,25** | **3,3** | **3,6** | **3,2** | **4,0** |
 
-| # | Ação | Sobe | Quem | Tempo | Até |
+**Por que não chega a 5.**
+- **Voz:** ninguém mediu uma resposta. Os 650 ms de espera são menos que a pausa de 1 segundo que idoso faz no meio da frase, então ela deve atropelar a pessoa. Se a ligação cai, a tela volta pra espera em 1,5 s sem aviso e ninguém liga de novo. No Gemini, ela fica muda se o idoso se cala.
+- **Técnica:** o modo principal nunca rodou de ponta a ponta, e quando ele falha a tela fica em "Estou te ouvindo" sem nada acontecer.
+- **Inovação:** Callie Care, Joy Calls e ElderVoice já ligam todo dia pra idoso lá fora, e operadoras no Japão e na Coreia já avisam a família durante um golpe.
+- **Validação:** zero idosos até agora.
+
+**O caminho pro 5,** depois das cinco ações: o tempo de resposta medido pela própria Agora perto de 1 s, uma segunda ligação no domingo de manhã pros mesmos avós contando quem atende de novo, uma mensagem escrita do Terça da Serra topando conversar sobre um piloto, e um momento que só a voz faz. Os dois jurados de fora sugeriram o mesmo momento: na urgência, a filha entra na mesma chamada da Agora. Isso é recurso novo (2 a 3 horas) e só entra depois que a cena da queda funcionar.
+
+## 4. As cinco ações, revisadas
+
+| # | Ação | Por quê | Quem | Tempo | Até |
 |---:|---|---|---|---|---|
-| 1 | **Rodar o teste da voz** (`teste-de-voz.md`, as dez situações) no endereço publicado, com um celular de verdade, e anotar os tempos. É também a prova da regra 2 | Voz e técnica | Gustavo no código, Breno fazendo o idoso, Stephanie no cronômetro | 40 min | 15h |
-| 2 | **Testar o Gemini Live como alternativa** (seção 4) e ligar o lembrete de silêncio da Agora, pra ela perguntar "A senhora ainda está aí?" depois de uns 8 s calada. Decidir pelo número medido, ficando com o modo atual de reserva | Voz e inovação | Gustavo, com a conversa "Servidor, voz e banco" | 1h30 | 18h |
-| 3 | **Ligar pra 3 a 5 avós** com o kit de `validacao.md` e fechar quatro números pro pitch: quantos atenderam, minutos médios, quantos atenderiam amanhã e quantas famílias usariam | Validação, de 1 pra 4 | Breno, Vitor e Stephanie na planilha | 3h | 23h |
-| 4 | **Gravar o vídeo de 2 minutos** com a cena que vende: o aparelho toca, a idosa atende, interrompe a Dona Leda, conta que caiu e o aviso aparece no painel da família na mesma hora. É a reserva se a internet cair no pitch | Técnica, apresentação e voz | Breno, com a conversa "Pitch, vídeo e slides" | 2h | sábado à noite |
-| 5 | **Fechar o que elimina:** README corrigido (nome, banco, login, 650 ms, como rodar), descrição no OS, slides até 10 e o time conferido no OS | Regras 1, 3, 4 e 6 | Gustavo no README, Vitor nos slides e na descrição, Breno no OS | 2h | domingo, 10h |
+| 1 | **Consertar os três defeitos da seção 1** e ensaiar a cena da queda e do golpe com as frases exatas | É a cena que mostra problema, voz e Agora de uma vez, e hoje ela falha em silêncio | Gustavo | 45 min | 17h |
+| 2 | **Escolher o modo pela medida.** Rodar o `teste-de-voz.md` num celular de verdade, nos dois modos, lendo o tempo de cada resposta pelas métricas da Agora (já ligadas no pedido, ninguém lê). Subir a espera de silêncio pra 1.000 a 1.200 ms. Se ficar o Gemini, trocar o pacote pra 2.15.0. O modo escolhido vira o padrão do site, do vídeo e da demonstração | Voz vale 25% e é o primeiro desempate, e hoje nenhuma resposta foi medida | Gustavo no código, Breno no papel da idosa, Stephanie anota | 1h30 | 18h |
+| 3 | **Ligar pros avós das 20h às 23h** no modo escolhido, com a chave paga confirmada, perguntando à família quanto pagaria por mês. Ligar de novo pros mesmos avós no domingo às 9h | Validação sai do zero, e a reação de uma avó real vira a história do pitch | Breno, Vitor e Stephanie | 3h mais 1h | 23h e domingo 10h |
+| 4 | **Gravar o vídeo e montar o palco** no sábado à noite: celular da idosa ao lado do painel, a conversa com uma interrupção, a queda e o aviso chegando. No palco, internet do celular, fone com microfone ou celular perto da boca de quem faz a idosa, ninguém falando perto, e quem faz a idosa falando primeiro | É entrega obrigatória e a reserva se a internet cair. O barulho do salão é o maior risco da demonstração ao vivo | Breno no roteiro, Gustavo nos aparelhos | 2h | meia-noite |
+| 5 | **Fechar números e entregas.** Custo e preço certos (seção 6), as frases que saem do pitch, um teto de 5 a 7 minutos por ligação no código, versão igual no README e no `package.json`, etiqueta `entrega`, site publicado da mesma gravação, varredura final de chaves e o time conferido no OS | Sem as entregas não tem nota, e número errado na frente da Agora custa ponto em problema e em clareza | Stephanie nos números, Gustavo na versão e no teto, Breno no OS | 2h | domingo 10h |
 
-Duas que ajudam se sobrar tempo:
-- **Uma frase do Terça da Serra.** Se o Vitor conseguir dos sócios uma frase sobre usar a Dona Leda nos residenciais, ela vira prova de comprador no slide de problema e na validação. Só com o sim deles pra citar.
-- **Ensaiar a demonstração ao vivo três vezes**, com o painel da família na tela do projetor e o celular da idosa ao lado, cronometrando os 2 minutos.
+## 5. O que estava errado na primeira versão
 
-## 4. Trocar a voz pelo Gemini Live
+- **"Em outubro, três peças levaram de 2 a 4 s."** Era outra montagem, com o cérebro do Virte e a voz MiniMax. A montagem de hoje nunca foi medida.
+- **"Testar o Gemini junto com o lembrete de silêncio."** A Agora não aplica o lembrete de silêncio ao Gemini, e o foco na voz também não vale nesse modo.
+- **"A Dona Leda para de falar sempre que escuta voz por cima."** Em parte. O risco maior é a voz de fundo entrar como fala da idosa: ela responde ao que outra pessoa disse e pode criar aviso falso no painel.
+- **"Ligar o foco na voz leva 30 minutos."** O time já ligou às 13h29, no modo de três peças. É recurso Beta e trava na primeira voz alta e clara da ligação, então quem apresenta não pode falar perto do celular antes da idosa. O filtro de ruído ligado no mesmo envio provavelmente não roda no navegador do celular: o código confere se o aparelho aceita e desliga sem avisar.
+- **"A interrupção acontece com 240 ms."** Enquanto ela fala, vale o padrão de 160 ms, e os 240 ms valem pra outro momento. No Gemini, a sensibilidade está no máximo.
+- **"O preço precisa passar de R$ 100."** Errado. Ver seção 6.
+- **"Os idosos foram 16% das vítimas de golpe (Febraban)."** A fonte é o DataSenado.
+- **"O CareCall está em mais de 100 prefeituras."** São 128 de 229 municípios em setembro de 2024, e ele liga uma ou duas vezes por semana.
+- **"Meela, Callie e CareCall ligam todo dia."** A Meela parou com a ligação de companhia. Ligam todo dia a Callie Care, a Joy Calls, a ElderVoice e a AloneAssist.
+- **"Nenhum concorrente faz checagem de golpe."** A NTT, no Japão, desde 2020, e a SK Telecom, na Coreia, desde abril de 2026, avisam a família durante a ligação do golpista. O que a pesquisa não achou foi uma assistente de companhia que liga pro idoso e conversa com ele sobre golpe.
+- **"No CareCall, o número que importa é quem atende de novo."** O estudo só publicou que 11,2% nunca atenderam. A régua que dá pra medir até domingo é a da primeira ligação e a da segunda, no domingo de manhã.
 
-### As peças da conversa
+## 6. Números pro pitch e pras perguntas
 
-Hoje são três peças em fila: o Deepgram escuta, a OpenAI pensa e a voz da OpenAI fala, e cada passagem soma tempo. No Gemini Live um modelo só escuta, pensa e fala, dentro do mesmo motor de conversa da Agora, então a integração com a Agora continua inteira.
+- **Custo por idoso por mês**, com o dólar oficial de 19/11 (R$ 5,8889) e uma ligação por dia de 5 minutos: R$ 88 no modo de três peças e de R$ 100 a 110 no Gemini, que soma o minuto do Google ao da Agora. Com 10 minutos por dia, o dobro. O produto liga duas vezes por dia por padrão (9h e 19h), então a conta precisa dizer quantas ligações cabem no preço.
+- **Preço que fecha na tabela da Agora:** de R$ 220 a 250 por mês, com uma ligação de até 5 minutos por dia. A família já paga de R$ 100 a 230 por botão de emergência, e um cuidador custa de R$ 2.800 a 4.500. Com volume, entra o preço de contrato da Agora.
+- **Sem teto de tempo hoje.** A assistente só sai sozinha 2 minutos depois de todo mundo sair da sala. Com o idoso calado e a ligação aberta, ela fica até a permissão vencer, em 1 hora. Só dizer à banca que a ligação tem teto depois de ele existir no código.
+- **Problema:** cerca de 6 milhões de pessoas com 60 anos ou mais moram sozinhas (41% dos 15,6 milhões que moram sozinhos, PNAD Contínua 2025). Golpe: 16% das vítimas de golpe digital em 2024 tinham 60 anos ou mais (DataSenado).
+- **Frases que saem do pitch e do repositório:** "ninguém faz aviso de golpe", "mesmo se a IA falhar" (vira "mesmo se a IA esquecer de avisar") e "o produto roda fora da Agora depois do hackathon", que não se diz pra uma banca da Agora.
+- **Perguntas que os três jurados fariam:** qual o tempo de resposta e como mediram; quantos idosos usaram e quantos atenderam de novo; quanto custa por idoso e quem paga; e se ela não perceber a queda; quem deixa o aparelho ligado pra uma senhora de 82 anos; isso não é vigiar o idoso; isso não é dispositivo médico. A resposta de cada uma sai dos números acima e das seções de limites do README.
 
-### O que a Agora aceita hoje
+## 7. O modo Gemini, como está às 13h50
 
-Pela documentação lida em 21/11 e pelo pacote `agora-agents` 2.9.0 instalado no projeto:
-- O pacote já tem o Gemini Live. Os modelos são `gemini-3.8-live` e `gemini-3.8-live-extended-thinking`, e a lista de vozes tem uma chamada **Leda**.
-- **Precisa de chave própria do Google** (AI Studio). As chaves gerenciadas pela Agora não cobrem o Gemini. A chave vai só nas variáveis da Vercel, nunca no repositório.
-- **As ações por MCP funcionam** com esse modo, segundo a documentação. A versão 2.9.0 do pacote não manda as ações junto com o Gemini (o campo não existe ali); a 2.15.0, de 19/11, precisa ser conferida, ou o campo entra à mão no pedido.
-- **Avatar em vídeo não funciona junto.** O pacote recusa a combinação. Como o plano já é o rosto desenhado, isso custa pouco agora e fecha o caminho do avatar.
-- **O ajuste de silêncio muda de lugar.** Ele passa a ir dentro do bloco do Gemini, senão os 650 ms e a interrupção somem sem aviso.
-- **A legenda e as regras fixas de segurança dependem da transcrição** da fala do idoso. Ela precisa estar ligada (`transcribeUser` e `transcribeAgent`), senão o aviso de queda e de Pix para de chegar no painel.
-- **Custo.** O Google cobra o minuto dele, e a Agora segue cobrando US$ 0,10 por minuto.
-
-### Efeito na nota
-
-Se a resposta cair pra menos de 1,5 s e ela calar em menos de 1 s quando interrompida, a voz sobe de 3 pra 4, e pode chegar a 5 com sotaque brasileiro bom. A opção de a voz mudar de tom pela emoção da pessoa (`affectiveDialog`) ajuda em inovação. A parte técnica fica igual se as ações e a legenda continuarem, e cai se quebrarem. No total, de +0,25 a +0,4 na nota final.
-
-### O que testar
-
-Nesta ordem, e cada item passa ou não passa:
-1. Sotaque: três frases com as vozes Leda, Aoede e Kore. Fica a que soar do Brasil.
-2. Tempo de resposta em três falas seguidas. Meta: menos de 1,5 s.
-3. Interromper no meio da frase dela. Meta: calar em menos de 1 s.
-4. Pausa de 1 s no meio da frase do idoso. Ela não pode cortar.
-5. A ficha de hoje preenche sono, comida e remédio. Prova de que as ações chegam.
-6. Queda e Pix viram aviso no painel. Prova de que a transcrição chega nas regras fixas.
-7. A legenda aparece na tela do idoso.
-8. Ela se apresenta como assistente virtual na primeira frase.
-9. Calado por 10 s, ela retoma com calma.
-
-### Como fazer sem risco
-
-Ligar o Gemini por uma variável, deixando o modo de três peças como reserva. Se o item 5, 6 ou 7 falhar, fica o modo atual. Quem: Gustavo, com a conversa "Servidor, voz e banco". Tempo: 1h pra ligar e 30 min pra testar.
-
-Recomendação: testar até as 18h. A voz vale 25% e é o primeiro desempate, e perder o avatar custa pouco porque o rosto desenhado já é o plano.
+- O time pôs o Gemini como modo principal às 13h12, com as três peças de reserva, e a chave já está na Vercel.
+- **Nunca rodou de ponta a ponta.** No pacote 2.9.0, o Gemini 3.8 passa por um endereço de teste da Agora, que a versão 2.10.0 trocou pelo endereço normal. A 2.15.0 já leva as ações por MCP no próprio Gemini, sem o remendo que o time escreveu.
+- **Desligar pode não tirar a assistente da sala** no 2.9.0, porque o pedido de parada vai pro endereço normal. Ela fica até 2 minutos a mais em cada ligação, cobrando.
+- **Se o Gemini falhar, nada troca sozinho** pro modo de três peças, e a tela fica muda.
+- **Avatar não funciona junto.** Como o rosto é um desenho, isso custa pouco.
+- **O que decide:** a ação 2. Se a saudação não tocar, a ficha não preencher, a legenda não aparecer ou "Eu caí no banheiro" não chegar inteira no aviso, o palco usa as três peças.
