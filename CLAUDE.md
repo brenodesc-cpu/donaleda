@@ -22,6 +22,7 @@ Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta
 | [conhecimento/validacao.md](conhecimento/validacao.md) | O kit das ligações com idosos de verdade e os resultados sem nome | Ao montar a validação ou o pitch |
 | [conhecimento/segundo-cerebro.md](conhecimento/segundo-cerebro.md) | O desenho do que a Dona Leda aprende da vida do idoso, como a conversa lê e grava, o que a família vê e o que o idoso controla por voz (aguardando aprovação do Breno) | Antes de mexer nas lembranças, na instrução da conversa ou no painel da família |
 | [conhecimento/verificacao.md](conhecimento/verificacao.md) | A Dona Leda conferida contra o regulamento: regras que eliminam, nota provável por critério, as ações que mais sobem a nota e a análise do Gemini Live | Ao priorizar o que falta até a entrega |
+| [conhecimento/landing.md](conhecimento/landing.md) | O briefing da página de apresentação: quem lê, os blocos, as regras do conteúdo, as três direções e como publicar | Ao montar ou mexer na landing page |
 
 Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da base no mesmo envio do código. Escreva o que vale hoje, com a data.
 
