@@ -39,6 +39,17 @@ O que a gente já sabe, sem ter falado com advogado:
 
 A nossa versão já guarda pouco: a ficha do dia, as lembranças, os avisos e o resumo, sem a conversa inteira.
 
+### 4. Passar a ligação pra uma pessoa na hora da urgência
+
+Ideia do time em 21/11: quando surgir uma necessidade urgente, a assistente conecta o idoso na hora com uma pessoa responsável. O time considera isso obrigatório no produto.
+
+Falta decidir quem atende:
+
+- **Alguém de confiança do idoso** (o filho, um vizinho). Mais simples: a família cadastra um ou dois contatos, e a assistente chama o primeiro que atender, na mesma chamada.
+- **Um cuidador de plantão**, em parceria com uma empresa de cuidadores. Cobre a madrugada e o filho que não atende, mas depende de contrato.
+
+Hoje a assistente avisa a família pelo painel e manda ligar pro 192. O passo seguinte é pôr o familiar dentro da mesma chamada da Agora, com voz e vídeo.
+
 ## Como usar isso no pitch
 
 Na parte de limites e próximos passos, que vale 10% da nota: o toque no botão é o limite de hoje, e o aparelho próprio é a segunda fase.

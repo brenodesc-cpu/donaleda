@@ -39,6 +39,15 @@ function modelo(): ModeloGerenciado {
 }
 
 /**
+ * Quanto silêncio a assistente espera antes de responder, em milissegundos.
+ * 650 por padrão: menos que isso atropela quem fala com pausas, mais que isso deixa a conversa lenta.
+ */
+function esperaDeSilencio(): number {
+  const pedido = Number(process.env.LIA_SILENCIO_MS);
+  return Number.isFinite(pedido) && pedido >= 300 && pedido <= 2000 ? pedido : 650;
+}
+
+/**
  * A voz. LIA_VOZ escolhe o fornecedor e a voz, no formato "fornecedor:voz".
  * - openai:nova (padrão, sem chave própria, fala português do Brasil)
  * - minimax:<id da voz> (sem chave própria)
@@ -135,7 +144,7 @@ export async function POST(request: NextRequest) {
           },
           end_of_speech: {
             mode: 'vad',
-            vad_config: { silence_duration_ms: 900 },
+            vad_config: { silence_duration_ms: esperaDeSilencio() },
           },
         },
       },
@@ -156,7 +165,7 @@ export async function POST(request: NextRequest) {
           greetingMessage: saudacao,
           failureMessage: SE_FALHAR,
           maxHistory: 30,
-          params: { max_tokens: 400, temperature: 0.6 },
+          params: { max_tokens: 220, temperature: 0.6 },
           ...(comFerramentas
             ? {
                 mcpServers: [
