@@ -47,6 +47,7 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
   - **A sala de áudio:** US$ 0,99 por mil minutos por participante, com 10 mil minutos grátis por mês (página de preço da Agora). Com o aparelho do idoso e o nosso servidor na sala, os minutos grátis cobrem umas 50 famílias por mês.
   - **O Google medido com gente de verdade:** a voz do Virte, o outro app do Breno, usa o Gemini ao vivo direto. Em outubro de 2026 foram 24 pessoas, 117 conversas e 160 minutos por US$ 3,53, ou US$ 0,022 por minuto. Em novembro, até o dia 21, foram 18 pessoas, 78 conversas e 126 minutos por US$ 3,45, ou US$ 0,027 por minuto. A fonte é o banco do Virte, lido em 21/11 às 18h10, com os tokens que o Google devolve em cada conversa, os minutos de voz de cada dia e o preço publicado do modelo.
   - **Por que o número conservador fica:** as conversas do Virte duram menos de 2 minutos, e o Google cobra de novo a conversa inteira a cada fala, então a ligação de 3 minutos e 20 segundos custa mais por minuto. A estimativa de US$ 0,042 por minuto continua sendo o pior caso.
+  - **O que a medida do Virte prova:** que o Gemini direto é barato. Ela vem de conversas de menos de 2 minutos, com instruções de uns 23 mil tokens, e na ligação da Dona Leda pesa o áudio que se acumula ao longo da conversa. Pra prever a ligação da Dona Leda, ela serve só de referência.
   - **O que falta:** o cenário 2 ainda não foi construído, e o custo do nosso servidor ainda não foi medido.
   - **A Agora no hackathon:** o regulamento pede que a Agora funcione na demonstração e não diz qual serviço usar. Até a entrega, o protótipo fica no motor de conversa da Agora.
 - **Quanto custa cada família por mês,** linha por linha, com o preço de R$ 129,90 e 100 minutos (dólar de 19/11):
@@ -64,6 +65,11 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
 
   - **Só a sala da Agora sai de graça pras primeiras famílias:** os 10 mil minutos grátis por mês cobrem umas 100 famílias com um participante na sala, ou umas 50 com dois. O Google cobra desde a primeira família.
   - **O modo direto** está sendo construído num ramo separado, na conversa "Voz direta no Gemini".
+
+- **Depois dos dois ajustes que o Breno aprovou em 21/11, ainda fora do ar:** ligar a compressão da conversa do Gemini, com a conversa do servidor, e encurtar as instruções da Dona Leda em uns 40%, com a conversa de segurança.
+  - Contando cada trecho uma vez só, uma ligação de 3 minutos e 20 segundos custa uns US$ 0,064 no Google: US$ 0,015 do áudio que entra, US$ 0,027 do áudio que sai (uns 90 segundos de fala dela), US$ 0,020 das instruções cobradas a cada fala (uns 2 mil tokens, em umas 13 falas) e US$ 0,002 da legenda. Nas 30 ligações do mês, R$ 11.
+  - Sem compressão, a estimativa da tese é US$ 0,14 por ligação, ou R$ 25 por mês. Com a compressão ligada o custo fica entre os dois, e a estimativa até a medida é de uns R$ 15 por mês de Gemini.
+  - Com isso, cada família custa uns R$ 74 por mês do jeito de hoje (R$ 15 de Gemini e R$ 59 da Agora), e sobram R$ 31. No modo direto custa uns R$ 16 (R$ 15 de Gemini e R$ 1 de sala), e sobram R$ 89.
 
 - **Os custos fixos,** que não mudam com o número de famílias. Hoje estão em zero, porque o projeto usa os planos grátis:
 
@@ -164,7 +170,7 @@ Desde 21/11/2026, às 17h, a família paga e a casa de repouso indica. Das 15h �
 
 ### Quanto custa a conversa e quanto cobrar (conta de 21/11/2026, à tarde)
 
-Proposta pra Stephanie e Breno decidirem. A conta usa o dólar oficial de 19/11 (R$ 5,8889), o mesmo da verificação, e os preços publicados lidos em 21/11. No hackathon o uso está liberado.
+Proposta pra Stephanie e Breno decidirem. A conta usa o dólar oficial de 19/11 (R$ 5,8889), o mesmo da verificação, e os preços publicados lidos em 21/11. A conta da Agora está no plano grátis, com 300 minutos do motor de conversa por mês, sem sinal de crédito do hackathon (visto pela conversa do servidor em 21/11), e o Breno vai perguntar à Agora.
 
 **O que cada ligação paga**
 - **O motor de conversa da Agora:** US$ 0,10 por minuto. Já inclui a escuta, o modelo e a voz das peças que a Agora gerencia (o modo reserva inteiro). Com chave própria o preço é o mesmo, diz a página de preços. A Agora não escreve com todas as letras que isso vale pro Gemini Live, e é a leitura mais provável, porque não existe outra tarifa.

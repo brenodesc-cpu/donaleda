@@ -219,7 +219,7 @@ Ordem decidida em 21/11, às 17h. O raciocínio está em "Quem paga e quem indic
 **Temos**
 - Quatro pessoas: pitch e produto (Breno e Vitor), preço e dados (Stephanie), software e aplicativo nativo (Gustavo).
 - O protótipo funcionando: a assistente liga, conversa em português pela Agora, anota o que ouviu, avisa a família e mostra o painel.
-- A Agora: chaves emprestadas de escuta, modelo e voz, e uso liberado no hackathon.
+- A Agora: chaves emprestadas de escuta, modelo e voz, e a conta no plano grátis, com 300 minutos do motor de conversa por mês. Se o hackathon libera mais, o Breno vai perguntar à Agora.
 - Um plano semanal inteiro do Claude pro time.
 - A primeira casa de repouso parceira, que topou indicar a Dona Leda às famílias.
 - O contato direto do Vitor com os sócios de uma rede de residenciais sênior com mais de cem unidades.
