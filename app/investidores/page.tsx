@@ -46,19 +46,30 @@ const metricas = [
 const perguntasFrequentes = [
   {
     pergunta: 'Por que uma família pagaria pela Dona Leda?',
-    resposta: 'Quem mora longe costuma se perguntar se a mãe almoçou, dormiu bem ou passou o dia sem conversar com alguém. E nem sempre dá para ligar na hora certa. A Dona Leda liga no horário combinado e reúne o que a pessoa contou em uma ficha no painel. Assim, a família tem assunto para puxar na próxima conversa e consegue perceber quando vale ligar mais cedo.',
+    resposta: (
+      <>
+        <p><strong>Ter notícias mesmo de longe.</strong> Quem mora longe quer saber se a mãe ou o pai almoçou, dormiu bem ou passou o dia sem conversar com alguém. A Dona Leda liga no horário combinado e reúne o que a pessoa contou. Isso dá à família assunto para a próxima conversa e pistas de quando vale ligar mais cedo.</p>
+        <p><strong>Acompanhar como a pessoa está se sentindo.</strong> Ao consultar os relatos de vários dias, a família pode notar mudanças de humor, cansaço ou dúvidas que se repetem sobre os remédios. Um relato de dose esquecida ou versões diferentes sobre a mesma dose dão motivo para conversar. O painel registra o que a pessoa contou. Se houver dúvida, a família pode conferir o organizador de comprimidos ou falar com quem acompanhou a tomada.</p>
+      </>
+    ),
   },
   {
     pergunta: 'Por que uma ILPI teria interesse em contratar ou indicar a Dona Leda?',
-    resposta: 'Uma instituição de longa permanência para pessoas idosas (ILPI) recebe famílias que ainda estão decidindo como cuidar de alguém que mora em casa. Ao indicar a Dona Leda, a instituição oferece a essas famílias uma forma de acompanhar a rotina enquanto decidem os próximos passos. Para uma ILPI que queira usar o produto com moradores, a hipótese é reunir relatos do dia em um painel para orientar o acompanhamento da equipe. Hoje, o foco comercial é a assinatura familiar, com a ILPI como parceira de indicação. A contratação pela instituição ainda é uma hipótese a testar.',
+    resposta: (
+      <>
+        <p><strong>Apoiar famílias que procuram o residencial.</strong> Uma instituição de longa permanência para pessoas idosas (ILPI) recebe famílias que ainda estão decidindo como cuidar de alguém que mora em casa. Ao indicar a Dona Leda, oferece a essas famílias uma forma de acompanhar a rotina enquanto decidem os próximos passos.</p>
+        <p><strong>Reduzir o tempo de organizar informações entre turnos.</strong> Num piloto com moradores que queiram participar, a Dona Leda pode reunir em um painel o que cada pessoa contou sobre sono, apetite e humor. Antes da passagem de plantão, a equipe consulta os relatos e decide com quem falar primeiro. O ganho a testar é gastar menos tempo reunindo anotações, liberando tempo para o cuidado presencial. O piloto pode medir os minutos gastos por turno antes e durante o uso, incluindo a revisão dos relatos e dos avisos.</p>
+        <p>O foco comercial atual é a assinatura familiar, com a ILPI como parceira de indicação. A contratação institucional e a economia de tempo ainda precisam ser validadas.</p>
+      </>
+    ),
   },
   {
     pergunta: 'O que acontece se a pessoa não atender?',
-    resposta: 'A Dona Leda tenta ligar novamente depois de três minutos. Se a segunda chamada também ficar sem resposta, o painel registra um aviso para a família decidir se deve ligar ou pedir a alguém que passe por lá. Em uma emergência, acione o serviço de emergência.',
+    resposta: <p>A Dona Leda tenta ligar novamente depois de três minutos. Se a segunda chamada também ficar sem resposta, o painel registra um aviso para a família decidir se deve ligar ou pedir a alguém que passe por lá. Em uma emergência, acione o serviço de emergência.</p>,
   },
   {
     pergunta: 'Quem usa e o que é preciso para começar?',
-    resposta: 'Nesta versão, o foco é a pessoa idosa que mora sozinha, quer receber as ligações e consegue conversar com a assistente. Ela precisa de um celular ou tablet compatível com internet. A família prepara o aparelho, combina o horário com a pessoa e consulta os relatos no painel.',
+    resposta: <p>Nesta versão, o foco é a pessoa idosa que mora sozinha, quer receber as ligações e consegue conversar com a assistente. Ela precisa de um celular ou tablet compatível com internet. A família prepara o aparelho, combina o horário com a pessoa e consulta os relatos no painel.</p>,
   },
 ];
 
@@ -177,7 +188,7 @@ export default function PaginaDeInvestidores() {
                     {pergunta}
                     <ChevronDown aria-hidden size={20} className="shrink-0 text-primary group-open:rotate-180" />
                   </summary>
-                  <p className="px-4 pb-5 text-base leading-relaxed text-muted-foreground sm:px-6">{resposta}</p>
+                  <div className="space-y-3 px-4 pb-5 text-base leading-relaxed text-muted-foreground sm:px-6">{resposta}</div>
                 </details>
               ))}
             </div>
