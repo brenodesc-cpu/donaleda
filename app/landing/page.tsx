@@ -40,18 +40,18 @@ export default function LandingPage() {
           </Link>
         </header>
 
-        <section className={`${LARGURA} grid items-center gap-14 pb-20 pt-8 lg:grid-cols-[1fr_auto] lg:gap-20 lg:pb-28 lg:pt-12`}>
+        <section className={`${LARGURA} grid items-center gap-14 pb-20 pt-8 lg:grid-cols-[1fr_auto] lg:gap-20 lg:pb-24 lg:pt-6`}>
           <div>
-            <h1 className="font-titulo text-[clamp(2.25rem,7.6vw,4.25rem)] font-extrabold leading-[1.03] tracking-[-0.025em]">
-              <SemViuva texto={SONHO[0]} />
+            <h1 className="font-titulo text-[clamp(2.25rem,4.6vw,3.25rem)] font-extrabold leading-[1.04] tracking-[-0.025em]">
+              <SemViuva texto={SONHO[0]} palavras={2} />
               <span className="mt-[0.4em] block">
                 <SemViuva texto={SONHO[1]} />
               </span>
             </h1>
-            <p className={`mt-8 max-w-[36rem] text-xl leading-relaxed sm:text-[1.375rem] ${CLARO_NO_ESCURO}`}>
+            <p className={`mt-7 max-w-[36rem] text-xl leading-relaxed sm:text-[1.375rem] ${CLARO_NO_ESCURO}`}>
               {DEFINICAO}
             </p>
-            <div className="mt-9 flex flex-col gap-5 sm:flex-row sm:items-center">
+            <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center">
               <BotaoPrincipal tom="casca" />
               <a href="#como-funciona" className="flex min-h-11 items-center text-lg font-semibold underline hover:no-underline">
                 Ver como funciona
