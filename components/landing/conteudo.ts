@@ -138,7 +138,7 @@ export const PERGUNTAS = [
   {
     pergunta: 'Quanto custa?',
     resposta:
-      'O plano da família custa R$ 129,90 por mês, com uma ligação por dia de uns 3 minutos, depois de sete dias de teste grátis. É menos de um décimo do preço de um cuidador. A cobrança ainda não começou: a Dona Leda está em fase de teste.',
+      'O plano da família custa R$ 129,90 por mês, com até 10 minutos de conversa por dia, depois de sete dias de teste grátis. É menos de um décimo do preço de um cuidador. A cobrança ainda não começou: a Dona Leda está em fase de teste.',
   },
   {
     pergunta: 'Como uma casa de repouso vira parceira?',

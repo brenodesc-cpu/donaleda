@@ -33,7 +33,7 @@ A parte "A camada de cuidado", com uma aba por necessidade, saiu em 21/11/2026: 
 
 - A página só afirma o que o produto faz hoje. `proposta-de-valor.md` separa o que existe do que vem depois, e na dúvida o código decide.
 - Todo número leva a fonte e vem dos arquivos da base. `verificacao.md` tem os números corrigidos.
-- O preço da família é R$ 129,90 por mês (decisão do Breno em 21/11/2026, em `decisoes.md`). Ele aparece na pergunta "Quanto custa?", com uma ligação por dia de uns 3 minutos e sete dias de teste grátis antes. A cobrança e o teste grátis ainda não existem no código, então a resposta diz que a cobrança ainda não começou. O resto da página continua com "menos de um décimo do preço de um cuidador", e o preço das casas de repouso fica de fora.
+- O preço da família é R$ 129,90 por mês (decisão do Breno em 21/11/2026, em `decisoes.md`). Ele aparece na pergunta "Quanto custa?", com até 10 minutos de conversa por dia (decisão do Breno às 19h10) e sete dias de teste grátis antes. A cobrança e o teste grátis ainda não existem no código, então a resposta diz que a cobrança ainda não começou. O resto da página continua com "menos de um décimo do preço de um cuidador", e o preço das casas de repouso fica de fora.
 - Depoimento inventado, foto de pessoa real sem autorização e logo de empresa que não é cliente ficam de fora. Nome de gente da rede de residenciais também.
 - Texto em português simples, com frase inteira e sem travessão. A marca fala com carinho e sem infantilizar (ver `marca.md`).
 
