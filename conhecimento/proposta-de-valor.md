@@ -88,7 +88,7 @@ Frase pra conversa com o residencial (proposta): "Cada morador ganha uma convers
 
 Conferido no código em 21/11: uma conta já acompanha vários idosos, um de cada vez, e cada idoso tem ficha, avisos, resumo e ligações. Pra atender uma casa inteira ainda falta:
 
-- A tela da casa, com todos os moradores juntos.
+- ~~A tela da casa, com todos os moradores juntos.~~ Feita em 21/11, em `/familia/casa` ("Todos os moradores"): três colunas (com aviso novo, ainda não conversou hoje, conversou sem aviso), "Já vi" e "Ligar agora" no cartão, e o toque no nome abre o painel do morador. O remédio fica fora dessa tela, porque no residencial é da equipe. Pra demonstrar, "Ver um residencial de exemplo" no primeiro cadastro cria oito moradores inventados. A tela busca o painel de cada morador a cada 5 segundos, o que serve pra casa da demonstração; pra 30 moradores ou mais, falta o servidor devolver todos numa chamada só (`GET /api/casa`).
 - O convite pra família de cada morador entrar e ver só o dela.
 - O saldo de minutos e a cobrança por casa.
 - Trocar "saiu de casa" por uma pergunta que faça sentido lá dentro, como "saiu do quarto" ou "foi a uma atividade".

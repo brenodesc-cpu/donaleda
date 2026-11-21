@@ -60,6 +60,10 @@ export const buscarIdosos = () => pedir<IdosoDaFamilia[]>('/api/idosos');
 export const criarIdoso = (novo: NovoIdoso | { exemplo: true }) =>
   pedir<{ id: string }>('/api/idosos', postar(novo));
 
+/** Os oito moradores inventados do residencial de exemplo, de uma vez. */
+export const criarResidencial = () =>
+  pedir<{ ok: boolean; ids: string[] }>('/api/idosos', postar({ exemplo: 'residencial' }));
+
 export const apagarIdoso = (idosoId: string) =>
   pedir<{ ok: boolean }>(`/api/idosos?id=${encodeURIComponent(idosoId)}`, { method: 'DELETE' });
 

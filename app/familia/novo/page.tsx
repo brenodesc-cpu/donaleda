@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { NovoIdoso } from '@/lib/tipos';
-import { criarIdoso, deuCerto, enderecoCom } from '@/components/familia/api';
+import { criarIdoso, criarResidencial, deuCerto, enderecoCom } from '@/components/familia/api';
 import { CLASSE_DO_BOTAO_SECUNDARIO, Erro } from '@/components/familia/campos';
 import { guardarIdosoEscolhido } from '@/components/familia/conta';
 import { FormularioDoIdoso } from '@/components/familia/FormularioDoIdoso';
@@ -36,6 +36,23 @@ export default function NovoIdosoPage() {
     router.replace(enderecoCom(depois === 'aparelho' ? '/familia/aparelho' : '/familia', dado.id));
   };
 
+  const handleResidencial = async () => {
+    setEnviando(true);
+    setErro(null);
+    setOrigemDoErro('exemplo');
+    const { status } = await criarResidencial();
+    if (status === 401) {
+      router.replace('/entrar');
+      return;
+    }
+    if (!deuCerto(status)) {
+      setEnviando(false);
+      setErro('Não deu pra montar o exemplo agora. Tente de novo.');
+      return;
+    }
+    router.replace('/familia/casa');
+  };
+
   const handleEnviar = (novo: NovoIdoso) => void cadastrar(novo, 'aparelho');
   const handleExemplo = () => void cadastrar({ exemplo: true }, 'painel');
 
@@ -58,6 +75,13 @@ export default function NovoIdosoPage() {
           </p>
           <button type="button" onClick={handleExemplo} disabled={enviando} className={CLASSE_DO_BOTAO_SECUNDARIO}>
             Ver com um exemplo
+          </button>
+          <p className="text-base text-foreground">
+            Num residencial, a equipe vê todos os moradores numa tela só. O exemplo tem oito
+            moradores inventados.
+          </p>
+          <button type="button" onClick={() => void handleResidencial()} disabled={enviando} className={CLASSE_DO_BOTAO_SECUNDARIO}>
+            Ver um residencial de exemplo
           </button>
           <Erro texto={origemDoErro === 'exemplo' ? erro : null} />
         </section>

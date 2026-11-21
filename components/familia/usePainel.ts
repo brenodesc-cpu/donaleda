@@ -35,7 +35,7 @@ function motivoDa(dado: unknown): string | null {
 /** Como está o pedido de "Ligar agora" feito neste painel. */
 export type PedidoDeLigacao = 'parado' | 'pedindo' | 'falhou';
 
-function pareceUmPainel(dado: unknown): dado is PainelDaFamilia {
+export function pareceUmPainel(dado: unknown): dado is PainelDaFamilia {
   if (!dado || typeof dado !== 'object') return false;
   const p = dado as Partial<PainelDaFamilia>;
   return (
@@ -48,7 +48,7 @@ function pareceUmPainel(dado: unknown): dado is PainelDaFamilia {
 }
 
 /** Campo que faltar na resposta vira vazio, pra tela nunca quebrar. */
-function completar(dado: PainelDaFamilia): PainelDaFamilia {
+export function completar(dado: PainelDaFamilia): PainelDaFamilia {
   const { idoso } = dado;
   return {
     ...dado,

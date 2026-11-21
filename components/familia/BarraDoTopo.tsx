@@ -3,14 +3,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, type ChangeEvent } from 'react';
-import { LogOut, Settings, Smartphone, LayoutDashboard } from 'lucide-react';
+import { LogOut, Settings, Smartphone, LayoutDashboard, Users } from 'lucide-react';
 import { Logo } from '@/components/marca/Logo';
 import type { IdosoDaFamilia } from '@/lib/tipos';
 import { enderecoCom } from './api';
 import { sair } from './conta';
 import { comMaiuscula } from './formatos';
 
-export type TelaDaFamilia = 'painel' | 'aparelho' | 'ajustes' | 'novo';
+export type TelaDaFamilia = 'painel' | 'aparelho' | 'ajustes' | 'novo' | 'casa';
 
 interface BarraDoTopoProps {
   idosos: IdosoDaFamilia[] | null;
@@ -64,7 +64,7 @@ export function BarraDoTopo({ idosos, idoso, onEscolher, ativa }: BarraDoTopoPro
         </button>
       </div>
 
-      {idosos && idosos.length > 1 && idoso ? (
+      {idosos && idosos.length > 1 && idoso && ativa !== 'casa' ? (
         <label className="flex flex-col gap-1 text-base text-muted-foreground">
           Acompanhando
           <select
@@ -83,6 +83,12 @@ export function BarraDoTopo({ idosos, idoso, onEscolher, ativa }: BarraDoTopoPro
 
       {id ? (
         <nav aria-label="Telas da família" className="-mx-1 flex flex-wrap gap-1">
+          {idosos && idosos.length > 1 ? (
+            <Link href="/familia/casa" className={classeDo(ativa === 'casa')}>
+              <Users aria-hidden="true" className="h-5 w-5" />
+              Todos os moradores
+            </Link>
+          ) : null}
           <Link href={enderecoCom('/familia', id)} className={classeDo(ativa === 'painel')}>
             <LayoutDashboard aria-hidden="true" className="h-5 w-5" />
             Painel
