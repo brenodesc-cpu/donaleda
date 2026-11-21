@@ -15,7 +15,7 @@ Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (PNAD Cont
 
 ## Pra quem
 
-A pessoa idosa usa, e só precisa atender. Quem contrata primeiro é o residencial sênior, que paga por morador e oferece a Dona Leda como serviço da casa, e a família do morador acompanha pelo painel. Depois vêm as empresas que já atendem o idoso que mora sozinho (teleassistência, plano de saúde de idoso e prefeitura), quando houver resultado medido num piloto. A família também pode contratar direto.
+A pessoa idosa lúcida que mora sozinha usa, e só precisa atender. O filho ou a filha que mora longe contrata e acompanha pelo painel. As casas de repouso parceiras indicam a Dona Leda às famílias que as procuram e acompanham os idosos que indicaram. Plano de saúde de idoso e prefeitura compram depois, quando houver resultado medido num piloto.
 
 ## O que a Dona Leda faz
 

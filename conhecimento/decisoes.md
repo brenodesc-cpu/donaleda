@@ -4,6 +4,7 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 | Data | Decisão | Por quê |
 |---|---|---|
+| 21/11/2026 | A família do idoso lúcido que mora sozinho volta a pagar (plano Essencial), e as casas de repouso entram como parceiras que indicam a Dona Leda às famílias e acompanham os idosos que indicaram. O plano Residencial, por morador, dá lugar ao plano Casa, por casa | Decisão do Breno ("Sim, volta") depois da conversa com a primeira casa parceira: a maioria dos moradores tem demência, a casa já cuida do remédio e da rotina, ela vê mais valor no idoso sozinho em casa, recebe muitas famílias divididas sobre levar o idoso, se ofereceu pra indicar e paga uns R$ 230 por casa pelo sistema de gestão |
 | 21/11/2026 | A landing fala primeiro com o residencial sênior: frase e "Fale conosco" no topo, a tela "Todos os moradores" em destaque, e a parte da família mais curta, depois | O Breno pediu ("atualiza a landing pra falar com o residencial"). O residencial compra primeiro, e a página segue o pitch |
 | 21/11/2026 | Num aviso urgente durante a ligação, ou quando a pessoa pede, a família ganha no painel o botão "Entrar na ligação" e entra na mesma sala da Agora. A Dona Leda fala com frase fixa que avisou a filha, anuncia quando ela entra e sai da sala. Telefone comum, pulseira e caixinha com ESP32 ficam como próximos passos (`ideias.md`, itens 5 a 7) | O Breno escolheu entre seis opções depois da conversa com os mentores da tarde ("Sim, a filha"). Responde à pergunta do diferencial claro, põe a assistente, o idoso e a família na mesma sala da Agora e não pede peça nova |
 | 21/11/2026 | Na landing, a parte dos residenciais sobe pra logo depois de "como funciona" e diz o que a casa leva hoje | O Breno decidiu ("sim, sobe a parte do residencial"). O residencial passou a ser quem compra primeiro, e a banca abre o link depois de ouvir o pitch |
@@ -36,8 +37,7 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 ## Em aberto
 
-- A conversa do Vitor com os sócios da rede de residenciais ainda não aconteceu. É ela que prova que a empresa compra.
-- A landing e o texto do problema falam com a família e do idoso que mora sozinho em casa. Falta decidir se a landing passa a falar primeiro com o residencial.
+- Quantas famílias a primeira casa parceira indica e quantas contratam. A rede de residenciais do contato do Vitor pode entrar do mesmo jeito, como parceira que indica.
 - O que construir pra atender uma casa inteira (a lista está em `proposta-de-valor.md`, em "O que muda no produto").
 - O preço.
 - Avatar em vídeo de verdade ou o rosto desenhado. O código já aceita avatar da Anam ou da HeyGen pela Agora (`LIA_AVATAR`), sem teste ainda, porque falta a conta num dos dois.

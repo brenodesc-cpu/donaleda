@@ -12,7 +12,7 @@ Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (IBGE, PNA
 
 ### Pra quem
 
-O idoso lúcido, com celular ou tablet com internet, só precisa atender. Quem contrata primeiro é o residencial sênior, que paga por morador e oferece a Dona Leda como serviço da casa, e a família do morador acompanha pelo painel. Depois vêm as empresas que já atendem o idoso que mora sozinho (teleassistência, plano de saúde e prefeitura) e a família, que pode contratar direto.
+O idoso lúcido que mora sozinho, com celular ou tablet com internet, só precisa atender. O filho ou a filha que mora longe contrata e acompanha pelo painel. As casas de repouso parceiras indicam a Dona Leda às famílias que as procuram e acompanham os idosos que indicaram.
 
 ### A solução
 
@@ -42,7 +42,7 @@ A Dona Leda é a camada de cuidado de quem envelhece: uma assistente virtual que
 
 ## Notas do time, fora da plataforma: o que foi conferido no código
 
-- **Quem contrata primeiro mudou em 21/11, às 15h:** o "Pra quem" passou a dizer que o residencial sênior contrata por morador. O texto do problema continua falando do idoso que mora sozinho em casa, que é o público do sonho; se a banca estranhar, a resposta está em `proposta-de-valor.md`, em "Perguntas que a banca vai fazer".
+- **Quem contrata, desde 21/11 às 17h:** a família, com as casas de repouso indicando. Das 15h às 17h o "Pra quem" dizia que o residencial contratava por morador.
 - **Sala de áudio só com o microfone:** `components/Conversa.tsx` publica apenas a faixa do microfone (`useLocalMicrophoneTrack` e `usePublish`).
 - **Filtro de ruído:** `hooks/useFiltroDeRuido.ts` usa a extensão `agora-extension-ai-denoiser`. Se o aparelho não aguenta o filtro, o microfone segue sem ele. Ficou fora do texto por falta de espaço.
 - **Engine e os dois modos:** `app/api/invite-agent/route.ts`. O Gemini Live usa `models/gemini-3.8-live`, voz `Leda`, `pt-BR` e a chave em `LIA_GEMINI_KEY`. A reserva usa `DeepgramSTT` (`nova-3`), `OpenAI` (`gpt-4o-mini`) e `OpenAITTS` (`tts-1`). Sem a chave do Google, o servidor passa sozinho pro modo reserva. Se o Gemini falhar, nada troca sozinho pras três peças.

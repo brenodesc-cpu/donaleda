@@ -2,7 +2,7 @@
 
 Aprovada pelo Breno em 21/11/2026, no fim da tarde. Nasceu da pesquisa em `concorrentes.md`. Todo texto de venda, slide, roteiro e tela parte daqui. O que virar decisão passa pra `decisoes.md`. As frases reprovadas estão no fim, no histórico.
 
-**Ajuste de 21/11, às 15h:** depois de uma conversa do time, o Breno mandou ajustar a proposta pra Dona Leda começar vendendo pra empresa. O sonho, a definição, a frase do dinheiro e a assinatura seguem iguais. Quem compra primeiro passou a ser o residencial sênior, e a família passou a acompanhar. O raciocínio inteiro está na seção "Por onde a gente começa".
+**Mudança de 21/11, às 17h:** a Dona Leda volta a ser contratada pela família do idoso lúcido que mora sozinho em casa, e as casas de repouso entram como parceiras que indicam a Dona Leda às famílias. O Breno decidiu depois da conversa com a primeira casa parceira. O sonho, a definição, a frase do dinheiro e a assinatura não mudaram. Das 15h às 17h a proposta começava pela venda ao residencial, por morador, e o motivo da volta está na seção "Quem paga e quem indica".
 
 ## A narrativa aprovada
 
@@ -50,65 +50,59 @@ A ficha anota todo dia se a pessoa saiu de casa e se falou com alguém. Desde 21
 - **Na demonstração**, o pitch vende a camada inteira e mostra a parte que já funciona: a ligação diária, com a ficha e os avisos.
 - **A conferir antes de pôr no slide:** a expectativa de vida de 76,6 anos é do IBGE (2024). O número de anos vividos com a saúde limitada, da OMS, não foi confirmado.
 
-## Por onde a gente começa: pela empresa
+## Quem paga e quem indica
 
-A primeira empresa é a rede de residenciais sênior com que o Vitor fala direto, confirmada pelo Breno em 21/11. A conversa do time que levou a essa mudança não ficou escrita, e os argumentos abaixo vêm do que a base já tinha.
+Decisão do Breno em 21/11, às 17h: a família paga, e a casa de repouso indica.
 
 **A frase do caminho** (proposta, esperando o Breno)
 
-> A gente começa pelo residencial sênior, que já reúne os idosos e já cuida deles todo dia. Com o resultado medido ali, a Dona Leda chega ao plano de saúde e à prefeitura, que alcançam quem não pode pagar.
+> A família do idoso que mora sozinho contrata a Dona Leda. As casas de repouso, que recebem essas famílias toda semana, indicam.
 
-### Por que começar pela empresa
+### O que a primeira casa parceira contou
 
-1. **O filho pagar todo mês era a premissa mais arriscada.** Lá fora ninguém publica quantas famílias pagam, e a Amazon encerrou o Alexa Together, que vendia isso.
-2. **Quem paga mais lá fora é empresa e governo.** A Hermet, da Espanha, vende só pra teleassistência e residenciais e faz 7.500 ligações por mês. O CareCall, da Coreia, é contratado por prefeituras em 128 de 229 distritos, com 30 mil idosos. A care.coach vende pra programas públicos e residenciais a partir de US$ 199 por mês.
-3. **Um contrato traz muitos idosos de uma vez.** A maior rede de residenciais do país tem 160 unidades, e o Vitor fala direto com os sócios de uma rede grande. Na venda pra família, cada idoso é uma venda nova, com gasto de anúncio.
-4. **O preço pesa pouco pra quem compra.** Os R$ 179,90 por morador, propostos em `tese.md`, são de 1,6% a 3% de uma mensalidade de R$ 6 mil a 11 mil.
-5. **A casa resolve o que trava o idoso sozinho.** Ela tem internet e tem gente pra entregar o tablet e ajudar na primeira ligação. Isso é uma aposta nossa, pra confirmar na conversa do Vitor.
-6. **O piloto gera o dado que plano de saúde e prefeitura pedem:** quantos moradores atendem, quantos voltam a atender e como o humor e a dor andam na semana.
+A dona de uma casa de repouso com três unidades topou ser a primeira parceira, na fase de teste e sem cobrança. A ata fica no vault, fora do repositório, porque tem o nome da casa e das pessoas.
 
-### O que o residencial compra
+- **Lá dentro a Dona Leda serve a poucos.** A maioria dos moradores tem demência. Uma parte é lúcida, usa celular e atenderia a chamada de vídeo.
+- **A casa já cuida do remédio e da rotina**, com enfermagem o dia inteiro. Ela não citou nenhuma dor do dia a dia.
+- **Ela vê mais valor no idoso que mora sozinho em casa** e se ofereceu pra indicar a Dona Leda o tempo todo.
+- **Chegam muitas famílias divididas:** parte quer levar o idoso pra casa de repouso e parte não. Pra ela, a Dona Leda ajuda muito nesses casos.
+- **Ela paga uns R$ 230 por mês, por casa, pelo sistema de gestão que usa hoje.** Com cinco moradores usando, os R$ 179,90 por morador que a gente tinha proposto dariam R$ 900, quase quatro vezes o sistema inteiro da casa.
 
-- **Pro morador:** uma conversa só dele todo dia, com alguém que lembra do que ele contou.
-- **Pra família, que paga a mensalidade:** notícia do pai ou da mãe todo dia no celular, sem depender de a equipe ter tempo de ligar.
-- **Pra casa:** um motivo a mais pra família escolher aquele residencial e continuar nele, e a ficha do dia de cada morador (humor, dor, apetite), que mostra à equipe em quem prestar atenção. A ficha informa e fica longe de diagnóstico.
-- **O remédio fica com a equipe da casa.** No residencial a Dona Leda entra como companhia e como notícia pra família.
+### Por que a família paga
 
-Frase pra conversa com o residencial (proposta): "Cada morador ganha uma conversa por dia, e a família dele recebe notícia todo dia. Custa até 3% da mensalidade."
+1. **O idoso do sonho mora em casa**, e é com ele que a Dona Leda faz mais diferença. Na casa de repouso já existe quem pergunte do sono e do remédio.
+2. **A família já paga por esse cuidado.** É o mesmo comprador do botão de emergência, que paga de R$ 189 a 249 por mês por ele, e o plano Essencial proposto custa R$ 229,90.
+3. **A casa traz a família sem gasto com anúncio**, na hora em que ela está decidindo o que fazer com o pai ou a mãe.
 
-### A conta do residencial
+### O que a casa parceira faz e ganha
 
-- **Preço proposto:** R$ 179,90 por morador por mês, com 150 minutos. A decisão continua com a Stephanie e o Breno.
-- **Custo por morador, com 5 minutos por dia:** R$ 89 no modo de três peças e R$ 139 no Gemini. Sobram R$ 63 (35%) no primeiro e R$ 13 (7%) no segundo. Vender pra empresa com o Gemini pede ligação mais curta, preço por volume da Agora ou preço maior.
-- **Uma rede de 2 mil moradores:** R$ 360 mil por mês e R$ 4,3 milhões por ano, se todos os moradores usarem. É o teto de uma rede só.
-- **No país:** 160.784 pessoas moram em instituições de longa permanência pra idosos (IBGE, Censo 2022, divulgado em setembro de 2024). O número junta residencial particular e asilo filantrópico, então a parte que paga esse preço ainda está sem medida.
-- **O tamanho de quem compra:** a maior rede do país faturou R$ 210 milhões em 2025, com 160 unidades e cerca de 3 mil leitos (Mercado & Consumo, junho de 2026).
+- **Indica** a Dona Leda às famílias que procuram a casa, principalmente às que ainda não querem levar o idoso.
+- **Acompanha**, na tela "Todos os moradores", os idosos que indicou e que continuam em casa, quando a família deixar.
+- **Ganha** uma relação com essas famílias. Quando o idoso precisar de mais cuidado, a casa que acompanhou é a primeira lembrada. Isso é uma aposta nossa, pra conferir com as próximas casas.
+- **Não paga** na fase de teste, como ficou combinado com a primeira parceira.
+
+### A conta
+
+- **A família:** plano Essencial, R$ 229,90 por mês com 150 minutos, proposto em `tese.md`. No teto sobram R$ 48 no Gemini e R$ 98 no modo de três peças.
+- **A casa parceira:** não paga pra indicar nem pra acompanhar os idosos que indicou.
+- **A casa que quiser a Dona Leda pros próprios moradores lúcidos:** plano Casa, R$ 229,90 por casa com 200 minutos no saldo da casa, perto do que ela já paga pelo sistema de gestão (conta em `tese.md`).
+- **A decisão do preço continua com a Stephanie e o Breno.**
 
 ### O que muda no produto
 
-Conferido no código em 21/11: uma conta já acompanha vários idosos, um de cada vez, e cada idoso tem ficha, avisos, resumo e ligações. Pra atender uma casa inteira ainda falta:
+Conferido no código em 21/11: uma conta já acompanha vários idosos, e a tela "Todos os moradores" (`/familia/casa`) mostra todos juntos. Pra casa parceira acompanhar os idosos que indicou ainda falta:
 
-- ~~A tela da casa, com todos os moradores juntos.~~ Feita em 21/11, em `/familia/casa` ("Todos os moradores"): três colunas (com aviso novo, ainda não conversou hoje, conversou sem aviso), "Já vi" e "Ligar agora" no cartão, e o toque no nome abre o painel do morador. O remédio fica fora dessa tela, porque no residencial é da equipe. Pra demonstrar, "Ver um residencial de exemplo" no primeiro cadastro cria oito moradores inventados. A tela busca o painel de cada morador a cada 5 segundos, o que serve pra casa da demonstração; pra 30 moradores ou mais, falta o servidor devolver todos numa chamada só (`GET /api/casa`).
-- O convite pra família de cada morador entrar e ver só o dela.
-- O saldo de minutos e a cobrança por casa.
-- Trocar "saiu de casa" por uma pergunta que faça sentido lá dentro, como "saiu do quarto" ou "foi a uma atividade".
-- Tirar a pergunta do remédio nas ligações de residencial.
+- A família autorizar a casa a ver o idoso dela, por convite.
+- A casa ver só o que a família liberar.
+- Anotar qual casa indicou cada família, pra contar as indicações.
 
-A demonstração do hackathon continua a mesma: a ligação, a ficha e os avisos. Muda quem recebe, que passa a ser a família do morador e a equipe da casa.
+A demonstração do hackathon continua a mesma: a ligação, a ficha e os avisos, com a família recebendo.
 
-### Depois do residencial
+### Os riscos
 
-1. **Quem já vende pra família do idoso que mora em casa:** empresa de teleassistência (botão de emergência) e franquia de cuidadores. Elas chegam no idoso do sonho, que mora sozinho, e já cobram a família todo mês. O time ainda não tem contato com nenhuma.
-2. **Plano de saúde de idoso e prefeitura:** compram resultado medido e entram com o dado do piloto. A Prevent Senior tem 549 mil vidas e a MedSênior, 310 mil.
-3. **Médico, clínica e hospital**, ideia que o time levantou no começo: pede um médico responsável, que o time não tem hoje.
-
-A família continua podendo contratar direto pelo site. Ela deixa de ser a aposta do começo até existir prova de que o filho paga todo mês.
-
-### O risco dessa escolha
-
-- **O sonho fala de quem envelhece sozinho em casa**, e o morador de residencial já saiu de casa, com uma família que pode pagar. O residencial entra como o lugar de provar que funciona e de pagar as contas, e o idoso que mora sozinho chega pelos passos seguintes. A banca vai perguntar isso.
-- **A Meela, dos EUA, começou com ligação de companhia em residenciais e saiu:** hoje vende ajuda por telefone direto ao idoso. Companhia sozinha é fraca como negócio, e por isso a venda pro residencial se apoia na notícia pra família e na ficha pra equipe.
-- **Nenhum residencial topou ainda.** Tudo depende da conversa do Vitor com os sócios.
+- **O filho pagar todo mês volta a ser a premissa mais arriscada.** Lá fora ninguém publica quantas famílias pagam, e a Amazon encerrou o Alexa Together.
+- **A indicação pode não virar família pagante.** A primeira casa se ofereceu, e falta ver quantas famílias ela indica e quantas contratam.
+- **A casa pode ver a Dona Leda como concorrente**, se ela adiar a mudança do idoso pra casa de repouso. A primeira parceira enxergou o contrário, e as próximas conversas testam isso.
 
 ## A camada, por dentro
 
@@ -122,7 +116,7 @@ As necessidades da frase do Breno, com o que o protótipo faz hoje e o que vem d
 | **Comunicação** | A família vê o dia, a semana, os avisos e o resumo da conversa no painel, e pode mandar ela ligar na hora. O idoso também liga pra ela quando quiser | "Liga pra minha filha" põe a filha na mesma chamada de vídeo. Recados do idoso chegam na família |
 | **Rotina** | Liga nos horários que a família marcou | Lembretes que a própria pessoa pede ("me lembra do remédio às três") e pequenas tarefas, como pedir remédio, sempre com o sim da família quando envolver dinheiro |
 
-Tudo isso alimenta a ficha de cada idoso. Em cima dela, a família acompanha, a equipe do residencial vê em quem prestar atenção e, depois, médico e plano de saúde podem cuidar melhor.
+Tudo isso alimenta a ficha de cada idoso. Em cima dela, a família acompanha, a casa que indicou vê como o idoso está quando a família deixa e, depois, médico e plano de saúde podem cuidar melhor.
 
 ## Onde está o dinheiro
 
@@ -144,25 +138,24 @@ Hoje essa camada é feita por gente: a filha, de graça, o cuidador por R$ 2.800
 | Cuidador | De R$ 2.800 a 4.500 por mês | Caro pra quem ainda vive sozinho e bem |
 | Residencial | De R$ 6 mil a 11 mil por mês | É pra quando a autonomia acabou |
 
-A Dona Leda entra no espaço entre a família ligar quando dá e contratar um cuidador: o idoso ainda mora sozinho e precisa de cuidado todo dia. No residencial, ela faz a parte que a equipe não alcança: a conversa de cada morador e a notícia diária pra família.
+A Dona Leda entra no espaço entre a família ligar quando dá e contratar um cuidador: o idoso ainda mora sozinho e precisa de cuidado todo dia.
 
 ## Quem usa, quem compra e por onde vende
 
-Ordem ajustada em 21/11, às 15h. O raciocínio está em "Por onde a gente começa".
+Ordem decidida em 21/11, às 17h. O raciocínio está em "Quem paga e quem indica".
 
-- **Quem usa:** o idoso, que só precisa atender.
-- **Quem compra primeiro:** o residencial sênior, que paga por morador e oferece a Dona Leda como serviço da casa. O caminho é o contato do Vitor.
-- **Quem acompanha:** a família do morador, pelo painel, e a equipe da casa.
-- **Quem compra depois:** empresa de teleassistência e franquia de cuidadores, que já cobram a família do idoso que mora em casa, e depois plano de saúde de idoso e prefeitura, que compram resultado medido num piloto.
-- **A família, direto:** continua podendo contratar pelo site, no lugar de segunda aposta. É o mesmo comprador do botão de emergência, que paga de R$ 189 a 249 por mês por ele.
+- **Quem usa:** o idoso lúcido que mora sozinho, que só precisa atender.
+- **Quem compra:** o filho ou a filha. É o mesmo comprador do botão de emergência, que paga de R$ 189 a 249 por mês por ele.
+- **Por onde chega:** a casa de repouso parceira, que indica a Dona Leda às famílias que a procuram e acompanha os idosos que indicou. A rede de residenciais do contato do Vitor pode entrar do mesmo jeito.
+- **Quem compra depois:** empresa de teleassistência e franquia de cuidadores, que já cobram a família do idoso que mora em casa, e plano de saúde de idoso e prefeitura, que compram resultado medido num piloto.
 
 ## Público
 
-- **Quem usa primeiro:** o morador lúcido de residencial sênior. No país, 160.784 pessoas moram em instituições de longa permanência pra idosos (Censo 2022), contando as filantrópicas.
-- **Quem usa depois, e é o público do sonho:** pessoa de 60 anos ou mais que mora sozinha (cerca de 6 milhões pela PNAD 2025; o Censo 2022 contou 5,66 milhões), lúcida, com celular ou tablet com internet. Perto de 45% dos 60+ já fazem chamada pela internet.
+- **Quem usa:** pessoa de 60 anos ou mais que mora sozinha (cerca de 6 milhões pela PNAD 2025; o Censo 2022 contou 5,66 milhões), lúcida, com celular ou tablet com internet. Perto de 45% dos 60+ já fazem chamada pela internet.
 - **Quem fica de fora desta versão:** quem não tem internet (entre 25% e 41% dos 60+) e quem tem demência avançada. O primeiro grupo entra com a ligação pelo telefone comum. O segundo precisa de cuidado humano.
-- **Quem compra primeiro:** o residencial sênior (a maior rede do país tem 160 unidades e mais de 2 mil residentes).
-- **Quem compra depois:** teleassistência e franquia de cuidadores; plano de saúde de idoso (Prevent Senior com 549 mil vidas, MedSênior com 310 mil) e prefeitura, depois de um piloto com dado próprio; e a família direto, o filho ou a filha de 35 a 55 anos, das classes A e B, que mora em outra cidade ou outro país.
+- **Quem compra:** filho ou filha de 35 a 55 anos, das classes A e B, que mora em outra cidade ou outro país. É o mesmo comprador do botão de emergência.
+- **Quem indica:** a casa de repouso. No país, 160.784 pessoas moram em instituições de longa permanência pra idosos (IBGE, Censo 2022), e cada casa recebe famílias que ainda estão decidindo.
+- **Quem compra depois:** teleassistência e franquia de cuidadores; plano de saúde de idoso (Prevent Senior com 549 mil vidas, MedSênior com 310 mil) e prefeitura, depois de um piloto com dado próprio.
 
 ## Premissas
 
@@ -170,14 +163,14 @@ Ordem ajustada em 21/11, às 15h. O raciocínio está em "Por onde a gente come�
 |---|---|---|---|
 | 1 | O idoso atende a chamada e conversa com uma assistente que diz ser virtual | No CareCall, 89% atenderam ao menos uma vez em três meses. Nove em dez pessoas de 50+ querem saber quando é IA | Sem teste nosso |
 | 2 | Ele aceita a ligação de novo nos dias seguintes | A novidade passa: na boneca Hyodol, o efeito sumiu aos seis meses | Sem teste nosso |
-| 3 | O filho paga todo mês por esse cuidado | A tranquilidade do filho é a promessa mais vendida lá fora, mas ninguém publica pagantes, e a Amazon encerrou o serviço dela | Sem teste nosso. Deixou de ser a aposta do começo em 21/11 |
+| 3 | O filho paga todo mês por esse cuidado | A tranquilidade do filho é a promessa mais vendida lá fora, mas ninguém publica pagantes, e a Amazon encerrou o serviço dela | Sem teste nosso. Volta a ser a premissa mais arriscada desde 21/11, às 17h |
 | 4 | Vídeo funciona melhor que só voz | Ninguém provou. Quase todos os concorrentes usam telefone comum | Sem teste nosso. A ligação só de voz é o plano B |
 | 5 | A assistente ligar funciona melhor que o idoso abrir um aplicativo | Os maiores programas (CareCall, Madri, Singapura) ligam pro idoso | Coerente com a pesquisa |
 | 6 | Dá pra entregar isso sem ser serviço médico | Software de bem-estar e de registro fica fora da regra da Anvisa | Vale enquanto a promessa não falar de doença |
-| 7 | A conta fecha | 5 minutos por dia custam R$ 89 por mês no modo reserva e perto de R$ 139 no Gemini, com o dólar de 19/11. O plano Residencial proposto custa R$ 179,90 por morador, e o Essencial, pra família, R$ 229,90 (seção do preço em `tese.md`) | No residencial sobram R$ 63 no modo reserva e R$ 13 no Gemini. Só fecha com ligação curta ou voz mais barata |
-| 8 | O residencial paga por morador | Hermet e care.coach vendem pra residenciais. A Meela começou neles com ligação de companhia e saiu | Depende de uma conversa do Vitor com os sócios. É a premissa mais arriscada desde 21/11 |
+| 7 | A conta fecha | 5 minutos por dia custam R$ 89 por mês no modo reserva e perto de R$ 139 no Gemini, com o dólar de 19/11. O plano Essencial proposto custa R$ 229,90 (seção do preço em `tese.md`) | No teto sobram R$ 98 no modo reserva e R$ 48 no Gemini |
+| 8 | A casa de repouso indica famílias | A primeira casa parceira se ofereceu pra indicar em 21/11. Ela recebe famílias divididas sobre levar o idoso | Sem teste nosso. Falta ver quantas famílias ela indica e quantas contratam |
 | 9 | Com a Dona Leda, o idoso fica mais ativo | Ligação diária feita por gente reduziu a solidão em quatro semanas (JAMA Psychiatry, 2021). Com IA não há estudo longo | Sem teste nosso. Medir semana a semana em quantos dias ele saiu de casa e conversou com alguém |
-| 10 | A equipe da casa entrega o aparelho e ajuda o morador nas primeiras ligações | Sem pesquisa | Sem teste nosso. Perguntar na conversa do Vitor |
+| 10 | A família deixa a casa que indicou acompanhar o idoso | Sem pesquisa | Sem teste nosso. Perguntar às famílias que a casa indicar |
 
 ## Formatos possíveis
 
@@ -199,6 +192,7 @@ Ordem ajustada em 21/11, às 15h. O raciocínio está em "Por onde a gente come�
 - O protótipo funcionando: a assistente liga, conversa em português pela Agora, anota o que ouviu, avisa a família e mostra o painel.
 - A Agora: chaves emprestadas de escuta, modelo e voz, e uso liberado no hackathon.
 - Um plano semanal inteiro do Claude pro time.
+- A primeira casa de repouso parceira, que topou indicar a Dona Leda às famílias.
 - O contato direto do Vitor com os sócios de uma rede de residenciais sênior com mais de cem unidades.
 - Os avós e pais do time, pra testar hoje.
 - Os mentores e as outras pessoas do evento, quase todas com um avô ou uma avó.
@@ -209,7 +203,7 @@ Ordem ajustada em 21/11, às 15h. O raciocínio está em "Por onde a gente come�
 - Dinheiro e empresa aberta.
 - Aparelho próprio.
 - Número de telefone brasileiro pra ligação comum.
-- Contrato ou piloto combinado com alguma empresa.
+- Nenhuma família pagante. A primeira casa parceira topou indicar, sem contrato escrito.
 
 ## O que ainda falta decidir no produto
 
@@ -222,7 +216,7 @@ Ordem ajustada em 21/11, às 15h. O raciocínio está em "Por onde a gente come�
 
 - **Hoje à noite:** de cada 10 idosos chamados, quantos atendem sem ajuda e conversam 3 minutos ou mais. Prova que o idoso aceita a chamada de vídeo de uma assistente que se diz virtual.
 - **Nas semanas seguintes:** em quantos dias da semana cada idoso saiu de casa e conversou com alguém. É o número do sonho.
-- **A conversa do Vitor com os sócios do residencial:** a meta é sair com um piloto combinado (quantos moradores, por quanto tempo e quem paga) ou com o motivo do não. É a prova de que a empresa compra.
+- **A casa parceira:** quantas famílias ela indica no primeiro mês e quantas contratam. É a prova de que a indicação traz família pagante.
 - **Pagamento e permanência** continuam sem prova. Com a família, o teste é mostrar o painel a filhos de verdade e perguntar quanto pagariam.
 
 ## Perguntas que a banca vai fazer
@@ -233,16 +227,18 @@ Ordem ajustada em 21/11, às 15h. O raciocínio está em "Por onde a gente come�
 | O que é "mais ativo"? Como vocês medem? | Em quantos dias da semana a pessoa saiu de casa e conversou com alguém. A ficha anota isso todo dia |
 | Por que "amiga", se é uma IA? | No pitch a palavra descreve o papel dela. No produto ela se apresenta sempre como assistente virtual |
 | Por que vídeo, se lá fora quase todos usam telefone? | Ninguém provou que vídeo ganha. 76% dos idosos conectados já fazem chamada de voz ou vídeo, e a ligação só de voz é o plano B |
-| Por que começar por empresa? | Um contrato com um residencial traz dezenas de idosos de uma vez, a casa já tem internet e equipe pra ajudar na primeira ligação, e o preço por morador pesa até 3% da mensalidade. Lá fora, quem paga mais por isso é empresa e governo |
-| O sonho é o idoso sozinho em casa. Por que começar por residencial? | O residencial é onde dá pra provar que funciona e medir o resultado com muitos idosos juntos. Com esse dado a Dona Leda chega a quem já atende o idoso que mora sozinho: teleassistência, plano de saúde e prefeitura |
-| Algum residencial já topou? | Ainda não. O Vitor fala direto com os sócios de uma rede grande, e o resultado da conversa entra no pitch, bom ou ruim |
-| A conta fecha? | Cinco minutos por dia custam de R$ 89 a 139 por mês por idoso. O plano proposto pro residencial custa R$ 179,90 por morador, e o da família, R$ 229,90, os dois com 150 minutos por mês. A ligação encerra sozinha com 10 minutos |
+| Por que quem paga é a família? | Na casa de repouso já existe equipe perguntando do sono e do remédio, e a maioria dos moradores tem demência. A primeira casa parceira contou isso e disse que vê mais valor no idoso que mora sozinho em casa. A família já paga por cuidado: o botão de emergência custa de R$ 189 a 249 por mês |
+| Como as famílias chegam? | Pelas casas de repouso parceiras, que recebem famílias decidindo o que fazer com o pai ou a mãe. A primeira já topou indicar |
+| O que a casa ganha indicando? | Acompanha os idosos que indicou e fica perto dessas famílias pra quando o idoso precisar de mais cuidado. Na fase de teste ela não paga nada |
+| A conta fecha? | Cinco minutos por dia custam de R$ 89 a 139 por mês por idoso, e o plano proposto pra família custa R$ 229,90, com 150 minutos por mês. A ligação encerra sozinha com 10 minutos |
 | Isso troca o filho por uma máquina? | O risco existe. Ela se apresenta como assistente virtual, e a família fica por perto pelo painel, pelos avisos e pela ligação que pode mandar fazer na hora |
 | E se ela cair depois da ligação? | A Dona Leda não é serviço de emergência e não promete isso. Pra queda existe o botão, que pode ser um parceiro |
 
 ## Histórico das frases (21/11/2026)
 
 O Breno reprovou três rodadas antes de aprovar a narrativa de cima. Elas ficam aqui pra ninguém reabrir o mesmo caminho.
+
+- **Quem paga, das 15h às 17h de 21/11:** a proposta começou pela venda ao residencial sênior, por morador, com a família acompanhando. Voltou pra família depois da conversa com a primeira casa parceira: a maioria dos moradores tem demência, a casa já cuida do remédio, ela vê mais valor no idoso sozinho em casa e paga uns R$ 230 por casa pelo sistema de gestão.
 
 - **Primeira rodada, a notícia pro filho:** "A Dona Leda liga pra sua mãe todo dia, conversa com ela e te conta como foi. E te dá um motivo pra ligar." Reprovada porque vendia uma ligação de conferência pro filho, igual à de 13 empresas lá fora, e escondia a assistente.
 - **Segunda rodada, a assistente no centro:** cinco frases, como "a assistente pessoal de quem nunca vai usar um aplicativo". Reprovadas porque nenhuma remetia a idoso nem mostrava dinheiro no mercado.

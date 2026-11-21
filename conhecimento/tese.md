@@ -9,9 +9,9 @@ Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (40% dos 1
 ## Pra quem
 
 - **Quem usa:** a pessoa idosa que mora sozinha ou passa o dia sozinha. Ela só precisa atender.
-- **Quem contrata primeiro (ajuste de 21/11, às 15h):** o residencial sênior, que paga por morador e oferece a Dona Leda como serviço da casa. O caminho é o contato do Vitor. A família do morador acompanha pelo painel.
+- **Quem contrata (decisão de 21/11, às 17h):** o filho ou a filha que mora longe. É o mesmo comprador do botão de emergência.
+- **Quem indica:** a casa de repouso parceira, que recebe famílias decidindo o que fazer com o pai ou a mãe. A primeira topou em 21/11, sem cobrança na fase de teste.
 - **Quem pode contratar depois:** empresa de teleassistência e franquia de cuidadores, que já cobram a família do idoso que mora em casa, e plano de saúde de idoso e prefeitura, que compram resultado medido num piloto.
-- **A família, direto:** o filho ou a filha que mora longe continua podendo contratar pelo site, como segunda aposta. É o mesmo comprador do botão de emergência.
 
 ## A solução
 
@@ -38,10 +38,10 @@ Muitos idosos não usam aplicativo nem WhatsApp, mas atendem uma ligação. Por 
 Em aberto. Hipóteses do brainstorm de 21/11:
 
 - **Família paga por mês.** Conversa básica de graça e plano pago pro acompanhamento (remédio, avisos, resumo da semana).
-- **Residencial sênior paga** e oferece aos moradores como um serviço a mais. Aqui o remédio já é cuidado pela equipe, então a Dona Leda entra como companhia e como aviso à família.
+- **Casa de repouso indica**, e paga só se quiser a Dona Leda pros próprios moradores lúcidos. Lá o remédio já é cuidado pela equipe, então a Dona Leda entra como companhia e como aviso à família.
 - **Médico ou hospital indica ao paciente.** Exige um médico responsável, que o time não tem hoje.
 
-Desde o ajuste de 21/11/2026, às 15h, a Dona Leda começa vendendo pra empresa: quem compra primeiro é o residencial sênior, por morador, e a família acompanha. Teleassistência, plano de saúde e prefeitura vêm depois, e a venda direta pra família fica como segunda aposta. O raciocínio está em `proposta-de-valor.md`, na seção "Por onde a gente começa".
+Desde 21/11/2026, às 17h, a família paga e a casa de repouso indica. Das 15h às 17h a proposta começava pela venda ao residencial, por morador, e voltou depois da conversa com a primeira casa parceira. Teleassistência, plano de saúde e prefeitura vêm depois. O raciocínio está em `proposta-de-valor.md`, na seção "Quem paga e quem indica".
 
 ### Quanto custa a conversa e quanto cobrar (conta de 21/11/2026, à tarde)
 
@@ -68,13 +68,13 @@ Proposta pra Stephanie e Breno decidirem. A conta usa o dólar oficial de 19/11 
 
 **Opções de plano**
 
-Premissas: a família paga no cartão pelo Asaas (R$ 0,49 + 2,99% por cobrança); o residencial paga um Pix pela casa inteira (R$ 1,99, dividido por um mínimo de 20 moradores); imposto do Simples Nacional no Anexo V, 15,5% (com folha de pagamento alta a empresa cai no Anexo III, 6%, e a margem sobe). A margem é sobre o preço.
+Premissas: a família paga no cartão pelo Asaas (R$ 0,49 + 2,99% por cobrança); a casa paga um Pix por mês (R$ 1,99); imposto do Simples Nacional no Anexo V, 15,5% (com folha de pagamento alta a empresa cai no Anexo III, 6%, e a margem sobe). A margem é sobre o preço.
 
 | Plano | Minutos incluídos | Preço por mês | Margem no teto, Gemini | Margem no teto, reserva | Margem no uso típico, Gemini | Quem compra |
 |---|---|---:|---:|---:|---:|---|
 | **Essencial** | 150 por mês (5 por dia) | R$ 229,90 | R$ 48 (21%) | R$ 98 (42%) | R$ 103 (45%) | Filho ou filha que mora longe |
 | **Companhia** | 300 por mês (10 por dia) | R$ 449,90 | R$ 16 (4%), ou R$ 69 (15%) com compressão | R$ 188 (42%) | R$ 282 (63%) | Família que quer conversa mais longa |
-| **Residencial** | 150 por morador, num saldo da casa | R$ 179,90 por morador | R$ 13 (7%) | R$ 63 (35%) | R$ 68 (38%) | Residencial sênior, que oferece aos moradores |
+| **Casa** | 200 por mês, num saldo da casa | R$ 229,90 por casa | R$ 7 (3%), com conversas de 5 minutos | R$ 73 (32%) | R$ 24 (11%) | Casa de repouso que quer a Dona Leda pros próprios moradores lúcidos |
 
 O Essencial fica perto do botão de emergência que a família já compra (Tecnosenior, de R$ 189 a 249 por mês) e da ligação diária da CheckWellCall nos EUA (US$ 29,99).
 
@@ -82,16 +82,16 @@ O Essencial fica perto do botão de emergência que a família já compra (Tecno
 
 | Cuidador | Preço por mês | Um décimo | Planos que cumprem |
 |---|---:|---:|---|
-| 12 horas por dia (Cidesp, maio de 2026) | R$ 2.800 a 4.500 | R$ 280 a 450 | Essencial e Residencial. O Companhia só contra o de R$ 4.500 |
-| Com carteira: média do Caged (R$ 1.863,66) com 13º, férias e 20% de encargos | perto de R$ 2.485 | R$ 248 | Essencial e Residencial |
+| 12 horas por dia (Cidesp, maio de 2026) | R$ 2.800 a 4.500 | R$ 280 a 450 | Essencial. O Companhia só contra o de R$ 4.500 |
+| Com carteira: média do Caged (R$ 1.863,66) com 13º, férias e 20% de encargos | perto de R$ 2.485 | R$ 248 | Essencial |
 
 A primeira metade da frase foi ajustada pelo Breno em 21/11. A aposentadoria média, de R$ 2.697 (IBGE 2025), paga o cuidador com carteira e só não paga o de 12 horas. A frase passou a ser "A aposentadoria da maioria dos brasileiros não paga um cuidador": 62,5% dos beneficiários do INSS recebem um salário mínimo (R$ 1.621), menos que o piso do cuidador no Caged (R$ 1.760,44).
 
 **Recomendação**
 
-O Essencial a R$ 229,90 pra família e o Residencial a R$ 179,90 por morador, os dois com 150 minutos por mês. São os planos que cumprem a frase do décimo contra o cuidador de 12 horas e dão lucro no teto mesmo no Gemini, e o Essencial cai na faixa que a verificação calculou (R$ 220 a 250). O Companhia espera a medida do uso real e a compressão ligada. A decisão é da Stephanie e do Breno.
+O Essencial a R$ 229,90 pra família, com 150 minutos por mês, que é quem paga desde 21/11. Ele cumpre a frase do décimo contra o cuidador de 12 horas, dá lucro no teto mesmo no Gemini e cai na faixa que a verificação calculou (R$ 220 a 250). O plano Casa fica pra casa de repouso que quiser a Dona Leda pros próprios moradores. O Companhia espera a medida do uso real e a compressão ligada. A decisão é da Stephanie e do Breno.
 
-Com o ajuste de 21/11 (começar pela empresa), o plano que abre a venda passou a ser o Residencial, e ele tem a margem mais apertada da tabela: R$ 13 por morador no teto com o Gemini e R$ 63 no modo de três peças. O preço do Residencial virou a decisão de preço mais importante.
+O plano Casa entrou em 21/11 no lugar do Residencial, que cobrava R$ 179,90 por morador. A primeira casa parceira paga uns R$ 230 por mês, por casa, pelo sistema de gestão que usa hoje, e com cinco moradores o preço por morador daria R$ 900, quase quatro vezes isso. O plano Casa fica perto desse valor e cobre uns dois moradores conversando 3 minutos por dia. No Gemini a margem dele é a mais apertada da tabela, e com conversas de 5 minutos quase some. A casa parceira que só indica famílias e acompanha os idosos que indicou não paga.
 
 **Antes de falar disso pra banca**
 - O teto de minutos ainda não existe no código: a ligação só termina sozinha 2 minutos depois de todo mundo sair da sala.
