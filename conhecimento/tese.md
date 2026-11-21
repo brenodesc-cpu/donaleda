@@ -37,6 +37,18 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
 - **O preço decidido:** R$ 129,90 por mês, com 100 minutos de conversa, uns 3 minutos e 20 segundos por dia. O Breno decidiu em 21/11, às 17h50, porque achou R$ 229,90 caro pra um produto que acabou de surgir. Fica abaixo do botão de emergência e é menos de 5% do preço do cuidador de 12 horas.
 - **A conta do preço:** depois do imposto (15,5%) e do cartão (R$ 0,49 mais 2,99%) sobram R$ 105,40. Os 100 minutos custam R$ 84 com a Agora e o Gemini, e sobram R$ 21 por família. O plano inclui 100 minutos porque, com 150, faltariam R$ 34. No modo de três peças sobram R$ 46. Se a conversa fosse direto no Google, sem o motor da Agora, sobrariam R$ 80.
 - **A margem é apertada enquanto a Agora cobrar US$ 0,10 por minuto.** A pergunta à Agora sobre o preço no caminho do Gemini e por volume segue aberta.
+- **A conta que prova a operação,** com o preço de R$ 129,90, os R$ 105,40 que sobram depois do imposto e do cartão e 100 minutos por família por mês:
+
+  | Cenário | Como funciona | Custo por família por mês | Sobra |
+  |---|---|---:|---:|
+  | 1. Como o protótipo roda hoje | Motor de conversa da Agora, a US$ 0,10 por minuto pelo preço de tabela, com o Gemini | R$ 84: R$ 59 da Agora e R$ 25 do Google | R$ 21 (16%) |
+  | 2. O da operação, **ainda não construído** | Só a sala de áudio da Agora, e a ligação ao Gemini feita pelo nosso servidor | De R$ 14 a 26: Google de R$ 13 a 16 pelo medido no Virte, ou R$ 25 pela estimativa conservadora, mais uns R$ 1 de sala | De R$ 79 (61%) a R$ 91 (70%) |
+
+  - **A sala de áudio:** US$ 0,99 por mil minutos por participante, com 10 mil minutos grátis por mês (página de preço da Agora). Com o aparelho do idoso e o nosso servidor na sala, os minutos grátis cobrem umas 50 famílias por mês.
+  - **O Google medido com gente de verdade:** a voz do Virte, o outro app do Breno, usa o Gemini ao vivo direto. Em outubro de 2026 foram 24 pessoas, 117 conversas e 160 minutos por US$ 3,53, ou US$ 0,022 por minuto. Em novembro, até o dia 21, foram 18 pessoas, 78 conversas e 126 minutos por US$ 3,45, ou US$ 0,027 por minuto. A fonte é o banco do Virte, lido em 21/11 às 18h10, com os tokens que o Google devolve em cada conversa, os minutos de voz de cada dia e o preço publicado do modelo.
+  - **Por que o número conservador fica:** as conversas do Virte duram menos de 2 minutos, e o Google cobra de novo a conversa inteira a cada fala, então a ligação de 3 minutos e 20 segundos custa mais por minuto. A estimativa de US$ 0,042 por minuto continua sendo o pior caso.
+  - **O que falta:** o cenário 2 ainda não foi construído, e o custo do nosso servidor ainda não foi medido.
+  - **A Agora no hackathon:** o regulamento pede que a Agora funcione na demonstração e não diz qual serviço usar. Até a entrega, o protótipo fica no motor de conversa da Agora.
 - **O preço pra testar hoje à noite:** depois de a família dizer quanto pagaria, perguntar se pagaria R$ 129,90 por mês por uma ligação por dia com os avisos no painel. Anotar o primeiro valor que ela disse e o sim ou o não.
 
 ### 3. Quem já faz parecido

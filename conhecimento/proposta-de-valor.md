@@ -124,6 +124,11 @@ Os passos 4 e 5 estão em construção na conversa "Tela do residencial". O pain
 - O rastreador de localização aparece só como próximo passo.
 - Nenhuma história real de mentor entra, nem a da mentora que contou o caso da mãe.
 
+**A conta que prova a operação** (detalhe e fontes em `tese.md`)
+- **Como o protótipo roda hoje,** com o motor de conversa da Agora: cada família custa R$ 84 por mês, e dos R$ 129,90 sobram R$ 21.
+- **Na operação,** com só a sala de áudio da Agora e o Gemini ligado pelo nosso servidor: cada família custa de R$ 14 a 26, e sobram de R$ 79 a 91. O Google sai de R$ 13 a 16 pelo que o Virte mede hoje com gente de verdade, e R$ 25 no pior caso.
+- Esse segundo jeito ainda não foi construído, e o custo do servidor falta medir. Até a entrega, o protótipo fica no motor de conversa da Agora.
+
 **O fecho**
 - **Quem paga:** a família, no plano Essencial de R$ 129,90 por mês, com a casa de repouso indicando.
 - **O custo por família acompanhada:** R$ 84 por mês com os 100 minutos do plano, sendo R$ 59 da Agora e R$ 25 do Google. Sobram R$ 21 por família (conta em `tese.md`, com o dólar de 19/11).
