@@ -14,10 +14,10 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 - **Endereço:** https://donaleda.vercel.app, no ar desde as 12h45 de 21/11.
 - **Duas duplas, em salas diferentes**, pra voz de uma não entrar no microfone da outra. A dupla A testa o Gemini e a dupla B testa as três peças. Em cada dupla, uma pessoa faz o papel do idoso e a outra cronometra, anota e olha o painel. As falas são as do roteiro, iguais nas duas duplas.
 - **Cada dupla prepara o seu par** (notebook com o painel, celular como aparelho do idoso):
-  1. No notebook, entre em `/entrar`, crie uma conta e escolha "Ver com um exemplo". O exemplo tem que ser novo, criado na hora: se a conta já tiver um, apague em `/familia/ajustes` ("Apagar os dados") e crie de novo. Cada dupla tem a sua conta, pra ligação de uma não tocar no celular da outra.
-  2. No celular, pelo navegador comum, abra o endereço do modo da dupla: `donaleda.vercel.app/?modo=gemini` ou `donaleda.vercel.app/?modo=tres`.
-  3. Toque em "Este aparelho vai receber as ligações" e digite os 6 números que aparecem no notebook, em `/familia/aparelho`.
-  4. Deixe o celular apoiado, com volume alto.
+  1. No notebook, abra donaleda.vercel.app, toque em "Sou da família", crie uma conta e escolha "Ver com um exemplo". O exemplo tem que ser novo, criado na hora: se a conta já tiver um, apague em `/familia/ajustes` ("Apagar os dados") e crie de novo. Cada dupla tem a sua conta, pra ligação de uma não tocar no celular da outra.
+  2. No celular, pelo navegador comum, abra donaleda.vercel.app, toque em "Este aparelho vai receber as ligações" ("Vou digitar o código que a família mandou") e digite os 6 números que aparecem no notebook, em `/familia/aparelho`.
+  3. Só depois de parear, no mesmo navegador do celular, abra o endereço do modo da dupla, já com o medidor: `donaleda.vercel.app/?modo=gemini&medir=1` ou `donaleda.vercel.app/?modo=tres&medir=1`. O celular já pareado abre direto a tela da dona Helena e guarda o modo. Na ordem contrária o modo se perde: a página inicial e a de parear não guardam o modo, e a dupla do Gemini acabaria testando as três peças sem saber.
+  4. Deixe a página aberta nesse endereço, com o celular apoiado e o volume alto.
 - **Como falar (vale também no palco):** o celular usa a internet dele (4G ou 5G), fora do wi-fi do evento. Quem faz a idosa fala com o celular perto da boca, sem ninguém falando perto, e diz "Alô" logo ao atender, antes de qualquer outra voz. No modo de três peças, o foco na voz prende na primeira voz alta da ligação e passa a ignorar as outras. As situações 5 e 6 fogem disso de propósito.
 - **Idoso de teste:** a dona Helena do exemplo. Nunca o nome de uma pessoa de verdade.
 - **Cada ligação** começa no painel, em "Ligar agora". O celular toca e quem faz o idoso toca em Atender.

@@ -17,9 +17,9 @@ Os avós usam o modo de três peças, o padrão do servidor. Ninguém abre `?mod
 
 O idoso nunca faz login. Quem faz é a pessoa do time, no celular dela:
 
-1. Em https://donaleda.vercel.app/entrar, crie a conta e cadastre o idoso.
+1. Em https://donaleda.vercel.app, toque em "Sou da família", crie a conta e cadastre o idoso.
 2. Em "Aparelho", toque em "Mandar o link pra" o idoso. Sai pelo WhatsApp um link que vale 30 minutos.
-3. No celular do idoso, alguém abre o link. O celular fica pronto sozinho, sem digitar nada. Se o link não abrir: entre em donaleda.vercel.app no celular dele, toque em "Este aparelho vai receber as ligações" e digite os 6 números.
+3. No celular do idoso, alguém abre o link. O celular fica pronto sozinho, sem digitar nada. Se o link não abrir: entre em donaleda.vercel.app no celular dele, toque em "Este aparelho vai receber as ligações" ("Vou digitar o código que a família mandou") e digite os 6 números que aparecem em "Aparelho".
 4. Deixe a página aberta, com a tela acesa e o volume alto, e o celular apoiado.
 5. No painel, toque em "Ligar agora". Na primeira ligação o idoso toca em Atender e alguém toca em "Permitir" quando o celular pedir microfone e câmera.
 
@@ -66,7 +66,7 @@ Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 
 **Domingo às 9h (a segunda ligação)**
 - A ligação das 9h já vem marcada no app (é o horário padrão; confira em `/familia/ajustes`).
-- Às 8h50, alguém da família abre de novo a página no celular do idoso e deixa a tela acesa. O celular continua ligado à conta, sem link novo. Quem abre não pede pro idoso atender: só deixa o celular pronto.
+- Às 8h50, alguém da família abre donaleda.vercel.app de novo no celular do idoso, no mesmo navegador de sábado, e deixa a tela acesa. O celular continua ligado e abre direto a tela dele, sem link novo. Quem abre não pede pro idoso atender: só deixa o celular pronto.
 - Se não tocar até 9h05, quem ligou no sábado toca em "Ligar agora" no painel.
 - Anote se ele atendeu, os minutos e se a Dona Leda lembrou de alguma coisa da conversa de sábado.
 
