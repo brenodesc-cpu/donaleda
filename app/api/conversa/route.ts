@@ -4,6 +4,7 @@
 
 import { NextResponse } from 'next/server';
 import { criarAlerta, fecharConversa, mudarBase } from '@/lib/dados';
+import { limparTempos } from '@/lib/medicao';
 import { avaliarFala } from '@/lib/regras';
 import { exigirAparelho } from '@/lib/sessao';
 import type { Alerta, EventoDaConversa, RespostaDoEvento } from '@/lib/tipos';
@@ -28,6 +29,21 @@ export async function POST(request: Request) {
 
   if (evento.tipo === 'fim') {
     const conversa = await mudarBase(idosoId, (base) => fecharConversa(base, evento.conversaId));
+    return NextResponse.json({ ok: Boolean(conversa) } satisfies RespostaDoEvento, {
+      status: conversa ? 200 : 404,
+    });
+  }
+
+  // O tempo de resposta medido pela Agora chega uma vez, no fim da ligação.
+  if (evento.tipo === 'tempos') {
+    const tempos = limparTempos(evento.tempos);
+    if (!tempos) return NextResponse.json({ ok: false }, { status: 400 });
+    const conversa = await mudarBase(idosoId, (base) => {
+      const achada = base.conversas.find((c) => c.id === evento.conversaId);
+      if (!achada) return null;
+      achada.tempos = tempos;
+      return achada;
+    });
     return NextResponse.json({ ok: Boolean(conversa) } satisfies RespostaDoEvento, {
       status: conversa ? 200 : 404,
     });

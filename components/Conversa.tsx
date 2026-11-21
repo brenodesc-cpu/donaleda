@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AgoraRTC, {
   RemoteAudioTrack,
   useClientEvent,
@@ -19,11 +19,14 @@ import {
   legendaDaAssistente,
   TEXTO_DO_ESTADO,
 } from '@/lib/conversation';
+import { avisarServidor } from '@/lib/avisarServidor';
+import { linhaDaMedicao, medidorLigado, resumirMedicao } from '@/lib/medicao';
 import { useEnviarFalas } from '@/hooks/useEnviarFalas';
 import { useFiltroDeRuido } from '@/hooks/useFiltroDeRuido';
 import { useNivelDoAudio } from '@/hooks/useNivelDoAudio';
 import { usePresencaDaAssistente } from '@/hooks/usePresencaDaAssistente';
 import { useSomPreso } from '@/hooks/useSomPreso';
+import { useTetoDaLigacao } from '@/hooks/useTetoDaLigacao';
 import { useVozDaAssistente } from '@/hooks/useVozDaAssistente';
 import type { PropsDaConversa } from '@/types/conversation';
 import { BotaoGrande } from './BotaoGrande';
@@ -85,13 +88,38 @@ export default function Conversa({
     }
   }, [client]);
 
-  const { transcript, estadoDoAgente } = useVozDaAssistente({
+  const { transcript, estadoDoAgente, medicao } = useVozDaAssistente({
     client,
     rtmClient,
     canal: dados.channel,
     pronto: pronto && entrou,
   });
   useEnviarFalas(transcript, dados.conversaId, uidDaAssistente);
+
+  // O tempo de resposta medido pela Agora vai pro servidor uma vez, quando a
+  // ligação acaba, e fica junto da conversa. Com ?medir=1 aparece também na tela.
+  const ultimaMedicao = useRef(medicao);
+  useEffect(() => {
+    ultimaMedicao.current = medicao;
+  }, [medicao]);
+  useEffect(() => {
+    const conversaId = dados.conversaId;
+    let enviou = false;
+    const mandar = () => {
+      if (enviou) return;
+      const tempos = resumirMedicao(ultimaMedicao.current);
+      if (Object.keys(tempos).length === 0) return;
+      enviou = true;
+      void avisarServidor({ tipo: 'tempos', conversaId, tempos });
+    };
+    // Fechar o app ou a aba no meio da ligação não desmonta a tela pelo React.
+    window.addEventListener('pagehide', mandar);
+    return () => {
+      window.removeEventListener('pagehide', mandar);
+      mandar();
+    };
+  }, [dados.conversaId]);
+  const [mostrarMedicao] = useState(medidorLigado);
 
   // Com avatar, a imagem e a voz podem vir de outro participante que não a
   // assistente em si. Por isso a tela toca o som de todos e mostra o vídeo de
@@ -136,6 +164,16 @@ export default function Conversa({
   useClientEvent(client, 'token-privilege-will-expire', renovarTokens);
 
   const estado = estadoDoRosto(estadoDoAgente, alguemNaLinha, nivel);
+  // Teto de 10 minutos por ligação e 2 minutos sem o idoso falar. O microfone
+  // entra junto da legenda, pra ligação não cair se a legenda falhar.
+  useTetoDaLigacao(
+    transcript,
+    uidDaAssistente,
+    alguemNaLinha,
+    estado === 'falando',
+    localMicrophoneTrack,
+    onEncerrar,
+  );
   const legenda = useMemo(
     () => legendaDaAssistente(transcript, uidDaAssistente),
     [transcript, uidDaAssistente],
@@ -170,6 +208,12 @@ export default function Conversa({
         <PhoneOff aria-hidden className="h-7 w-7 shrink-0" />
         Desligar
       </BotaoGrande>
+
+      {mostrarMedicao ? (
+        <p className="w-full text-center font-mono text-xs text-muted-foreground">
+          {linhaDaMedicao(medicao) || 'Esperando a primeira medição da Agora'}
+        </p>
+      ) : null}
 
       {/* O som da ligação toca por aqui; nada disso aparece na tela. */}
       <RemoteAudioTrack track={faixaDaVoz} play />

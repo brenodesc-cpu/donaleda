@@ -10,6 +10,7 @@ import {
   type AgentState,
 } from 'agora-agent-client-toolkit';
 import type { ItemDoTranscript } from '@/lib/conversation';
+import { somarMedida, type Medicao } from '@/lib/medicao';
 
 interface Entrada {
   client: IAgoraRTCClient;
@@ -27,6 +28,8 @@ interface Entrada {
 export function useVozDaAssistente({ client, rtmClient, canal, pronto }: Entrada) {
   const [transcript, setTranscript] = useState<ItemDoTranscript[]>([]);
   const [estadoDoAgente, setEstadoDoAgente] = useState<AgentState | null>(null);
+  // Quanto cada peça levou pra começar a responder, medido pela Agora (enable_metrics).
+  const [medicao, setMedicao] = useState<Medicao>({});
 
   useEffect(() => {
     if (!pronto) return;
@@ -57,6 +60,15 @@ export function useVozDaAssistente({ client, rtmClient, canal, pronto }: Entrada
         voz.on(AgoraVoiceAIEvents.AGENT_STATE_CHANGED, (_, evento) => {
           setEstadoDoAgente(evento.state);
         });
+        voz.on(AgoraVoiceAIEvents.AGENT_METRICS, (_, medida) => {
+          setMedicao((atual) => somarMedida(atual, medida));
+        });
+        // O tempo inteiro de cada resposta, do fim da fala do idoso até a voz dela.
+        voz.on(AgoraVoiceAIEvents.AGENT_TURN_FINISHED, (_, turno) => {
+          setMedicao((atual) =>
+            somarMedida(atual, { type: 'turno', name: 'e2e', value: turno.e2eLatencyMs }),
+          );
+        });
         voz.subscribeMessage(canal);
       } catch (erro) {
         if (!cancelado) console.error('[voz da assistente] não ligou:', erro);
@@ -77,5 +89,5 @@ export function useVozDaAssistente({ client, rtmClient, canal, pronto }: Entrada
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pronto]);
 
-  return { transcript, estadoDoAgente };
+  return { transcript, estadoDoAgente, medicao };
 }

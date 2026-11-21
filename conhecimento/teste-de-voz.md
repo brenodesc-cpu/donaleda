@@ -21,7 +21,7 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 - **Como falar (vale também no palco):** o celular usa a internet dele (4G ou 5G), fora do wi-fi do evento. Quem faz a idosa fala com o celular perto da boca, sem ninguém falando perto, e diz "Alô" logo ao atender, antes de qualquer outra voz. No modo de três peças, o foco na voz prende na primeira voz alta da ligação e passa a ignorar as outras. As situações 4 e 5 fogem disso de propósito.
 - **Idoso de teste:** a dona Helena do exemplo. Nunca o nome de uma pessoa de verdade.
 - **Cada ligação** começa no painel, em "Ligar agora". O celular toca e quem faz o idoso toca em Atender.
-- **Tempo de resposta:** quem cronometra dispara quando o idoso termina a última palavra e para no primeiro som da Dona Leda. Anote em segundos, com uma casa (1,8). Até 1,5 s soa como conversa. Acima de 3 s a pessoa acha que a ligação caiu, e conta como falha.
+- **Tempo de resposta:** quem cronometra dispara quando o idoso termina a última palavra e para no primeiro som da Dona Leda. Anote em segundos, com uma casa (1,8). Até 1,5 s soa como conversa. Acima de 3 s a pessoa acha que a ligação caiu, e conta como falha. Pra ter também o número da própria Agora, abra o aparelho uma vez com `?medir=1` no fim do endereço: durante a ligação aparece, embaixo, o tempo inteiro de cada resposta medido pela Agora, do fim da fala até a voz dela (`turno.e2e`), e quanto cada peça levou pra começar (por exemplo `llm.ttfb` e `tts.ttfb`). Os nomes das peças vêm da Agora e só aparecem de verdade na primeira ligação. Some com `?medir=0`. O resumo de cada ligação também fica guardado na conversa, no banco.
 - **Minutos:** cada ligação gasta minutos da Agora (300 grátis por conta).
 
 ## As onze situações

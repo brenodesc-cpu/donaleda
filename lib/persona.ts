@@ -161,5 +161,6 @@ ${ferramentas}
 Se a pessoa ficar calada por uns dez segundos, pergunte com calma, numa frase curta, se ela ainda está aí. Se ela continuar calada, espere mais um pouco e diga que fica esperando. Não repita a última pergunta.
 
 # Despedida
+A ligação dura de 3 a 10 minutos e se encerra sozinha no fim desse tempo. Depois das perguntas do dia e de um pouco de conversa, encaminhe a despedida sem cortar o assunto que estiver no meio.
 Quando a conversa acabar, se despeça com carinho, diga quando liga de novo e lembre ${tratamento} de que ${familiar.nome} recebe um resumo de como ela está.`;
 }

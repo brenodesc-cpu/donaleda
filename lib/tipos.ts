@@ -57,12 +57,20 @@ export interface Alerta {
 }
 
 /** Uma conversa. O texto do que foi dito não é guardado: só a duração e o resumo. */
+/**
+ * Tempo de resposta medido pela Agora numa conversa, por "peça.medida"
+ * (ex.: "llm.ttfb" é quanto o modelo levou pra começar a responder).
+ */
+export type TemposDaConversa = Record<string, { n: number; mediaMs: number; piorMs: number }>;
+
 export interface Conversa {
   id: string;
   inicio: string;
   fim?: string;
   falasDoIdoso: number;
   resumo?: string;
+  /** Vem da tela do idoso no fim da ligação, quando a Agora mandou medições. */
+  tempos?: TemposDaConversa;
 }
 
 export interface Idoso {
@@ -179,7 +187,8 @@ export type RespostaDaChamada =
 /** POST /api/conversa (a tela do idoso avisa o servidor do que acontece na conversa). */
 export type EventoDaConversa =
   | { tipo: 'fala'; conversaId: string; texto: string }
-  | { tipo: 'fim'; conversaId: string };
+  | { tipo: 'fim'; conversaId: string }
+  | { tipo: 'tempos'; conversaId: string; tempos: TemposDaConversa };
 
 export interface RespostaDoEvento {
   ok: boolean;

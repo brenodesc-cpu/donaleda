@@ -38,7 +38,7 @@ Fonte: itens 3, 5.1 e 5.5 do regulamento. A organização confere antes da class
 
 Duas coisas fora das regras que eliminam e que podem custar caro:
 - **O site sai do Mac, sem passar pelo GitHub.** O que a banca vê no ar pode ser diferente do código entregue. Publicar o site a partir da gravação marcada com `entrega`.
-- **A promessa feita às famílias hoje à noite** diz que nada é gravado e que tudo é apagado. Se a chave do Gemini for do plano grátis do Google, o Google pode usar a conversa pra melhorar os produtos dele. Antes das 20h, confirmar que a chave é da conta paga, ou fazer as ligações com os avós no modo de três peças.
+- **A promessa feita às famílias hoje à noite** diz que nada é gravado e que tudo é apagado. **Conferido às 14h05: a chave do Gemini no site e no Mac é do plano grátis do Google** (a que termina em 3caA, no projeto "Gemini Project", marcado "Nível gratuito" no AI Studio). Nesse plano o Google pode usar a conversa pra melhorar os produtos dele. O site usa o modo de três peças por padrão (`LIA_MODO=tres` na Vercel), então as ligações com os avós ficam fora do Google enquanto ninguém abrir `?modo=gemini`. Se o Gemini virar o modo do palco, o Breno cria uma chave num projeto pago (os dois projetos do Virte na conta 2 do AI Studio estão no Nível 1) e troca a variável na Vercel ele mesmo, porque isso gasta crédito e chave não passa por agente.
 
 ## 3. Nota por critério
 
@@ -86,14 +86,19 @@ Duas coisas fora das regras que eliminam e que podem custar caro:
 
 ## 6. Números pro pitch e pras perguntas
 
-- **Custo por idoso por mês**, com o dólar oficial de 19/11 (R$ 5,8889) e uma ligação por dia de 5 minutos: R$ 88 no modo de três peças e de R$ 100 a 110 no Gemini, que soma o minuto do Google ao da Agora. Com 10 minutos por dia, o dobro. O produto liga duas vezes por dia por padrão (9h e 19h), então a conta precisa dizer quantas ligações cabem no preço.
+- **Custo por idoso por mês:** a conta que vale é a de `tese.md` ("Quanto custa a conversa e quanto cobrar"), refeita na tarde de 21/11 com o dólar oficial de 19/11 (R$ 5,8889) e o preço do Google por token. Com uma ligação de 5 minutos por dia, ela dá R$ 89 no modo de três peças e perto de R$ 139 no Gemini. A minha estimativa anterior pro Gemini (R$ 100 a 110) ficou baixa. O produto liga duas vezes por dia por padrão (9h e 19h), então a conta precisa dizer quantas ligações cabem no preço.
 - **Preço que fecha na tabela da Agora:** de R$ 220 a 250 por mês, com uma ligação de até 5 minutos por dia. A família já paga de R$ 100 a 230 por botão de emergência, e um cuidador custa de R$ 2.800 a 4.500. Com volume, entra o preço de contrato da Agora.
-- **Sem teto de tempo hoje.** A assistente só sai sozinha 2 minutos depois de todo mundo sair da sala. Com o idoso calado e a ligação aberta, ela fica até a permissão vencer, em 1 hora. Só dizer à banca que a ligação tem teto depois de ele existir no código.
+- **A ligação tem teto desde 14h10.** Ela encerra sozinha com 10 minutos (esperando 2 segundos sem ninguém falar, pra não cortar frase, e no máximo 30 segundos a mais) ou com 2 minutos sem o idoso falar. O silêncio conta pela legenda e também pelo microfone, pra ligação não cair se a legenda falhar, e pausa enquanto ela fala. Antes, uma ligação aberta com o idoso longe ficava até 1 hora na sala. As provas estão em `testes/teto.test.ts`.
+- **O tempo de resposta agora é medido pela Agora.** Cada ligação guarda, na conversa, o tempo inteiro de cada resposta (`turno.e2e`, média e pior caso) e o de cada peça. Com `?medir=1` no endereço do aparelho, o número aparece na tela durante o teste.
 - **Problema:** cerca de 6 milhões de pessoas com 60 anos ou mais moram sozinhas (41% dos 15,6 milhões que moram sozinhos, PNAD Contínua 2025). Golpe: 16% das vítimas de golpe digital em 2024 tinham 60 anos ou mais (DataSenado).
 - **Frases que saem do pitch e do repositório:** "ninguém faz aviso de golpe", "mesmo se a IA falhar" (vira "mesmo se a IA esquecer de avisar") e "o produto roda fora da Agora depois do hackathon", que não se diz pra uma banca da Agora.
 - **Perguntas que os três jurados fariam:** qual o tempo de resposta e como mediram; quantos idosos usaram e quantos atenderam de novo; quanto custa por idoso e quem paga; e se ela não perceber a queda; quem deixa o aparelho ligado pra uma senhora de 82 anos; isso não é vigiar o idoso; isso não é dispositivo médico. A resposta de cada uma sai dos números acima e das seções de limites do README.
 
-## 7. O modo Gemini, como está às 13h50
+## 7. Defeito antigo que o teto deixou à vista
+
+Uma ligação que atende sozinha com o idoso longe do aparelho conta como conversa. A chamada fica marcada como atendida, a segunda tentativa não acontece, a família não recebe o aviso de que ele não atendeu, e o painel mostra que ele conversou hoje (`lib/chamadas.ts` e `fecharConversa` em `lib/dados.ts`). Agora o teto encerra essa ligação em 2 minutos com zero falas dele, que é o sinal exato de que ninguém estava ali. Conserto: quando a conversa fecha sem nenhuma fala do idoso, o servidor trata como não atendida. Fica com a conversa "Servidor, voz e banco", com prova em `testes/chamadas.test.ts`.
+
+## 8. O modo Gemini, como está às 13h50
 
 - O time pôs o Gemini como modo principal às 13h12, com as três peças de reserva, e a chave já está na Vercel.
 - **Nunca rodou de ponta a ponta.** No pacote 2.9.0, o Gemini 3.8 passa por um endereço de teste da Agora, que a versão 2.10.0 trocou pelo endereço normal. A 2.15.0 já leva as ações por MCP no próprio Gemini, sem o remendo que o time escreveu.
