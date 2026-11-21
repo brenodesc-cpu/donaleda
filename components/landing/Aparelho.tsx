@@ -1,7 +1,9 @@
 // O celular desenhado da landing page, com as telas que o produto mostra de verdade:
 // a ligação tocando e a conversa (aparelho do idoso) e o painel (celular da família).
-// Os textos repetem os das telas reais: components/ChamadaTocando.tsx,
-// components/familia/formatos.ts e lib/regras.ts. A pessoa é a do exemplo (lib/exemplo.ts).
+// Os textos repetem os das telas reais: components/ChamadaTocando.tsx, components/Conversa.tsx,
+// components/familia/ (DiaDeHoje, Alertas, ResumoDaSemana, Ligacoes, Apoio e formatos.ts),
+// lib/regras.ts e lib/chamadas.ts. A pessoa é a do exemplo (lib/exemplo.ts).
+// Conferidos com as telas em 21/11/2026, depois da revisão de textos da gravação ace3b84.
 
 import { Phone, PhoneOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -95,15 +97,17 @@ export function TelaConversa({ onDesligar }: { onDesligar?: () => void }) {
 function TopoDoPainel() {
   return (
     <div className="flex items-center justify-between gap-2 border-b border-border px-4 pb-3 pt-6">
-      <p className="font-titulo text-xl font-bold">Dona Helena</p>
-      <span className="rounded-full bg-muted px-2.5 py-0.5 text-sm text-muted-foreground">Exemplo</span>
+      <p className="whitespace-nowrap font-titulo text-lg font-bold">Dona Helena</p>
+      <span className="whitespace-nowrap rounded-full bg-muted px-2 py-0.5 text-[0.72rem] text-muted-foreground">
+        dados de exemplo
+      </span>
     </div>
   );
 }
 
 const DIA_DE_EXEMPLO: Array<{ nome: string; valor: string; bom: boolean }> = [
   { nome: 'Sono', valor: 'Dormiu bem', bom: true },
-  { nome: 'Alimentação', valor: 'Comeu bem', bom: true },
+  { nome: 'Comida', valor: 'Comeu bem', bom: true },
   { nome: 'Remédio', valor: 'Tomou o remédio', bom: true },
   { nome: 'Dor (0 a 10)', valor: 'Dor 3 no joelho direito', bom: false },
   { nome: 'Humor', valor: 'Bem', bom: true },
@@ -118,7 +122,7 @@ export function TelaPainel({ parte }: { parte: 'dia' | 'aviso' | 'semana' }) {
       <div className="flex flex-1 flex-col gap-3 px-3.5 py-4">
         {parte === 'dia' ? (
           <>
-            <p className="font-titulo text-lg font-bold">Hoje</p>
+            <p className="font-titulo text-lg font-bold">O dia de hoje</p>
             <ul className="grid grid-cols-2 gap-2">
               {DIA_DE_EXEMPLO.map((item) => (
                 <li
@@ -136,7 +140,7 @@ export function TelaPainel({ parte }: { parte: 'dia' | 'aviso' | 'semana' }) {
               ))}
             </ul>
             <div className="rounded-xl border border-border bg-card px-3 py-2.5">
-              <p className="text-[0.8rem] text-muted-foreground">Resumo da conversa</p>
+              <p className="text-[0.8rem] text-muted-foreground">Resumo da última conversa</p>
               <p className="mt-1 text-[0.95rem] leading-snug">
                 Dormiu bem, tomou o remédio da pressão e foi à hidroginástica de manhã.
               </p>
@@ -148,19 +152,19 @@ export function TelaPainel({ parte }: { parte: 'dia' | 'aviso' | 'semana' }) {
           <>
             <p className="font-titulo text-lg font-bold">Avisos</p>
             <div className="rounded-xl bg-destructive px-3.5 py-3 text-white">
-              <p className="text-[0.8rem] font-semibold">Urgente</p>
+              <p className="text-[0.8rem] font-semibold">Emergência</p>
               <p className="mt-1 text-[0.98rem] font-semibold leading-snug">
                 Pode ser uma emergência: “Eu caí no banheiro”. Ligue agora e, se precisar, chame o SAMU no 192.
               </p>
             </div>
             <div className="rounded-xl border border-foreground bg-warning-soft px-3.5 py-3 text-warning">
-              <p className="text-[0.8rem] font-semibold">Atenção</p>
+              <p className="text-[0.8rem] font-semibold">Possível golpe</p>
               <p className="mt-1 text-[0.98rem] font-semibold leading-snug">
                 Contou de um pedido de dinheiro ou de senha: “Me ligaram pedindo o código do cartão”. Pode ser golpe.
               </p>
             </div>
             <div className="rounded-xl border border-foreground bg-warning-soft px-3.5 py-3 text-warning">
-              <p className="text-[0.8rem] font-semibold">Atenção</p>
+              <p className="text-[0.8rem] font-semibold">Ligação</p>
               <p className="mt-1 text-[0.98rem] font-semibold leading-snug">
                 Não atendeu a ligação das 09:00, em 2 tentativas.
               </p>
@@ -183,9 +187,9 @@ export function TelaPainel({ parte }: { parte: 'dia' | 'aviso' | 'semana' }) {
                 <p className="text-base font-medium">{numero.rotulo}</p>
               </div>
             ))}
-            <div className={cn(BOTAO_DA_TELA, 'mt-auto min-h-14 bg-primary text-xl text-primary-foreground')}>
+            <div className={cn(BOTAO_DA_TELA, 'mt-auto min-h-14 bg-primary px-3 text-[1.05rem] leading-tight text-primary-foreground')}>
               <Phone aria-hidden className="h-5 w-5 shrink-0" />
-              Ligar agora
+              Ligar agora pra dona Helena
             </div>
           </>
         ) : null}
