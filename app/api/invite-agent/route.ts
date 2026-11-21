@@ -328,7 +328,8 @@ export async function POST(request: NextRequest) {
       agentUid,
       remoteUids: [requester_id],
       // A assistente espera dois minutos de silêncio antes de sair sozinha.
-      idleTimeout: 120,
+      // Sozinha na sala por 30 s (o aparelho fechou sem desligar), ela sai e para de gastar minuto.
+      idleTimeout: 30,
       expiresIn: ExpiresIn.hours(1),
       debug: process.env.LIA_DEPURAR === '1',
     });

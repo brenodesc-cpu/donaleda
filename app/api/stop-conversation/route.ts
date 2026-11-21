@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { AgoraClient, Area, generateConvoAIToken } from 'agora-agents';
 import { StopConversationRequest } from '@/types/conversation';
+import { pararAssistente } from '@/lib/pararAssistente';
 import { exigirAparelho } from '@/lib/sessao';
 
 export const dynamic = 'force-dynamic';
@@ -107,23 +108,11 @@ export async function POST(request: Request) {
       }
     }
 
-    // area: change to Area.EU or Area.AP for European or Asia-Pacific deployments.
-    const client = new AgoraClient({
-      area: Area.US,
-      appId,
-      appCertificate,
-    });
-    try {
-      await client.stopAgent(agent_id);
-    } catch (error) {
-      if (isAgentAlreadyStoppingOrStopped(error)) {
-        // Treat stop as idempotent: agent is already exiting (or gone).
-        return NextResponse.json({ success: true, state: 'already-stopping' });
-      }
-      throw error;
-    }
-
-    return NextResponse.json({ success: true });
+    // Pede a saída nos dois endereços da Agora: o do Gemini e o de três peças.
+    const resultado = await pararAssistente(appId, appCertificate, agent_id);
+    return NextResponse.json(
+      resultado === 'parou' ? { success: true } : { success: true, state: 'already-stopping' },
+    );
   } catch (error) {
     console.error('Error stopping conversation:', error);
     return NextResponse.json(
