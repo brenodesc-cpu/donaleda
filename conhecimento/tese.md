@@ -49,6 +49,32 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
   - **Por que o número conservador fica:** as conversas do Virte duram menos de 2 minutos, e o Google cobra de novo a conversa inteira a cada fala, então a ligação de 3 minutos e 20 segundos custa mais por minuto. A estimativa de US$ 0,042 por minuto continua sendo o pior caso.
   - **O que falta:** o cenário 2 ainda não foi construído, e o custo do nosso servidor ainda não foi medido.
   - **A Agora no hackathon:** o regulamento pede que a Agora funcione na demonstração e não diz qual serviço usar. Até a entrega, o protótipo fica no motor de conversa da Agora.
+- **Quanto custa cada família por mês,** linha por linha, com o preço de R$ 129,90 e 100 minutos (dólar de 19/11):
+
+  | Linha | Hoje, com o motor de conversa da Agora | No modo direto, ainda não construído | De onde vem |
+  |---|---:|---:|---|
+  | Preço | R$ 129,90 | R$ 129,90 | Decisão do Breno, 21/11 |
+  | Imposto do Simples Nacional (15,5%) | R$ 20,13 | R$ 20,13 | Anexo V do Simples |
+  | Cartão pelo Asaas (R$ 0,49 mais 2,99%) | R$ 4,37 | R$ 4,37 | Página de taxas do Asaas |
+  | Google, Gemini ao vivo | R$ 25 (estimativa conservadora) | De R$ 13 a 16 pelo medido no Virte, R$ 25 no pior caso | Preço publicado do Gemini e o banco do Virte |
+  | Google, resumo depois da ligação | Centavos, sem medida | Centavos, sem medida | A extração em `lib/posConversa.ts`, com o modelo leve do Gemini |
+  | Sala de áudio da Agora | R$ 0,58 (só o aparelho do idoso) | R$ 1,17 (o aparelho e o nosso servidor) | US$ 0,99 por mil minutos por participante |
+  | Motor de conversa da Agora | R$ 59 | Zero | US$ 0,10 por minuto |
+  | **Sobra por família** | **R$ 21** | **De R$ 79 a 91** | |
+
+  - **Só a sala da Agora sai de graça pras primeiras famílias:** os 10 mil minutos grátis por mês cobrem umas 100 famílias com um participante na sala, ou umas 50 com dois. O Google cobra desde a primeira família.
+  - **O modo direto** está sendo construído num ramo separado, na conversa "Voz direta no Gemini".
+
+- **Os custos fixos,** que não mudam com o número de famílias. Hoje estão em zero, porque o projeto usa os planos grátis:
+
+  | Serviço | O primeiro plano pago | Em reais | De onde vem |
+  |---|---|---:|---|
+  | Site (Vercel) | Pro, US$ 20 por mês por pessoa que publica | R$ 118 | Página de preço da Vercel, lida em 21/11 |
+  | Banco (Supabase) | Pro, US$ 25 por mês, com o primeiro projeto e US$ 10 de crédito de servidor do banco | R$ 147 | Página de preço do Supabase, lida em 21/11 |
+
+  - Com os dois pagos, o custo fixo fica em uns R$ 265 por mês. Ele se paga com 13 famílias do jeito de hoje, ou com 4 no modo direto.
+  - As páginas de preço e de uso justo da Vercel, lidas em 21/11, não proíbem uso comercial no plano grátis. Os termos de uso não foram lidos.
+  - No plano grátis do Supabase, o projeto pausa depois de uma semana sem uso.
 - **O preço pra testar hoje à noite:** depois de a família dizer quanto pagaria, perguntar se pagaria R$ 129,90 por mês por uma ligação por dia com os avisos no painel. Anotar o primeiro valor que ela disse e o sim ou o não.
 
 ### 3. Quem já faz parecido
