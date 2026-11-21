@@ -40,7 +40,9 @@ export async function POST(request: Request) {
     if (falas.some((f) => f.quem === 'idoso')) {
       try {
         const atual = await lerBase(idosoId);
-        extracao = await extrairConhecimentoComIA(atual.idoso.tratamento, falas);
+        // Quando outra pessoa atendeu, nada dela entra na ficha: a leitura por IA nem roda.
+        const outraPessoa = atual.conversas.find((c) => c.id === evento.conversaId)?.outraPessoa;
+        if (!outraPessoa) extracao = await extrairConhecimentoComIA(atual.idoso.tratamento, falas);
       } catch {
         extracao = {};
       }

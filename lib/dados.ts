@@ -184,6 +184,41 @@ export function abrirConversa(base: Base, agora: Date = new Date(), chamadaId?: 
   return conversa;
 }
 
+/** A conversa que está acontecendo agora (a última, sem fim). */
+export function conversaAberta(base: Base): Conversa | undefined {
+  const ultima = base.conversas[base.conversas.length - 1];
+  return ultima && !ultima.fim ? ultima : undefined;
+}
+
+/**
+ * Outra pessoa atendeu a ligação: marca a conversa e avisa a família uma vez, com a hora.
+ * Não guarda a voz nem nada do que a pessoa disse. Devolve false se não há conversa aberta.
+ */
+export function marcarOutraPessoa(base: Base, agora: Date = new Date()): boolean {
+  const conversa = conversaAberta(base);
+  if (!conversa) return false;
+  if (conversa.outraPessoa) return true;
+  conversa.outraPessoa = true;
+  const hora = new Intl.DateTimeFormat('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(conversa.inicio));
+  const { tratamento } = base.idoso;
+  criarAlerta(
+    base,
+    {
+      tipo: 'ligacao',
+      gravidade: 'atencao',
+      texto: `Outra pessoa atendeu a ligação das ${hora}. Nada do que ela disse entrou na ficha de ${tratamento}. Vale ligar pra saber como está.`,
+      origem: 'assistente',
+    },
+    agora,
+  );
+  return true;
+}
+
 export function fecharConversa(
   base: Base,
   conversaId: string,
@@ -192,7 +227,7 @@ export function fecharConversa(
   const conversa = base.conversas.find((c) => c.id === conversaId);
   if (!conversa) return null;
   if (!conversa.fim) conversa.fim = agora.toISOString();
-  if (conversa.falasDoIdoso > 0) base.idoso.primeiraConversaFeita = true;
+  if (conversa.falasDoIdoso > 0 && !conversa.outraPessoa) base.idoso.primeiraConversaFeita = true;
   return conversa;
 }
 
@@ -214,7 +249,8 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     semana.push(porData.get(data) ?? diaVazio(data));
   }
 
-  const ultima = base.conversas[base.conversas.length - 1];
+  // Ligação em que outra pessoa atendeu não aparece como a última conversa do idoso.
+  const ultima = [...base.conversas].reverse().find((c) => !c.outraPessoa);
   let ultimaConversa: PainelDaFamilia['ultimaConversa'] = null;
   if (ultima) {
     const inicio = new Date(ultima.inicio).getTime();
@@ -246,7 +282,8 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     hoje: porData.get(hojeData) ?? diaVazio(hojeData),
     // Ligação que atendeu sozinha e terminou sem o idoso falar não conta como conversa.
     conversouHoje: base.conversas.some(
-      (c) => dataEmBrasilia(new Date(c.inicio)) === hojeData && (c.falasDoIdoso > 0 || !c.fim),
+      (c) =>
+        dataEmBrasilia(new Date(c.inicio)) === hojeData && !c.outraPessoa && (c.falasDoIdoso > 0 || !c.fim),
     ),
     ultimaConversa,
     alertas,

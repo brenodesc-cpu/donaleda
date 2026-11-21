@@ -58,7 +58,7 @@ describe('ações da assistente (/api/mcp)', () => {
     expect(resposta.status).toBe(200);
   });
 
-  it('responde à abertura e lista as seis ações', async () => {
+  it('responde à abertura e lista as sete ações', async () => {
     const abertura = await (
       await POST(pedido({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-03-26' } }))
     ).json();
@@ -75,6 +75,7 @@ describe('ações da assistente (/api/mcp)', () => {
       'mudar_lembranca',
       'buscar_lembranca',
       'avisar_familia',
+      'outra_pessoa_atendeu',
       'resumir_conversa',
     ]);
   });

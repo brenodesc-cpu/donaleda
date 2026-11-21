@@ -95,7 +95,8 @@ function darPorPerdida(base: Base, chamada: Chamada, agora: Date): void {
  */
 export function ligacaoSemFala(base: Base, conversaId: string, agora: Date = new Date()): boolean {
   const conversa = base.conversas.find((c) => c.id === conversaId);
-  if (!conversa || conversa.falasDoIdoso > 0 || !conversa.chamadaId) return false;
+  // Quando outra pessoa atendeu, o idoso também não foi ouvido: vale como não atendida.
+  if (!conversa || (conversa.falasDoIdoso > 0 && !conversa.outraPessoa) || !conversa.chamadaId) return false;
   const chamada = base.chamadas.find((c) => c.id === conversa.chamadaId);
   if (!chamada || chamada.estado !== 'atendida') return false;
   darPorPerdida(base, chamada, agora);
@@ -122,7 +123,7 @@ export function avancarChamadas(base: Base, agora: Date = new Date()): { mudou: 
   const minutosAgora = emMinutos(horaMinutoEmBrasilia(agora));
   // Conversa em que o idoso não falou nada não segura a ligação da hora marcada.
   const conversasDeHoje = base.conversas
-    .filter((c) => dataEmBrasilia(new Date(c.inicio)) === hoje && (c.falasDoIdoso > 0 || !c.fim))
+    .filter((c) => dataEmBrasilia(new Date(c.inicio)) === hoje && !c.outraPessoa && (c.falasDoIdoso > 0 || !c.fim))
     .map((c) => emMinutos(horaMinutoEmBrasilia(new Date(c.inicio))));
 
   for (const horario of arrumarHorarios(base.idoso.horariosDeLigacao)) {

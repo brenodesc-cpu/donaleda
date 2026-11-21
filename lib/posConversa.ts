@@ -158,6 +158,9 @@ export function aplicarExtracaoNaBase(
     }
   }
 
+  // Outra pessoa atendeu: a regra de segurança acima vale, e o resto não entra na ficha.
+  if (conversa?.outraPessoa) return { aplicouAlgo };
+
   // 2. Aplica campos de bem-estar extraídos (sem sobrescrever dados já gravados hoje).
   // A nota da dor só vale se o idoso disse um número; o modelo inventava "dor 10".
   if (extracao.bemEstar) {

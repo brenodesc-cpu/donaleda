@@ -3,8 +3,10 @@
 
 import {
   aplicarBemEstar,
+  conversaAberta,
   criarAlerta,
   lerBase,
+  marcarOutraPessoa,
   mudarBase,
   oQueFaltaSaber,
   resumirConversa,
@@ -127,6 +129,12 @@ export const FERRAMENTAS: Ferramenta[] = [
     },
   },
   {
+    name: 'outra_pessoa_atendeu',
+    description:
+      'Quem está na ligação não é a pessoa da ficha: disse que é outra pessoa ou, depois de você perguntar, confirmou que não é. Avisa a família uma vez. Daqui em diante nada desta conversa é anotado.',
+    inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+  },
+  {
     name: 'resumir_conversa',
     description:
       'No fim da conversa, guarda um resumo de duas ou três frases do que a pessoa contou hoje. A família lê esse resumo.',
@@ -172,6 +180,15 @@ function numero_(valor: unknown): number | undefined {
 
 export class FerramentaDesconhecida extends Error {}
 
+/** As ações que leem ou gravam a vida do idoso. Ficam fechadas quando outra pessoa atendeu. */
+const ACOES_DA_FICHA = new Set([
+  'registrar_bem_estar',
+  'guardar_lembranca',
+  'mudar_lembranca',
+  'buscar_lembranca',
+  'resumir_conversa',
+]);
+
 /** Executa uma ação e devolve uma frase curta pro modelo. */
 export async function executarFerramenta(
   idosoId: string,
@@ -181,6 +198,18 @@ export async function executarFerramenta(
 ): Promise<string> {
   const a: Entrada =
     argumentos && typeof argumentos === 'object' ? (argumentos as Entrada) : {};
+
+  if (nome === 'outra_pessoa_atendeu') {
+    const marcou = await mudarBase(idosoId, (base) => marcarOutraPessoa(base, agora));
+    return marcou
+      ? 'A família foi avisada de que outra pessoa atendeu. Não conte nada da vida da pessoa da ficha e não anote o que for dito nesta ligação.'
+      : 'Não há ligação aberta pra marcar.';
+  }
+
+  // Quando outra pessoa atendeu, nada do que ela disser entra na ficha, e a vida do idoso não sai.
+  if (ACOES_DA_FICHA.has(nome) && conversaAberta(await lerBase(idosoId))?.outraPessoa) {
+    return 'Nada foi anotado nem buscado: quem está na ligação não é a pessoa da ficha. Não conte nada da vida dela.';
+  }
 
   if (nome === 'registrar_bem_estar') {
     const parcial: BemEstar = {
