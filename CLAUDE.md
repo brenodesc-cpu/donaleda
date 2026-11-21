@@ -15,6 +15,8 @@ Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta
 | [conhecimento/decisoes.md](conhecimento/decisoes.md) | O que o time já decidiu, com data | Antes de reabrir um assunto |
 | [conhecimento/infraestrutura.md](conhecimento/infraestrutura.md) | O que está de pé, o que falta pra virar aplicativo e a ordem | Antes de mexer em servidor, banco, login ou app |
 | [conhecimento/ideias.md](conhecimento/ideias.md) | Ideias e conselhos de mentores que ainda não viraram decisão | Ao pensar no que vem depois ou montar o pitch |
+| [conhecimento/teste-de-voz.md](conhecimento/teste-de-voz.md) | O roteiro de teste da conversa por voz e as falhas achadas | Antes de mexer na voz, na escuta ou no tempo de resposta |
+| [conhecimento/validacao.md](conhecimento/validacao.md) | O kit das ligações com idosos de verdade e os resultados sem nome | Ao montar a validação ou o pitch |
 
 Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da base no mesmo envio do código. Escreva o que vale hoje, com a data.
 
