@@ -92,6 +92,11 @@ export interface Conversa {
   falasDoIdoso: number;
   /** A ligação que abriu esta conversa, quando foi a assistente que ligou. */
   chamadaId?: string;
+  /**
+   * Quem atendeu não era o idoso (a assistente percebeu ou a pessoa disse). Nada desta
+   * conversa entra na ficha, nas lembranças nem no resumo, e ela não conta como conversa dele.
+   */
+  outraPessoa?: boolean;
   resumo?: string;
   /** Vem da tela do idoso no fim da ligação, quando a Agora mandou medições. */
   tempos?: TemposDaConversa;
