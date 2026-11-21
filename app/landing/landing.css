@@ -1,0 +1,130 @@
+/*
+ * Estilos da landing page. Tudo aqui vale só dentro de .lp, pra não tocar nas
+ * telas do idoso nem no painel da família.
+ */
+
+html:has(.lp) {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(.lp) {
+    scroll-behavior: auto;
+  }
+}
+
+.lp {
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 0.08em;
+  font-variant-numeric: lining-nums;
+}
+
+.lp ::selection {
+  background: #f7b90f;
+  color: #33200f;
+}
+
+.lp-escuro ::selection {
+  background: #f7b90f;
+  color: #33200f;
+}
+
+/* Foco de teclado: anel Café no claro, Casca no escuro. */
+.lp a:focus-visible,
+.lp button:focus-visible,
+.lp summary:focus-visible {
+  outline: 3px solid #33200f;
+  outline-offset: 3px;
+  border-radius: 0.5rem;
+}
+
+.lp-escuro a:focus-visible,
+.lp-escuro button:focus-visible,
+.lp-escuro summary:focus-visible {
+  outline-color: #fff8e8;
+}
+
+.lp .numeros {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Perguntas frequentes: o sinal de mais vira xis quando abre. */
+.lp details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.lp details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.lp details .sinal {
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lp details[open] .sinal {
+  transform: rotate(45deg);
+}
+
+/* Direção 2: a troca de tela dentro do aparelho. */
+@keyframes lp-tela-entra {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.lp-tela-entra {
+  animation: lp-tela-entra 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Direção 2: o anel que pulsa atrás do disco enquanto a ligação toca. */
+@keyframes lp-anel {
+  0% {
+    transform: scale(0.82);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.lp-anel {
+  animation: lp-anel 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+/* Direção 3: as barras da conta crescem uma vez, quando a página abre. */
+@keyframes lp-barra {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.lp-barra {
+  transform-origin: left center;
+  animation: lp-barra 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-tela-entra,
+  .lp-anel,
+  .lp-barra {
+    animation: none;
+  }
+
+  .lp details .sinal {
+    transition: none;
+  }
+}
