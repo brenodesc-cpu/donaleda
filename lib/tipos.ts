@@ -6,12 +6,15 @@ export type Alimentacao = 'comeu_bem' | 'comeu_pouco' | 'nao_comeu';
 export type Remedio = 'tomou' | 'nao_tomou' | 'nao_confirmou';
 export type Humor = 'bem' | 'triste' | 'ansioso' | 'sozinho' | 'irritado';
 
+/** As gavetas do segundo cérebro do idoso. A antiga 'familia' é lida como 'pessoa'. */
 export type CategoriaDeLembranca =
-  | 'familia'
+  | 'pessoa'
   | 'saude'
+  | 'dificuldade'
+  | 'rotina'
   | 'gosto'
   | 'historia'
-  | 'rotina'
+  | 'humor'
   | 'compromisso';
 
 export type TipoDeAlerta = 'emergencia' | 'golpe' | 'remedio' | 'saude' | 'humor' | 'ligacao';
@@ -36,12 +39,24 @@ export interface Dia {
   atualizadoEm?: string;
 }
 
-/** Algo que a Lia aprendeu sobre a pessoa e usa nas próximas conversas. */
+/** Algo que a Dona Leda aprendeu sobre a pessoa e usa nas próximas conversas. */
 export interface Lembranca {
   id: string;
+  /** Número curto e fixo (1, 2, 3...), que a assistente cita pra corrigir ou esquecer. */
+  numero: number;
   texto: string;
   categoria: CategoriaDeLembranca;
+  /** Nome da pessoa de quem a lembrança fala ("Zefa", "Pedro"). */
+  sobre?: string;
+  /** Compromisso e aniversário: AAAA-MM-DD e HH:MM, no horário de Brasília. */
+  data?: string;
+  hora?: string;
+  /** O idoso pediu pra não contar à família. A família vê só quantas são. */
+  reservada?: boolean;
+  /** Quem contou: o idoso na conversa ou a família no painel. */
+  origem?: 'conversa' | 'familia';
   criadaEm: string;
+  atualizadaEm?: string;
   exemplo?: boolean;
 }
 
@@ -134,7 +149,10 @@ export interface PainelDaFamilia {
   alertas: Alerta[];
   /** Sete dias, do mais antigo até hoje. Dia sem dado vem com os campos vazios. */
   semana: Dia[];
+  /** Sem as reservadas. Compromissos com data vêm primeiro, pela data. */
   lembrancas: Lembranca[];
+  /** Quantas lembranças o idoso pediu pra guardar só com a assistente. */
+  reservadas: number;
   /** A ligação que está tocando agora no aparelho do idoso, se houver. */
   chamadaTocando: Chamada | null;
   /** As últimas ligações, da mais nova pra mais antiga. */
@@ -155,6 +173,12 @@ export type AcaoDaFamilia = (
   | { acao: 'atender_sozinho'; ligado: boolean }
   /** Gera o código de 6 números pra ligar um aparelho. Responde `{ ok, ...CodigoDoAparelho }`. */
   | { acao: 'gerar_codigo' }
+  /** A família ensina uma lembrança. Responde `{ ok, lembranca }` ou 422 `{ ok:false, erro:'recusada', motivo }`. */
+  | { acao: 'ensinar'; texto: string; categoria: CategoriaDeLembranca; sobre?: string; data?: string; hora?: string }
+  /** A família corrige uma lembrança que vê. Só os campos que vierem. Responde `{ ok, lembranca }`. */
+  | { acao: 'corrigir_lembranca'; lembrancaId: string; texto?: string; categoria?: CategoriaDeLembranca; sobre?: string; data?: string; hora?: string }
+  /** A família apaga uma lembrança que vê. Responde `{ ok }`. */
+  | { acao: 'apagar_lembranca'; lembrancaId: string }
   /** Muda o perfil. Só os campos que vierem. Responde `{ ok, idoso }`. */
   | {
       acao: 'perfil';

@@ -4,12 +4,13 @@
 import {
   aplicarBemEstar,
   criarAlerta,
-  guardarLembranca,
+  lerBase,
   mudarBase,
   oQueFaltaSaber,
   resumirConversa,
   type BemEstar,
 } from './dados';
+import { buscar, dataPedida, GAVETAS, guardar, horaPedida, linha, mudar, type Mudanca } from './memoria';
 import type {
   Alimentacao,
   CategoriaDeLembranca,
@@ -24,7 +25,7 @@ const SONO: Sono[] = ['bem', 'mais_ou_menos', 'mal'];
 const ALIMENTACAO: Alimentacao[] = ['comeu_bem', 'comeu_pouco', 'nao_comeu'];
 const REMEDIO: Remedio[] = ['tomou', 'nao_tomou', 'nao_confirmou'];
 const HUMOR: Humor[] = ['bem', 'triste', 'ansioso', 'sozinho', 'irritado'];
-const CATEGORIAS: CategoriaDeLembranca[] = ['familia', 'saude', 'gosto', 'historia', 'rotina', 'compromisso'];
+const CATEGORIAS: CategoriaDeLembranca[] = GAVETAS;
 const TIPOS: TipoDeAlerta[] = ['emergencia', 'golpe', 'remedio', 'saude', 'humor'];
 const GRAVIDADES: Gravidade[] = ['urgente', 'atencao'];
 
@@ -62,14 +63,46 @@ export const FERRAMENTAS: Ferramenta[] = [
   {
     name: 'guardar_lembranca',
     description:
-      'Guarda algo sobre a vida da pessoa pra lembrar nas próximas conversas: família, gostos, histórias, rotina, compromissos.',
+      'Guarda algo sobre a vida da pessoa pra lembrar nas próximas conversas, na gaveta certa. Compromisso e aniversário levam a data e a hora como a pessoa disse. Se a pessoa pediu segredo ("isso fica entre nós"), mande reservada true.',
     inputSchema: {
       type: 'object',
       properties: {
-        texto: { type: 'string', description: 'Uma frase completa, em terceira pessoa.' },
-        categoria: { type: 'string', enum: CATEGORIAS },
+        texto: { type: 'string', description: 'Uma frase completa, em terceira pessoa, com as palavras da pessoa.' },
+        categoria: { type: 'string', enum: CATEGORIAS, description: 'pessoa, saude, dificuldade, rotina, gosto, historia, humor ou compromisso.' },
+        sobre: { type: 'string', description: 'Nome da pessoa de quem a lembrança fala, se houver.' },
+        data: { type: 'string', description: 'Pra compromisso e aniversário: como a pessoa disse ("amanhã", "quinta", "26/11"). Nunca calcule a data.' },
+        hora: { type: 'string', description: 'Hora como a pessoa disse ("14h", "2 da tarde").' },
+        reservada: { type: 'boolean', description: 'true quando a pessoa pediu pra não contar à família.' },
       },
       required: ['texto', 'categoria'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'mudar_lembranca',
+    description:
+      'Corrige, esquece, reserva (segredo) ou libera (pode contar à família) uma lembrança, pelo número que aparece entre colchetes.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        numero: { type: 'integer', description: 'O número da lembrança, o que aparece entre colchetes.' },
+        acao: { type: 'string', enum: ['corrigir', 'esquecer', 'reservar', 'liberar'] },
+        texto: { type: 'string', description: 'Na correção: a frase certa, inteira.' },
+        data: { type: 'string', description: 'Na correção de compromisso: a data como a pessoa disse.' },
+        hora: { type: 'string', description: 'Na correção de compromisso: a hora como a pessoa disse.' },
+      },
+      required: ['numero', 'acao'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'buscar_lembranca',
+    description:
+      'Procura na ficha inteira o que a pessoa já contou, quando ela pergunta algo da própria vida que não está nas suas lembranças de hoje.',
+    inputSchema: {
+      type: 'object',
+      properties: { pergunta: { type: 'string', description: 'As palavras da pergunta, como "consulta", "chave da casa", "neto".' } },
+      required: ['pergunta'],
       additionalProperties: false,
     },
   },
@@ -131,6 +164,11 @@ function numero(valor: unknown): number | undefined {
   return typeof n === 'number' && Number.isFinite(n) ? n : undefined;
 }
 
+function numero_(valor: unknown): number | undefined {
+  const n = typeof valor === 'string' ? Number(valor) : valor;
+  return typeof n === 'number' && Number.isInteger(n) && n > 0 ? n : undefined;
+}
+
 export class FerramentaDesconhecida extends Error {}
 
 /** Executa uma ação e devolve uma frase curta pro modelo. */
@@ -167,10 +205,49 @@ export async function executarFerramenta(
 
   if (nome === 'guardar_lembranca') {
     const frase = texto(a.texto, 240);
-    const categoria = escolha(a.categoria, CATEGORIAS) ?? 'historia';
     if (!frase) return 'Nada foi guardado: faltou o texto.';
-    await mudarBase(idosoId, (base) => guardarLembranca(base, frase, categoria, agora));
-    return 'Guardado.';
+    const categoria = escolha(a.categoria, CATEGORIAS) ?? 'historia';
+    const r = await mudarBase(idosoId, (base) =>
+      guardar(
+        base,
+        {
+          texto: frase,
+          categoria,
+          sobre: texto(a.sobre, 60),
+          data: dataPedida(texto(a.data, 40), agora),
+          hora: horaPedida(texto(a.hora, 20)),
+          reservada: simOuNao(a.reservada),
+          origem: 'conversa',
+        },
+        agora,
+      ),
+    );
+    if (!r.ok) return `Não guardei: ${r.motivo}. Diga isso com calma pra pessoa.`;
+    return r.lembranca.reservada
+      ? `Guardada como número ${r.lembranca.numero}, só entre vocês. A família não vê. Queda, emergência e golpe continuam indo pra família.`
+      : `Guardada como número ${r.lembranca.numero}.`;
+  }
+
+  if (nome === 'mudar_lembranca') {
+    const numero = numero_(a.numero);
+    const acao = escolha(a.acao, ['corrigir', 'esquecer', 'reservar', 'liberar'] as const);
+    if (!numero || !acao) return 'Nada mudou: faltou o número ou o que fazer.';
+    const mudanca: Mudanca =
+      acao === 'corrigir'
+        ? { acao, texto: texto(a.texto, 240), data: dataPedida(texto(a.data, 40), agora), hora: horaPedida(texto(a.hora, 20)) }
+        : { acao };
+    const r = await mudarBase(idosoId, (base) => mudar(base, { numero }, mudanca, agora));
+    if (!r.ok) return `Nada mudou: ${r.motivo}.`;
+    return { corrigir: 'Corrigido.', esquecer: 'Esquecido. Saiu da ficha e do painel da família.', reservar: 'Agora fica só entre vocês.', liberar: 'Agora a família pode ver.' }[acao];
+  }
+
+  if (nome === 'buscar_lembranca') {
+    const pergunta = texto(a.pergunta, 200);
+    if (!pergunta) return 'Faltou o que procurar.';
+    const base = await lerBase(idosoId);
+    const achadas = buscar(base, pergunta);
+    if (achadas.length === 0) return 'Não achei nada sobre isso na ficha. Diga que não sabe e ofereça guardar.';
+    return `Achei:\n${achadas.map((l) => linha(l, base.idoso.familiar.nome)).join('\n')}`;
   }
 
   if (nome === 'avisar_familia') {

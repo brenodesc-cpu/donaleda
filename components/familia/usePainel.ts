@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { PainelDaFamilia } from '@/lib/tipos';
+import type { CategoriaDeLembranca, PainelDaFamilia } from '@/lib/tipos';
 import { arrumarHorarios } from './formatos';
 import {
   buscarPainel,
@@ -13,6 +13,24 @@ import {
 } from './api';
 
 const INTERVALO_MS = 2000;
+
+/** Os campos de uma lembrança que a família ensina ou corrige. */
+export interface CamposDaLembranca {
+  texto?: string;
+  categoria?: CategoriaDeLembranca;
+  sobre?: string;
+  data?: string;
+  hora?: string;
+}
+
+/** Resultado de ensinar, corrigir ou apagar: deu certo, ou o motivo de não ter dado. */
+export type ResultadoDaLembranca = { ok: true } | { ok: false; motivo: string | null };
+
+function motivoDa(dado: unknown): string | null {
+  if (!dado || typeof dado !== 'object') return null;
+  const motivo = (dado as { motivo?: unknown }).motivo;
+  return typeof motivo === 'string' && motivo.trim() ? motivo.trim() : null;
+}
 
 /** Como está o pedido de "Ligar agora" feito neste painel. */
 export type PedidoDeLigacao = 'parado' | 'pedindo' | 'falhou';
@@ -36,6 +54,7 @@ function completar(dado: PainelDaFamilia): PainelDaFamilia {
     ...dado,
     chamadaTocando: dado.chamadaTocando ?? null,
     chamadas: Array.isArray(dado.chamadas) ? dado.chamadas : [],
+    reservadas: typeof dado.reservadas === 'number' ? dado.reservadas : 0,
     idoso: {
       ...idoso,
       remedios: Array.isArray(idoso.remedios) ? idoso.remedios : [],
@@ -173,6 +192,45 @@ export function usePainel(idosoId: string | null) {
     [idosoId, mandar],
   );
 
+  /** Manda uma ação de lembrança e busca o painel de novo quando deu certo. */
+  const mandarLembranca = useCallback(
+    async (acao: AcaoComIdoso): Promise<ResultadoDaLembranca> => {
+      const { status, dado } = await enviarAcao(acao);
+      if (status === 401) router.replace('/entrar');
+      if (status === 0) setSemConexao(true);
+      if (deuCerto(status)) {
+        await buscarAgora.current();
+        return { ok: true };
+      }
+      return { ok: false, motivo: status === 422 ? motivoDa(dado) : null };
+    },
+    [router],
+  );
+
+  const ensinarLembranca = useCallback(
+    async (campos: CamposDaLembranca & { texto: string; categoria: CategoriaDeLembranca }) => {
+      if (!idosoId) return { ok: false, motivo: null } as const;
+      return mandarLembranca({ acao: 'ensinar', idosoId, ...campos });
+    },
+    [idosoId, mandarLembranca],
+  );
+
+  const corrigirLembranca = useCallback(
+    async (lembrancaId: string, campos: CamposDaLembranca) => {
+      if (!idosoId) return { ok: false, motivo: null } as const;
+      return mandarLembranca({ acao: 'corrigir_lembranca', idosoId, lembrancaId, ...campos });
+    },
+    [idosoId, mandarLembranca],
+  );
+
+  const apagarLembranca = useCallback(
+    async (lembrancaId: string) => {
+      if (!idosoId) return { ok: false, motivo: null } as const;
+      return mandarLembranca({ acao: 'apagar_lembranca', idosoId, lembrancaId });
+    },
+    [idosoId, mandarLembranca],
+  );
+
   const painel = useMemo<PainelDaFamilia | null>(() => {
     if (!bruto) return null;
     return {
@@ -200,5 +258,8 @@ export function usePainel(idosoId: string | null) {
     trocarHorarios,
     trocarAtenderSozinho,
     salvarPerfil,
+    ensinarLembranca,
+    corrigirLembranca,
+    apagarLembranca,
   };
 }

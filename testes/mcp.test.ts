@@ -58,7 +58,7 @@ describe('ações da assistente (/api/mcp)', () => {
     expect(resposta.status).toBe(200);
   });
 
-  it('responde à abertura e lista as quatro ações', async () => {
+  it('responde à abertura e lista as seis ações', async () => {
     const abertura = await (
       await POST(pedido({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-03-26' } }))
     ).json();
@@ -72,6 +72,8 @@ describe('ações da assistente (/api/mcp)', () => {
     expect(lista.result.tools.map((t: { name: string }) => t.name)).toEqual([
       'registrar_bem_estar',
       'guardar_lembranca',
+      'mudar_lembranca',
+      'buscar_lembranca',
       'avisar_familia',
       'resumir_conversa',
     ]);
@@ -135,5 +137,31 @@ describe('ações da assistente (/api/mcp)', () => {
       await POST(pedido({ jsonrpc: '2.0', id: 6, method: 'tools/call', params: { name: 'comprar_remedio' } }))
     ).json();
     expect(resposta.error.code).toBe(-32602);
+  });
+});
+
+describe('segundo cérebro pelas ações da assistente', () => {
+  const chamar = async (name: string, args: Record<string, unknown>) =>
+    (await (await POST(pedido({ jsonrpc: '2.0', id: 9, method: 'tools/call', params: { name, arguments: args } }))).json()).result.content[0].text as string;
+
+  it('guarda compromisso com a data dita em palavra, busca e esquece', async () => {
+    const guardou = await chamar('guardar_lembranca', { texto: 'Dentista com a doutora Ana.', categoria: 'compromisso', data: 'amanhã', hora: '10h' });
+    expect(guardou).toMatch(/Guardada como número \d+/);
+    const numero = Number(guardou.match(/número (\d+)/)![1]);
+    const achou = await chamar('buscar_lembranca', { pergunta: 'quando é o dentista?' });
+    expect(achou).toContain('Dentista com a doutora Ana.');
+    expect(achou).toContain('às 10h');
+    expect(await chamar('mudar_lembranca', { numero, acao: 'esquecer' })).toContain('Esquecido');
+    expect(await chamar('buscar_lembranca', { pergunta: 'dentista' })).toContain('Não achei');
+  });
+
+  it('reservada avisa que queda e golpe continuam indo pra família', async () => {
+    const r = await chamar('guardar_lembranca', { texto: 'Tem medo de cair de novo no banho.', categoria: 'humor', reservada: true });
+    expect(r).toContain('só entre vocês');
+    expect(r).toContain('golpe continuam indo pra família');
+  });
+
+  it('não guarda senha', async () => {
+    expect(await chamar('guardar_lembranca', { texto: 'A senha é 998877', categoria: 'historia' })).toContain('Não guardei');
   });
 });

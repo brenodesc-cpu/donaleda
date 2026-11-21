@@ -7,6 +7,7 @@ import { randomInt } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { arrumarHorarios, avancarChamadas, pedirChamadaDaFamilia } from '@/lib/chamadas';
 import { montarPainel, mudarBase, mudarBaseQuando } from '@/lib/dados';
+import { dataPedida, GAVETAS, guardar, horaPedida, mudar } from '@/lib/memoria';
 import { exigirIdosoDaFamilia } from '@/lib/sessao';
 import { clienteDoServidor } from '@/lib/supabase/servidor';
 import type { AcaoDaFamilia, CodigoDoAparelho } from '@/lib/tipos';
@@ -110,6 +111,45 @@ export async function POST(request: Request) {
       base.idoso.atenderSozinho = acao.ligado;
     });
     return NextResponse.json({ ok: true });
+  }
+
+  if (acao.acao === 'ensinar') {
+    const r = await mudarBase(idosoId, (base) =>
+      guardar(
+        base,
+        {
+          texto: String(acao.texto ?? ''),
+          categoria: GAVETAS.includes(acao.categoria) ? acao.categoria : 'historia',
+          sobre: typeof acao.sobre === 'string' ? acao.sobre : undefined,
+          data: dataPedida(typeof acao.data === 'string' ? acao.data : undefined),
+          hora: horaPedida(typeof acao.hora === 'string' ? acao.hora : undefined),
+          origem: 'familia',
+        },
+      ),
+    );
+    if (!r.ok) return NextResponse.json({ ok: false, erro: 'recusada', motivo: r.motivo }, { status: 422 });
+    return NextResponse.json({ ok: true, lembranca: r.lembranca });
+  }
+
+  if (acao.acao === 'corrigir_lembranca' || acao.acao === 'apagar_lembranca') {
+    const lembrancaId = typeof acao.lembrancaId === 'string' ? acao.lembrancaId : '';
+    const r = await mudarBase(idosoId, (base) => {
+      // A família não vê nem mexe no que o idoso pediu pra guardar só com a assistente.
+      const alvo = base.lembrancas.find((l) => l.id === lembrancaId);
+      if (!alvo || alvo.reservada) return { ok: false as const, motivo: 'não achei essa lembrança' };
+      return acao.acao === 'apagar_lembranca'
+        ? mudar(base, { id: lembrancaId }, { acao: 'esquecer' })
+        : mudar(base, { id: lembrancaId }, {
+            acao: 'corrigir',
+            texto: typeof acao.texto === 'string' ? acao.texto : undefined,
+            categoria: acao.categoria && GAVETAS.includes(acao.categoria) ? acao.categoria : undefined,
+            sobre: typeof acao.sobre === 'string' ? acao.sobre : undefined,
+            data: typeof acao.data === 'string' ? (dataPedida(acao.data) ?? '') : undefined,
+            hora: typeof acao.hora === 'string' ? (horaPedida(acao.hora) ?? '') : undefined,
+          });
+    });
+    if (!r.ok) return NextResponse.json({ ok: false, erro: r.motivo.startsWith('não achei') ? 'nao_achada' : 'recusada', motivo: r.motivo }, { status: r.motivo.startsWith('não achei') ? 404 : 422 });
+    return NextResponse.json({ ok: true, lembranca: r.lembranca });
   }
 
   if (acao.acao === 'gerar_codigo') {

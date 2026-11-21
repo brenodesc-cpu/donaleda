@@ -13,7 +13,16 @@ import { usePainel } from '@/components/familia/usePainel';
 
 export default function PainelDaFamiliaPage() {
   const { idosos, idoso, escolher, semConexao: semLista } = useIdosos();
-  const { painel, semConexao, marcarVisto, pedidoDeLigacao, ligar } = usePainel(idoso?.id ?? null);
+  const {
+    painel,
+    semConexao,
+    marcarVisto,
+    pedidoDeLigacao,
+    ligar,
+    ensinarLembranca,
+    corrigirLembranca,
+    apagarLembranca,
+  } = usePainel(idoso?.id ?? null);
   const resumo = painel?.ultimaConversa?.resumo?.trim();
 
   return (
@@ -40,8 +49,12 @@ export default function PainelDaFamiliaPage() {
           <Semana semana={painel.semana} hoje={painel.hoje.data} />
           <Lembrancas
             lembrancas={painel.lembrancas}
+            reservadas={painel.reservadas}
             assistente={painel.assistente}
             tratamento={painel.idoso.tratamento}
+            onEnsinar={ensinarLembranca}
+            onCorrigir={corrigirLembranca}
+            onApagar={apagarLembranca}
           />
           <Rodape assistente={painel.assistente} />
         </>

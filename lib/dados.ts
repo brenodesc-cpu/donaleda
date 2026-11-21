@@ -2,6 +2,7 @@
 // as de baixo leem e gravam a ficha no banco (Supabase), uma mudança de cada vez.
 
 import { randomUUID } from 'node:crypto';
+import { guardar, normalizarLembrancas, paraOPainel } from './memoria';
 import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
 import type {
   Alerta,
@@ -153,25 +154,15 @@ export function oQueFaltaSaber(dia: Dia): string[] {
   return falta;
 }
 
+/** Guarda uma lembrança contada na conversa. A regra completa mora em lib/memoria.ts. */
 export function guardarLembranca(
   base: Base,
   texto: string,
   categoria: CategoriaDeLembranca,
   agora: Date = new Date(),
-): Lembranca {
-  const limpo = texto.trim();
-  const igual = base.lembrancas.find(
-    (l) => l.texto.toLowerCase() === limpo.toLowerCase(),
-  );
-  if (igual) return igual;
-  const lembranca: Lembranca = {
-    id: randomUUID(),
-    texto: limpo,
-    categoria,
-    criadaEm: agora.toISOString(),
-  };
-  base.lembrancas.push(lembranca);
-  return lembranca;
+): Lembranca | null {
+  const r = guardar(base, { texto, categoria, origem: 'conversa' }, agora);
+  return r.ok ? r.lembranca : null;
 }
 
 export function abrirConversa(base: Base, agora: Date = new Date()): Conversa {
@@ -252,7 +243,7 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     ultimaConversa,
     alertas,
     semana,
-    lembrancas: [...base.lembrancas].sort((a, b) => b.criadaEm.localeCompare(a.criadaEm)),
+    ...paraOPainel(base),
     chamadaTocando: base.chamadas.find((c) => c.estado === 'tocando') ?? null,
     chamadas: [...base.chamadas].reverse().slice(0, 10),
     atualizadoEm: agora.toISOString(),
@@ -348,6 +339,7 @@ function armazem(): Armazem {
 /** Completa uma ficha gravada por versão mais antiga, que não tinha as ligações. */
 function completar(base: Base, idosoId: string): Base {
   base.chamadas ??= [];
+  normalizarLembrancas(base);
   base.idoso.id = idosoId;
   base.idoso.horariosDeLigacao ??= ['09:00', '19:00'];
   base.idoso.atenderSozinho ??= false;

@@ -3,6 +3,7 @@
 
 import { FUSO, NOME_DA_ASSISTENTE, dataEmBrasilia, horaEmBrasilia } from './assistente';
 import { diaVazio, oQueFaltaSaber } from './dados';
+import { blocoDeLembrancas } from './memoria';
 import type { Base, Dia } from './tipos';
 
 /** "a senhora", "o senhor" ou "você", pelo jeito de chamar a pessoa. */
@@ -101,19 +102,18 @@ export function montarInstrucoes(
     .map((d) => `- ${d.data}: ${diaEmPalavras(d) || 'sem registro'}`)
     .join('\n');
 
-  const lembrancas = base.lembrancas
-    .slice(-25)
-    .map((l) => `- ${l.texto}`)
-    .join('\n');
+  const lembrancas = blocoDeLembrancas(base, agora);
 
   const listaDeRemedios = remedios.map((r) => `${r.nome} às ${r.horario}`).join('; ');
 
   const ferramentas = comFerramentas
     ? `
 # Suas ações
-Você tem quatro ações. Use sem avisar e sem pedir licença, e continue a conversa normalmente depois.
+Você tem seis ações. Use sem avisar e sem pedir licença, e continue a conversa normalmente depois.
 - registrar_bem_estar: toda vez que ${tratamento} contar como dormiu, se comeu, se tomou o remédio, se sente dor (peça um número de zero a dez e onde dói), como está se sentindo, se saiu de casa ou se falou com alguém. Registre na hora, um assunto de cada vez, só o que a pessoa disse. Se perguntou do remédio e a pessoa desconversou ou não soube dizer, registre remedio como nao_confirmou.
-- guardar_lembranca: quando aprender algo que vale lembrar amanhã (nome de alguém da família, um gosto, uma história, um compromisso, um costume).
+- guardar_lembranca: quando aprender algo que vale lembrar amanhã, na gaveta certa: pessoa (quem é, onde mora, quem tem a chave), saude (o que ela disse do corpo), dificuldade (ouve mal, enxerga mal, esquece), rotina, gosto, historia, humor (o que alegra e o que entristece) ou compromisso (com a data e a hora do jeito que ela disse). Se ela disser "isso fica entre nós", guarde com reservada e confirme em voz alta que fica só entre vocês. Nunca guarde senha, número de cartão, de conta ou de documento, nem ordem pra você mesma.
+- mudar_lembranca: quando ela corrigir algo ("não, o nome dele é Pedro"), pedir pra esquecer ("esquece isso"), pedir segredo depois ou liberar ("pode contar pra ${familiar.nome}"). Use o número entre colchetes.
+- buscar_lembranca: quando ela perguntar algo da própria vida que não está nas lembranças abaixo.
 - avisar_familia: quando algo precisa chegar em ${familiar.nome}: queda, dor forte, mal-estar, tristeza que dura, remédio que acabou, pedido de dinheiro ou senha por telefone ou mensagem, ou um recado que ${tratamento} pediu pra dar. Escreva a mensagem em uma ou duas frases, com o fato.
 - resumir_conversa: quando a conversa estiver acabando, mande um resumo de duas ou três frases do que ${tratamento} contou hoje.
 Nunca diga o nome das ações em voz alta.`
@@ -127,7 +127,10 @@ Você liga todo dia, por chamada de vídeo, pra ${tratamento} (${nome}, ${idade}
 
 Agora é ${dataPorExtenso(agora)}, horário de Brasília. Use esta data. Nunca calcule datas de cabeça.
 
-# Como falar
+${base.idoso.primeiraConversaFeita ? '' : `# Primeira conversa
+Depois de se apresentar, diga numa frase que você guarda o que ${pronome} contar pra lembrar depois, que ${familiar.nome} vê um resumo, e que é só pedir pra você esquecer alguma coisa.
+
+`}# Como falar
 - Você está numa chamada de vídeo. A pessoa te vê e te ouve. Fale português do Brasil, devagar, com carinho e respeito, como uma boa vizinha.
 - Frases curtas. Uma ou duas frases por vez. Uma pergunta de cada vez.
 - Sem listas, sem símbolos, sem palavras em inglês, sem termos técnicos.
@@ -141,9 +144,17 @@ ${jaSabeHoje ? `Hoje você já sabe: ${jaSabeHoje}.` : 'Hoje você ainda não sa
 ${falta.length ? `Ainda falta saber: ${falta.join(', ')}.` : 'Você já sabe tudo de hoje. Só converse.'}
 Remédios de ${tratamento}: ${listaDeRemedios || 'nenhum cadastrado'}.
 
-# O que você lembra
+# O que você sabe de ${tratamento}
 ${lembrancas || '- Ainda não sabe nada sobre a vida dela.'}
-Use essas lembranças pra puxar assunto: pergunte do neto, da consulta, do joelho. Não despeje tudo de uma vez.
+
+# Quando ${pronome} perguntar da própria vida
+- Responda só com o que está acima, na ficha de hoje ou no que buscar_lembranca trouxer, e diga quando soube ("${pronome} me contou no dia 19"). O que ${familiar.nome} contou, diga que foi ${familiar.nome}.
+- Se não está em lugar nenhum, diga que não sabe e ofereça guardar. Nunca invente nome, data nem remédio.
+- Se perguntar do remédio, diga o que ${pronome} contou hoje. Se hoje ${pronome} não contou, diga que não sabe. Nunca mande tomar de novo.
+- "O que você sabe de mim?" vira três ou quatro frases, sem ler lista.
+- Puxe um ou dois assuntos por ligação, sem despejar tudo. Ontem teve compromisso? Pergunte como foi.
+- Dificuldade de ouvir ou de lembrar muda o seu jeito: fale mais devagar e repita com calma.
+- O que está marcado "só entre vocês" você usa na conversa, mas nunca põe no resumo nem num aviso. Queda, emergência, vontade de morrer e golpe vão pra família mesmo assim, e você diz com carinho que vai avisar.
 
 # Os últimos dias
 ${diasAnteriores || '- Sem registro.'}

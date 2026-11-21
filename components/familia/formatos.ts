@@ -150,23 +150,54 @@ export function rotuloDoAlerta(tipo: TipoDeAlerta, tratamento: string): string {
   }
 }
 
+/** Ordem das gavetas no painel. Os compromissos com data vão à parte, no topo. */
 export const ORDEM_DAS_CATEGORIAS: CategoriaDeLembranca[] = [
-  'familia',
+  'pessoa',
   'saude',
+  'dificuldade',
+  'rotina',
   'gosto',
   'historia',
-  'rotina',
+  'humor',
   'compromisso',
 ];
 
 export const NOME_DA_CATEGORIA: Record<CategoriaDeLembranca, string> = {
-  familia: 'Família',
+  pessoa: 'Pessoas',
   saude: 'Saúde',
+  dificuldade: 'Dificuldades',
+  rotina: 'Rotina',
   gosto: 'Gostos',
   historia: 'Histórias',
-  rotina: 'Rotina',
+  humor: 'O que alegra e o que entristece',
   compromisso: 'Compromissos',
 };
+
+/** Gaveta conhecida, ou 'pessoa' pra ficha antiga que ainda chega com 'familia'. */
+export function gavetaDe(categoria: string): CategoriaDeLembranca {
+  return (ORDEM_DAS_CATEGORIAS as string[]).includes(categoria)
+    ? (categoria as CategoriaDeLembranca)
+    : 'pessoa';
+}
+
+/** "14h" ou "14h30" a partir de HH:MM. */
+export function horaCurta(hora: string): string {
+  const [h, m] = hora.split(':');
+  if (!h) return hora;
+  const horas = String(Number(h));
+  return !m || m === '00' ? `${horas}h` : `${horas}h${m}`;
+}
+
+/** "quinta, 26/11, às 14h" a partir de AAAA-MM-DD e HH:MM. */
+export function quandoDoCompromisso(data: string, hora?: string): string {
+  const quando = partesDaData(data);
+  if (!quando) return '';
+  const dia = new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC', weekday: 'long' })
+    .format(quando)
+    .replace('-feira', '');
+  const base = `${dia}, ${diaEMes(data)}`;
+  return hora ? `${base}, às ${horaCurta(hora)}` : base;
+}
 
 export function comMaiuscula(texto: string): string {
   const limpo = texto.trim();

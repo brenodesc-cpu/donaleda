@@ -2,6 +2,7 @@
 // leva `exemplo: true`, e o painel da família mostra essa marca.
 
 import { dataEmBrasilia, somarDias } from './assistente';
+import { dataPedida } from './memoria';
 import type { Base, Dia, Lembranca, NovoIdoso } from './tipos';
 
 export function baseDeExemplo(agora: Date = new Date(), idosoId = 'helena'): Base {
@@ -13,17 +14,23 @@ export function baseDeExemplo(agora: Date = new Date(), idosoId = 'helena'): Bas
     ...resto,
   });
 
+  let numero = 0;
   const lembranca = (
     id: string,
     categoria: Lembranca['categoria'],
     texto: string,
+    extra: Partial<Pick<Lembranca, 'sobre' | 'data' | 'hora' | 'reservada' | 'origem'>> = {},
   ): Lembranca => ({
     id,
+    numero: (numero += 1),
     categoria,
     texto,
+    origem: 'conversa',
+    ...extra,
     criadaEm: agora.toISOString(),
     exemplo: true,
   });
+  const quinta = dataPedida('quinta', agora) ?? hoje;
 
   return {
     idoso: {
@@ -49,12 +56,18 @@ export function baseDeExemplo(agora: Date = new Date(), idosoId = 'helena'): Bas
       dia(1, { sono: 'bem', alimentacao: 'comeu_bem', remedio: 'tomou', dor: 3, ondeDoi: 'no joelho direito', humor: 'bem', saiuDeCasa: true, falouComAlguem: true }),
     ],
     lembrancas: [
-      lembranca('ex-1', 'familia', 'A filha Marina mora em Curitiba e liga aos domingos.'),
-      lembranca('ex-2', 'familia', 'O neto Pedro tem 9 anos e joga futebol.'),
-      lembranca('ex-3', 'gosto', 'Gosta de novela e de cuidar das orquídeas.'),
-      lembranca('ex-4', 'saude', 'O joelho direito dói mais quando o tempo esfria.'),
-      lembranca('ex-5', 'rotina', 'Faz hidroginástica às terças e quintas de manhã.'),
-      lembranca('ex-6', 'compromisso', 'Tem consulta com o cardiologista na quinta-feira.'),
+      lembranca('ex-1', 'pessoa', 'A filha Marina mora em Curitiba e liga aos domingos.', { sobre: 'Marina' }),
+      lembranca('ex-2', 'pessoa', 'O neto Pedro tem 9 anos e joga futebol.', { sobre: 'Pedro' }),
+      lembranca('ex-3', 'pessoa', 'A vizinha Zefa tem a chave da casa.', { sobre: 'Zefa' }),
+      lembranca('ex-4', 'saude', 'Disse que o joelho direito dói mais quando o tempo esfria.'),
+      lembranca('ex-5', 'dificuldade', 'Ouve mal do lado esquerdo.'),
+      lembranca('ex-6', 'rotina', 'Faz hidroginástica às terças e quintas de manhã.'),
+      lembranca('ex-7', 'gosto', 'Gosta de novela e de cuidar das orquídeas.'),
+      lembranca('ex-8', 'historia', 'Foi costureira por 30 anos em Ribeirão Preto.'),
+      lembranca('ex-9', 'humor', 'Domingo é o dia mais difícil desde que o marido morreu.'),
+      lembranca('ex-10', 'compromisso', 'Consulta com o cardiologista, o doutor Renato.', { data: quinta, hora: '14:00', origem: 'familia' }),
+      lembranca('ex-11', 'compromisso', 'Aniversário do neto Pedro.', { sobre: 'Pedro', data: somarDias(hoje, 5) }),
+      lembranca('ex-12', 'humor', 'Anda preocupada com o aluguel e não quer que a filha saiba.', { reservada: true }),
     ],
     alertas: [],
     conversas: [],
