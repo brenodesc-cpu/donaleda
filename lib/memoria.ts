@@ -399,3 +399,77 @@ export function paraOPainel(base: Base): { lembrancas: Lembranca[]; reservadas: 
     reservadas: base.lembrancas.length - visiveis.length,
   };
 }
+
+// ---------- O segredo não sai pela família ----------
+
+// Palavras que aparecem em qualquer aviso ou resumo e não dizem qual é o segredo:
+// ligação, família, tempo, sentimento. Sem elas, "triste" ou "filha" bloqueariam tudo.
+const PALAVRAS_COMUNS = new Set(
+  `esta este isso essa esse aquele aquela aquilo pela pelo para como quando onde porque mais menos muito muita
+  muitos muitas pouco pouca tudo nada todo toda todos todas sempre nunca ainda agora depois antes hoje ontem amanha
+  semana dias meses anos sobre entre desde mesmo mesma outra outro outras outros algum alguma alguem ninguem nenhum
+  nenhuma cada qual quem assim tambem apenas pode podia quer queria quero querem sabe saber saiba sabia saibam conta
+  contar contou conte falar falou fala falando disse dizer dizendo pede pediu pedir pedindo ficar fica ficou estar
+  estava estao estou anda andar andava andando tinha teve fazer fazia vezes coisa coisas vida tempo hora horas
+  conversa conversar conversou ligacao ligar ligue ligou vale avisar aviso avisada avisado dela dele delas deles
+  nossa nosso minha seus suas dona senhora senhor gente casa familia filha filho filhas filhos neta neto netas netos
+  marido esposa segredo guardar guarda guardou entre triste tristeza chora chorando chorou choro chorar preocupada
+  preocupado preocupacao nervosa nervoso ansiosa ansioso medo sozinha sozinho cansada cansado desanimada desanimado
+  abatida abatido feliz alegre dormiu dormir sono comeu comer remedio remedios tomou tomar saude sente sentindo
+  sentiu sentia melhor pior forte fraca fraco causa motivo vontade semanas todo dias muito bastante pouco pessoa
+  assistente virtual contou disse acha achou`
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(radical),
+);
+
+function radical(palavra: string): string {
+  return palavra.length > 6 ? palavra.slice(0, 6) : palavra;
+}
+
+function palavrasDe(texto: string): string[] {
+  return (semAcento(texto).match(/[a-z]{4,}/g) ?? []).map(radical);
+}
+
+/**
+ * As palavras que só aparecem nas lembranças reservadas: o assunto do segredo
+ * ("aluguel" em "anda preocupada com o aluguel e não quer que a filha saiba").
+ * Ficam de fora o que a família já vê nas outras lembranças, os nomes da ficha
+ * e as palavras comuns.
+ */
+export function assuntoDoSegredo(base: Base): Set<string> {
+  const reservadas = base.lembrancas.filter((l) => l.reservada);
+  if (reservadas.length === 0) return new Set();
+  const conhecidas = new Set(
+    palavrasDe(
+      [
+        base.idoso.nome,
+        base.idoso.tratamento,
+        base.idoso.familiar.nome,
+        base.idoso.familiar.parentesco,
+        ...base.lembrancas.filter((l) => !l.reservada).map((l) => `${l.texto} ${l.sobre ?? ''}`),
+      ].join(' '),
+    ),
+  );
+  const assunto = new Set<string>();
+  for (const l of reservadas) {
+    for (const p of palavrasDe(`${l.texto} ${l.sobre ?? ''}`)) {
+      if (!conhecidas.has(p) && !PALAVRAS_COMUNS.has(p)) assunto.add(p);
+    }
+  }
+  return assunto;
+}
+
+/** O texto cita o assunto de alguma lembrança reservada? */
+export function citaSegredo(base: Base, texto: string): boolean {
+  const assunto = assuntoDoSegredo(base);
+  return assunto.size > 0 && palavrasDe(texto).some((p) => assunto.has(p));
+}
+
+/** O resumo sem as frases que citam o segredo. */
+export function resumoSemSegredo(base: Base, resumo: string): { resumo: string; cortou: boolean } {
+  const frases = resumo.trim().split(/(?<=[.!?])\s+/).filter((f) => f.trim());
+  const ficam = frases.filter((f) => !citaSegredo(base, f));
+  if (ficam.length === frases.length) return { resumo: resumo.trim(), cortou: false };
+  return { resumo: ficam.length ? ficam.join(' ') : 'Conversaram hoje.', cortou: true };
+}

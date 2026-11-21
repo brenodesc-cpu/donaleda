@@ -165,3 +165,52 @@ describe('segundo cérebro pelas ações da assistente', () => {
     expect(await chamar('guardar_lembranca', { texto: 'A senha é 998877', categoria: 'historia' })).toContain('Não guardei');
   });
 });
+
+describe('o segredo não sai no aviso nem no resumo', () => {
+  const chamar = async (name: string, args: Record<string, unknown>) =>
+    (await (await POST(pedido({ jsonrpc: '2.0', id: 11, method: 'tools/call', params: { name, arguments: args } }))).json()).result.content[0].text as string;
+  const ultimoAviso = async () => (await base()).alertas.at(-1)!;
+
+  it('tristeza por causa do aluguel reservado chega à família sem o motivo', async () => {
+    const r = await chamar('avisar_familia', {
+      tipo: 'humor',
+      gravidade: 'atencao',
+      mensagem: 'Dona Helena está triste e chorando todos os dias por causa do aluguel atrasado.',
+    });
+    expect(r).toContain('sem o motivo');
+    const aviso = await ultimoAviso();
+    expect(aviso.texto).not.toMatch(/alugu/i);
+    expect(aviso.texto).toContain('triste');
+  });
+
+  it('tristeza sem o assunto do segredo vai como a assistente escreveu', async () => {
+    await chamar('avisar_familia', { tipo: 'humor', gravidade: 'atencao', mensagem: 'Dona Helena anda triste com a chuva, sem sair de casa.' });
+    expect((await ultimoAviso()).texto).toBe('Dona Helena anda triste com a chuva, sem sair de casa.');
+  });
+
+  it('tristeza marcada como urgente também chega sem o motivo', async () => {
+    const r = await chamar('avisar_familia', { tipo: 'humor', gravidade: 'urgente', mensagem: 'Dona Helena está muito triste por causa do aluguel atrasado.' });
+    expect(r).toContain('sem o motivo');
+    expect((await base()).alertas.some((a) => a.texto.includes('muito triste por causa do aluguel'))).toBe(false);
+  });
+
+  it.each([
+    'Falou que não quer mais viver por causa do aluguel.',
+    'Caiu no banheiro quando foi ver a conta do aluguel.',
+  ])('risco vai inteiro, mesmo citando o segredo: %s', async (mensagem) => {
+    const r = await chamar('avisar_familia', { tipo: 'humor', gravidade: 'urgente', mensagem });
+    expect(r).toBe('A família foi avisada.');
+    expect((await ultimoAviso()).texto).toBe(mensagem);
+  });
+
+  it('o resumo perde só a frase do segredo', async () => {
+    const dados = await import('@/lib/dados');
+    await dados.mudarBase(IDOSO, (b) => dados.abrirConversa(b, new Date()));
+    const r = await chamar('resumir_conversa', {
+      resumo: 'Dona Helena regou as orquídeas e foi à hidroginástica. Está preocupada com o aluguel atrasado.',
+    });
+    expect(r).toContain('sem a parte');
+    const conversa = (await base()).conversas.at(-1);
+    expect(conversa?.resumo).toBe('Dona Helena regou as orquídeas e foi à hidroginástica.');
+  });
+});

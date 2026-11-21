@@ -10,7 +10,8 @@ import {
   resumirConversa,
   type BemEstar,
 } from './dados';
-import { buscar, dataPedida, GAVETAS, guardar, horaPedida, linha, mudar, type Mudanca } from './memoria';
+import { avaliarFala, semAcento } from './regras';
+import { buscar, citaSegredo, dataPedida, GAVETAS, guardar, horaPedida, linha, mudar, resumoSemSegredo, type Mudanca } from './memoria';
 import type {
   Alimentacao,
   CategoriaDeLembranca,
@@ -255,18 +256,45 @@ export async function executarFerramenta(
     if (!mensagem) return 'Aviso não enviado: faltou a mensagem.';
     const tipo = escolha(a.tipo, TIPOS) ?? 'saude';
     const gravidade = escolha(a.gravidade, GRAVIDADES) ?? 'atencao';
-    await mudarBase(idosoId, (base) =>
-      criarAlerta(base, { tipo, gravidade, texto: mensagem, origem: 'assistente' }, agora),
-    );
-    return 'A família foi avisada.';
+    // Queda, golpe e o que as regras fixas tratam como risco (vontade de morrer, remédio
+    // a mais) vão inteiros, mesmo com segredo. O resto não conta o assunto que a pessoa
+    // pediu segredo, nem marcado como urgente: a família recebe o fato sem o motivo.
+    const podeCitar = tipo === 'emergencia' || tipo === 'golpe' || RISCO_NO_AVISO.test(semAcento(mensagem)) || avaliarFala(mensagem) !== null;
+    let semOMotivo = false;
+    await mudarBase(idosoId, (base) => {
+      semOMotivo = !podeCitar && citaSegredo(base, mensagem);
+      const textoDoAviso = semOMotivo ? avisoSemMotivo(tipo, base.idoso.nome) : mensagem;
+      return criarAlerta(base, { tipo, gravidade, texto: textoDoAviso, origem: 'assistente' }, agora);
+    });
+    return semOMotivo
+      ? 'A família foi avisada sem o motivo, porque o motivo é um assunto que a pessoa pediu segredo. Não mande de novo.'
+      : 'A família foi avisada.';
   }
 
   if (nome === 'resumir_conversa') {
     const resumo = texto(a.resumo, 600);
     if (!resumo) return 'Resumo não guardado: faltou o texto.';
-    await mudarBase(idosoId, (base) => resumirConversa(base, resumo));
-    return 'Resumo guardado.';
+    let cortou = false;
+    await mudarBase(idosoId, (base) => {
+      const limpo = resumoSemSegredo(base, resumo);
+      cortou = limpo.cortou;
+      return resumirConversa(base, limpo.resumo);
+    });
+    return cortou ? 'Resumo guardado sem a parte que a pessoa pediu segredo.' : 'Resumo guardado.';
   }
 
   throw new FerramentaDesconhecida(`Ação desconhecida: ${nome}`);
+}
+
+// O aviso da assistente vem em terceira pessoa ("disse que não quer mais viver"), e as
+// regras fixas leem a fala em primeira. Isto pega o risco do jeito que ela escreve.
+const RISCO_NO_AVISO =
+  /\b(nao (quer|quero|queria) mais viver|(quer|queria|quero) morrer|vontade de morrer|(se|me) matar|suicid\w*|tirar a (propria )?vida|acabar com a (propria )?vida|melhor sem (ela|ele|mim)|nao acordar mais|caiu|queda|tombo|desmai\w*|sangr\w*|dor no peito|falta de ar|remedio a mais|dose dupla|duas vezes o remedio)\b/;
+
+/** O aviso que vai pra família quando o que a assistente escreveu citava o segredo. */
+function avisoSemMotivo(tipo: TipoDeAlerta, nome: string): string {
+  if (tipo === 'humor') return `${nome} disse na conversa de hoje que está triste. Vale ligar pra conversar.`;
+  if (tipo === 'saude') return `${nome} falou de um incômodo de saúde na conversa de hoje. Vale ligar pra saber como está.`;
+  if (tipo === 'remedio') return `Apareceu uma dúvida sobre o remédio na conversa de hoje com ${nome}. Vale ligar pra conferir.`;
+  return `Vale ligar pra ${nome} hoje.`;
 }
