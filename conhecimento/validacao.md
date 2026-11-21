@@ -120,7 +120,7 @@ Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia a
 
 O primeiro teste que os mentores sugeriram: a família entende melhor um aviso com responsável do que a conversa inteira? É o mesmo começo de manhã, inventado, da dona Helena (a pessoa de exemplo do app), mostrado de três jeitos: a conversa inteira transcrita, um resumo de três linhas e o aviso "Marina, sua mãe contou que tomou o remédio da pressão duas vezes. Quem liga pra ela?".
 
-**A página:** `donaleda.vercel.app/teste-tres-versoes.html` (arquivo `public/teste-tres-versoes.html`). Abre no celular, mostra uma versão por vez, mede os segundos e guarda as respostas no próprio celular, com um botão pra copiar o resultado.
+**A página:** `donaleda.vercel.app/teste-tres-versoes.html` (arquivo `public/teste-tres-versoes.html`). Abre no celular, mostra uma versão por vez, mede os segundos e guarda as respostas no próprio celular, com um botão pra copiar o resultado. As respostas ficam só no navegador daquele celular: aplique as cinco pessoas no mesmo aparelho, ou copie o resultado de cada celular e junte na planilha.
 
 **Como aplicar (5 minutos por pessoa):**
 1. Escolha um adulto do evento que não conhece o app. Na página, digite o número da pessoa (1 a 5): a ordem das versões muda pra cada número.
