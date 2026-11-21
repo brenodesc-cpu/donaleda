@@ -25,6 +25,18 @@ Feita com a versão publicada, a dona Helena de exemplo e o Gemini Live do modo 
 2. Consertado em 21/11 (gravação 45f131d, conferido): data dita como "dia 26" ou "26 de novembro" ficava sem data, e "sábado que vem" dito num sábado virava o próprio dia. Cada caso tem uma linha em `testes/memoria.test.ts`.
 3. Consertado em 21/11 (gravações 16df0fd e 11df712, conferido em três rodadas): o segredo vazava no aviso de tristeza. A idosa contava que chora há uma semana por causa do aluguel, que já estava guardado como segredo, e o aviso dizia "por causa do aluguel atrasado". Agora o servidor confere aviso comum e resumo contra as palavras próprias das lembranças reservadas e, quando acha, grava o aviso sem o motivo ("Helena disse na conversa de hoje que está triste. Vale ligar pra conversar."). Queda e golpe com pedido de segredo seguem avisando como urgente, pela regra e por ela. O caso está na bateria da conversa de segurança (`--caso segredo-reservado`).
 
+### Três peças de 21/11 à noite, aprovadas pelo Breno às 18h35
+
+Feitas no ramo `cerebro-pecas` e entregues à conversa "Servidor, voz e banco" pra juntar e publicar no lote de depois das 23h.
+
+| Peça | Como funciona | Provas |
+|---|---|---|
+| **Limite de 10 minutos de conversa por dia** | A soma das conversas do dia (horário de Brasília) para em 10 minutos, o que o plano vende. Depois disso a ligação marcada não toca, o servidor recusa a conversa começada pelo idoso, a tela dele diz "A conversa de hoje com a Dona Leda já acabou. Amanhã ela liga de novo às 9h" e o painel mostra "Hoje: 6 de 10 minutos de conversa" ou avisa que acabaram. A segunda ligação do dia leva só o que sobra. O "Ligar agora" da família passa sempre, com os 10 minutos inteiros, porque pode ser urgência. Conversa dos dados de exemplo não gasta minutos. O número troca por `LIA_LIMITE_DO_DIA_MIN` | `testes/limiteDoDia.test.ts` |
+| **De onde veio cada lembrança** | Cada lembrança diz se a pessoa contou, se a família ensinou ou se a Dona Leda deduziu da conversa depois do fim (`lib/posConversa.ts`). A dedução vai pra instrução com "ninguém confirmou: pergunte antes de dar como certo", e o painel mostra numa parte própria com Está certo, Corrigir e Apagar. Vira fato quando a pessoa diz de novo ou confirma por voz, ou quando a família confirma. O que o pós-conversa gravou antes disto segue marcado como contado | `testes/origemDaLembranca.test.ts` |
+| **Aviso de privacidade fixo** | A saudação da primeira ligação, que a Agora fala como está escrita, diz: "Eu guardo o que a senhora me contar pra lembrar nas próximas conversas, a Marina recebe um resumo de como a senhora está, e é só pedir que eu esqueço o que a senhora quiser." Quando a conversa termina com o idoso tendo falado, a ficha grava a data e a versão do texto (`lib/privacidade.ts`), e o painel mostra quando o aviso foi dado. A linha que repetia isso na instrução sai de `lib/persona.ts` pela conversa de segurança | `testes/privacidade.test.ts` |
+
+As 282 provas do projeto passam no ramo. As telas novas (o fim dos minutos na tela do idoso e as duas partes novas do painel) não foram conferidas na tela por esta conversa; ficam pro teste da publicação.
+
 ### O ciclo inteiro, 21/11 às 16h
 
 Três ligações seguidas pra mesma idosa, que nunca tinha falado com a Dona Leda, por voz no Gemini Live (voz Luciana do Mac fazendo a idosa), com a ficha guardada entre uma ligação e outra e a família ensinando no meio pelo mesmo caminho do painel. As ações rodaram de verdade; a ficha ficou na memória do teste, fora do banco.
@@ -41,7 +53,7 @@ Três ligações seguidas pra mesma idosa, que nunca tinha falado com a Dona Led
 
 **O que ainda impede o ciclo de funcionar sempre:**
 1. **O modo de três peças, que ficou de reserva, não está provado.** Desde a tarde de 21/11 o padrão do site é o Gemini dentro da Agora, por decisão do Breno, e as três peças só vão pros avós se a chave paga do Gemini não for trocada até 19h45. Nas três peças ela já prometeu avisar a família e não chamou a ação, e ninguém testou esse modo por voz. O teste das 17h confere nos dois modos se a vizinha com a chave e a consulta aparecem em "O que a Dona Leda sabe".
-2. **O aviso de privacidade da primeira ligação depende da IA.** Na ligação 1 ela não disse que guarda o que a pessoa conta, que a família vê um resumo e que dá pra pedir pra esquecer. A frase precisa entrar na saudação fixa da primeira ligação.
+2. Resolvido no ramo `cerebro-pecas` (ver abaixo): o aviso de privacidade da primeira ligação dependia da IA, e na ligação 1 ela não disse.
 3. **A lembrança guarda a data relativa no texto** ("na quinta que vem"). A data certa fica no campo próprio, mas o texto vai ficar errado depois dessa quinta.
 
 ### Conferência por voz do pedido de segredo, 21/11 às 15h30
