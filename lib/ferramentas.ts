@@ -289,7 +289,7 @@ export async function executarFerramenta(
 // O aviso da assistente vem em terceira pessoa ("disse que não quer mais viver"), e as
 // regras fixas leem a fala em primeira. Isto pega o risco do jeito que ela escreve.
 const RISCO_NO_AVISO =
-  /\b(nao (quer|quero|queria) mais viver|(quer|queria|quero) morrer|vontade de morrer|(se|me) matar|suicid\w*|tirar a (propria )?vida|acabar com a (propria )?vida|melhor sem (ela|ele|mim)|nao acordar mais|caiu|queda|tombo|desmai\w*|sangr\w*|dor no peito|falta de ar|remedio a mais|dose dupla|duas vezes o remedio)\b/;
+  /\b(nao (quer|quero|queria) mais viver|(quer|queria|quero) morrer|vontade de morrer|(se|me) matar|suicid\w*|tirar a (propria )?vida|acabar com a (propria )?vida|melhor sem (ela|ele|mim)|nao acordar mais|caiu|cai|caido|caida|queda|tombo|escorreg\w*|bateu (a|com a) cabeca|no chao|machuc\w*|desmai\w*|sangr\w*|dor no peito|falta de ar|remedio a mais|dose dupla|duas vezes o remedio|golpe|senha|pix|cartao)\b/;
 
 /** O aviso que vai pra família quando o que a assistente escreveu citava o segredo. */
 function avisoSemMotivo(tipo: TipoDeAlerta, nome: string): string {

@@ -214,3 +214,14 @@ describe('o segredo não sai no aviso nem no resumo', () => {
     expect(conversa?.resumo).toBe('Dona Helena regou as orquídeas e foi à hidroginástica.');
   });
 });
+
+describe('queda guardada como segredo continua indo pra família', () => {
+  it('a assistente guarda a queda como reservada e o aviso sai inteiro', async () => {
+    const chamar = async (name: string, args: Record<string, unknown>) =>
+      (await (await POST(pedido({ jsonrpc: '2.0', id: 12, method: 'tools/call', params: { name, arguments: args } }))).json()).result.content[0].text as string;
+    await chamar('guardar_lembranca', { texto: 'Dona Helena escorregou no banho e bateu o joelho.', categoria: 'saude', reservada: true });
+    const r = await chamar('avisar_familia', { tipo: 'saude', gravidade: 'atencao', mensagem: 'Dona Helena escorregou no banho e bateu o joelho.' });
+    expect(r).toBe('A família foi avisada.');
+    expect((await base()).alertas.at(-1)?.texto).toBe('Dona Helena escorregou no banho e bateu o joelho.');
+  });
+});
