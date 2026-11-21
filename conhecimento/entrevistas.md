@@ -29,7 +29,7 @@ Numa rodada de mentoria do hackathon, uma mentora contou o caso dos pais dela e 
 
 O que pesa mais é o que ela já faz (a ligação de todo sábado e a visita de toda semana). O R$ 500 é a opinião de uma pessoa que ainda não pagou nada e serve de referência de teto.
 
-**Pro pitch de domingo:** é o caso real mais forte do problema que o time tem. Só entra no palco se a mentora autorizar, e sem o nome dela.
+**Pro pitch de domingo:** é o caso real mais forte do problema que o time tem, e mesmo assim não entra no pitch (decisão do Breno em 21/11). Fica só registrado.
 
 ## O que a banca vai querer ver (mentor, 21/11)
 
