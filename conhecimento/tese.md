@@ -8,6 +8,17 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
 
 **Em uma frase:** a família do idoso lúcido que mora sozinho paga R$ 129,90 por mês por uma ligação combinada que ajuda a família a cuidar, e as casas de repouso indicam a Dona Leda às famílias que as procuram.
 
+### Pra quem (fechado pelo Breno em 21/11, às 20h10)
+
+- **Quem compra:** a filha ou o filho de 40 a 60 anos, com renda pra pagar R$ 130 por mês sem pensar, que mora longe o bastante pra não ver os pais toda semana.
+- **O pai ou a mãe:** de 75 a 90 anos, lúcido, que mora sozinho ou com o cônjuge e recusa morar com alguém ou ter cuidador.
+- **O que a família faz hoje:** liga quando dá e depende de um irmão ou de um vizinho pra ir ver.
+- **O que faz comprar:** um susto recente com o pai ou a mãe, como queda, remédio parado ou golpe, ou a morte de um dos dois.
+- **Onde achar:** nas casas de repouso que a família consulta e entre conhecidos da mesma idade.
+- **Fica de fora por enquanto:** idoso com demência, família que mora junto e quem não tem celular com internet.
+
+Isso vem de uma entrevista com uma família, da conversa com a primeira casa parceira e do retorno dos mentores. A idade de 75 a 90 anos e o susto como o que faz comprar são hipóteses, ainda sem dado. As ligações de hoje à noite confirmam ou derrubam o perfil, principalmente o susto recente.
+
 ### 1. O tamanho do mercado, em degraus
 
 | Degrau | Pessoas | Por ano, a R$ 129,90 por mês | De onde vem |
@@ -67,6 +78,7 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
 
 | O que | Como medir | Quando |
 |---|---|---|
+| Se um susto recente é o que faz a família comprar | A pergunta sobre o que aconteceu antes de procurar ajuda, nas ligações | 21/11, às 20h |
 | Se o idoso atende e volta a atender no dia seguinte | Ligações das 20h e a de domingo às 9h | 21 e 22/11 |
 | Quantas horas por semana a família gasta checando | A pergunta da planilha das ligações (`validacao.md`) | 21/11, às 20h |
 | Se o filho paga todo mês | Pedir o cartão a famílias do teste, com a primeira cobrança depois de uma semana | Depois do hackathon |
