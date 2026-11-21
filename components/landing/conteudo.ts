@@ -7,6 +7,45 @@ export const DESTINO_DO_BOTAO = '/entrar';
 export const TEXTO_DO_BOTAO = 'Criar a conta da família';
 export const EMAIL_DE_CONTATO = 'suporte@virte.com.br';
 
+// --- Fale conosco ---
+
+/**
+ * O número do WhatsApp que recebe o "Fale conosco": só os dígitos, com 55 e o DDD
+ * (por exemplo, 5511999999999). Fica vazio até o Breno mandar o número. Com ele
+ * vazio, os botões de contato abrem um e-mail pro endereço de cima.
+ */
+export const WHATSAPP_DE_CONTATO: string = '';
+
+export const TEXTO_DO_CONTATO = 'Fale conosco';
+export const MENSAGEM_DO_CONTATO = 'Olá! Quero conhecer a Dona Leda.';
+export const MENSAGEM_DO_RESIDENCIAL = 'Olá! Quero conhecer a Dona Leda pro meu residencial.';
+
+/** Só os dígitos do número, do jeito que o endereço do WhatsApp pede. */
+function soDigitos(numero: string): string {
+  return numero.replace(/\D/g, '');
+}
+
+/**
+ * Monta o endereço do botão de contato: a conversa no WhatsApp com a mensagem
+ * pronta ou, sem número, o e-mail já com a mensagem. O número pode vir com
+ * espaço, parêntese, traço ou sinal de mais.
+ */
+export function montarLinkDeContato(numero: string, mensagem: string): string {
+  const digitos = soDigitos(numero);
+  if (digitos) return `https://wa.me/${digitos}?text=${encodeURIComponent(mensagem)}`;
+  return `mailto:${EMAIL_DE_CONTATO}?subject=${encodeURIComponent('Dona Leda')}&body=${encodeURIComponent(mensagem)}`;
+}
+
+/** true quando o contato já sai pelo WhatsApp, false enquanto ele ainda abre o e-mail. */
+export function contatoPeloWhatsApp(): boolean {
+  return soDigitos(WHATSAPP_DE_CONTATO).length > 0;
+}
+
+/** O endereço do botão de contato da landing, com o número que estiver gravado acima. */
+export function linkDeContato(mensagem: string): string {
+  return montarLinkDeContato(WHATSAPP_DE_CONTATO, mensagem);
+}
+
 // --- A narrativa aprovada ---
 
 export const SONHO = [

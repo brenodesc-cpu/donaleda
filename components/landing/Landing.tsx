@@ -14,12 +14,14 @@ import {
   CONFIANCA,
   DEFINICAO,
   DINHEIRO,
-  EMAIL_DE_CONTATO,
+  MENSAGEM_DO_CONTATO,
+  MENSAGEM_DO_RESIDENCIAL,
   FONTES,
   RESIDENCIAIS,
   SONHO,
 } from '@/components/landing/conteudo';
 import {
+  BotaoDeContato,
   BotaoPrincipal,
   FonteDoNumero,
   Perguntas,
@@ -95,9 +97,13 @@ export function Landing({ comCaminhos = false }: LandingProps) {
             <p className={`mt-7 max-w-[36rem] text-xl leading-relaxed sm:text-[1.375rem] ${CLARO_NO_ESCURO}`}>
               {DEFINICAO}
             </p>
-            <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
               <BotaoPrincipal tom="casca" />
-              <a href="#como-funciona" className="flex min-h-11 items-center text-lg font-semibold underline hover:no-underline">
+              <BotaoDeContato tom="escuro" mensagem={MENSAGEM_DO_CONTATO} />
+              <a
+                href="#como-funciona"
+                className="flex min-h-11 items-center text-lg font-semibold underline hover:no-underline sm:ml-1"
+              >
                 Ver como funciona
               </a>
             </div>
@@ -189,12 +195,7 @@ export function Landing({ comCaminhos = false }: LandingProps) {
               </h2>
               <p className="mt-4 max-w-[42rem] text-xl leading-relaxed">{RESIDENCIAIS.texto}</p>
             </div>
-            <a
-              href={`mailto:${EMAIL_DE_CONTATO}?subject=Dona%20Leda%20no%20residencial`}
-              className="inline-flex min-h-14 items-center justify-center rounded-2xl border-2 border-foreground px-7 py-3 font-titulo text-xl font-bold hover:bg-background"
-            >
-              {RESIDENCIAIS.botao}
-            </a>
+            <BotaoDeContato mensagem={MENSAGEM_DO_RESIDENCIAL}>{RESIDENCIAIS.botao}</BotaoDeContato>
           </div>
         </section>
 
@@ -218,7 +219,10 @@ export function Landing({ comCaminhos = false }: LandingProps) {
             className="pointer-events-none absolute -right-28 top-1/2 hidden h-[420px] w-[420px] -translate-y-1/2 md:block"
           />
           <p className={`${TITULO} relative max-w-[16ch]`}>{ASSINATURA}</p>
-          <BotaoPrincipal tom="casca" className="relative mt-9 w-full sm:w-auto" />
+          <div className="relative mt-9 flex flex-col gap-3 sm:flex-row sm:gap-4">
+            <BotaoPrincipal tom="casca" />
+            <BotaoDeContato tom="escuro" mensagem={MENSAGEM_DO_CONTATO} />
+          </div>
           <Rodape tom="escuro" className="relative mt-16 border-t border-[#FFF8E8]/25 pt-8" />
         </section>
       </div>

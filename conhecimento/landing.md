@@ -48,6 +48,8 @@ As outras duas direções ficaram no histórico do repositório, na gravação "
 
 **Na página inicial desde 21/11/2026 (decisão do Breno, "Já agora"):** quem abre `/` sem aparelho ligado a um idoso vê a landing, com dois botões grandes no topo, os mesmos da antiga tela de boas-vindas: "Sou da família", que leva pra `/entrar`, e "Este aparelho vai receber as ligações", que leva pra `/parear`, onde entram os 6 números. Aparelho já ligado continua abrindo direto a tela do idoso, sem passar pela landing. Dentro do app de iPhone e Android, o aparelho sem par continua na tela de boas-vindas, sem landing. Quem decide é `components/Inicio.tsx`, que recebe a landing de `app/page.tsx`. Em `/landing` a página aparece sem esses dois botões.
 
+**Fale conosco pelo WhatsApp (decisão do Breno em 21/11/2026, "Sim, pelo WhatsApp"):** o botão "Fale conosco" fica no topo, ao lado de "Criar a conta da família", e no bloco final. Na seção dos residenciais, "Falar com o time" usa o mesmo caminho. A mensagem já vai escrita: "Olá! Quero conhecer a Dona Leda." no topo e no fim, e "Olá! Quero conhecer a Dona Leda pro meu residencial." na seção dos residenciais. O número fica em `WHATSAPP_DE_CONTATO`, em `components/landing/conteudo.ts`, e está vazio até o Breno mandar. Com ele vazio, os botões abrem um e-mail pro suporte@virte.com.br com a mesma mensagem. Só entra ali o número que o Breno mandar, e a prova do endereço está em `testes/landing.test.ts`.
+
 Skills de design instaladas em `~/.claude/skills/`: `ui-ux-pro-max`, `impeccable`, `frontend-design`, `brand`, `design-system`, `theme-factory`, `web-design-guidelines`, `apple-design` e `frontend-project-style`.
 
 ## Onde gravar e como publicar
