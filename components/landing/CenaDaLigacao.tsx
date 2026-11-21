@@ -39,35 +39,35 @@ const CENAS: Array<{ tela: Tela; titulo: string; texto: string; onde: string }> 
     tela: 'tocando',
     titulo: 'Na hora marcada, a Dona Leda liga',
     texto:
-      'O celular ou o tablet toca como uma chamada de vídeo comum. A família escolhe os horários e também pode pedir uma ligação na hora.',
-    onde: 'No aparelho do seu pai ou da sua mãe',
+      'O celular ou o tablet toca como uma chamada de vídeo comum. Quem acompanha escolhe os horários e também pode pedir uma ligação na hora.',
+    onde: 'No aparelho de quem recebe a ligação',
   },
   {
     tela: 'conversa',
     titulo: 'A pessoa só atende',
     texto:
       'Um toque no botão verde e a conversa começa. Ela se apresenta como assistente virtual, pergunta do sono, da comida, do remédio e da dor, e lembra do que ouviu nos outros dias.',
-    onde: 'No aparelho do seu pai ou da sua mãe',
+    onde: 'No aparelho de quem recebe a ligação',
   },
   {
     tela: 'dia',
-    titulo: 'Você vê como foi o dia',
-    texto: 'Depois da ligação, o painel da família mostra a ficha do dia e um resumo curto da conversa.',
-    onde: 'No seu celular',
+    titulo: 'Quem acompanha vê como foi o dia',
+    texto: 'Depois da ligação, o painel mostra a ficha do dia e um resumo curto da conversa.',
+    onde: 'No celular de quem acompanha',
   },
   {
     tela: 'aviso',
     titulo: 'O aviso aparece quando algo sai do normal',
     texto:
       'Queda, dor no peito, pedido de dinheiro ou senha e ligação não atendida viram aviso no painel. Os de queda e de golpe saem por regra fixa.',
-    onde: 'No seu celular',
+    onde: 'No celular de quem acompanha',
   },
   {
     tela: 'semana',
-    titulo: 'E você acompanha a semana',
+    titulo: 'E a semana fica à vista',
     texto:
       'O painel soma em quantos dos últimos 7 dias a pessoa saiu de casa e conversou com alguém. Pra saber dela agora, é só pedir uma ligação.',
-    onde: 'No seu celular',
+    onde: 'No celular de quem acompanha',
   },
 ];
 

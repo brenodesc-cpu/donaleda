@@ -1,6 +1,7 @@
 // A landing page da Dona Leda. A ligação toca na tela, o botão Atender funciona e o
-// painel da família aparece conforme a pessoa rola. É a direção "Produto em cena",
-// escolhida pelo Breno em 21/11/2026 entre três. O briefing está em conhecimento/landing.md.
+// painel aparece conforme a pessoa rola. É a direção "Produto em cena", escolhida pelo
+// Breno em 21/11/2026 entre três. Desde o mesmo dia ela fala primeiro com o residencial
+// sênior, que compra primeiro, e depois com a família. O briefing está em conhecimento/landing.md.
 // Aparece em dois endereços: em /landing e, desde 21/11/2026, na página inicial de quem
 // chega sem aparelho ligado a um idoso (components/Inicio.tsx).
 
@@ -14,7 +15,8 @@ import {
   CONFIANCA,
   DEFINICAO,
   DINHEIRO,
-  MENSAGEM_DO_CONTATO,
+  FAMILIA,
+  FRASE_DO_RESIDENCIAL,
   MENSAGEM_DO_RESIDENCIAL,
   FONTES,
   RESIDENCIAIS,
@@ -34,6 +36,8 @@ const LARGURA = 'mx-auto w-full max-w-6xl px-5 sm:px-8';
 const TITULO =
   'font-titulo text-[clamp(2.125rem,6.4vw,3.5rem)] font-extrabold leading-[1.05] tracking-[-0.025em] text-balance';
 const CLARO_NO_ESCURO = 'text-[#F3E3C3]';
+/** O botão de contato cheio, em cima do fundo Café: é o botão principal da página. */
+const CHEIO_NO_ESCURO = 'border-background bg-background text-foreground hover:bg-white';
 
 const CAMINHO =
   'flex min-h-24 items-center gap-4 rounded-2xl px-6 py-5 text-left font-titulo text-2xl font-semibold leading-tight transition-[background-color,transform] duration-150 active:scale-[0.98]';
@@ -97,9 +101,11 @@ export function Landing({ comCaminhos = false }: LandingProps) {
             <p className={`mt-7 max-w-[36rem] text-xl leading-relaxed sm:text-[1.375rem] ${CLARO_NO_ESCURO}`}>
               {DEFINICAO}
             </p>
+            <p className="mt-5 max-w-[36rem] font-titulo text-[1.375rem] font-bold leading-snug tracking-[-0.01em] sm:text-2xl">
+              {FRASE_DO_RESIDENCIAL}
+            </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-              <BotaoPrincipal tom="casca" />
-              <BotaoDeContato tom="escuro" mensagem={MENSAGEM_DO_CONTATO} />
+              <BotaoDeContato tom="escuro" mensagem={MENSAGEM_DO_RESIDENCIAL} className={CHEIO_NO_ESCURO} />
               <a
                 href="#como-funciona"
                 className="flex min-h-11 items-center text-lg font-semibold underline hover:no-underline sm:ml-1"
@@ -111,14 +117,6 @@ export function Landing({ comCaminhos = false }: LandingProps) {
           <AparelhoDoTopo />
         </section>
 
-        <section id="como-funciona" aria-labelledby="cena-titulo" className={`${LARGURA} pb-20 lg:pb-10`}>
-          <h2 id="cena-titulo" className={`${TITULO} max-w-[18ch]`}>
-            Ela liga, a pessoa atende e você fica sabendo
-          </h2>
-          <div className="mt-14 lg:mt-4">
-            <CenaDaLigacao />
-          </div>
-        </section>
       </div>
 
       <main>
@@ -134,10 +132,24 @@ export function Landing({ comCaminhos = false }: LandingProps) {
               <BotaoDeContato
                 mensagem={MENSAGEM_DO_RESIDENCIAL}
                 className="border-primary bg-primary text-primary-foreground hover:bg-[#4A2F17]"
-              >
-                {RESIDENCIAIS.botao}
-              </BotaoDeContato>
+              />
             </div>
+
+            {/* A tela de verdade, com os moradores de exemplo. Mora em /telas/ver/casa, com os botões travados. */}
+            <figure className="mt-10">
+              <div className="overflow-hidden rounded-2xl border-[10px] border-[#1F1308] bg-background shadow-[0_30px_60px_-30px_rgba(51,32,15,0.65)]">
+                <iframe
+                  src="/telas/ver/casa"
+                  title={RESIDENCIAIS.legendaDaTela}
+                  loading="lazy"
+                  scrolling="no"
+                  tabIndex={-1}
+                  className="pointer-events-none block h-[560px] w-full bg-background lg:h-[640px]"
+                />
+              </div>
+              <figcaption className="mt-3 text-base leading-relaxed">{RESIDENCIAIS.legendaDaTela}</figcaption>
+            </figure>
+
             <ul className="mt-12 grid gap-x-10 gap-y-9 md:grid-cols-3">
               {RESIDENCIAIS.itens.map((item) => (
                 <li key={item.titulo} className="border-t-2 border-foreground pt-5">
@@ -148,7 +160,23 @@ export function Landing({ comCaminhos = false }: LandingProps) {
                 </li>
               ))}
             </ul>
-            <p className="mt-9 text-lg leading-relaxed sm:text-xl">{RESIDENCIAIS.nota}</p>
+            <p className="mt-9 max-w-[52rem] text-lg leading-relaxed sm:text-xl">{RESIDENCIAIS.piloto}</p>
+            <p className="mt-3 max-w-[52rem] text-lg leading-relaxed sm:text-xl">{RESIDENCIAIS.nota}</p>
+          </div>
+        </section>
+
+        <section
+          id="como-funciona"
+          aria-labelledby="cena-titulo"
+          className="lp-escuro bg-primary text-primary-foreground"
+        >
+          <div className={`${LARGURA} pb-20 pt-20 lg:pb-10 lg:pt-24`}>
+            <h2 id="cena-titulo" className={`${TITULO} max-w-[20ch]`}>
+              Ela liga, a pessoa atende e quem acompanha fica sabendo
+            </h2>
+            <div className="mt-14 lg:mt-4">
+              <CenaDaLigacao />
+            </div>
           </div>
         </section>
 
@@ -217,6 +245,18 @@ export function Landing({ comCaminhos = false }: LandingProps) {
           </ul>
         </section>
 
+        <section aria-labelledby="familia-titulo" className="bg-secondary">
+          <div className={`${LARGURA} grid gap-8 py-16 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-16 lg:py-20`}>
+            <div>
+              <h2 id="familia-titulo" className="font-titulo text-4xl font-extrabold tracking-[-0.02em] text-balance">
+                {FAMILIA.titulo}
+              </h2>
+              <p className="mt-4 max-w-[42rem] text-xl leading-relaxed">{FAMILIA.texto}</p>
+            </div>
+            <BotaoPrincipal />
+          </div>
+        </section>
+
         <section aria-labelledby="perguntas-titulo" className={`${LARGURA} py-20 lg:py-28`}>
           <div className="grid gap-8 lg:grid-cols-[20rem_1fr] lg:gap-16">
             <h2 id="perguntas-titulo" className={TITULO}>
@@ -238,8 +278,11 @@ export function Landing({ comCaminhos = false }: LandingProps) {
           />
           <p className={`${TITULO} relative max-w-[16ch]`}>{ASSINATURA}</p>
           <div className="relative mt-9 flex flex-col gap-3 sm:flex-row sm:gap-4">
-            <BotaoPrincipal tom="casca" />
-            <BotaoDeContato tom="escuro" mensagem={MENSAGEM_DO_CONTATO} />
+            <BotaoDeContato tom="escuro" mensagem={MENSAGEM_DO_RESIDENCIAL} className={CHEIO_NO_ESCURO} />
+            <BotaoPrincipal
+              tom="casca"
+              className="border-2 border-[#FFF8E8] bg-transparent text-[#FFF8E8] hover:bg-white/10"
+            />
           </div>
           <Rodape tom="escuro" className="relative mt-16 border-t border-[#FFF8E8]/25 pt-8" />
         </section>
