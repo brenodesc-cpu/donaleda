@@ -60,16 +60,20 @@ export function normalizarLembrancas(base: Base): void {
 // ---------- O que nunca entra ----------
 
 // Seis dígitos ou mais seguidos (com espaço, ponto ou traço no meio): senha, cartão,
-// conta, CPF, telefone. Data (12/11) e hora (14h) passam.
+// conta, CPF, telefone. Data (12/11, 12/06/1965) e hora (14h) passam: a data sai do
+// texto antes da conferência, pra "casou em 12/06/1965" não ser lida como número longo.
 const NUMERO_LONGO = /\d(?:[\s.\-/]?\d){5,}/;
+const DATA_ESCRITA = /\b\d{1,2}[/.-]\d{1,2}[/.-](?:\d{4}|\d{2})\b|\b\d{4}-\d{2}-\d{2}\b/g;
+// Ordem dirigida à assistente. "Sempre que" só conta quando fala com ela ("sempre que eu
+// disser X, você..."); "sempre que alguém visita, ela faz bolo" é rotina e fica guardada.
 const ORDEM =
-  /\b(a partir de agora|de agora em diante|daqui pra frente voce|voce (deve|tem que|precisa)|sempre que (eu|alguem)|ignore|esqueca (as|suas) regras|finja|nao avise|nao conte (pra|para) (ninguem|a familia)|sua nova regra|nova instrucao)\b/;
+  /\b(a partir de agora|de agora em diante|daqui pra frente voce|voce (deve|tem que|precisa)|sempre que [^.]*\bvoce\b|ignore|esqueca (as|suas) regras|finja|nao avise|nao conte (pra|para) (ninguem|a familia)|sua nova regra|nova instrucao)\b/;
 const DADO_SECRETO = /\b(senha|codigo de seguranca|codigo do banco|numero do cartao|cvv|token)\b/;
 
 /** Por que a lembrança não pode ser guardada, ou null quando pode. */
 export function motivoDeRecusa(texto: string): string | null {
   const limpo = semAcento(texto);
-  if (NUMERO_LONGO.test(texto) || DADO_SECRETO.test(limpo)) {
+  if (NUMERO_LONGO.test(texto.replace(DATA_ESCRITA, ' ')) || DADO_SECRETO.test(limpo)) {
     return 'número longo, senha ou dado de banco não ficam guardados';
   }
   if (ORDEM.test(limpo)) return 'ordem pra assistente não vira lembrança';
@@ -85,29 +89,87 @@ function diaDaSemana(data: string): number {
   return new Date(Date.UTC(a, m - 1, d)).getUTCDay();
 }
 
+const MESES = [
+  'janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho',
+  'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro',
+];
+const NUMEROS: Record<string, number> = {
+  um: 1, uma: 1, dois: 2, duas: 2, tres: 3, quatro: 4, cinco: 5, seis: 6, sete: 7, oito: 8, nove: 9, dez: 10, quinze: 15,
+};
+
+/** AAAA-MM-DD se o dia existe naquele mês (31/11 não existe), senão undefined. */
+function dataValida(ano: number, mes: number, dia: number): string | undefined {
+  const d = new Date(Date.UTC(ano, mes - 1, dia));
+  if (d.getUTCMonth() !== mes - 1 || d.getUTCDate() !== dia) return undefined;
+  return `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+}
+
+/** Dia e mês sem ano: este ano, ou o que vem se já passou. */
+function proximaData(hoje: string, mes: number, dia: number): string | undefined {
+  const ano = Number(hoje.slice(0, 4));
+  const data = dataValida(ano, mes, dia);
+  if (data && data >= hoje) return data;
+  return dataValida(ano + 1, mes, dia);
+}
+
 /**
- * A data como a pessoa disse ("hoje", "amanhã", "quinta", "26/11", "2026-11-26")
- * vira AAAA-MM-DD pelo relógio de Brasília. A conta de data nunca fica com a IA.
+ * A data como a pessoa disse ("hoje", "amanhã", "quinta", "sábado que vem", "dia 26",
+ * "26 de novembro", "26/11", "daqui a 3 dias", "2026-11-26") vira AAAA-MM-DD pelo
+ * relógio de Brasília. A conta de data nunca fica com a IA.
  */
 export function dataPedida(texto: string | undefined, agora: Date = new Date()): string | undefined {
   if (!texto) return undefined;
-  const t = semAcento(texto).trim().replace(/-feira/g, '');
+  const t = semAcento(texto).trim().replace(/-feira/g, '').replace(/\s+/g, ' ');
   const hoje = dataEmBrasilia(agora);
   if (/^\d{4}-\d{2}-\d{2}$/.test(t)) return t;
-  if (t === 'hoje') return hoje;
-  if (t === 'amanha') return somarDias(hoje, 1);
-  if (t === 'depois de amanha') return somarDias(hoje, 2);
-  if (t === 'ontem') return somarDias(hoje, -1);
-  const barra = t.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
-  if (barra) {
-    const ano = barra[3] ? (barra[3].length === 2 ? `20${barra[3]}` : barra[3]) : hoje.slice(0, 4);
-    const data = `${ano}-${barra[2].padStart(2, '0')}-${barra[1].padStart(2, '0')}`;
-    // Sem ano e já passou: é o do ano que vem.
-    return !barra[3] && data < hoje ? `${Number(ano) + 1}${data.slice(4)}` : data;
+  if (/^(hoje|hoje mesmo)$/.test(t)) return hoje;
+  if (/\bdepois de amanha\b/.test(t)) return somarDias(hoje, 2);
+  if (/\bamanha\b/.test(t)) return somarDias(hoje, 1);
+  if (/^ontem$/.test(t)) return somarDias(hoje, -1);
+
+  const daqui = t.match(/\bdaqui a (\d{1,3}|\w+) dias?\b/);
+  if (daqui) {
+    const n = /^\d+$/.test(daqui[1]) ? Number(daqui[1]) : NUMEROS[daqui[1]];
+    if (n) return somarDias(hoje, n);
   }
-  const qual = DIAS.findIndex((d) => t.startsWith(d) || t.endsWith(d));
+
+  // "26/11", "dia 26/11/2026"
+  const barra = t.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/);
+  if (barra) {
+    const [dia, mes] = [Number(barra[1]), Number(barra[2])];
+    if (!barra[3]) return proximaData(hoje, mes, dia);
+    const ano = barra[3].length === 2 ? 2000 + Number(barra[3]) : Number(barra[3]);
+    return dataValida(ano, mes, dia);
+  }
+
+  // "26 de novembro", "dia 3 de dezembro de 2026"
+  const porExtenso = t.match(new RegExp(`\\b(\\d{1,2}) de (${MESES.join('|')})(?: de (\\d{4}))?\\b`));
+  if (porExtenso) {
+    const [dia, mes] = [Number(porExtenso[1]), MESES.indexOf(porExtenso[2]) + 1];
+    return porExtenso[3] ? dataValida(Number(porExtenso[3]), mes, dia) : proximaData(hoje, mes, dia);
+  }
+
+  // "dia 26": este mês, ou o que vem se já passou.
+  const soDia = t.match(/\bdia (\d{1,2})\b/);
+  if (soDia) {
+    const dia = Number(soDia[1]);
+    const [ano, mes] = [Number(hoje.slice(0, 4)), Number(hoje.slice(5, 7))];
+    for (let i = 0; i < 3; i++) {
+      const m = ((mes - 1 + i) % 12) + 1;
+      const data = dataValida(ano + Math.floor((mes - 1 + i) / 12), m, dia);
+      if (data && data >= hoje) return data;
+    }
+    return undefined;
+  }
+
+  const qual = DIAS.findIndex((d) => new RegExp(`\\b${d}\\b`).test(t));
   if (qual >= 0) {
-    const falta = (qual - diaDaSemana(hoje) + 7) % 7;
+    const semana = diaDaSemana(hoje);
+    let falta = (qual - semana + 7) % 7;
+    // "sábado que vem" dito num sábado é o da outra semana.
+    if (falta === 0 && /\b(que vem|proxim[oa])\b/.test(t)) falta = 7;
+    // "quinta da semana que vem" dito numa segunda pula a quinta desta semana.
+    if (/\b(semana que vem|proxima semana)\b/.test(t) && semana + falta <= 6) falta += 7;
     return somarDias(hoje, falta);
   }
   return undefined;
