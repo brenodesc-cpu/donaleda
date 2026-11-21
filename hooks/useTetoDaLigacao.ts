@@ -8,8 +8,8 @@ import { avancarTeto, RELOGIOS_ZERADOS, type RelogiosDoTeto } from '@/lib/teto';
 // A ligação tem teto. Sem ele, um idoso que larga o aparelho com a ligação aberta
 // (ou a ligação que atendeu sozinha com ele longe) deixa a assistente na sala até a
 // permissão vencer, em 1 hora, e a Agora cobra cada minuto. A conversa combinada é
-// de 3 a 10 minutos, então 10 minutos é o máximo, e 2 minutos sem o idoso dizer
-// nada quer dizer que ele não está mais ali. A conta fica em lib/teto.ts.
+// de 3 a 10 minutos, então 10 minutos é o máximo. O corte por silêncio (2 minutos
+// sem o idoso falar) existe, mas só liga pela variável. A conta fica em lib/teto.ts.
 
 function minutos(variavel: string | undefined, padrao: number): number {
   const pedido = Number(variavel);
@@ -17,7 +17,12 @@ function minutos(variavel: string | undefined, padrao: number): number {
 }
 
 export const TETO_DA_LIGACAO_MS = minutos(process.env.NEXT_PUBLIC_LIA_TETO_MIN, 10) * 60_000;
-export const TETO_SEM_FALA_MS = minutos(process.env.NEXT_PUBLIC_LIA_TETO_SEM_FALA_MIN, 2) * 60_000;
+// O corte por silêncio fica desligado até o teste com gente falando (21/11, 17h):
+// sem prova de que o microfone e a legenda chegam no celular, ele poderia derrubar
+// uma conversa de verdade. NEXT_PUBLIC_LIA_TETO_SEM_FALA_MIN=2 liga com 2 minutos.
+export const TETO_SEM_FALA_MS = process.env.NEXT_PUBLIC_LIA_TETO_SEM_FALA_MIN
+  ? minutos(process.env.NEXT_PUBLIC_LIA_TETO_SEM_FALA_MIN, 2) * 60_000
+  : 0;
 const PASSO_MS = 250;
 
 /** Um retrato do que o idoso já falou: muda sempre que ele fala algo novo. */

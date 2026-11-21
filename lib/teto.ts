@@ -33,6 +33,7 @@ export interface LeituraDoTeto {
 
 export interface LimitesDoTeto {
   tetoMs: number;
+  /** 0 desliga o corte por silêncio. */
   semFalaMs: number;
 }
 
@@ -59,6 +60,8 @@ export function avancarTeto(
     const passouDaFolga = proximos.total >= limites.tetoMs + FOLGA_DO_TETO_MS;
     if (respirou || passouDaFolga) return { relogios: proximos, encerrar: 'teto' };
   }
-  if (proximos.semFala >= limites.semFalaMs) return { relogios: proximos, encerrar: 'sem_fala' };
+  if (limites.semFalaMs > 0 && proximos.semFala >= limites.semFalaMs) {
+    return { relogios: proximos, encerrar: 'sem_fala' };
+  }
   return { relogios: proximos, encerrar: null };
 }

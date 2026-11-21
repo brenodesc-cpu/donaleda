@@ -45,6 +45,20 @@ describe('teto da ligação', () => {
     expect(r.em).toBeLessThanOrEqual(608_000);
   });
 
+  it('com o corte por silêncio desligado, só o teto de 10 minutos encerra', () => {
+    let relogios: RelogiosDoTeto = RELOGIOS_ZERADOS;
+    let encerrar: string | null = null;
+    let em = 0;
+    for (let ms = 250; ms <= 12 * 60_000 && !encerrar; ms += 250) {
+      const r = avancarTeto(relogios, QUIETO, 250, { tetoMs: 10 * 60_000, semFalaMs: 0 });
+      relogios = r.relogios;
+      encerrar = r.encerrar;
+      em = ms;
+    }
+    expect(encerrar).toBe('teto');
+    expect(em).toBe(10 * 60_000);
+  });
+
   it('no teto, encerra de qualquer jeito 30 segundos depois', () => {
     const semParar = (): LeituraDoTeto => ({ ...QUIETO, volumeDoIdoso: 0.5 });
     expect(rodar(semParar, 12 * 60_000)).toEqual({ encerrar: 'teto', em: 10 * 60_000 + 30_000 });
