@@ -2,6 +2,76 @@
 
 Atualizado em 21/11/2026.
 
+## A tese em uma página
+
+Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem fonte e data, e a estimativa vem marcada como estimativa. O detalhe de cada parte está nas seções de baixo.
+
+**Em uma frase:** a família do idoso lúcido que mora sozinho paga uns R$ 230 por mês por uma ligação combinada que ajuda a família a cuidar, e as casas de repouso indicam a Dona Leda às famílias que as procuram.
+
+### 1. O tamanho do mercado, em degraus
+
+| Degrau | Pessoas | Por ano, a R$ 229,90 por mês | De onde vem |
+|---|---:|---:|---|
+| Têm 60 anos ou mais e moram sozinhas | 6,0 milhões | R$ 16,55 bilhões (teto) | PNAD Contínua 2025, IBGE, divulgada em abril de 2026 |
+| Dessas, usam internet | 3,5 a 4,5 milhões | R$ 9,8 a 12,3 bilhões | **Estimativa:** 59% (TIC Domicílios 2025) a 74,5% (IBGE 2025) dos 60+ usam internet. A taxa é de todos os 60+, aplicada a quem mora sozinho |
+| E fazem chamada de voz ou vídeo | 2,7 a 3,4 milhões | R$ 7,4 a 9,4 bilhões | **Estimativa:** 76% de quem tem 60+ e usa internet faz chamada. O número está em `concorrentes.md` sem a pesquisa de origem anotada, e falta conferir |
+| E têm família que paga uns R$ 230 por mês | 0,7 a 0,9 milhão | R$ 2,0 a 2,5 bilhões | **Estimativa:** uso o plano de saúde como sinal de renda. 8,7 milhões de pessoas de 60+ têm plano (IESS, fevereiro de 2026), 27% dos 32,1 milhões de 60+ (Censo 2022) |
+| O primeiro grupo, em 12 meses, pelas casas que indicam | Sem número | | **Não tem fonte.** O Censo SUAS 2023 conta 2.081 unidades de acolhimento pra pessoa idosa, quase todas filantrópicas, e as particulares com fins lucrativos não respondem a ele. Moram em instituições 160.784 pessoas (Censo 2022). Quantas famílias procuram cada casa por mês ninguém publica |
+
+**Como medir o último degrau:** perguntar à primeira casa parceira, e às próximas, quantas famílias a procuram por mês e quantas acabam não levando o idoso, e anotar a partir de agora qual casa indicou cada família que entrar.
+
+### 2. Quanto cobrar
+
+- **O custo por idoso:** de R$ 59 a 89 por mês no modo de três peças e de R$ 84 a 139 no Gemini, com 100 a 150 minutos de conversa por mês (conta de 21/11, com o dólar de 19/11, na seção do preço abaixo).
+- **O que a família já paga por algo parecido:** o botão de emergência custa de R$ 189 a 249 por mês (Tecnosenior, conferido em 21/11). Nos EUA, a ligação diária da CheckWellCall custa US$ 29,99, uns R$ 177. O cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 (Cidesp, maio de 2026).
+- **As respostas de preço que temos:** uma só. Uma mentora com os pais morando longe disse "eu investiria até R$ 500" por mês (21/11, `entrevistas.md`). As ligações das 20h trazem mais.
+- **A recomendação:** o plano Essencial, R$ 229,90 por mês com 150 minutos. Ele fica na faixa do botão de emergência que a família já compra, é menos de um décimo do cuidador e deixa de margem, no teto, R$ 48 no Gemini e R$ 98 no modo de três peças.
+- **O preço pra testar hoje à noite:** depois de a família dizer quanto pagaria, perguntar se pagaria R$ 229,90 por mês por uma ligação por dia com os avisos no painel. Anotar o primeiro valor que ela disse e o sim ou o não.
+
+### 3. Quem já faz parecido
+
+| Quem | Quem paga | O que o idoso faz | Preço por mês | Atende em português | Por que não resolve pro filho brasileiro |
+|---|---|---|---|---|---|
+| Joy Calls, CheckWellCall, ElderVoice (EUA) | Família | Atende o telefone | De US$ 9,99 a 99,99 | Não informa | Vendem só na América do Norte e no Reino Unido |
+| Callie Care (EUA) | Família ou o idoso | Liga pra um número | US$ 15 | Não informa | Só nos EUA, e o que cresce lá são as corridas de carro |
+| inTouch (República Tcheca) | Família | Atende o fixo ou o celular | € 29,90 | Não informa | Só na Europa, e os idosos acharam a voz robótica |
+| CLOVA CareCall (Coreia e Japão) | Prefeitura | Atende o telefone | Pago pelo governo | Não: coreano e japonês | É vendido a governo, e a família fica de fora |
+| Hermet (Espanha) | Teleassistência e residencial | Atende o telefone | Não publicado | Não informa | A família não recebe nada |
+| ElliQ (EUA) | Órgão público, ou família | Conversa com um robô de mesa | US$ 40, mais US$ 249 de entrada | Não informa | Aparelho importado e caro |
+| Komp (Noruega) | Família | Nada: a chamada da família abre sozinha | NOK 249, mais NOK 7.995 pelo aparelho | Não informa | Não tem assistente, quem liga é a família |
+| Alexa Together (Amazon) | Família | Pede socorro à Alexa | US$ 19,99 | Não informa | Saiu do ar |
+| Tesatad Anna (Brasil) | Família | Conversa com um aparelho de mesa | R$ 479, com contrato de dois anos | Sim | É protótipo, com venda prevista pro segundo semestre de 2027 |
+| TeleHelp e Tecnosenior (Brasil) | Família | Aperta um botão | De R$ 189 a 249 | Sim | Só serve depois que algo deu errado, e ninguém conversa com o idoso |
+| Fabi, da EdukaLuz (Brasil) | Não informado | Escreve no WhatsApp | Não informado | Sim | Só responde quem procura |
+| **Dona Leda** | Família, com a casa de repouso indicando | Atende a chamada de vídeo | R$ 229,90 (proposta) | Sim | |
+
+**Por que ninguém fez isso aqui ainda:** no Brasil, quem vende pra esse público vende botão de emergência e cuidador, e os produtos que ligam pro idoso com IA estão nos EUA, na Europa e na Ásia, falando inglês ou a língua de lá.
+
+### 4. O problema a fundo
+
+- **O que a família faz hoje pra saber se está tudo bem:** liga quando dá, visita, pede pra um vizinho olhar, paga um botão de emergência ou contrata cuidador. Isso vem do que ouvimos e da pesquisa de concorrentes. Não achamos pesquisa nacional sobre filho que acompanha os pais de longe.
+- **Quanto tempo a família gasta por semana:** sem número publicado pra quem acompanha à distância. *Lugar pro número das ligações das 20h: o valor do meio das horas por semana que cada família gasta ligando ou indo ver.*
+- **O que dá errado:**
+  - Queda: 194 mil internações de idosos no SUS em 2025, cerca de 530 por dia.
+  - Solidão: entre pessoas de 50 anos ou mais, 16,8% se sentem sós sempre, e quem mora só tem 2,44 vezes mais chance de solidão constante (ELSI-Brasil, coleta de 2015 e 2016).
+  - O cuidado cai em cima de alguém da família: 25,8% dos cuidadores de idosos com limitação pararam de trabalhar ou estudar pra cuidar, e só 9,2% recebem por isso (ELSI-Brasil, Revista de Saúde Pública, 2018).
+  - A família se divide: a primeira casa parceira recebe muitas famílias em que parte quer levar o idoso pra casa de repouso e parte não (21/11).
+- *Lugar pras ligações das 20h: quantas famílias falaram, o que cada uma usa hoje e o que já deu errado.*
+
+### 5. O que ainda não sabemos
+
+| O que | Como medir | Quando |
+|---|---|---|
+| Se o idoso atende e volta a atender no dia seguinte | Ligações das 20h e a de domingo às 9h | 21 e 22/11 |
+| Quantas horas por semana a família gasta checando | A pergunta da planilha das ligações (`validacao.md`) | 21/11, às 20h |
+| Se o filho paga todo mês | Pedir o cartão a famílias do teste, com a primeira cobrança depois de uma semana | Depois do hackathon |
+| Quantos idosos que moram sozinhos usam internet | Cruzar, nos microdados da PNAD, quem mora sozinho com quem usa internet | Depois do hackathon |
+| Quantas famílias passam por uma casa de repouso por mês | Perguntar à primeira casa parceira e às próximas | Semana de 23/11 |
+| Quantas indicações viram família pagante | Anotar qual casa indicou cada família | No primeiro mês |
+| O custo de verdade no Gemini | A primeira fatura do Google | No fim do mês |
+
+Fontes desta página: as de `concorrentes.md` (PNAD Contínua 2025, TIC Domicílios 2025, IESS, ELSI-Brasil, internações por queda e os sites das empresas), [Censo 2022 sobre quem mora em instituição](https://agenciabrasil.ebc.com.br/geral/noticia/2024-09/brasil-tem-160-mil-pessoas-vivendo-em-asilos-e-14-mil-em-orfanatos), [Censo SUAS 2023, na apresentação do MDS na Câmara](https://www2.camara.leg.br/atividade-legislativa/comissoes/comissoes-permanentes/comissao-de-defesa-dos-direitos-da-pessoa-idosa-cidoso/apresentacoes-em-eventos/apresentacoes-de-convidados-em-audiencias-publicas-em-2024/audiencia-publica-sobre-desafios-das-instituicoes-de-longa-permanencia-para-idosos-15-5-24/apresentacao-ap-15-5-24-ministerio-do-desenvolvimento-social-e-combate-a-fome/view) e [ELSI-Brasil sobre cuidadores](https://scielosp.org/pdf/rsp/2018.v52suppl2/9s/pt).
+
 ## O problema
 
 Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (40% dos 15,6 milhões de pessoas que moram sozinhas, PNAD Contínua 2025, divulgada em abril de 2026). Quem envelhece precisa de cuidado todo dia, com companhia, segurança, saúde, comunicação e rotina. Hoje esse cuidado é feito por gente: a filha, de graça, o cuidador por R$ 2.800 a 4.500 por mês, ou o residencial por R$ 6 mil a 11 mil. 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged), e quase todo idoso envelhece sem esse cuidado ou com um filho fazendo o papel dele. O filho mora longe, liga quando dá e fica sem saber se a mãe comeu, tomou o remédio ou caiu. O idoso passa dias sem conversar com ninguém.
