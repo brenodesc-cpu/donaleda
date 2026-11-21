@@ -93,7 +93,7 @@ Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia a
 ## Compromissos com quem participou
 
 - Nada é gravado sem o segundo sim.
-- As fichas criadas pra esses idosos são apagadas do banco até 23/11/2026.
+- Quem cadastrou o idoso apaga tudo dele a qualquer hora, em `/familia/ajustes`, no fim da página, em "Apagar os dados" (ficha, lembranças, avisos e o celular ligado a ele). O que sobrar, quem cuida do servidor apaga até 23/11/2026.
 
 ## Resultados
 
