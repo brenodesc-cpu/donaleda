@@ -2,11 +2,39 @@
 
 Proposta de 21/11/2026, pro time decidir. Nasceu da pesquisa em `concorrentes.md`. O que virar decisão passa pra `decisoes.md`.
 
-## Em revisão desde a tarde de 21/11: a assistente vai pra frente
+## Direção do Breno desde a tarde de 21/11: uma camada de cuidado
 
-O Breno reprovou a frase abaixo ("te conta como foi, e te dá um motivo pra ligar"). Motivo: ela vende uma ligação de conferência pro filho, igual à de 13 empresas lá fora, e esconde a assistente. A pesquisa aponta pro mesmo lado: Meela e Callie Care só cresceram quando a IA passou a resolver coisas pro idoso.
+O Breno reprovou as duas rodadas de frase. As primeiras vendiam uma ligação de conferência pro filho. As segundas vendiam "um assistente de IA", sem remeter a idoso e sem mostrar o dinheiro do mercado. A direção dele: **a Dona Leda é toda uma camada que cuida da qualidade de vida de quem envelhece**, e a assistente é o jeito de essa camada chegar na pessoa.
 
-Nenhuma frase está aprovada. As opções em discussão:
+**Onde está o dinheiro.** Hoje essa camada é feita por gente: a filha, de graça, o cuidador por R$ 2.800 a 4.500 por mês, ou o residencial por R$ 6 mil a 11 mil. A aposentadoria média é de R$ 2.697 (IBGE 2025), menos que o salário de um cuidador. Quase todo idoso do país envelhece sem essa camada, ou com um filho fazendo o papel dela.
+
+**Números pro slide de mercado**
+- 36 milhões de brasileiros com 60 anos ou mais. A partir de 2029 o país tem mais idosos que crianças, e em 2070 serão 75 milhões (IBGE, Projeções 2024).
+- Cuidado com idosos no Brasil estimado em US$ 82,6 bilhões por ano (2023), a caminho de US$ 124 bilhões em 2030. Estimativa de consultoria citada na imprensa, sem método publicado.
+- Quem tem 50 anos ou mais consumiu R$ 1,8 trilhão em 2024, 24% do consumo das famílias (Data8, estudo Brasil Prateado).
+- 840 mil cuidadores de idosos, 547% a mais que dez anos atrás (imprensa, 2025).
+- Lá fora: Papa avaliada em US$ 1,4 bilhão (2021) e Hippocratic AI em US$ 3,5 bilhões (2025).
+
+**O que tem dentro da camada:** companhia, saúde do dia a dia, segurança, ajuda pra resolver a vida e a família por perto. Tudo alimenta a ficha de cada idoso. Família, residencial, médico e plano de saúde pagam pra cuidar melhor em cima dela.
+
+**Frases em discussão (nenhuma aprovada)**
+
+| Pra quê | Frase |
+|---|---|
+| O que a empresa é | "A Dona Leda é a camada de cuidado de quem envelhece em casa: companhia, saúde do dia a dia, segurança e ajuda pra resolver a vida, com a família por perto." |
+| O que a empresa é | "Qualidade de vida pra quem passou dos 60, cuidada todo dia." |
+| O dinheiro do mercado | "A aposentadoria média do brasileiro não paga um cuidador. A Dona Leda leva o cuidado de todo dia pra quem envelhece em casa, por menos de um décimo desse preço." |
+| O dinheiro do mercado | "Em 2029 o Brasil vai ter mais idosos que crianças, e vai faltar cuidador. A Dona Leda é o cuidado diário que dá pra levar a cada um deles." |
+| O dinheiro do mercado | "Cuidar de idosos já movimenta mais de US$ 80 bilhões por ano no Brasil, quase tudo com gente e pra quem pode pagar. A Dona Leda leva esse cuidado pra quem ficou de fora." |
+| Pro filho que compra | "Sua mãe quer envelhecer na casa dela. A Dona Leda cuida do dia a dia pra isso dar certo." |
+
+**Dois cuidados com essa direção:** "garante" é uma palavra que a banca vai testar, e "cuida" entrega o mesmo sem pedir prova. A saúde do dia a dia fica em perguntar, lembrar e avisar: passar disso exige médico e registro na Anvisa.
+
+**Na demonstração:** o pitch vende a camada inteira e mostra a parte que já funciona, que é a ligação diária com a ficha e os avisos.
+
+## Segunda rodada, reprovada: a assistente no centro
+
+Opções que o Breno também reprovou em 21/11:
 
 | Ângulo | Frase | Aposta | Risco |
 |---|---|---|---|
@@ -15,8 +43,6 @@ Nenhuma frase está aprovada. As opções em discussão:
 | 3. Continuar morando na própria casa | "Entre ligar uma vez por semana e pagar R$ 3 mil por um cuidador, existe a Dona Leda." | Cada mês a mais em casa vale milhares de reais pra família | Encosta em promessa de saúde |
 | 4. O canal de voz pros serviços | "Farmácia, médico, banco e transporte foram pro aplicativo. A Dona Leda leva tudo isso pro idoso por uma ligação." | Farmácia, plano e banco pagam pra alcançar o idoso que não usa o aplicativo deles | É visão, e depende de parceria que não existe |
 | 5. Cuidar de longe, com a assistente no centro | "Você mora longe. A Dona Leda liga pra sua mãe todo dia, resolve o que ela precisa e te conta como ela está." | Mantém o comprador que a pesquisa confirmou | É a menos nova |
-
-**Recomendação de 21/11:** abrir com a 1 ou a 2 e fechar com a 4. A notícia pra família vira uma das coisas que ela faz.
 
 **O que isso pede da demonstração:** a banca precisa ver a Dona Leda resolvendo duas ou três coisas na ligação. As que cabem em um dia:
 
