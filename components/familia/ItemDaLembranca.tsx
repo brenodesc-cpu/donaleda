@@ -21,7 +21,7 @@ export function quemContou(lembranca: Lembranca, tratamento: string): string {
   const quando = dataDeBrasilia(lembranca.criadaEm);
   if (lembranca.origem === 'deduzida') {
     const daConversa = quando ? `da conversa de ${diaEMes(quando)}` : 'da conversa';
-    return `A ${NOME_DA_ASSISTENTE} entendeu ${daConversa}. Ninguém confirmou ainda.`;
+    return `A ${NOME_DA_ASSISTENTE} entendeu ${daConversa}.`;
   }
   const quem = lembranca.origem === 'familia' ? 'A família contou' : `${tratamento} contou`;
   const quemComMaiuscula = quem.charAt(0).toLocaleUpperCase('pt-BR') + quem.slice(1);

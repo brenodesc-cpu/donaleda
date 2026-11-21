@@ -103,6 +103,7 @@ describe('limite de 10 minutos de conversa por dia', () => {
   it('o painel da família mostra os minutos de hoje e diz quando acabaram', () => {
     const usado = montarPainel(idosaCom([{ inicio: '12:00', minutos: 6 }]), as('14:00'));
     expect(frasesDoLimite(usado.limiteDoDia)).toBe('Hoje: 6 de 10 minutos de conversa.');
+    expect(frasesDoLimite(montarPainel(idosaCom([]), as('14:00')).limiteDoDia)).toBeNull();
     const acabou = montarPainel(idosaCom([{ inicio: '12:00', minutos: 10 }]), as('14:00'));
     expect(frasesDoLimite(acabou.limiteDoDia)).toContain('acabaram');
     expect(frasesDoLimite(acabou.limiteDoDia)).toContain('urgência');

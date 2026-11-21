@@ -79,7 +79,7 @@ describe('de onde veio cada lembrança', () => {
     const painel = montarPainel(base, AGORA);
     const deduzida = painel.lembrancas.find((l) => l.origem === 'deduzida');
     expect(deduzida).toBeDefined();
-    expect(quemContou(deduzida!, 'Dona Helena')).toBe('A Dona Leda entendeu da conversa de 21/11. Ninguém confirmou ainda.');
+    expect(quemContou(deduzida!, 'Dona Helena')).toBe('A Dona Leda entendeu da conversa de 21/11.');
   });
 
   it('esquecer a dedução apaga de vez', () => {

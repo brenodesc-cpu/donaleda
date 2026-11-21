@@ -52,6 +52,12 @@ export const TELAS: TelaDaLista[] = [
     oQueFaz: 'O aparelho fica nesta tela até a Dona Leda ligar. A pessoa também pode ligar pra ela.',
   },
   {
+    id: 'minutos-de-hoje-acabaram',
+    grupo: 'idoso',
+    nome: 'Minutos de hoje acabados',
+    oQueFaz: 'Depois dos 10 minutos de conversa do dia, a tela diz que a conversa de hoje acabou e quando ela liga de novo.',
+  },
+  {
     id: 'tocando',
     grupo: 'idoso',
     nome: 'Tocando',
@@ -116,6 +122,12 @@ export const TELAS: TelaDaLista[] = [
     grupo: 'cuida',
     nome: 'Painel com aviso urgente',
     oQueFaz: 'O painel no dia em que o seu Jorge, morador de exemplo, contou que caiu.',
+  },
+  {
+    id: 'painel-memoria-e-minutos',
+    grupo: 'cuida',
+    nome: 'Painel com os minutos acabados e uma dedução',
+    oQueFaz: 'Os 10 minutos de hoje já usados, o que a Dona Leda entendeu sem ninguém confirmar e quando a dona Helena ouviu o aviso de privacidade.',
   },
   {
     id: 'ajustes',
