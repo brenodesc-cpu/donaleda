@@ -224,7 +224,6 @@ export function Landing({ comCaminhos = false }: LandingProps) {
                 <iframe
                   src="/telas/ver/casa"
                   title={CASAS.legendaDaTela}
-                  loading="lazy"
                   scrolling="no"
                   tabIndex={-1}
                   className="pointer-events-none block h-[520px] w-full bg-background lg:h-[600px]"
