@@ -137,3 +137,14 @@ describe('quem contratou, com o artigo certo', () => {
     expect(quemContratou({ nome: 'Ana', parentesco: 'cuidadora' })).toBe('a sua cuidadora Ana');
   });
 });
+
+describe('aviso repetido (verificador, 21/11)', () => {
+  it('o mesmo aviso volta depois de meia hora, pra ensaio não esconder o aviso do palco', () => {
+    const base = baseDeExemplo(AGORA);
+    const novo = { tipo: 'emergencia' as const, gravidade: 'urgente' as const, texto: 'Pode ser uma emergência: "Eu caí".', origem: 'regra' as const };
+    const primeiro = criarAlerta(base, novo, AGORA);
+    const duasHorasDepois = criarAlerta(base, novo, new Date(AGORA.getTime() + 2 * 60 * 60_000));
+    expect(duasHorasDepois.id).not.toBe(primeiro.id);
+    expect(base.alertas.filter((a) => a.tipo === 'emergencia')).toHaveLength(2);
+  });
+});

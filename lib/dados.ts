@@ -52,14 +52,13 @@ export function criarAlerta(
   novo: { tipo: TipoDeAlerta; gravidade: Gravidade; texto: string; origem: Alerta['origem'] },
   agora: Date = new Date(),
 ): Alerta {
-  const hoje = dataEmBrasilia(agora);
-  // O mesmo aviso não aparece duas vezes no dia, nem a mesma regra dispara de novo em um minuto.
+  // O mesmo aviso não aparece duas vezes em meia hora, nem a mesma regra dispara de novo
+  // em um minuto. A janela era o dia inteiro, e um ensaio de manhã escondia o aviso do palco.
   const repetido = base.alertas.find((a) => {
     if (a.tipo !== novo.tipo) return false;
-    const mesmoDia = dataEmBrasilia(new Date(a.criadoEm)) === hoje;
-    if (mesmoDia && a.texto === novo.texto) return true;
-    const haPouco = agora.getTime() - new Date(a.criadoEm).getTime() < 60_000;
-    return novo.origem === 'regra' && a.origem === 'regra' && haPouco;
+    const passou = agora.getTime() - new Date(a.criadoEm).getTime();
+    if (a.texto === novo.texto.trim() && passou < 30 * 60_000) return true;
+    return novo.origem === 'regra' && a.origem === 'regra' && passou < 60_000;
   });
   if (repetido) return repetido;
 

@@ -113,3 +113,21 @@ export const TEXTO_DO_ESTADO: Record<EstadoDoRosto, string> = {
   pensando: 'Pensando...',
   falando: 'Falando',
 };
+
+/**
+ * As falas do idoso que mudaram desde o último envio, inclusive as que ainda estão
+ * em andamento. A legenda marca cada pedaço como terminado na hora, então o mesmo
+ * turno cresce depois ("Eu" vira "Eu caí no banheiro") e precisa ir de novo pro
+ * servidor, que é onde as regras de queda e de golpe olham a frase.
+ */
+export function falasNovasDoIdoso(
+  transcript: ItemDoTranscript[],
+  uidDaAssistente: string,
+  enviadas: ReadonlyMap<string, string>,
+): FalaDoIdoso[] {
+  return transcript
+    .filter((item) => item.uid !== uidDaAssistente)
+    .map((item) => ({ id: String(item.turn_id), texto: textoDe(item) }))
+    .filter((fala) => fala.texto !== '' && enviadas.get(fala.id) !== fala.texto);
+}
+

@@ -51,3 +51,28 @@ describe('regras fixas de segurança', () => {
     expect(avaliarFala('Morri de rir com o Pedro hoje')).toBeNull();
   });
 });
+
+describe('golpe: palavras que faltavam (verificador, 21/11)', () => {
+  it.each([
+    'Ligaram dizendo que era do banco e pediram o meu CPF',
+    'Um homem ligou pedindo dinheiro pro meu neto',
+    'Acho que caí num golpe, me mandaram uma mensagem',
+  ])('avisa: %s', (fala) => {
+    expect(avaliarFala(fala)?.tipo).toBe('golpe');
+  });
+
+  it('sequestro é aviso urgente, mesmo sem pedido de dinheiro na mesma frase', () => {
+    const alerta = avaliarFala('Ligaram dizendo que sequestraram o meu neto');
+    expect(alerta?.tipo).toBe('golpe');
+    expect(alerta?.gravidade).toBe('urgente');
+  });
+
+  it('dinheiro ou senha já passados viram urgente', () => {
+    expect(avaliarFala('Um moço do banco ligou e eu já passei a senha')?.gravidade).toBe('urgente');
+    expect(avaliarFala('Mandaram mensagem pedindo Pix e eu já fiz o pix')?.gravidade).toBe('urgente');
+  });
+
+  it('receber dinheiro da aposentadoria não é golpe', () => {
+    expect(avaliarFala('Recebi o dinheiro da aposentadoria hoje')).toBeNull();
+  });
+});

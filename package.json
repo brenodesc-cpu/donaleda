@@ -1,6 +1,6 @@
 {
   "name": "donaleda",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lia: assistente de voz que conversa todo dia com o idoso que mora sozinho e avisa a família. Hackathon UNMUTE by Agora, 21 e 22/11/2026.",
   "private": true,
   "engines": {

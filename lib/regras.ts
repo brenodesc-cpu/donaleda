@@ -29,10 +29,17 @@ const VONTADE_DE_MORRER =
   /\b(quero morrer|queria morrer|nao quero mais viver|vontade de morrer|me matar|acabar com (a minha|minha) vida|melhor se eu morresse|nao aguento mais viver)\b/;
 
 const PEDIDO_DE_DINHEIRO =
-  /\b(pix|senha|codigo|numero do cartao|cartao de credito|dados do cartao|transferencia|transferir|deposito|depositar|boleto|emprestimo|consignado)\b/;
+  /\b(pix|senha|codigo|numero do cartao|cartao de credito|dados do cartao|transferencia|transferir|deposito|depositar|boleto|emprestimo|consignado|dinheiro|cpf|rg|dados do banco|conta do banco|numero da conta|golpe)\b/;
 
 const ALGUEM_PEDIU =
-  /\b(pediu|pediram|pedindo|ligou|ligaram|ligacao|mandou|mandaram|mensagem|whatsapp|zap|moco do banco|moca do banco|gerente|falou que (era|e) (do|da)|disse que (era|e) (meu|minha|do|da))\b/;
+  /\b(pediu|pediram|pedindo|ligou|ligaram|ligacao|telefonou|telefonaram|mandou|mandaram|mensagem|whatsapp|zap|moco do banco|moca do banco|gerente|um homem|uma mulher|numero estranho|falaram|disseram|falou que (era|e) (do|da)|disse que (era|e) (meu|minha|do|da)|cai num golpe|cai em golpe)\b/;
+
+// Golpe do falso sequestro: vale sozinho, porque quem liga não precisa pedir dinheiro na mesma frase.
+const SEQUESTRO = /\b(sequestr\w*)\b/;
+
+// Quando a pessoa conta que já passou o dinheiro ou o dado, a família precisa agir agora.
+const JA_PASSOU =
+  /\b(ja (fiz|mandei|passei|transferi|depositei|paguei|dei)|fiz (o|um) pix|passei a senha|passei o codigo|mandei o dinheiro|transferi)\b/;
 
 function citar(fala: string): string {
   const limpa = fala.trim().replace(/\s+/g, ' ');
@@ -60,11 +67,22 @@ export function avaliarFala(fala: string): AlertaDeRegra | null {
     };
   }
 
-  if (PEDIDO_DE_DINHEIRO.test(texto) && ALGUEM_PEDIU.test(texto)) {
+  if (SEQUESTRO.test(texto)) {
     return {
       tipo: 'golpe',
-      gravidade: 'atencao',
-      texto: `Contou de um pedido de dinheiro ou de senha: "${citar(fala)}". Pode ser golpe.`,
+      gravidade: 'urgente',
+      texto: `Falou de sequestro: "${citar(fala)}". Quase sempre é golpe. Ligue agora pra ela e pra pessoa citada, e não passe dinheiro.`,
+    };
+  }
+
+  if (PEDIDO_DE_DINHEIRO.test(texto) && ALGUEM_PEDIU.test(texto)) {
+    const passou = JA_PASSOU.test(texto);
+    return {
+      tipo: 'golpe',
+      gravidade: passou ? 'urgente' : 'atencao',
+      texto: passou
+        ? `Contou que já passou dinheiro ou dado a alguém: "${citar(fala)}". Pode ser golpe. Ligue agora e, se for o caso, avise o banco.`
+        : `Contou de um pedido de dinheiro ou de senha: "${citar(fala)}". Pode ser golpe.`,
     };
   }
 
