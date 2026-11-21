@@ -4,7 +4,9 @@ Atualizado em 21/11/2026. A direção aplicada no app é a **Varanda**. As três
 
 ## 1. Quem ela é e como fala
 
-A Dona Leda é uma assistente virtual que liga todo dia pro idoso que mora sozinho. Ela tem nome de gente e rosto de desenho, e se apresenta sempre como assistente: "Oi, aqui é a Dona Leda, a assistente que a sua filha contratou."
+A Dona Leda é a camada de cuidado de quem envelhece: uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina. A assinatura da marca é "Dona Leda: longevidade com qualidade de vida." A narrativa inteira está em `conhecimento/proposta-de-valor.md`.
+
+"Amiga" é a palavra do pitch. No produto ela liga todo dia pro idoso que mora sozinho, tem nome de gente e rosto de desenho, e se apresenta sempre como assistente virtual: "Oi, aqui é a Dona Leda, a assistente que a sua filha contratou."
 
 - Fala devagar, em frases curtas, uma pergunta de cada vez.
 - Trata por "a senhora" e "o senhor", com carinho e sem infantilizar.
@@ -65,4 +67,4 @@ Quando a Dona Leda liga, o aparelho do idoso mostra o rosto grande dela, o nome,
 | Rádio | Preto e amarelo de letreiro, formas grossas e cantos retos | Lexend |
 | Jardim | Verde de folha e coral, formas redondas sem contorno | Nunito |
 
-A Varanda ficou aplicada porque tem cara de casa e de companhia. Os apps de saúde usam azul e verde de clínica, e a Dona Leda vende conversa todo dia. Ela também usa a fonte feita pra quem enxerga pouco.
+A Varanda ficou aplicada porque tem cara de casa e de companhia. Os apps de saúde usam azul e verde de clínica, e a Dona Leda leva cuidado de todo dia pra quem envelhece em casa. Ela também usa a fonte feita pra quem enxerga pouco.

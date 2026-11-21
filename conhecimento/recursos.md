@@ -11,7 +11,7 @@ Atualizado em 21/11/2026.
 
 ## Pessoas e contatos
 
-- **Rede de residenciais sênior:** o Vitor fala direto com os sócios de uma rede com mais de cem unidades. Serve pra validar a ideia com quem cuida de idoso todo dia e pode virar o primeiro cliente. Os nomes ficam fora deste repositório, que é público.
+- **Rede de residenciais sênior:** o Vitor fala direto com os sócios de uma rede com mais de cem unidades. Serve pra validar a ideia com quem cuida de idoso todo dia e pode ser o caminho de venda até as famílias. Os nomes ficam fora deste repositório, que é público.
 - **Avós e pais do time:** de três a cinco conversas de teste no sábado à noite, com permissão deles e da família.
 - **Mentores do evento:** das 13h30 de sábado ao meio-dia de domingo.
 - **As outras 56 pessoas do evento:** servem de teste pro painel da família, porque quase todo mundo tem um avô ou uma avó.

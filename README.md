@@ -1,6 +1,6 @@
 # Dona Leda
 
-Assistente de voz que liga todo dia pro idoso que mora sozinho. Ela conversa, anota como ele está e avisa a família quando algo sai do normal.
+A Dona Leda é a camada de cuidado de quem envelhece: uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina. No protótipo, ela liga todo dia pro idoso que mora sozinho, conversa, anota como ele está e avisa a família quando algo sai do normal.
 
 Projeto do hackathon **UNMUTE by Agora** (NewHack e Agora), feito em 21 e 22 de novembro de 2026, na AI House Brasil, em São Paulo.
 
@@ -9,11 +9,13 @@ Projeto do hackathon **UNMUTE by Agora** (NewHack e Agora), feito em 21 e 22 de 
 
 ## O problema
 
-Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (PNAD Contínua 2025). O filho que mora longe não sabe se a mãe comeu, tomou o remédio ou caiu, e o idoso passa dias sem conversar com ninguém.
+Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim.
+
+Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (PNAD Contínua 2025). O filho que mora longe não sabe se a mãe comeu, tomou o remédio ou caiu, e o idoso passa dias sem conversar com ninguém. O cuidado de todo dia hoje é feito por gente: a filha, de graça, o cuidador, de R$ 2.800 a 4.500 por mês, ou o residencial, de R$ 6 mil a 11 mil. A aposentadoria média do brasileiro (R$ 2.697, IBGE 2025) não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
 
 ## Pra quem
 
-A pessoa idosa que mora sozinha usa. O filho ou a filha que mora longe contrata e acompanha.
+A pessoa idosa que mora sozinha usa, e só precisa atender. O filho ou a filha que mora longe contrata e acompanha. O residencial sênior é o caminho de venda até essas famílias. Plano de saúde de idoso e prefeitura compram depois, quando houver resultado medido num piloto.
 
 ## O que a Dona Leda faz
 

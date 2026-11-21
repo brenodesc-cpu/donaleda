@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Este é o projeto da Lia, feito no hackathon UNMUTE by Agora (21 e 22/11/2026). A Lia é uma assistente que liga todo dia, por chamada de vídeo, pro idoso que mora sozinho, anota como ele está e avisa a família quando algo sai do normal. O produto gira em torno de a assistente começar a ligação: o idoso só atende.
+Este é o projeto da Dona Leda, feito no hackathon UNMUTE by Agora (21 e 22/11/2026). A Dona Leda é a camada de cuidado de quem envelhece: uma assistente virtual que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina. Hoje ela liga todo dia, por chamada de vídeo, pro idoso que mora sozinho, anota como ele está e avisa a família quando algo sai do normal. O produto gira em torno de a assistente começar a ligação: o idoso só atende. O nome provisório era Lia, e ele ainda aparece em pastas, variáveis e trechos do código.
 
 Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta `conhecimento/`. Ela diz o que estamos construindo, pra quem, com quem e até quando.
 
@@ -14,7 +14,7 @@ Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta
 | [conhecimento/hackathon.md](conhecimento/hackathon.md) | Regras, entregas, prazo e como a banca dá nota | Ao priorizar: o que não conta ponto fica pra depois |
 | [conhecimento/decisoes.md](conhecimento/decisoes.md) | O que o time já decidiu, com data | Antes de reabrir um assunto |
 | [conhecimento/infraestrutura.md](conhecimento/infraestrutura.md) | O que está de pé, o que falta pra virar aplicativo e a ordem | Antes de mexer em servidor, banco, login ou app |
-| [conhecimento/proposta-de-valor.md](conhecimento/proposta-de-valor.md) | A frase que a gente vende, pra quem, as camadas do problema, as premissas, os formatos e o que cortar | Antes de escrever pitch, slide, tela ou texto de venda |
+| [conhecimento/proposta-de-valor.md](conhecimento/proposta-de-valor.md) | A narrativa aprovada (o sonho, o que a Dona Leda é, o dinheiro e a assinatura), a camada de cuidado por dentro, quem usa, quem compra e por onde vende, as premissas, os formatos e as frases já reprovadas | Antes de escrever pitch, slide, tela ou texto de venda |
 | [conhecimento/concorrentes.md](conhecimento/concorrentes.md) | Quem faz parecido no mundo e no Brasil, como cada um se vende, quem paga e o que a ciência diz | Ao comparar com outro produto ou responder a banca |
 | [conhecimento/ideias.md](conhecimento/ideias.md) | Ideias e conselhos de mentores que ainda não viraram decisão | Ao pensar no que vem depois ou montar o pitch |
 | [conhecimento/teste-de-voz.md](conhecimento/teste-de-voz.md) | O roteiro de teste da conversa por voz e as falhas achadas | Antes de mexer na voz, na escuta ou no tempo de resposta |
@@ -25,10 +25,10 @@ Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da b
 
 ## Regras que não mudam
 
-1. **A Lia diz que é assistente virtual.** Ela nunca finge ser gente, parente, médica ou banco. A saudação e as instruções em `lib/persona.ts` garantem isso, e `testes/dados.test.ts` confere.
+1. **A Dona Leda diz que é assistente virtual.** Ela nunca finge ser gente, parente, médica ou banco. A saudação e as instruções em `lib/persona.ts` garantem isso, e `testes/dados.test.ts` confere.
 2. **Segurança não depende só da IA.** Queda, dor no peito, vontade de morrer e pedido de dinheiro ou senha disparam aviso por regra fixa em `lib/regras.ts`. Regra nova entra com um caso em `testes/regras.test.ts`.
 3. **A conversa inteira não é guardada.** O servidor guarda a ficha do dia, as lembranças, os avisos e o resumo. A fala só fica registrada dentro de um aviso de segurança.
-4. **A Lia não é médica.** Ela não dá diagnóstico e não muda remédio. Em emergência, manda ligar pro 192 e avisa a família.
+4. **A Dona Leda não é médica.** Ela não dá diagnóstico e não muda remédio. Em emergência, manda ligar pro 192 e avisa a família.
 5. **O repositório é público.** Nada de chave, senha, dado de pessoa real ou gravação de conversa aqui dentro. As chaves ficam em `.env.local` e os dados em `dados/`, os dois fora do GitHub.
 6. **Texto de tela em português simples.** A tela do idoso tem letra grande, um botão por vez e nenhuma palavra técnica.
 
@@ -38,10 +38,10 @@ Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da b
 - `app/api/chamada/route.ts`, `lib/chamadas.ts` e `lib/relogio.ts`: as ligações que a assistente faz (hora marcada, pedido da família, segunda tentativa e aviso de não atendida).
 - `app/familia/` e `components/familia/`: o painel da família.
 - `app/api/invite-agent/route.ts`: começa a conversa na Agora (escuta, modelo, voz e ações).
-- `app/api/mcp/route.ts` e `lib/ferramentas.ts`: as ações que a Lia faz durante a conversa (anotar, lembrar, avisar, resumir).
+- `app/api/mcp/route.ts` e `lib/ferramentas.ts`: as ações que a Dona Leda faz durante a conversa (anotar, lembrar, avisar, resumir).
 - `app/api/conversa/route.ts` e `lib/regras.ts`: as regras fixas de segurança em cima de cada fala.
 - `app/api/familia/route.ts` e `lib/dados.ts`: a ficha e o que o painel mostra.
-- `lib/persona.ts`: o jeito de a Lia falar e o que ela sabe antes de cada conversa.
+- `lib/persona.ts`: o jeito de a Dona Leda falar e o que ela sabe antes de cada conversa.
 - `lib/tipos.ts`: o formato dos dados. Quem muda a ficha ou o painel começa por aqui.
 - `lib/exemplo.ts`: a pessoa inventada da demonstração.
 

@@ -53,3 +53,5 @@ Hoje a assistente avisa a família pelo painel e manda ligar pro 192. O passo se
 ## Como usar isso no pitch
 
 Na parte de limites e próximos passos, que vale 10% da nota: o toque no botão é o limite de hoje, e o aparelho próprio é a segunda fase.
+
+Nota de 21/11/2026: depois desta conversa, a assistente passou a ligar pro idoso, e a ligação pode atender sozinha se a família ligar essa opção (ver `decisoes.md`). Na demonstração, o pitch vende a camada de cuidado inteira e mostra a parte que já funciona: a ligação diária, com a ficha e os avisos (ver `proposta-de-valor.md`).

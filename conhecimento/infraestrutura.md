@@ -25,6 +25,8 @@ Serve pra desenvolver e pra testar no celular de quem está na sala. Cai se o Ma
 | Aviso pra família fora do painel | A filha recebe o aviso sem estar olhando | Notificação do app ou mensagem de WhatsApp | 2 horas pra notificação |
 | Marca | Nome, ícone, cores, rosto e voz | O nome vem primeiro: ele define o ícone e o registro do app | Decisão do time |
 
+Depois desta atualização, ainda em 21/11/2026, o nome ficou decidido. O produto e a assistente se chamam Dona Leda (ver `proposta-de-valor.md`).
+
 ## TestFlight
 
 - **Teste interno:** até 100 pessoas, sem revisão da Apple. Cada pessoa precisa ser adicionada à conta de desenvolvedor de quem publica. Dá pra fazer no sábado.

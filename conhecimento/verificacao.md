@@ -43,6 +43,8 @@ A nota de cada jurado é a média ponderada das seis notas, de 1 a 5.
 | Apresentação | 5% | 3 | 4 | Pitch, slides e vídeo por fazer |
 | **Total** | | **3,25** | **4,45** | |
 
+> **Nota de 21/11/2026, fim da tarde:** depois desta conferência o Breno aprovou a narrativa de venda da Dona Leda (o sonho, o que ela é, o dinheiro e a assinatura). Ela está em `conhecimento/proposta-de-valor.md`, então o contra "a frase de venda ainda não foi aprovada", em Problema e impacto, já foi resolvido.
+
 ## 3. As ações que mais sobem a nota
 
 Em ordem de pontos ganhos por hora gasta.

@@ -4,6 +4,8 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 | Data | Decisão | Por quê |
 |---|---|---|
+| 21/11/2026 | A narrativa do pitch, aprovada pelo Breno: o sonho é que todo brasileiro envelheça ativo até o fim; a frase dele define a Dona Leda como a camada de cuidado de quem envelhece, uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina; a aposentadoria média do brasileiro não paga um cuidador, e a Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço; a assinatura é "Dona Leda: longevidade com qualidade de vida". O texto inteiro está em `proposta-de-valor.md` | Ela remete ao idoso, mostra o dinheiro que o mercado já gasta com cuidado e põe a camada de cuidado inteira na frente |
+| 21/11/2026 | O produto e a assistente se chamam Dona Leda, e o nome provisório "Lia" saiu. O nome troca num lugar só (`NEXT_PUBLIC_NOME_DA_ASSISTENTE`) | O motivo da escolha não ficou registrado. "Leda" é a forma antiga de "alegre" em português (ver `marca.md`) |
 | 21/11/2026 | O produto gira em torno de a assistente ligar pro idoso por chamada de vídeo, na hora marcada ou quando a família pede | O idoso atende ligação, mas não abre aplicativo nem lembra de abrir. Um mentor reforçou: quem tem 100 anos não toca em botão |
 | 21/11/2026 | Ligação não atendida tem uma segunda tentativa em 3 minutos e depois vira aviso pra família | Não atender é o sinal mais importante de que algo pode estar errado |
 | 21/11/2026 | A ligação pode atender sozinha depois de 10 segundos, se a família ligar essa opção | Tem idoso que não consegue tocar na tela |
@@ -18,7 +20,6 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 ## Em aberto
 
-- O nome. "Lia" é provisório e troca num lugar só (`NEXT_PUBLIC_NOME_DA_ASSISTENTE`).
-- Quem paga no pitch: a família ou o residencial.
+- Quem paga no pitch: o filho ou a filha que mora longe compra primeiro, e o residencial sênior é o caminho de venda. Esse caminho ainda depende de uma conversa do Vitor com os sócios da rede de residenciais.
 - O preço.
 - Avatar em vídeo de verdade ou o rosto desenhado. O código já aceita avatar da Anam ou da HeyGen pela Agora (`LIA_AVATAR`), sem teste ainda, porque falta a conta num dos dois.

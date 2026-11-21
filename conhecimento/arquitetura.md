@@ -4,7 +4,7 @@ Contrato de 21/11/2026, 13h, entre o servidor, o painel da família e o app do i
 
 ## Nome
 
-O produto e a assistente se chamam **Dona Leda**. Ela se apresenta sempre como assistente: "Oi, aqui é a Dona Leda, a assistente que a sua filha contratou." O nome vem de `NOME_DA_ASSISTENTE` em `lib/assistente.ts`.
+O produto e a assistente se chamam **Dona Leda**. Ela se apresenta sempre como assistente virtual: "Oi, aqui é a Dona Leda, a assistente virtual que a sua filha contratou." O nome vem de `NOME_DA_ASSISTENTE` em `lib/assistente.ts`.
 
 ## Peças
 

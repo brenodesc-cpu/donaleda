@@ -29,11 +29,11 @@ O idoso nunca faz login. Quem faz é a pessoa do time, no celular dela:
 
 **Pra família** (o pai, a mãe ou quem cuida):
 
-> Oi! Estou num hackathon, uma competição de programação, e o meu time fez uma assistente virtual que liga por vídeo pro idoso, pergunta como ele está e avisa a família. Queria testar com a vó hoje, uns cinco a dez minutos. Ela vai saber que é um programa de computador. A gente não grava a conversa, só anota o que ela contar de como está, e apaga tudo depois do hackathon. Você topa? Consegue ficar do lado dela?
+> Oi! Estou num hackathon, uma competição de programação, e o meu time fez a Dona Leda, uma assistente virtual que liga todo dia por vídeo pro idoso pra fazer companhia e ajudar a cuidar do dia a dia dele. Ela pergunta como ele está e avisa a família quando algo não vai bem. Queria testar com a vó hoje, uns cinco a dez minutos. A vó vai saber que é um programa de computador. A gente não grava a conversa, só anota o que ela contar de como está, e apaga tudo depois do hackathon. Você topa? Consegue ficar do lado dela?
 
 **Pro idoso** (quem acompanha fala, antes de ligar):
 
-> Vó, o meu time fez um programa de computador que conversa por vídeo, a Dona Leda. Ela vai perguntar como a senhora está, se dormiu bem, se comeu. Dura uns cinco minutos, e a senhora pode parar quando quiser, é só dar tchau. Ninguém vai gravar. A senhora deixa eu testar com a senhora?
+> Vó, o meu time fez uma assistente virtual, a Dona Leda. É um programa de computador que liga por vídeo pra fazer companhia e ajudar a senhora no dia a dia. Hoje ela vai perguntar como a senhora está, se dormiu bem, se comeu. Dura uns cinco minutos, e a senhora pode parar quando quiser, é só dar tchau. Ninguém vai gravar. A senhora deixa eu testar com a senhora?
 
 Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 
