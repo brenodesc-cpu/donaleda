@@ -13,7 +13,15 @@ Kit das ligações de 21/11/2026, das 20h às 23h. A validação vale 10% da not
 
 ## Como a ligação chega no idoso
 
-**Do jeito recomendado**, alguém da família fica ao lado do idoso e prepara o celular: abre o endereço, digita o código de 6 números que o painel gera, aceita o microfone e a câmera e apoia o celular. Depois se afasta, e o idoso só atende. É assim que o produto funciona de verdade: a família instala e o idoso atende.
+O idoso nunca faz login. Quem faz é a pessoa do time, no celular dela:
+
+1. Em https://donaleda.vercel.app/entrar, crie a conta e cadastre o idoso.
+2. Em "Aparelho", toque em "Mandar o link pra" o idoso. Sai pelo WhatsApp um link que vale 30 minutos.
+3. No celular do idoso, alguém abre o link. O celular fica pronto sozinho, sem digitar nada. Se o link não abrir: entre em donaleda.vercel.app no celular dele, toque em "Este aparelho é do idoso" e digite os 6 números.
+4. Deixe a página aberta, com a tela acesa e o volume alto, e o celular apoiado.
+5. No painel, toque em "Ligar agora". Na primeira ligação o idoso toca em Atender e alguém toca em "Permitir" quando o celular pedir microfone e câmera.
+
+**Do jeito recomendado**, alguém da família fica ao lado do idoso, faz os passos 3 e 4 e o "Permitir", e depois se afasta, deixando o idoso só atender. É assim que o produto funciona de verdade: a família instala e o idoso atende.
 
 **Sem ninguém do lado**, só tente com quem usa WhatsApp sozinho. Guie por telefone, desligue antes de a Dona Leda ligar (o celular não usa o microfone em duas ligações ao mesmo tempo) e anote em que passo travou.
 
@@ -35,7 +43,7 @@ Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 
 **Antes (10 minutos)**
 1. No painel da família, cadastre o idoso do jeito que ele é chamado ("Dona Maria", "Seu João") e quem contratou ("a neta Ana"). A Dona Leda usa isso na primeira frase.
-2. Se ele tem dificuldade com a tela, ligue "atender sozinho" nos ajustes.
+2. Deixe "atender sozinho" desligado: na primeira ligação o celular pode bloquear som e microfone sem um toque na tela.
 3. Faça uma ligação de teste com você mesmo.
 4. Faça o pedido de permissão.
 

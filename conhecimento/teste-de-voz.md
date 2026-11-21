@@ -4,7 +4,8 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 
 ## Antes de começar
 
-- **Endereço:** _a confirmar com quem cuida do servidor_ (o túnel e a Vercel estavam fora do ar às 12h40).
+- **Endereço:** https://donaleda.vercel.app, no ar até as 16h. O túnel do Mac não serve pro teste, porque o endereço dele troca sozinho.
+- **Preparar:** no notebook, entre em `/entrar`, crie uma conta e escolha "Ver com um exemplo". Em `/familia/aparelho`, mande o link pro celular de teste pelo WhatsApp e abra direto do WhatsApp, como a avó vai abrir às 20h: o celular fica pronto sozinho. Se o microfone não funcionar aberto pelo WhatsApp, anote como falha.
 - **Três pessoas:** quem fala (faz o papel do idoso), quem cronometra e anota, e quem olha o painel da família.
 - **Aparelho do idoso:** um celular apoiado, volume alto, numa sala sem barulho. O painel da família fica num notebook.
 - **Idoso de teste:** a dona Helena, que o painel cria em "Ver com um exemplo". Nunca o nome de uma pessoa de verdade.
@@ -67,7 +68,7 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 
 ### 10. Ela lembra na ligação seguinte
 - **Na primeira ligação, conte:** "Meu neto Pedro vem me visitar no sábado" e "meu joelho tá doendo".
-- **Desligue**, espere dois minutos e ligue de novo pelo painel.
+- **Desligue**, ligue "atender sozinho" em `/familia/ajustes`, espere dois minutos e ligue de novo pelo painel, sem tocar no celular. Ele tem que atender sozinho em 10 segundos (ainda sem teste em celular de verdade).
 - **Ela tem que** perguntar do neto Pedro ou do joelho na segunda ligação.
 - **No painel**, confira se o neto aparece nas lembranças.
 - As lembranças não dependem da data, então a segunda ligação já mostra se ela guardou. O dia seguinte de verdade fica pras ligações com os avós ([validacao.md](validacao.md)).
@@ -86,7 +87,7 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 | 7 | Pix | aviso em: | | |
 | 8 | Mudar de assunto | | | |
 | 9 | Repetir | | | |
-| 10 | Lembra na seguinte | | | |
+| 10 | Lembra na seguinte | | | atendeu sozinho? |
 
 ## Depois do teste
 
