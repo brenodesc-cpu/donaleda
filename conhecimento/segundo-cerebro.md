@@ -16,11 +16,14 @@ Feita com a versão publicada, a dona Helena de exemplo e o Gemini Live do modo 
 - **"Esquece aquilo da hidroginástica":** ela buscou, achou a lembrança 6 e apagou da ficha.
 - **Segredo no resumo:** em duas rodadas com o aluguel na conversa, o resumo não falou dele; numa delas ela não fez resumo nenhum. Essa proteção depende só da instrução.
 - **Painel:** a lembrança reservada não aparece, e a conta mostra 1. Com 212 lembranças na ficha, o bloco ficou em 44 linhas.
+- **Queda e golpe com pedido de segredo** ("fica só entre nós, eu caí no banheiro", "não conta pra Marina, mas passei a senha pro moço do banco"): a regra fixa e a própria Dona Leda avisaram a família como urgente, e ela disse com calma que ia avisar. O segredo do aluguel não apareceu nesses avisos nem no resumo.
+- **Limite aceito:** quando a pessoa conta o segredo na mesma frase de uma palavra de golpe ("o dono da casa mandou o boleto do aluguel, não conta pra Marina"), a regra fixa manda um aviso de atenção de possível golpe com a frase inteira, segredo junto.
 - **Sem teste:** o modo de três peças (gpt-4o-mini pela Agora), porque falta uma chave da OpenAI fora da Agora.
 
 **Defeitos abertos**, que mexem em dado da pessoa e pedem uma prova de máquina no conserto:
 1. Lembrança recusada por engano: "Casou em 12/06/1965" (a data completa conta como número longo) e "Sempre que alguém da família visita, ela faz bolo" (lida como ordem pra assistente).
 2. Data dita de outro jeito se perde: "dia 26" e "26 de novembro" ficam sem data, e "sábado que vem" dito num sábado vira o próprio dia.
+3. **O segredo vaza no aviso de tristeza, nas três rodadas.** A idosa conta que chora há uma semana por causa do aluguel, que já estava guardado como segredo, e o aviso pra família diz "triste e chorando todos os dias por causa do aluguel atrasado". Avisar da tristeza está certo; o motivo é o segredo. A proteção hoje é só a instrução. O conserto proposto: antes de mandar um aviso que não seja de queda, emergência, vontade de morrer ou golpe, e antes de guardar o resumo, o servidor confere se o texto cita uma palavra própria de uma lembrança reservada ("aluguel") e devolve pra ela escrever de novo sem o motivo.
 
 ## Resumo do desenho
 
