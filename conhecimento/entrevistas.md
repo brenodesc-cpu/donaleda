@@ -1,6 +1,6 @@
 # Entrevistas com casas, cuidadoras e famílias
 
-Roteiro das ligações de 21 e 22/11/2026 com a primeira casa parceira e com outras casas de idosos. A pergunta é se o residencial é mesmo o primeiro comprador da Dona Leda e o que ela precisa fazer lá dentro pra valer o dinheiro. Cada pergunta diz qual resposta reforça a ideia e qual derruba.
+Roteiro das ligações de 21 e 22/11/2026 com a primeira casa parceira e com outras casas de idosos. Desde as 17h de 21/11 a proposta é a família pagar e as casas de repouso indicarem (ver `proposta-de-valor.md`, "Quem paga e quem indica"). As ligações testam se as casas indicam, se a família paga e o que a Dona Leda precisa fazer pra valer o dinheiro. Cada pergunta diz qual resposta reforça a ideia e qual derruba.
 
 **Este repositório é público.** Aqui entram só o roteiro, os códigos das ligações (C1, K1, F1) e os números. Nome de casa, de pessoa, cidade e preço que a casa contou ficam com o Breno, fora do GitHub.
 
@@ -69,7 +69,7 @@ Pra cada casa que o time liga, e pra pessoa que está a par de tudo na primeira 
 6. **Como está sendo a implantação do prontuário eletrônico? Quanto tempo levou, quem treinou a equipe, quem resistiu?**
    Reforça: foi tranquilo. Derruba entrar agora: a equipe está sofrendo com um sistema novo e não quer outro, e a Dona Leda só cabe se não der trabalho nenhum pra ela.
 7. **Quanto a casa paga por mês pelo prontuário ou por outro sistema? Quem decidiu contratar, e quanto tempo levou da primeira conversa até começar a usar?**
-   Reforça: a casa já paga algumas centenas de reais por mês e decide em semanas. Derruba o preço: R$ 179,90 por morador soma mais que tudo o que a casa gasta com sistema.
+   Reforça: a casa já paga algumas centenas de reais por mês e decide em semanas. Derruba o plano Casa: a casa paga bem menos que R$ 229,90 por mês por todo o sistema dela.
 8. **Quanto as famílias pagam de verdade na mensalidade, na média? E o que pagam por fora (remédio, fralda, acompanhante, passeio)?**
    Reforça: já existe um extra pago pela família, e a Dona Leda pode ser mais um. Derruba a cobrança pela família: nada é cobrado por fora e a mensalidade já pesa. O valor vai só pro Breno, fora do GitHub.
 9. **No último mês, quantas famílias procuraram a casa e desistiram ou adiaram? Por quê?**
@@ -163,9 +163,9 @@ Cada ligação vira um bloco com estes campos, e a Stephanie junta os números p
 
 ## O que decide depois das ligações
 
-- **O residencial continua sendo o primeiro comprador** se pelo menos duas casas contarem que a família procura toda semana e que a equipe responde pelo próprio celular, e se uma casa topar o teste com moradores, com data.
-- **A venda pra família volta pra frente** se as casas disserem que a equipe já sabe de tudo e não quer a família recebendo direto, e se nenhuma topar o teste.
-- **A casa vira o caminho até o idoso que mora sozinho** se as casas contarem que várias famílias por mês desistem ou adiam e se toparem indicar um serviço. A primeira casa disse isso de si mesma.
+- **A família pagar se sustenta** se as famílias contarem horas por semana indo ver ou ligando pra checar, e se pelo menos uma pedir pra começar.
+- **A casa indica de verdade** se as casas contarem que várias famílias por mês desistem ou adiam e se toparem indicar um serviço. A primeira casa disse isso de si mesma.
+- **O plano Casa tem comprador** se pelo menos duas casas contarem que a família procura toda semana e que a equipe responde pelo próprio celular, e se uma casa topar o teste com moradores, com data.
 - **A ficha muda** se as cuidadoras disserem que o relato do morador quase nunca bate com o que a equipe viu. Nesse caso a Dona Leda passa a registrar mudança de humor e de voz, e deixa de mandar como fato o que ele contou sobre sono e comida.
 
 ## Resultados
