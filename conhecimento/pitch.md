@@ -15,10 +15,10 @@ O pitch tem até 3 minutos de fala, até 2 de demonstração e até 3 de pergunt
 São umas 400 palavras faladas, perto de 2 minutos e 50 segundos com as duas frases que faltam (o que a gente aprendeu e o pedido à banca). Ela saiu de três rascunhos com ângulos diferentes (a cena primeiro, o sonho e o dinheiro, e a conversa no centro), comparados e cortados por um avaliador que não escreveu nenhum deles: a abertura e a validação vieram do primeiro, o bloco aprovado e os limites do teste vieram do segundo, e a ligação que a pessoa só atende veio do terceiro.
 
 **[Slides 1 e 2, a capa e a dona Helena]**
-A dona Helena, a nossa idosa de exemplo, tem 78 anos e mora sozinha. A filha, a Marina, mora em Curitiba e liga no domingo. Hoje de manhã ligaram pra ela em nome do neto pedindo um Pix. A Marina só ia saber disso no domingo.
+A dona Helena, a nossa idosa de exemplo, tem 78 anos e mora sozinha. A filha, a Marina, trabalha a semana inteira e só fala com ela no domingo. Hoje de manhã ligaram pra ela em nome do neto pedindo um Pix. A Marina só ia saber disso no domingo.
 
 **[Slide 3, o problema]**
-Uns 6 milhões de brasileiros com 60 anos ou mais moram sozinhos, e a família acompanha de longe. Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim.
+Uns 6 milhões de brasileiros com 60 anos ou mais moram sozinhos, e a filha que passa a semana sem ver a mãe só sabe dela pelo telefone, quando dá tempo de ligar. Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim.
 
 **[Slide 4, o que ela faz]**
 A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, saúde, comunicação e rotina. Na hora combinada com a família, ela liga, e a pessoa só precisa atender. Ela se apresenta como assistente virtual, conversa e anota o que ouviu numa ficha que a família vê. Quando a pessoa conta uma queda ou um golpe, como o Pix da dona Helena, uma regra fixa do código avisa a família na hora. Quem age é a família.
@@ -50,7 +50,7 @@ Cada slide tem uma frase ou um número, em letra grande, e serve de apoio pra fa
 | # | O que aparece na tela | O que a fala diz nesse slide | O que pesa na nota |
 |---:|---|---|---|
 | 1 | O disco, "Dona Leda" e "A assistente de cuidado de quem envelhece" | Fica na tela enquanto quem fala sobe e começa | Apresentação |
-| 2 | A dona Helena, 78 anos, de exemplo, e a frase dela: "Me ligaram dizendo que era o meu neto e pediram um Pix." | A cena: ela mora sozinha, a Marina mora em Curitiba e só saberia no domingo | Problema |
+| 2 | A dona Helena, 78 anos, de exemplo, e a frase dela: "Me ligaram dizendo que era o meu neto e pediram um Pix." | A cena: ela mora sozinha, a Marina passa a semana sem ver a mãe e só saberia no domingo | Problema |
 | 3 | "6 milhões de brasileiros com 60 anos ou mais moram sozinhos", com a fonte | O tamanho do problema e o sonho | Problema |
 | 4 | Quatro passos com desenho: liga na hora combinada, conversa, anota a ficha, avisa a família | A definição e o que ela faz numa ligação, sempre dizendo que é assistente virtual | Inovação |
 | 5 | O desenho da chamada: o celular do idoso, a sala da Agora, o motor de conversa e a família entrando na sala quando precisa. Embaixo, "responde em [X] segundos" | O que a Agora faz em cada pedaço da conversa | Voz e Agora |
