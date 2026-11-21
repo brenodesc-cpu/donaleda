@@ -6,16 +6,16 @@ Atualizado em 21/11/2026.
 
 Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem fonte e data, e a estimativa vem marcada como estimativa. O detalhe de cada parte está nas seções de baixo.
 
-**Em uma frase:** a família do idoso lúcido que mora sozinho paga uns R$ 230 por mês por uma ligação combinada que ajuda a família a cuidar, e as casas de repouso indicam a Dona Leda às famílias que as procuram.
+**Em uma frase:** a família do idoso lúcido que mora sozinho paga R$ 129,90 por mês por uma ligação combinada que ajuda a família a cuidar, e as casas de repouso indicam a Dona Leda às famílias que as procuram.
 
 ### 1. O tamanho do mercado, em degraus
 
-| Degrau | Pessoas | Por ano, a R$ 229,90 por mês | De onde vem |
+| Degrau | Pessoas | Por ano, a R$ 129,90 por mês | De onde vem |
 |---|---:|---:|---|
-| Têm 60 anos ou mais e moram sozinhas | 6,0 milhões | R$ 16,55 bilhões (teto) | PNAD Contínua 2025, IBGE, divulgada em abril de 2026 |
-| Dessas, usam internet | 3,5 a 4,5 milhões | R$ 9,8 a 12,3 bilhões | **Estimativa:** 59% (TIC Domicílios 2025) a 74,5% (IBGE 2025) dos 60+ usam internet. A taxa é de todos os 60+, aplicada a quem mora sozinho |
-| E fazem chamada de voz ou vídeo | 2,7 a 3,4 milhões | R$ 7,4 a 9,4 bilhões | **Estimativa:** 76% de quem tem 60+ e usa internet faz chamada. O número está em `concorrentes.md` sem a pesquisa de origem anotada, e falta conferir |
-| E têm família que paga uns R$ 230 por mês | 0,7 a 0,9 milhão | R$ 2,0 a 2,5 bilhões | **Estimativa:** uso o plano de saúde como sinal de renda. 8,7 milhões de pessoas de 60+ têm plano (IESS, fevereiro de 2026), 27% dos 32,1 milhões de 60+ (Censo 2022) |
+| Têm 60 anos ou mais e moram sozinhas | 6,0 milhões | R$ 9,35 bilhões (teto) | PNAD Contínua 2025, IBGE, divulgada em abril de 2026 |
+| Dessas, usam internet | 3,5 a 4,5 milhões | R$ 5,5 a 7,0 bilhões | **Estimativa:** 59% (TIC Domicílios 2025) a 74,5% (IBGE 2025) dos 60+ usam internet. A taxa é de todos os 60+, aplicada a quem mora sozinho |
+| E fazem chamada de voz ou vídeo | 2,7 a 3,4 milhões | R$ 4,2 a 5,3 bilhões | **Estimativa:** 76% de quem tem 60+ e usa internet faz chamada. O número está em `concorrentes.md` sem a pesquisa de origem anotada, e falta conferir |
+| E têm família que paga uns R$ 130 por mês | 0,7 a 0,9 milhão | R$ 1,1 a 1,4 bilhão | **Estimativa:** uso o plano de saúde como sinal de renda. 8,7 milhões de pessoas de 60+ têm plano (IESS, fevereiro de 2026), 27% dos 32,1 milhões de 60+ (Censo 2022) |
 | O primeiro grupo, em 12 meses, pelas casas que indicam | Sem número | | **Não tem fonte.** O Censo SUAS 2023 conta 2.081 unidades de acolhimento pra pessoa idosa, quase todas filantrópicas, e as particulares com fins lucrativos não respondem a ele. Moram em instituições 160.784 pessoas (Censo 2022). Quantas famílias procuram cada casa por mês ninguém publica |
 
 **Como medir o último degrau:** perguntar à primeira casa parceira, e às próximas, quantas famílias a procuram por mês e quantas acabam não levando o idoso, e anotar a partir de agora qual casa indicou cada família que entrar.
@@ -34,8 +34,10 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
   **Onde o custo cai:** na resposta da Agora sobre o preço do motor no caminho do Gemini e por volume, na compressão ligada, que corta a conversa recontada pelo Google, e na primeira fatura de verdade do Google depois das ligações de hoje com a chave paga.
 - **O que a família já paga por algo parecido:** o botão de emergência custa de R$ 189 a 249 por mês (Tecnosenior, conferido em 21/11). Nos EUA, a ligação diária da CheckWellCall custa US$ 29,99, uns R$ 177. O cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 (Cidesp, maio de 2026).
 - **As respostas de preço que temos:** uma só. Uma mentora com os pais morando longe disse "eu investiria até R$ 500" por mês (21/11, `entrevistas.md`). As ligações das 20h trazem mais.
-- **A recomendação:** o plano Essencial, R$ 229,90 por mês com 150 minutos. Ele fica na faixa do botão de emergência que a família já compra, é menos de um décimo do cuidador e deixa de margem, no teto, R$ 48 no Gemini e R$ 98 no modo de três peças.
-- **O preço pra testar hoje à noite:** depois de a família dizer quanto pagaria, perguntar se pagaria R$ 229,90 por mês por uma ligação por dia com os avisos no painel. Anotar o primeiro valor que ela disse e o sim ou o não.
+- **O preço decidido:** R$ 129,90 por mês, com 100 minutos de conversa, uns 3 minutos e 20 segundos por dia. O Breno decidiu em 21/11, às 17h50, porque achou R$ 229,90 caro pra um produto que acabou de surgir. Fica abaixo do botão de emergência e é menos de 5% do preço do cuidador de 12 horas.
+- **A conta do preço:** depois do imposto (15,5%) e do cartão (R$ 0,49 mais 2,99%) sobram R$ 105,40. Os 100 minutos custam R$ 84 com a Agora e o Gemini, e sobram R$ 21 por família. O plano inclui 100 minutos porque, com 150, faltariam R$ 34. No modo de três peças sobram R$ 46. Se a conversa fosse direto no Google, sem o motor da Agora, sobrariam R$ 80.
+- **A margem é apertada enquanto a Agora cobrar US$ 0,10 por minuto.** A pergunta à Agora sobre o preço no caminho do Gemini e por volume segue aberta.
+- **O preço pra testar hoje à noite:** depois de a família dizer quanto pagaria, perguntar se pagaria R$ 129,90 por mês por uma ligação por dia com os avisos no painel. Anotar o primeiro valor que ela disse e o sim ou o não.
 
 ### 3. Quem já faz parecido
 
@@ -52,7 +54,7 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
 | Tesatad Anna (Brasil) | Família | Conversa com um aparelho de mesa | R$ 479, com contrato de dois anos | Sim | É protótipo, com venda prevista pro segundo semestre de 2027 |
 | TeleHelp e Tecnosenior (Brasil) | Família | Aperta um botão | De R$ 189 a 249 | Sim | Só serve depois que algo deu errado, e ninguém conversa com o idoso |
 | Fabi, da EdukaLuz (Brasil) | Não informado | Escreve no WhatsApp | Não informado | Sim | Só responde quem procura |
-| **Dona Leda** | Família, com a casa de repouso indicando | Atende a chamada de vídeo | R$ 229,90 (proposta) | Sim | |
+| **Dona Leda** | Família, com a casa de repouso indicando | Atende a chamada de vídeo | R$ 129,90 (decidido em 21/11) | Sim | |
 
 **Por que ninguém fez isso aqui ainda:** no Brasil, quem vende pra esse público vende botão de emergência e cuidador, e os produtos que ligam pro idoso com IA estão nos EUA, na Europa e na Ásia, falando inglês ou a língua de lá.
 
@@ -151,11 +153,11 @@ Premissas: a família paga no cartão pelo Asaas (R$ 0,49 + 2,99% por cobrança)
 
 | Plano | Minutos incluídos | Preço por mês | Margem no teto, Gemini | Margem no teto, reserva | Margem no uso típico, Gemini | Quem compra |
 |---|---|---:|---:|---:|---:|---|
-| **Essencial** | 150 por mês (5 por dia) | R$ 229,90 | R$ 48 (21%) | R$ 98 (42%) | R$ 103 (45%) | Filho ou filha que mora longe |
+| **Essencial** | 100 por mês (3 min e 20 s por dia) | R$ 129,90 | R$ 21 (16%) | R$ 46 (36%) | R$ 21 (16%) | Filho ou filha que mora longe |
 | **Companhia** | 300 por mês (10 por dia) | R$ 449,90 | R$ 16 (4%), ou R$ 69 (15%) com compressão | R$ 188 (42%) | R$ 282 (63%) | Família que quer conversa mais longa |
 | **Casa** | 200 por mês, num saldo da casa | R$ 229,90 por casa | R$ 7 (3%), com conversas de 5 minutos | R$ 73 (32%) | R$ 24 (11%) | Casa de repouso que quer a Dona Leda pros próprios moradores lúcidos |
 
-O Essencial fica perto do botão de emergência que a família já compra (Tecnosenior, de R$ 189 a 249 por mês) e da ligação diária da CheckWellCall nos EUA (US$ 29,99).
+O Essencial fica abaixo do botão de emergência que a família já compra (Tecnosenior, de R$ 189 a 249 por mês) e da ligação diária da CheckWellCall nos EUA (US$ 29,99, uns R$ 177). O Companhia e o Casa não mudaram em 21/11 e precisam ser revistos com o preço novo.
 
 **A frase do décimo**
 
@@ -168,11 +170,12 @@ A primeira metade da frase foi ajustada pelo Breno em 21/11. A aposentadoria mé
 
 **Recomendação**
 
-O Essencial a R$ 229,90 pra família, com 150 minutos por mês, que é quem paga desde 21/11. Ele cumpre a frase do décimo contra o cuidador de 12 horas, dá lucro no teto mesmo no Gemini e cai na faixa que a verificação calculou (R$ 220 a 250). O plano Casa fica pra casa de repouso que quiser a Dona Leda pros próprios moradores. O Companhia espera a medida do uso real e a compressão ligada. A decisão é da Stephanie e do Breno.
+O Essencial a R$ 129,90 pra família, com 100 minutos por mês, decidido pelo Breno em 21/11 às 17h50. Ele cumpre a frase do décimo com folga (menos de 5% do cuidador de 12 horas) e dá lucro no teto no Gemini, de R$ 21 por família, apertado enquanto a Agora cobrar US$ 0,10 por minuto. O plano Casa fica pra casa de repouso que quiser a Dona Leda pros próprios moradores. O Companhia espera a medida do uso real e a compressão ligada.
 
 O plano Casa entrou em 21/11 no lugar do Residencial, que cobrava R$ 179,90 por morador. A primeira casa parceira paga uns R$ 230 por mês, por casa, pelo sistema de gestão que usa hoje, e com cinco moradores o preço por morador daria R$ 900, quase quatro vezes isso. O plano Casa fica perto desse valor e cobre uns dois moradores conversando 3 minutos por dia. No Gemini a margem dele é a mais apertada da tabela, e com conversas de 5 minutos quase some. A casa parceira que só indica famílias e acompanha os idosos que indicou não paga.
 
 **Antes de falar disso pra banca**
+- Os 100 minutos do Essencial pedem um teto por mês no código, e hoje ela liga duas vezes por dia por padrão (9h e 19h). Com 100 minutos, cada ligação teria 1 minuto e 40 segundos. Ou o padrão vira uma ligação por dia, ou o plano conta ligações.
 - O teto de minutos ainda não existe no código: a ligação só termina sozinha 2 minutos depois de todo mundo sair da sala.
 - Perguntar à Agora, no evento, se o Gemini com chave própria paga os US$ 0,10 por minuto e se os 300 minutos grátis do motor renovam todo mês. Se o motor sair de graça no Gemini, ele vira o modo mais barato.
 - Vender pelo app custa comissão: no Brasil a Apple cobra de 10% a 15% mesmo quando o app manda pagar no site. Vendendo só pelo site, sem link no app, a comissão não entra.

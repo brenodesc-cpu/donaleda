@@ -4,6 +4,7 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 | Data | Decisão | Por quê |
 |---|---|---|
+| 21/11/2026 | O plano da família (Essencial) custa R$ 129,90 por mês, com 100 minutos de conversa | Decisão do Breno às 17h50: R$ 229,90 é caro pra um produto que acabou de surgir. Sobram R$ 21 por família no Gemini, e com 150 minutos daria prejuízo. A margem é apertada enquanto a Agora cobrar US$ 0,10 por minuto, e a pergunta à Agora sobre o Gemini e o preço por volume segue aberta |
 | 21/11/2026 | A frase do dinheiro fica como o Breno aprovou: "A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço." | Depois da promessa nova, a troca proposta ("liga todo dia e avisa a família...") foi reprovada por descrever um serviço de ligação. A promessa nova e o resto do pitch já tiram a leitura de serviço de saúde |
 | 21/11/2026 | O aviso mostra quem viu, em quanto tempo e o que a pessoa fez (ligou, foi até lá, chamou ajuda ou vai ver mais tarde), no painel da família e na tela do residencial. Aviso que ninguém viu diz há quanto tempo está assim | Aprovado pelo Breno às 17h30, depois de os mentores cobrarem que aviso entregue não é cuidado prestado. A cena do pitch passa a ser uma família, um aviso, um responsável e um desfecho. Código em `lib/avisos.ts` e `components/familia/DesfechoDoAviso.tsx` |
 | 21/11/2026 | A promessa da Dona Leda passa a ser uma ligação combinada que ajuda a família a cuidar. Os documentos dizem a função direto (ela liga no horário combinado, conversa, anota e avisa a família) e deixam de fora "cuida do idoso", "detecta", "monitora", "protege" e "garante" | Aprovado pelo Breno às 17h30, a partir do retorno escrito dos mentores: a promessa não pode soar como socorro nem como cuidado clínico, que o protótipo não demonstrou |
@@ -47,5 +48,6 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 - Quantas famílias a primeira casa parceira indica e quantas contratam. A rede de residenciais do contato do Vitor pode entrar do mesmo jeito, como parceira que indica.
 - O que construir pra atender uma casa inteira (a lista está em `proposta-de-valor.md`, em "O que muda no produto").
-- O preço.
+- O preço do Companhia e do Casa, que não mudaram com o Essencial novo.
+- O teto de 100 minutos por mês, que ainda não existe no código.
 - Avatar em vídeo de verdade ou o rosto desenhado. O código já aceita avatar da Anam ou da HeyGen pela Agora (`LIA_AVATAR`), sem teste ainda, porque falta a conta num dos dois.

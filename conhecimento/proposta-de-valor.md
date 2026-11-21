@@ -71,7 +71,7 @@ A dona de uma casa de repouso com três unidades topou ser a primeira parceira, 
 ### Por que a família paga
 
 1. **O idoso do sonho mora em casa**, e é com ele que a Dona Leda faz mais diferença. Na casa de repouso já existe quem pergunte do sono e do remédio.
-2. **A família já paga por esse cuidado.** É o mesmo comprador do botão de emergência, que paga de R$ 189 a 249 por mês por ele, e o plano Essencial proposto custa R$ 229,90.
+2. **A família já paga por esse cuidado.** É o mesmo comprador do botão de emergência, que paga de R$ 189 a 249 por mês por ele, e o plano Essencial custa R$ 129,90, menos que o botão.
 3. **A casa traz a família sem gasto com anúncio**, na hora em que ela está decidindo o que fazer com o pai ou a mãe.
 
 ### O que a casa parceira faz e ganha
@@ -83,7 +83,7 @@ A dona de uma casa de repouso com três unidades topou ser a primeira parceira, 
 
 ### A conta
 
-- **A família:** plano Essencial, R$ 229,90 por mês com 150 minutos, proposto em `tese.md`. No teto sobram R$ 48 no Gemini e R$ 98 no modo de três peças.
+- **A família:** plano Essencial, R$ 129,90 por mês com 100 minutos, decidido pelo Breno em 21/11. No teto sobram R$ 21 no Gemini e R$ 46 no modo de três peças, e a margem fica apertada enquanto a Agora cobrar US$ 0,10 por minuto (conta em `tese.md`).
 - **A casa parceira:** não paga pra indicar nem pra acompanhar os idosos que indicou.
 - **A casa que quiser a Dona Leda pros próprios moradores lúcidos:** plano Casa, R$ 229,90 por casa com 200 minutos no saldo da casa, perto do que ela já paga pelo sistema de gestão (conta em `tese.md`).
 - **A decisão do preço continua com a Stephanie e o Breno.**
@@ -125,8 +125,8 @@ Os passos 4 e 5 estão em construção na conversa "Tela do residencial". O pain
 - Nenhuma história real de mentor entra, nem a da mentora que contou o caso da mãe.
 
 **O fecho**
-- **Quem paga:** a família, no plano Essencial (R$ 229,90 proposto), com a casa de repouso indicando.
-- **O custo por família acompanhada:** de R$ 59 a 139 por mês, com 100 a 150 minutos de conversa (conta em `tese.md`, com o dólar de 19/11).
+- **Quem paga:** a família, no plano Essencial de R$ 129,90 por mês, com a casa de repouso indicando.
+- **O custo por família acompanhada:** R$ 84 por mês com os 100 minutos do plano, sendo R$ 59 da Agora e R$ 25 do Google. Sobram R$ 21 por família (conta em `tese.md`, com o dólar de 19/11).
 
 ## A camada, por dentro
 
@@ -191,7 +191,7 @@ Ordem decidida em 21/11, às 17h. O raciocínio está em "Quem paga e quem indic
 | 4 | Vídeo funciona melhor que só voz | Ninguém provou. Quase todos os concorrentes usam telefone comum | Sem teste nosso. A ligação só de voz é o plano B |
 | 5 | A assistente ligar funciona melhor que o idoso abrir um aplicativo | Os maiores programas (CareCall, Madri, Singapura) ligam pro idoso | Coerente com a pesquisa |
 | 6 | Dá pra entregar isso sem ser serviço médico | Software de bem-estar e de registro fica fora da regra da Anvisa | Vale enquanto a promessa não falar de doença |
-| 7 | A conta fecha | 5 minutos por dia custam R$ 89 por mês no modo reserva e perto de R$ 139 no Gemini, com o dólar de 19/11. O plano Essencial proposto custa R$ 229,90 (seção do preço em `tese.md`) | No teto sobram R$ 98 no modo reserva e R$ 48 no Gemini |
+| 7 | A conta fecha | 5 minutos por dia custam R$ 89 por mês no modo reserva e perto de R$ 139 no Gemini, com o dólar de 19/11. O plano Essencial custa R$ 129,90 com 100 minutos (seção do preço em `tese.md`) | Com 100 minutos sobram R$ 46 no modo reserva e R$ 21 no Gemini. Com 150 minutos o Gemini daria prejuízo |
 | 8 | A casa de repouso indica famílias | A primeira casa parceira se ofereceu pra indicar em 21/11. Ela recebe famílias divididas sobre levar o idoso | Sem teste nosso. Falta ver quantas famílias ela indica e quantas contratam |
 | 9 | Com a Dona Leda, o idoso fica mais ativo | Ligação diária feita por gente reduziu a solidão em quatro semanas (JAMA Psychiatry, 2021). Com IA não há estudo longo | Sem teste nosso. Medir semana a semana em quantos dias ele saiu de casa e conversou com alguém |
 | 10 | A família deixa a casa que indicou acompanhar o idoso | Sem pesquisa | Sem teste nosso. Perguntar às famílias que a casa indicar |
@@ -254,7 +254,7 @@ Ordem decidida em 21/11, às 17h. O raciocínio está em "Quem paga e quem indic
 | Por que quem paga é a família? | Na casa de repouso já existe equipe perguntando do sono e do remédio, e a maioria dos moradores tem demência. A primeira casa parceira contou isso e disse que vê mais valor no idoso que mora sozinho em casa. A família já paga por cuidado: o botão de emergência custa de R$ 189 a 249 por mês |
 | Como as famílias chegam? | Pelas casas de repouso parceiras, que recebem famílias decidindo o que fazer com o pai ou a mãe. A primeira já topou indicar |
 | O que a casa ganha indicando? | Acompanha os idosos que indicou e fica perto dessas famílias pra quando o idoso precisar de mais cuidado. Na fase de teste ela não paga nada |
-| A conta fecha? | Cinco minutos por dia custam de R$ 89 a 139 por mês por idoso, e o plano proposto pra família custa R$ 229,90, com 150 minutos por mês. A ligação encerra sozinha com 10 minutos |
+| A conta fecha? | O plano custa R$ 129,90 por mês com 100 minutos. Esses minutos custam R$ 84 com a Agora e o Gemini, e sobram R$ 21 por família depois do imposto e do cartão. A margem cresce com preço por volume da Agora. A ligação encerra sozinha com 10 minutos |
 | Isso troca o filho por uma máquina? | O risco existe. Ela se apresenta como assistente virtual, e a família fica por perto pelo painel, pelos avisos e pela ligação que pode mandar fazer na hora |
 | E se ela cair depois da ligação? | A Dona Leda não é serviço de emergência e não promete isso. Pra queda existe o botão, que pode ser um parceiro |
 
