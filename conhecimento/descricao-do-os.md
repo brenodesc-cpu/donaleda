@@ -8,7 +8,7 @@ Texto pra colar no OS, com o que o regulamento pede: problema, público-alvo, so
 
 Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim.
 
-Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (IBGE, PNAD Contínua 2025). O filho que mora longe não sabe se a mãe comeu, tomou o remédio ou caiu. Um cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 por mês (Cidesp, 2026). A aposentadoria média do brasileiro não paga um cuidador. Ela é de R$ 2.697 por mês (IBGE, 2025).
+Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (IBGE, PNAD Contínua 2025). O filho que mora longe não sabe se a mãe comeu, tomou o remédio ou caiu. Um cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 por mês (Cidesp, 2026). A aposentadoria da maioria dos brasileiros não paga um cuidador: 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged).
 
 ### Pra quem
 
@@ -54,4 +54,4 @@ A Dona Leda é a camada de cuidado de quem envelhece: uma assistente virtual que
 - **Assistente virtual:** a saudação e as instruções estão em `lib/persona.ts`. As quatro saudações dizem "assistente virtual", e o 192 está na regra de emergência.
 - **Avatar em vídeo:** existe em `route.ts` só no modo de três peças (Anam e HeyGen). Não foi testado e ficou fora do texto.
 - **Dona Helena:** `lib/exemplo.ts`.
-- **Números:** a população e a aposentadoria estão em `conhecimento/tese.md`, e o preço do cuidador de 12 horas em `conhecimento/tese.md` (seção do preço, fonte Cidesp). A frase do décimo vale contra o cuidador de 12 horas com o plano Essencial de R$ 229,90 proposto na mesma seção. A aposentadoria média (R$ 2.697) paga o cuidador com carteira, e a seção do preço propõe trocar "média" por "da maioria dos brasileiros". Até o Breno decidir, a frase aprovada fica como está.
+- **Números:** a população e a aposentadoria estão em `conhecimento/tese.md`, e o preço do cuidador de 12 horas em `conhecimento/tese.md` (seção do preço, fonte Cidesp). A frase do décimo vale contra o cuidador de 12 horas com o plano Essencial de R$ 229,90 proposto na mesma seção. Em 21/11 o Breno trocou "a aposentadoria média" por "a aposentadoria da maioria dos brasileiros": a média (R$ 2.697) paga um cuidador com carteira, e a maioria (62,5% do INSS, um salário mínimo) não paga.

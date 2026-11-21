@@ -14,7 +14,9 @@ Aprovada pelo Breno em 21/11/2026, no fim da tarde. Nasceu da pesquisa em `conco
 
 **O dinheiro**
 
-> A aposentadoria média do brasileiro não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
+> A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
+
+O Breno trocou "a aposentadoria média" por "a aposentadoria da maioria dos brasileiros" em 21/11: a média (R$ 2.697, IBGE 2025) paga um cuidador com carteira, e 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged).
 
 **A assinatura** (último slide): "Dona Leda: longevidade com qualidade de vida."
 
@@ -26,7 +28,7 @@ Aprovada pelo Breno em 21/11/2026, no fim da tarde. Nasceu da pesquisa em `conco
 
 A Dona Leda é a camada de cuidado de quem envelhece: uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina.
 
-A aposentadoria média do brasileiro não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço."
+A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço."
 
 ### O nome que o sonho já tem
 
@@ -62,7 +64,7 @@ Tudo isso alimenta a ficha de cada idoso. Em cima dela, a família acompanha e, 
 
 ## Onde está o dinheiro
 
-Hoje essa camada é feita por gente: a filha, de graça, o cuidador por R$ 2.800 a 4.500 por mês, ou o residencial por R$ 6 mil a 11 mil. A aposentadoria média é de R$ 2.697 (IBGE 2025), menos que o salário de um cuidador. Quase todo idoso do país envelhece sem essa camada, ou com um filho fazendo o papel dela.
+Hoje essa camada é feita por gente: a filha, de graça, o cuidador por R$ 2.800 a 4.500 por mês, ou o residencial por R$ 6 mil a 11 mil. 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged). A aposentadoria média é de R$ 2.697 (IBGE 2025). Quase todo idoso do país envelhece sem essa camada, ou com um filho fazendo o papel dela.
 
 **Números pro slide de mercado**
 - 36 milhões de brasileiros com 60 anos ou mais. A partir de 2029 o país tem mais idosos que crianças, e em 2070 serão 75 milhões (IBGE, Projeções 2024).
@@ -180,7 +182,7 @@ As tabelas completas das três rodadas:
 
 O Breno reprovou as duas rodadas de frase. As primeiras vendiam uma ligação de conferência pro filho. As segundas vendiam "um assistente de IA", sem remeter a idoso e sem mostrar o dinheiro do mercado. A direção dele: **a Dona Leda é toda uma camada que cuida da qualidade de vida de quem envelhece**, e a assistente é o jeito de essa camada chegar na pessoa.
 
-**Onde está o dinheiro.** Hoje essa camada é feita por gente: a filha, de graça, o cuidador por R$ 2.800 a 4.500 por mês, ou o residencial por R$ 6 mil a 11 mil. A aposentadoria média é de R$ 2.697 (IBGE 2025), menos que o salário de um cuidador. Quase todo idoso do país envelhece sem essa camada, ou com um filho fazendo o papel dela.
+**Onde está o dinheiro.** Hoje essa camada é feita por gente: a filha, de graça, o cuidador por R$ 2.800 a 4.500 por mês, ou o residencial por R$ 6 mil a 11 mil. 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged). A aposentadoria média é de R$ 2.697 (IBGE 2025). Quase todo idoso do país envelhece sem essa camada, ou com um filho fazendo o papel dela.
 
 **Números pro slide de mercado**
 - 36 milhões de brasileiros com 60 anos ou mais. A partir de 2029 o país tem mais idosos que crianças, e em 2070 serão 75 milhões (IBGE, Projeções 2024).

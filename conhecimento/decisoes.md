@@ -4,6 +4,8 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 | Data | Decisão | Por quê |
 |---|---|---|
+| 21/11/2026 | A frase do dinheiro passa a ser "A aposentadoria da maioria dos brasileiros não paga um cuidador", no lugar de "a aposentadoria média" | A média (R$ 2.697, IBGE 2025) paga um cuidador com carteira; 62,5% de quem recebe do INSS ganha um salário mínimo, menos que o piso do cuidador |
+| 21/11/2026 | A ligação encerra sozinha com 10 minutos, ou com 2 minutos sem o idoso falar (`NEXT_PUBLIC_LIA_TETO_MIN` e `NEXT_PUBLIC_LIA_TETO_SEM_FALA_MIN` mudam os dois) | Sem teto, uma ligação aberta com o idoso longe do aparelho ficava até 1 hora na sala, e a Agora cobra cada minuto. A conversa combinada é de 3 a 10 minutos |
 | 21/11/2026 | A marca aplicada é a Gema: disco de telefone antigo amarelo com o rosto no miolo, Café e Casca, Gabarito nos títulos e Atkinson no texto | Aprovada pelo time no brand book. Quem tem mais de 70 anos discou a vida inteira num telefone de disco, e o botão de atender fica sendo o único verde da tela |
 | 21/11/2026 | Na família, vermelho só no aviso urgente; remédio não tomado e dor forte aparecem como atenção | O brand book reserva a Goiabada pro urgente, e o próprio aviso de remédio já é de atenção |
 | 21/11/2026 | Filtro de barulho da Agora (AI Noise Suppression) no microfone do aparelho, nos dois modos, no nível suave | Demonstração em salão cheio e TV ligada na casa do idoso. O nível suave preserva a voz baixa. Se o aparelho não aguentar, o microfone segue sem filtro |

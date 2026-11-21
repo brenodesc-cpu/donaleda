@@ -11,7 +11,7 @@ Projeto do hackathon **UNMUTE by Agora** (NewHack e Agora), feito em 21 e 22 de 
 
 Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim.
 
-Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (PNAD Contínua 2025). O filho que mora longe não sabe se a mãe comeu, tomou o remédio ou caiu, e o idoso passa dias sem conversar com ninguém. O cuidado de todo dia hoje é feito por gente: a filha, de graça, o cuidador, de R$ 2.800 a 4.500 por mês, ou o residencial, de R$ 6 mil a 11 mil. A aposentadoria média do brasileiro (R$ 2.697, IBGE 2025) não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
+Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (PNAD Contínua 2025). O filho que mora longe não sabe se a mãe comeu, tomou o remédio ou caiu, e o idoso passa dias sem conversar com ninguém. O cuidado de todo dia hoje é feito por gente: a filha, de graça, o cuidador, de R$ 2.800 a 4.500 por mês, ou o residencial, de R$ 6 mil a 11 mil. A aposentadoria da maioria dos brasileiros não paga um cuidador: 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged). A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
 
 ## Pra quem
 
