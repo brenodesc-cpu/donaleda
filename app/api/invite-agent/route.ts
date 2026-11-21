@@ -48,11 +48,11 @@ function modelo(): ModeloGerenciado {
 
 /**
  * Quanto silêncio a assistente espera antes de responder, em milissegundos.
- * 650 por padrão: menos que isso atropela quem fala com pausas, mais que isso deixa a conversa lenta.
+ * 500 por padrão: equilibrado entre não atropelar pausas e não deixar silêncio longo.
  */
 function esperaDeSilencio(): number {
   const pedido = Number(process.env.LIA_SILENCIO_MS);
-  return Number.isFinite(pedido) && pedido >= 300 && pedido <= 2000 ? pedido : 650;
+  return Number.isFinite(pedido) && pedido >= 300 && pedido <= 2000 ? pedido : 500;
 }
 
 /**
@@ -231,10 +231,10 @@ export async function POST(request: NextRequest) {
                 turnDetection: {
                   mode: 'server_vad',
                   server_vad_config: {
-                    prefix_padding_ms: 300,
+                    prefix_padding_ms: 200,
                     silence_duration_ms: esperaDeSilencio(),
                     start_of_speech_sensitivity: 'START_SENSITIVITY_HIGH',
-                    end_of_speech_sensitivity: 'END_SENSITIVITY_LOW',
+                    end_of_speech_sensitivity: 'END_SENSITIVITY_HIGH',
                   },
                 } as never,
               },
@@ -256,11 +256,26 @@ export async function POST(request: NextRequest) {
           speech_threshold: 0.5,
           start_of_speech: {
             mode: 'vad',
-            vad_config: { interrupt_duration_ms: 240, prefix_padding_ms: 300 },
+            vad_config: { interrupt_duration_ms: 180, prefix_padding_ms: 200 },
           },
           end_of_speech: {
             mode: 'vad',
             vad_config: { silence_duration_ms: esperaDeSilencio() },
+          },
+        },
+      },
+      // Filler words nativos da Agora: evita silêncio morto quando LLM/MCP demoram > 850 ms.
+      fillerWords: {
+        enable: true,
+        trigger: {
+          mode: 'fixed_time',
+          fixed_time_config: { response_wait_ms: 850 },
+        },
+        content: {
+          mode: 'static',
+          static_config: {
+            phrases: ['Certo...', 'Entendi...', 'Aham...', 'Só um segundinho...'],
+            selection_rule: 'shuffle',
           },
         },
       },
@@ -283,7 +298,7 @@ export async function POST(request: NextRequest) {
           greetingMessage: saudacao,
           failureMessage: SE_FALHAR,
           maxHistory: 30,
-          params: { max_tokens: 220, temperature: 0.6 },
+          params: { max_tokens: 150, temperature: 0.6 },
           ...(servidoresDeAcoes ? { mcpServers: servidoresDeAcoes } : {}),
         }),
       )

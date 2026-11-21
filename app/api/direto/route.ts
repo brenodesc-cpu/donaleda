@@ -16,10 +16,10 @@ import type { InicioDaConversa } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
 
-/** O mesmo silêncio do modo da Agora: 650 ms por padrão, trocado por LIA_SILENCIO_MS. */
+/** O mesmo silêncio do modo da Agora: 500 ms por padrão, trocado por LIA_SILENCIO_MS. */
 function esperaDeSilencio(): number {
   const pedido = Number(process.env.LIA_SILENCIO_MS);
-  return Number.isFinite(pedido) && pedido >= 300 && pedido <= 2000 ? pedido : 650;
+  return Number.isFinite(pedido) && pedido >= 300 && pedido <= 2000 ? pedido : 500;
 }
 
 /** Minutos de conversa antes de descartar as falas mais antigas. LIA_COMPRESSAO_MIN troca, e 0 desliga. */
@@ -43,7 +43,16 @@ export async function POST(request: NextRequest) {
 
     const body = (await request.json().catch(() => ({}))) as { chamada_id?: string };
     const agora = new Date();
-    const base = await lerBase(idosoId);
+    // Ficha do Supabase e passe temporário do Google em paralelo: corta ~500 ms na abertura.
+    const [base, passe] = await Promise.all([lerBase(idosoId), pedirPasseDoGemini(chaveDoGoogle)]);
+    if (!passe.ok) {
+      console.error('[direto] o Google recusou o passe:', passe.status, passe.detalhe);
+      return NextResponse.json(
+        { error: `O Google recusou o passe (${passe.status})` },
+        { status: passe.status === 429 ? 429 : 502 },
+      );
+    }
+
     // As ações rodam pelo aparelho pareado, em /api/direto/acao, então existem
     // mesmo sem o endereço público que a nuvem da Agora precisa.
     const instrucoes = montarInstrucoes(base, agora, true);
@@ -53,15 +62,6 @@ export async function POST(request: NextRequest) {
     const origem: OrigemDaLigacao = chamada ? chamada.motivo : 'idoso';
     const saudacao = montarSaudacao(base, agora, origem);
     const modelo = process.env.LIA_MODELO_GEMINI?.trim() || 'models/gemini-3.8-live';
-
-    const passe = await pedirPasseDoGemini(chaveDoGoogle);
-    if (!passe.ok) {
-      console.error('[direto] o Google recusou o passe:', passe.status, passe.detalhe);
-      return NextResponse.json(
-        { error: `O Google recusou o passe (${passe.status})` },
-        { status: passe.status === 429 ? 429 : 502 },
-      );
-    }
 
     const conversa = await mudarBase(idosoId, (b) => abrirConversa(b, agora, chamada?.id));
 

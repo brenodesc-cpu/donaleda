@@ -112,8 +112,8 @@ export function montarAbertura(pedido: PedidoDeAbertura): Record<string, unknown
         automaticActivityDetection: {
           disabled: false,
           startOfSpeechSensitivity: 'START_SENSITIVITY_HIGH',
-          endOfSpeechSensitivity: 'END_SENSITIVITY_LOW',
-          prefixPaddingMs: 300,
+          endOfSpeechSensitivity: 'END_SENSITIVITY_HIGH',
+          prefixPaddingMs: 200,
           silenceDurationMs: pedido.silencioMs,
         },
       },

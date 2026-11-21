@@ -72,13 +72,14 @@ export function useLigacao() {
     setFase('ligando');
     setMotivo(null);
     try {
-      if (!(await conseguirMicrofone())) {
+      // Microfone e token da Agora rodam em paralelo pra cortar ~400 ms na abertura.
+      const [temMicrofone, token] = await Promise.all([conseguirMicrofone(), pedirToken()]);
+      if (!temMicrofone) {
         ocupado.current = false;
         setMotivo('microfone');
         setFase('erro');
         return;
       }
-      const token = await pedirToken();
       // O canal de mensagens precisa estar pronto antes de a conversa aparecer na tela.
       const [inicio, mensagens] = await Promise.allSettled([
         chamarAssistente(token, chamadaId),
