@@ -121,3 +121,25 @@ describe('frases da bateria de ataque que escapavam (guardrails, 21/11)', () => 
     expect(avaliarFala(fala)).toBeNull();
   });
 });
+
+describe('tristeza que dura dias (central, 21/11)', () => {
+  it.each([
+    'Tô muito triste, faz uma semana que eu choro todo dia por causa do aluguel atrasado.',
+    'Não durmo de tristeza.',
+    'Ando chorando todas as noites.',
+    'Tô triste faz dias, sabe.',
+  ])('vira aviso de atenção sem citar a fala: %s', (fala) => {
+    const alerta = avaliarFala(fala);
+    expect(alerta).toMatchObject({ tipo: 'humor', gravidade: 'atencao' });
+    expect(alerta?.texto).not.toMatch(/alugu/i);
+  });
+
+  it.each([
+    'Chorei de rir com o Pedro hoje.',
+    'Hoje tô meio tristinha, choveu o dia todo e não saí de casa.',
+    'Chorei no casamento da minha neta.',
+    'Faz uma semana que eu planto as orquídeas novas.',
+  ])('não dispara à toa: %s', (fala) => {
+    expect(avaliarFala(fala)).toBeNull();
+  });
+});

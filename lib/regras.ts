@@ -78,6 +78,21 @@ const ALGUEM_PEDIU = new RegExp(
     .join('|'),
 );
 
+// Tristeza que dura dias: vira aviso de atenção, sem citar a fala, porque o motivo pode
+// ser um assunto que a pessoa pediu segredo. "Chorei de rir" e um dia tristinho não contam.
+const TRISTEZA_LONGA = new RegExp(
+  [
+    'chor(o|ando|ei|a)( \\w+){0,3} (todo dia|todos os dias|toda noite|todas as noites|a semana (toda|inteira)|o dia (todo|inteiro))',
+    '(faz|ha) (uma semana|dias|semanas|meses|um mes|\\d+ dias)( \\w+){0,4} (choro|chorando|triste|tristeza|sem dormir|nao durmo|desanimad[ao])',
+    '(triste|chorando|desanimad[ao]) (faz|ha) (dias|uma semana|semanas|meses|um mes|\\d+ dias)',
+    'nao (durmo|consigo dormir|dormi) de (tristeza|preocupacao|desgosto|tanto chorar)',
+    '(muito|tao) triste (todo dia|todos os dias|toda hora)',
+  ]
+    .map((p) => `\\b${p}\\b`)
+    .join('|'),
+);
+const NAO_E_TRISTEZA = /\bchor(o|ando|ei|a|ar) de (rir|alegria|emocao|felicidade)\b/g;
+
 // Golpe do falso sequestro: vale sozinho, porque quem liga não precisa pedir dinheiro na mesma frase.
 const SEQUESTRO = /\b(sequestr\w*)\b/;
 
@@ -135,6 +150,14 @@ export function avaliarFala(fala: string): AlertaDeRegra | null {
       texto: passou
         ? `Contou que já passou dinheiro ou dado a alguém: "${citar(fala)}". Pode ser golpe. Ligue agora e, se for o caso, avise o banco.`
         : `Contou de um pedido de dinheiro ou de senha: "${citar(fala)}". Pode ser golpe.`,
+    };
+  }
+
+  if (TRISTEZA_LONGA.test(texto.replace(NAO_E_TRISTEZA, ' '))) {
+    return {
+      tipo: 'humor',
+      gravidade: 'atencao',
+      texto: 'Contou que anda muito triste faz dias. Vale ligar pra conversar.',
     };
   }
 

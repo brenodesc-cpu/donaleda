@@ -259,7 +259,10 @@ export async function executarFerramenta(
     // Queda, golpe e o que as regras fixas tratam como risco (vontade de morrer, remédio
     // a mais) vão inteiros, mesmo com segredo. O resto não conta o assunto que a pessoa
     // pediu segredo, nem marcado como urgente: a família recebe o fato sem o motivo.
-    const podeCitar = tipo === 'emergencia' || tipo === 'golpe' || RISCO_NO_AVISO.test(semAcento(mensagem)) || avaliarFala(mensagem) !== null;
+    // A tristeza longa da regra fixa é aviso de atenção e não libera o motivo.
+    const daRegra = avaliarFala(mensagem);
+    const riscoDaRegra = daRegra !== null && !(daRegra.tipo === 'humor' && daRegra.gravidade === 'atencao');
+    const podeCitar = tipo === 'emergencia' || tipo === 'golpe' || RISCO_NO_AVISO.test(semAcento(mensagem)) || riscoDaRegra;
     let semOMotivo = false;
     await mudarBase(idosoId, (base) => {
       semOMotivo = !podeCitar && citaSegredo(base, mensagem);
