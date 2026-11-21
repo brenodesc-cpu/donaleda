@@ -6,13 +6,14 @@ Roteiro das ligações de 21 e 22/11/2026 com a primeira casa parceira e com out
 
 ## O que a primeira casa já contou (21/11)
 
-A dona de um residencial pequeno topou ser parceira da Dona Leda na fase de teste, sem cobrança. Cinco coisas que ela disse mudam as perguntas:
+A responsável por uma rede pequena de casas de idosos topou ser parceira da Dona Leda na fase de teste, sem cobrança. Seis coisas que ela disse mudam as perguntas:
 
 1. **A maioria dos moradores tem demência, e uma parte usa celular e notebook e consegue atender vídeo.** O nosso público dentro da casa é o idoso que já tem celular e sabe fazer ligação. Falta o número: quantos são em cada casa.
 2. **"Por enquanto não tem dor, mas é tudo manual."** Ninguém reclamou de nada. Por isso as perguntas procuram onde o tempo da equipe vai.
 3. **O idoso conta coisa que não aconteceu: dorme a noite inteira e diz que não dormiu nada.** A ficha montada só com o que ele fala pode sair errada. Ela se interessou justamente por saber, pela voz, se ele está mesmo pra baixo.
 4. **Serve mais pras cuidadoras diaristas do que pras plantonistas.** As diaristas separam o remédio, acompanham consulta, marcam visita e supervisionam o dia.
-5. **A casa está implantando um prontuário eletrônico agora**, e a outra unidade usa há um ano. É a única tecnologia que eles têm, e ela pode liberar alguns prontuários pro nosso estudo.
+5. **A casa está implantando um prontuário eletrônico agora**, e outra unidade usa há um ano. É a única tecnologia que eles têm, e ela pode liberar alguns prontuários pro nosso estudo. Pelo sistema de gestão a casa paga uma mensalidade fixa por casa, bem abaixo do que a Dona Leda cobraria por morador.
+6. **Ela vê mais valor na Dona Leda pro idoso que mora sozinho em casa, e se ofereceu pra indicar.** Chegam muitas famílias divididas na casa: uma parte quer levar o idoso pra lá e a outra não. A casa pode ser o caminho até esse idoso, e as perguntas 9 e 10 do roteiro A testam se isso se repete nas outras casas.
 
 ## Como conduzir
 
@@ -45,6 +46,12 @@ Pra cada casa que o time liga, e pra pessoa que está a par de tudo na primeira 
    Reforça: a casa já paga algumas centenas de reais por mês e decide em semanas. Derruba o preço: R$ 179,90 por morador soma mais que tudo o que a casa gasta com sistema.
 8. **Quanto as famílias pagam de verdade na mensalidade, na média? E o que pagam por fora (remédio, fralda, acompanhante, passeio)?**
    Reforça: já existe um extra pago pela família, e a Dona Leda pode ser mais um. Derruba a cobrança pela família: nada é cobrado por fora e a mensalidade já pesa. O valor vai só pro Breno, fora do GitHub.
+9. **No último mês, quantas famílias procuraram a casa e desistiram ou adiaram? Por quê?**
+   Reforça: várias, porque a família está dividida ou porque o idoso não quer sair de casa. Esse idoso que fica em casa é o público da Dona Leda. Derruba: quase nenhuma, ou desistem só pelo preço e somem.
+10. **Quando uma família desiste, vocês indicam alguma coisa pra quem fica em casa, como cuidadora ou botão de emergência? Já indicaram algum serviço, e ganharam algo com isso?**
+   Reforça: já indicam e topariam indicar a Dona Leda, de graça ou por comissão. Derruba: não indicam nada e não querem se envolver com quem não virou morador.
+
+Se o tempo apertar, faça a 1, a 2, a 3, a 9 e o fechamento.
 
 **Pra fechar, mostre as telas (donaleda.vercel.app/telas) e peça: "Você deixa a gente testar com três moradores que usam celular, a partir da semana que vem? E me passa o contato de uma cuidadora e de uma família?"**
 
@@ -91,6 +98,8 @@ Pra família que cada casa indicar. Serve também pra família de idoso que mora
    Reforça: já procurou e já pagou. Derruba a família como compradora: nunca procurou nem pagou nada.
 6. **O que você paga hoje além da mensalidade? Quanto, por mês?**
    Mostra quanto ainda cabe no bolso da família.
+7. **Pra família de quem mora em casa: vocês já conversaram sobre levar ele pra uma casa de idosos? O que decidiram, e por quê?**
+   Reforça: a família está dividida e ele ficou em casa, que é onde a Dona Leda entra. Derruba: nunca pensaram nisso, ou já decidiram e está resolvido.
 
 **Pra fechar, mostre o painel da família e peça: "Quer que a Dona Leda ligue pro seu pai esta semana e te mande o resumo?"**
 
@@ -113,6 +122,7 @@ Cada ligação vira um bloco com estes campos, e a Stephanie junta os números p
 - Código e tipo: C1, C2 pra casa; K1 pra cuidadora; F1 pra família.
 - Moradores, e quantos usam celular sozinhos.
 - Vezes que a família procurou a casa na última semana, e quem respondeu.
+- Famílias que procuraram a casa e desistiram ou adiaram no último mês, e se a casa indicaria um serviço pra quem fica em casa.
 - Quanto a casa paga hoje por sistema, por mês.
 - Próximo passo com data: sim ou não.
 - A frase que mais pesou, do jeito que a pessoa falou.
@@ -121,6 +131,7 @@ Cada ligação vira um bloco com estes campos, e a Stephanie junta os números p
 
 - **O residencial continua sendo o primeiro comprador** se pelo menos duas casas contarem que a família procura toda semana e que a equipe responde pelo próprio celular, e se uma casa topar o teste com moradores, com data.
 - **A venda pra família volta pra frente** se as casas disserem que a equipe já sabe de tudo e não quer a família recebendo direto, e se nenhuma topar o teste.
+- **A casa vira o caminho até o idoso que mora sozinho** se as casas contarem que várias famílias por mês desistem ou adiam e se toparem indicar um serviço. A primeira casa disse isso de si mesma.
 - **A ficha muda** se as cuidadoras disserem que o relato do morador quase nunca bate com o que a equipe viu. Nesse caso a Dona Leda passa a registrar mudança de humor e de voz, e deixa de mandar como fato o que ele contou sobre sono e comida.
 
 ## Resultados
