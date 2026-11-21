@@ -66,7 +66,10 @@ export function falar(conversa: Conversa, texto: string, prioridade: 'APPEND' | 
 }
 
 /** Tira a Dona Leda da sala. A ligação continua entre quem ficou. */
-export function tirarAssistente(conversa: Conversa): Promise<boolean> {
+export async function tirarAssistente(conversa: Conversa): Promise<boolean> {
+  // Num teste de 21/11 a Agora respondeu erro 500 uma vez e tirou assim mesmo; tenta de novo por garantia.
+  if (await pedirAgora(conversa, 'leave')) return true;
+  await new Promise((r) => setTimeout(r, 1500));
   return pedirAgora(conversa, 'leave');
 }
 
