@@ -1,11 +1,11 @@
 # Teste da conversa por voz
 
-Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pitch, onde a Dona Leda falha no que a banca dá nota na conversa por voz (25%: rapidez da resposta, interrupção e recuperação de falha), confere se os avisos de segurança chegam no painel e decide qual dos dois modos da voz fica no ar. Leva uns 40 minutos, com as duas duplas ao mesmo tempo.
+Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pitch, onde a Dona Leda falha no que a banca dá nota na conversa por voz (25%: rapidez da resposta, interrupção e recuperação de falha), confere se os avisos de segurança chegam no painel e compara o Gemini, que é o padrão do site desde a tarde de 21/11, com o modo de três peças, que ficou de reserva. Leva uns 40 minutos, com as duas duplas ao mesmo tempo.
 
 ## Os dois modos
 
-- **Gemini** (`?modo=gemini`): um modelo só escuta e fala. É o que promete resposta mais rápida e voz mais natural. A chave é a do plano grátis do Google, que tem limite de uso.
-- **Três peças** (`?modo=tres`): uma peça escuta, outra pensa e outra fala. Só ele tem o foco na voz de quem fala (ignora quem fala ao fundo), o lembrete garantido quando a pessoa fica calada e o avatar em vídeo.
+- **Gemini, o padrão do site:** um modelo só escuta e fala, com voz feminina. É o que promete resposta mais rápida e voz mais natural. Até o Breno trocar a chave por uma de projeto pago, a chave é a do plano grátis do Google, que tem limite de uso.
+- **Três peças, a reserva** (`?modo=tres`): uma peça escuta, outra pensa e outra fala. Só ele tem o foco na voz de quem fala (ignora quem fala ao fundo), o lembrete garantido quando a pessoa fica calada e o avatar em vídeo.
 - Os dois têm o filtro de barulho da Agora no microfone.
 - O modo fica guardado no celular até alguém abrir outro endereço de modo nele.
 
@@ -16,7 +16,7 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 - **Cada dupla prepara o seu par** (notebook com o painel, celular como aparelho do idoso):
   1. No notebook, abra donaleda.vercel.app, toque em "Sou da família", crie uma conta e escolha "Ver com um exemplo". O exemplo tem que ser novo, criado na hora: se a conta já tiver um, apague em `/familia/ajustes` ("Apagar os dados") e crie de novo. Cada dupla tem a sua conta, pra ligação de uma não tocar no celular da outra.
   2. No celular, pelo navegador comum, abra donaleda.vercel.app, toque em "Este aparelho vai receber as ligações" ("Vou digitar o código que a família mandou") e digite os 6 números que aparecem no notebook, em `/familia/aparelho`.
-  3. Só depois de parear, no mesmo navegador do celular, abra o endereço do modo da dupla, já com o medidor: `donaleda.vercel.app/?modo=gemini&medir=1` ou `donaleda.vercel.app/?modo=tres&medir=1`. O celular já pareado abre direto a tela da dona Helena e guarda o modo. Na ordem contrária o modo se perde: a página inicial e a de parear não guardam o modo, e a dupla do Gemini acabaria testando as três peças sem saber.
+  3. Só depois de parear, no mesmo navegador do celular, abra o endereço da dupla, já com o medidor. A dupla do Gemini abre `donaleda.vercel.app/?modo=auto&medir=1`: o "auto" apaga um modo que tenha ficado guardado de um teste anterior e deixa o padrão. A dupla das três peças abre `donaleda.vercel.app/?modo=tres&medir=1`. O celular já pareado abre direto a tela da dona Helena e guarda o modo. Na ordem contrária o modo se perde, porque a página inicial e a de parear não guardam o modo, e a dupla das três peças acabaria testando o Gemini sem saber.
   4. Deixe a página aberta nesse endereço, com o celular apoiado e o volume alto.
 - **Como falar (vale também no palco):** o celular usa a internet dele (4G ou 5G), fora do wi-fi do evento. Quem faz a idosa fala com o celular perto da boca, sem ninguém falando perto, e diz "Alô" logo ao atender, antes de qualquer outra voz. No modo de três peças, o foco na voz prende na primeira voz alta da ligação e passa a ignorar as outras. As situações 5 e 6 fogem disso de propósito.
 - **Idoso de teste:** a dona Helena do exemplo. Nunca o nome de uma pessoa de verdade.
@@ -144,17 +144,18 @@ Em cada célula vão três respostas, nesta ordem: se acertou (sim, meio ou não
 
 A situação 1 passa quando ela acerta pelo menos quatro das cinco e não inventa nada.
 
-## Como decidir o modo que fica no ar
+## Como usar o resultado
 
-1. O modo que falhar na 7, na 8 ou na 9 (é gente, queda e dor no peito, Pix) não fica no ar enquanto essa falha não for consertada, porque ali está a segurança do idoso.
-2. Entre os que sobrarem, fica o que passar em mais situações.
-3. Se empatar, fica o mais rápido na média dos três tempos da situação 2.
-4. Situação marcada como "limite de uso" não conta como falha do Gemini: ela sai da conta dos dois modos.
+O Breno já escolheu o Gemini como padrão. O teste diz se ele aguenta ou se o padrão volta pras três peças até um conserto.
+
+1. Se o Gemini falhar na 7, na 8 ou na 9 (é gente, queda e dor no peito, Pix) e as três peças passarem, a central leva ao Breno a volta do padrão pras três peças até o conserto, porque ali está a segurança do idoso.
+2. Nas outras situações, a comparação vira a lista de consertos de cada modo e o número de quantas cada um passou.
+3. Situação marcada como "limite de uso" não conta como falha do Gemini: ela sai da conta dos dois modos.
 
 ## Depois do teste
 
 - **O link pelo WhatsApp, uma vez só:** no fim, uma das duplas manda pelo WhatsApp, de `/familia/aparelho`, o link pra um celular que ainda não foi usado no teste e abre direto do WhatsApp, como a avó vai abrir às 20h. Veja se o celular fica pronto sozinho e se o microfone funciona numa ligação. Se não funcionar, anote como falha.
-- **As duas tabelas** (foto do papel serve) vão pro Breno. As falhas viram a lista abaixo, que vai pra quem cuida da voz e do servidor, e o modo escolhido vai pra central.
+- **As duas tabelas** (foto do papel serve) vão pro Breno. As falhas viram a lista abaixo, que vai pra quem cuida da voz e do servidor, e a comparação dos dois modos vai pra central.
 
 ## Falhas encontradas
 

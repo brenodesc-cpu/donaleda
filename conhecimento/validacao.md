@@ -13,7 +13,7 @@ Kit das ligações de 21/11/2026, das 20h às 23h. A validação vale 10% da not
 
 ## Como a ligação chega no idoso
 
-Os avós usam o modo de três peças, o padrão do servidor. Ninguém abre `?modo=gemini` no celular do idoso.
+Os avós usam o padrão do site, o Gemini dentro da Agora, com a chave de projeto pago que o Breno põe antes das 20h. Às 19h45 o Breno avisa o time se a chave foi trocada. Se não foi, depois de parear, a família abre `donaleda.vercel.app/?modo=tres` no celular do idoso, no mesmo navegador em que o link abriu, e as ligações da noite usam as três peças. A chave grátis fica fora das ligações com os avós porque, nesse plano, o Google pode usar a conversa pra melhorar os produtos dele.
 
 O idoso nunca faz login. Quem faz é a pessoa do time, no celular dela:
 
