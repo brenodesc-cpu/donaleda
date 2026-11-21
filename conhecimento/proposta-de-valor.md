@@ -52,7 +52,7 @@ A ficha anota todo dia se a pessoa saiu de casa e se falou com alguém. Desde 21
 
 ## Por onde a gente começa: pela empresa
 
-A conversa do time que levou a essa mudança não ficou escrita. Este ajuste parte do que a base já tinha e assume que a primeira empresa é o residencial sênior, o único contato de empresa que o time tem. Se o time escolheu outra, esta seção muda.
+A primeira empresa é a rede de residenciais sênior com que o Vitor fala direto, confirmada pelo Breno em 21/11. A conversa do time que levou a essa mudança não ficou escrita, e os argumentos abaixo vêm do que a base já tinha.
 
 **A frase do caminho** (proposta, esperando o Breno)
 
