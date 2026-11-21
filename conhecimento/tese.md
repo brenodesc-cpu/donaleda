@@ -90,7 +90,7 @@ Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (40% dos 1
 
 ## A solução
 
-A Dona Leda é a camada de cuidado de quem envelhece: uma assistente virtual que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina. Ela leva esse cuidado de todo dia por menos de um décimo do preço de um cuidador. No protótipo, a parte que já funciona é a ligação diária, com a ficha e os avisos.
+A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, saúde, comunicação e rotina. Ela se apresenta sempre como assistente virtual e leva esse cuidado de todo dia por menos de um décimo do preço de um cuidador. No protótipo, a parte que já funciona é a ligação diária, com a ficha e os avisos.
 
 A Dona Leda liga pro idoso por chamada de vídeo. O aparelho toca na hora marcada, ou quando a família pede, e o rosto da assistente aparece na tela. O idoso atende com um toque, ou a ligação atende sozinha pra quem tem dificuldade de tocar na tela. Ele também pode ligar pra Dona Leda quando quiser. Se ninguém atende, a família é avisada. Na conversa ela:
 

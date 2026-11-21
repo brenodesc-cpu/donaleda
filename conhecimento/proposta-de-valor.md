@@ -10,9 +10,9 @@ Aprovada pelo Breno em 21/11/2026, no fim da tarde. Nasceu da pesquisa em `conco
 
 > Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim.
 
-**O que a Dona Leda é** (frase escrita pelo Breno)
+**O que a Dona Leda é** (frase escrita pelo Breno, com o ajuste que ele aprovou em 21/11, à noite)
 
-> A Dona Leda é a camada de cuidado de quem envelhece: uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina.
+> A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, saúde, comunicação e rotina.
 
 **O dinheiro**
 
@@ -28,7 +28,7 @@ O Breno trocou "a aposentadoria média" por "a aposentadoria da maioria dos bras
 
 "Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim.
 
-A Dona Leda é a camada de cuidado de quem envelhece: uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina.
+A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, saúde, comunicação e rotina.
 
 A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço."
 
@@ -44,7 +44,7 @@ A ficha anota todo dia se a pessoa saiu de casa e se falou com alguém. Desde 21
 
 - **A promessa, desde 21/11 às 17h30:** uma ligação combinada que ajuda a família a cuidar. Veio do retorno escrito dos mentores, pra ela não soar como socorro nem como cuidado clínico. "Cuida do idoso", "detecta", "monitora", "protege" e "garante" pedem uma prova que a gente não tem. No lugar, a função dita direto: ela liga no horário combinado, conversa, anota o que a pessoa contou e avisa a família quando a pessoa conta uma queda, um golpe, uma tristeza que dura ou remédio tomado a mais. Quem age é a família.
 - **A saúde do dia a dia** é perguntar, lembrar e avisar. Diagnóstico, sinais vitais e socorro em emergência ficam fora da promessa, porque pedem médico e registro na Anvisa.
-- **"Amiga"** é a palavra do pitch. No produto ela se apresenta sempre como assistente virtual, e essa é a resposta se a banca perguntar.
+- **"Assistente de cuidado"** é como a frase define a Dona Leda desde 21/11, à noite, no lugar de "camada de cuidado" e de "amiga". No produto ela se apresenta sempre como assistente virtual. Ela liga, conversa, anota e avisa a família, e quem cuida é a família.
 - **"Monitorar" e "prevenir"** ficam fora do discurso: puxam pra regra da Anvisa, e o idoso resiste a se sentir vigiado. No lugar, "saber como ele está".
 - **Solidão** aparece como cena no sonho ("sozinho em casa") e como companhia na camada. O que fica fora é prometer um número de queda da solidão, porque a prova com IA é fraca.
 - **Na demonstração**, o pitch vende a camada inteira e mostra a parte que já funciona: a ligação diária, com a ficha e os avisos.
@@ -254,7 +254,7 @@ Ordem decidida em 21/11, às 17h. O raciocínio está em "Quem paga e quem indic
 |---|---|
 | Algum idoso já usou? | O teste é no sábado à noite, e o número entra no pitch, bom ou ruim |
 | O que é "mais ativo"? Como vocês medem? | Em quantos dias da semana a pessoa saiu de casa e conversou com alguém. A ficha anota isso todo dia |
-| Por que "amiga", se é uma IA? | No pitch a palavra descreve o papel dela. No produto ela se apresenta sempre como assistente virtual |
+| Ela é uma cuidadora virtual? | Ela liga no horário combinado, conversa, anota o que a pessoa contou e avisa a família. Quem cuida é a família. Ela se apresenta sempre como assistente virtual e não dá diagnóstico nem socorro |
 | Por que vídeo, se lá fora quase todos usam telefone? | Ninguém provou que vídeo ganha. 76% dos idosos conectados já fazem chamada de voz ou vídeo, e a ligação só de voz é o plano B |
 | Por que quem paga é a família? | Na casa de repouso já existe equipe perguntando do sono e do remédio, e a maioria dos moradores tem demência. A primeira casa parceira contou isso e disse que vê mais valor no idoso que mora sozinho em casa. A família já paga por cuidado: o botão de emergência custa de R$ 189 a 249 por mês |
 | Como as famílias chegam? | Pelas casas de repouso parceiras, que recebem famílias decidindo o que fazer com o pai ou a mãe. A primeira já topou indicar |

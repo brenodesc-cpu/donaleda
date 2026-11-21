@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Este é o projeto da Dona Leda, feito no hackathon UNMUTE by Agora (21 e 22/11/2026). A Dona Leda é a camada de cuidado de quem envelhece: uma assistente virtual que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina. Hoje ela liga todo dia, por chamada de vídeo, pro idoso que mora sozinho, anota como ele está e avisa a família quando algo sai do normal. O produto gira em torno de a assistente começar a ligação: o idoso só atende. O nome provisório era Lia, e ele ainda aparece em pastas, variáveis e trechos do código.
+Este é o projeto da Dona Leda, feito no hackathon UNMUTE by Agora (21 e 22/11/2026). A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, saúde, comunicação e rotina. Ela se apresenta sempre como assistente virtual. Hoje ela liga todo dia, por chamada de vídeo, pro idoso que mora sozinho, anota como ele está e avisa a família quando algo sai do normal. O produto gira em torno de a assistente começar a ligação: o idoso só atende. O nome provisório era Lia, e ele ainda aparece em pastas, variáveis e trechos do código.
 
 Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta `conhecimento/`. Ela diz o que estamos construindo, pra quem, com quem e até quando.
 
