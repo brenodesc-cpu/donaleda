@@ -45,8 +45,10 @@ Pra cada casa que o time liga, e pra pessoa que está a par de tudo na primeira 
    Reforça: a casa já paga algumas centenas de reais por mês e decide em semanas. Derruba o preço: R$ 179,90 por morador soma mais que tudo o que a casa gasta com sistema.
 8. **Quanto as famílias pagam de verdade na mensalidade, na média? E o que pagam por fora (remédio, fralda, acompanhante, passeio)?**
    Reforça: já existe um extra pago pela família, e a Dona Leda pode ser mais um. Derruba a cobrança pela família: nada é cobrado por fora e a mensalidade já pesa. O valor vai só pro Breno, fora do GitHub.
-9. **No fim, mostre as telas (donaleda.vercel.app/telas) e peça: "Você deixa a gente testar com três moradores que usam celular, a partir da semana que vem? E me passa o contato de uma cuidadora e de uma família?"**
-   Reforça: sim, com data e com os contatos. Derruba: "manda um material que eu vejo".
+
+**Pra fechar, mostre as telas (donaleda.vercel.app/telas) e peça: "Você deixa a gente testar com três moradores que usam celular, a partir da semana que vem? E me passa o contato de uma cuidadora e de uma família?"**
+
+Reforça: sim, com data e com os contatos. Derruba: "manda um material que eu vejo".
 
 ## B. Cuidadora
 
@@ -68,8 +70,10 @@ Pras cuidadoras que a primeira casa indicou e pra qualquer cuidadora que outra c
    Muda o produto: sem celular no plantão, a tela dos moradores tem que ficar num tablet do posto.
 8. **Os moradores que usam celular atendem sozinhos? Você já viu algum receber ligação estranha, golpe ou pedido de dinheiro?**
    Reforça: atendem sozinhos, e golpe já apareceu. Derruba: sempre alguém da equipe precisa ajudar a atender.
-9. **No fim, mostre um aviso da Dona Leda e pergunte: "Se isto chegasse no seu celular de manhã, o que você faria?"**
-   Reforça: ela diz uma ação concreta, como passar no quarto ou chamar a enfermeira. Derruba: "eu ia ter que conferir de qualquer jeito, então muda pouco".
+
+**Pra fechar, mostre um aviso da Dona Leda e pergunte: "Se isto chegasse no seu celular de manhã, o que você faria?"**
+
+Reforça: ela diz uma ação concreta, como passar no quarto ou chamar a enfermeira. Derruba: "eu ia ter que conferir de qualquer jeito, então muda pouco".
 
 ## C. Família de um morador
 
@@ -87,8 +91,10 @@ Pra família que cada casa indicar. Serve também pra família de idoso que mora
    Reforça: já procurou e já pagou. Derruba a família como compradora: nunca procurou nem pagou nada.
 6. **O que você paga hoje além da mensalidade? Quanto, por mês?**
    Mostra quanto ainda cabe no bolso da família.
-7. **No fim, mostre o painel da família e peça: "Quer que a Dona Leda ligue pro seu pai esta semana e te mande o resumo?"**
-   Reforça: sim, e a pessoa já diz o horário. Derruba: "depois eu vejo". Se perguntarem o preço, diga R$ 229,90 por mês e anote a reação. "Você pagaria?" sozinha vale pouco.
+
+**Pra fechar, mostre o painel da família e peça: "Quer que a Dona Leda ligue pro seu pai esta semana e te mande o resumo?"**
+
+Reforça: sim, e a pessoa já diz o horário. Derruba: "depois eu vejo". Se perguntarem o preço, diga R$ 229,90 por mês e anote a reação. "Você pagaria?" sozinha vale pouco.
 
 ## D. O próprio idoso (se a casa e a família deixarem)
 
