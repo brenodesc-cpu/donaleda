@@ -5,7 +5,7 @@
 import { NextResponse } from 'next/server';
 import { arrumarHorarios } from '@/lib/chamadas';
 import { criarFicha } from '@/lib/dados';
-import { baseDeExemplo, baseNova } from '@/lib/exemplo';
+import { baseDeExemplo, baseNova, residencialDeExemplo } from '@/lib/exemplo';
 import { exigirFamilia, exigirIdosoDaFamilia } from '@/lib/sessao';
 import { clienteDoServidor } from '@/lib/supabase/servidor';
 import type { IdosoDaFamilia, NovoIdoso } from '@/lib/tipos';
@@ -106,6 +106,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, erro: 'json' }, { status: 400 });
   }
 
+  if (corpo?.exemplo === 'residencial') return criarResidencialDeExemplo(userId);
+
   const exemplo = corpo?.exemplo === true;
   const novo = exemplo ? null : novoValido(corpo ?? {});
   if (!exemplo && !novo) {
@@ -138,6 +140,35 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({ ok: true, id });
+}
+
+/**
+ * POST { exemplo: 'residencial' }: cria os oito moradores inventados do residencial de
+ * exemplo na conta logada, cada um com a própria ficha, pra demonstração. Se um falhar,
+ * apaga os que já tinham sido criados.
+ */
+async function criarResidencialDeExemplo(userId: string): Promise<Response> {
+  const banco = clienteDoServidor();
+  const criados: string[] = [];
+  try {
+    for (const morador of residencialDeExemplo(new Date())) {
+      const { data: idoso, error } = await banco
+        .from('idosos')
+        .insert({ nome: morador.nome, criado_por: userId })
+        .select('id')
+        .single();
+      if (error || !idoso) throw new Error('idoso');
+      const id = idoso.id as string;
+      criados.push(id);
+      const membro = await banco.from('membros').insert({ idoso_id: id, user_id: userId, papel: 'responsavel' });
+      if (membro.error) throw new Error('membro');
+      await criarFicha(id, morador.ficha(id));
+    }
+  } catch {
+    if (criados.length) await banco.from('idosos').delete().in('id', criados);
+    return NextResponse.json({ ok: false, erro: 'banco' }, { status: 500 });
+  }
+  return NextResponse.json({ ok: true, ids: criados });
 }
 
 /**
