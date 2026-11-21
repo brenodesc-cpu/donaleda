@@ -41,6 +41,7 @@ Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da b
 - `app/api/chamada/route.ts`, `lib/chamadas.ts` e `lib/relogio.ts`: as ligações que a assistente faz (hora marcada, pedido da família, segunda tentativa e aviso de não atendida).
 - `app/familia/` e `components/familia/`: o painel da família.
 - `app/familia/casa/` e `components/familia/casa/`: a tela "Todos os moradores", com os moradores do residencial juntos.
+- `app/telas/` e `components/telas/`: todas as telas do app com dados de exemplo, em `/telas`, pra ver sem login e sem ligação. Fica fora do menu e fora da busca. Tela nova entra em `components/telas/lista.ts` e em `TelaDeExemplo.tsx`.
 - `app/landing/` e `components/landing/`: a landing page, em `/landing` e na página inicial de quem chega sem aparelho ligado. O briefing está em `conhecimento/landing.md`.
 - `app/api/invite-agent/route.ts`: começa a conversa na Agora (escuta, modelo, voz e ações).
 - `app/api/mcp/route.ts` e `lib/ferramentas.ts`: as ações que a Dona Leda faz durante a conversa (anotar, lembrar, avisar, resumir).
