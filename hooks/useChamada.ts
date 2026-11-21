@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { fetchDoAparelho } from '@/lib/aparelho';
 import type {
   Chamada,
   RespostaDaChamada,
@@ -37,7 +38,7 @@ export function useChamada(ativo: boolean) {
 
     const buscar = async () => {
       try {
-        const resposta = await fetch('/api/chamada', { cache: 'no-store' });
+        const resposta = await fetchDoAparelho('/api/chamada', { cache: 'no-store' });
         if (!resposta.ok) throw new Error(`status ${resposta.status}`);
         const dado: unknown = await resposta.json();
         if (!pareceSituacao(dado)) throw new Error('resposta fora do contrato');
@@ -70,7 +71,7 @@ export function useChamada(ativo: boolean) {
     (acao: RespostaDaChamada['acao'], chamadaId: string) => {
       setRespondidas((antes) => new Set(antes).add(chamadaId));
       const resposta: RespostaDaChamada = { acao, chamadaId };
-      void fetch('/api/chamada', {
+      void fetchDoAparelho('/api/chamada', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(resposta),

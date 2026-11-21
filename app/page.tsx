@@ -1,7 +1,7 @@
-import TelaDoIdoso from '@/components/TelaDoIdoso';
+import { Inicio } from '@/components/Inicio';
 
-// A tela do aparelho do idoso: ele espera, toca quando a assistente liga e
-// vira uma chamada de vídeo quando alguém atende.
-export default function Inicio() {
-  return <TelaDoIdoso />;
+// A primeira tela. Aparelho ligado a um idoso abre a tela de espera da ligação;
+// aparelho novo pergunta se quem está com ele é da família ou o próprio idoso.
+export default function Pagina() {
+  return <Inicio />;
 }

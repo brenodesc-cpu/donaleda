@@ -2,6 +2,7 @@
 // ligação: microfone, token da Agora, entrada da assistente e canal de mensagens.
 
 import type { RTMClient } from 'agora-rtm';
+import { fetchDoAparelho } from '@/lib/aparelho';
 import { avisarServidor } from '@/lib/avisarServidor';
 import type { InicioDaConversa } from '@/lib/tipos';
 import type {
@@ -28,7 +29,7 @@ export async function conseguirMicrofone(): Promise<boolean> {
 }
 
 export async function pedirToken(parametros = ''): Promise<TokenDaAgora> {
-  const resposta = await fetch(`/api/generate-agora-token${parametros}`);
+  const resposta = await fetchDoAparelho(`/api/generate-agora-token${parametros}`);
   if (!resposta.ok) throw new Error('o token da Agora não veio');
   return (await resposta.json()) as TokenDaAgora;
 }
@@ -43,7 +44,7 @@ export async function chamarAssistente(
     // Só vai quando foi a assistente que ligou e o idoso atendeu.
     ...(chamadaId ? { chamada_id: chamadaId } : {}),
   };
-  const resposta = await fetch('/api/invite-agent', {
+  const resposta = await fetchDoAparelho('/api/invite-agent', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(pedido),
@@ -65,7 +66,7 @@ export async function ligarRtm(token: TokenDaAgora): Promise<RTMClient> {
 
 function pararAssistente(agentId: string): Promise<void> {
   const pedido: StopConversationRequest = { agent_id: agentId };
-  return fetch('/api/stop-conversation', {
+  return fetchDoAparelho('/api/stop-conversation', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(pedido),

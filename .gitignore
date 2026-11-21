@@ -139,3 +139,6 @@ dist
 .DS_Store
 # Dados locais da Lia (ficha e alertas de quem conversou). Nunca vai pro GitHub.
 /dados/
+
+# Script de envio ao TestFlight: aponta pra chaves da conta da Apple do Breno. Fica só no Mac dele.
+/recursos/testflight.sh
