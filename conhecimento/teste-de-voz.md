@@ -1,6 +1,6 @@
 # Teste da conversa por voz
 
-Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pitch, onde a Dona Leda falha no que a banca dá nota na conversa por voz (25%: rapidez da resposta, interrupção e recuperação de falha), confere se os avisos de segurança chegam no painel e compara o Gemini, que é o padrão do site desde a tarde de 21/11, com o modo de três peças, que ficou de reserva. Leva uns 40 minutos, com as duas duplas ao mesmo tempo.
+Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pitch, onde a Dona Leda falha no que a banca dá nota na conversa por voz (25%: rapidez da resposta, interrupção e recuperação de falha), confere se os avisos de segurança chegam no painel e compara o Gemini, que é o padrão do site desde a tarde de 21/11, com o modo de três peças, que ficou de reserva. Leva uns 45 minutos, com as duas duplas ao mesmo tempo.
 
 ## Os dois modos
 
@@ -32,7 +32,7 @@ Ninguém olhou estas duas telas com a conta entrada depois da revisão de 15h05.
 - **Celular, tela de espera do idoso:** só o disco, o horário e o botão "Ligar pra Dona Leda". Não pode ter o link "Painel da família", nem texto cortado, nem letra pequena.
 - **Notebook, painel da família:** nas lembranças, o "Ensinar algo" fica logo abaixo do título.
 
-## As doze situações
+## As treze situações
 
 ### 1. O que ela sabe da dona Helena (rode primeiro)
 - **Na primeira ligação**, com o exemplo recém-criado e antes de contar qualquer coisa, faça as cinco perguntas, uma de cada vez, esperando a resposta: "Quando é a minha consulta?", "Como chama o meu neto?", "Já tomei o remédio hoje?", "Quem tem a chave da minha casa?" e "O que você sabe de mim?".
@@ -108,6 +108,13 @@ Ninguém olhou estas duas telas com a conta entrada depois da revisão de 15h05.
 - **No painel**, confira se a irmã Lurdes aparece nas lembranças.
 - As lembranças não dependem da data, então a segunda ligação já mostra se ela guardou. O dia seguinte de verdade fica pras ligações com os avós ([validacao.md](validacao.md)).
 
+### 13. O que ela guardou aparece no painel
+- **Numa ligação, conte** duas coisas que o exemplo ainda não sabe: "A vizinha Neide, do apartamento de baixo, agora também tem a chave da minha casa" e "Marquei dentista na terça, às 10 da manhã".
+- **Desligue** e abra no painel a parte "O que a Dona Leda sabe de dona Helena".
+- **Tem que aparecer** a vizinha Neide com a chave, entre as pessoas, e o dentista entre os compromissos, com a data certa (terça, 24/11, às 10h, se o teste for em 21/11).
+- **Falha** se uma das duas não aparece, se a data está errada ou se ela trocou a Zefa pela Neide.
+- **Nas três peças**, se as duas não aparecerem, a dupla avisa a central na hora: é o modo que os avós usam se a chave paga do Gemini não for trocada até 19h45.
+
 ## Tabela pra anotar
 
 Cada dupla preenche só as colunas do seu modo.
@@ -127,6 +134,7 @@ Cada dupla preenche só as colunas do seu modo.
 | 10 | Mudar de assunto | | | | | |
 | 11 | Repetir | | | | | |
 | 12 | Lembra na seguinte | | | | | atendeu sozinho? |
+| 13 | Aparece no painel | | | | | chave apareceu? dentista com a data certa? |
 
 "Passou?" é sim, meio ou não. Na coluna do Gemini também pode ser "limite de uso", com o horário.
 
