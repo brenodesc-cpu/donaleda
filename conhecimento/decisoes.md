@@ -4,6 +4,7 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 | Data | Decisão | Por quê |
 |---|---|---|
+| 21/11/2026 | A página inicial mostra a landing pra quem chega sem aparelho ligado, com os botões "Sou da família" e "Este aparelho vai receber as ligações" no topo. Aparelho ligado continua abrindo direto a tela do idoso, e o app de iPhone e Android continua na tela de boas-vindas | O Breno decidiu ("Já agora"). Quem abre o endereço pela primeira vez, como a banca, vê o que a Dona Leda é, e as famílias dos testes continuam achando os dois caminhos |
 | 21/11/2026 | A landing page é a direção "Produto em cena", em `/landing`: a ligação toca na tela e o painel da família aparece conforme a pessoa rola | O Breno escolheu entre três direções. A página inicial continua sendo o aparelho do idoso |
 | 21/11/2026 | Remédio tomado a mais (duas vezes, em dobro, remédio trocado) vira aviso urgente por regra fixa, e as regras de golpe, queda, derrame e vontade de morrer passaram a pegar as 11 frases da bateria de ataque que escapavam | A bateria de ataque mostrou que motoboy buscando cartão, código de seis dígitos, "melhor sem mim" e boca torta com braço fraco passavam sem aviso. Um aviso desses não pode depender de o modelo decidir avisar |
 | 21/11/2026 | A frase do dinheiro passa a ser "A aposentadoria da maioria dos brasileiros não paga um cuidador", no lugar de "a aposentadoria média" | A média (R$ 2.697, IBGE 2025) paga um cuidador com carteira; 62,5% de quem recebe do INSS ganha um salário mínimo, menos que o piso do cuidador |

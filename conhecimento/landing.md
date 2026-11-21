@@ -1,6 +1,6 @@
 # A landing page da Dona Leda
 
-Atualizado em 21/11/2026. A página mora em `/landing`. O Breno pediu três direções de famílias diferentes e escolheu a segunda, "Produto em cena", no mesmo dia. Este arquivo é o briefing de quem mexe na página.
+Atualizado em 21/11/2026. A página mora em `/landing` e é a página inicial de quem chega sem aparelho ligado. O Breno pediu três direções de famílias diferentes e escolheu a segunda, "Produto em cena", no mesmo dia. Este arquivo é o briefing de quem mexe na página.
 
 ## Quem lê e o que a página pede
 
@@ -46,14 +46,14 @@ As telas do celular desenhado repetem os textos das telas reais (`components/Cha
 
 As outras duas direções ficaram no histórico do repositório, na gravação "Landing page: três direções pra escolha". A Carta era uma página de leitura que contava uma ligação de cima a baixo, e a Conta e prova punha os números do cuidador e do país na frente, com a camada em tabela.
 
-**Em aberto, com o Breno:** a página inicial `/` continua sendo o aparelho do idoso, porque o aplicativo e os celulares já ligados a um idoso abrem nesse endereço. Falta decidir se quem chega em `/` sem aparelho ligado passa a ver a landing.
+**Na página inicial desde 21/11/2026 (decisão do Breno, "Já agora"):** quem abre `/` sem aparelho ligado a um idoso vê a landing, com dois botões grandes no topo, os mesmos da antiga tela de boas-vindas: "Sou da família", que leva pra `/entrar`, e "Este aparelho vai receber as ligações", que leva pra `/parear`, onde entram os 6 números. Aparelho já ligado continua abrindo direto a tela do idoso, sem passar pela landing. Dentro do app de iPhone e Android, o aparelho sem par continua na tela de boas-vindas, sem landing. Quem decide é `components/Inicio.tsx`, que recebe a landing de `app/page.tsx`. Em `/landing` a página aparece sem esses dois botões.
 
 Skills de design instaladas em `~/.claude/skills/`: `ui-ux-pro-max`, `impeccable`, `frontend-design`, `brand`, `design-system`, `theme-factory`, `web-design-guidelines`, `apple-design` e `frontend-project-style`.
 
 ## Onde gravar e como publicar
 
-- **Rotas:** `/landing`. Os endereços antigos `/landing/1`, `/landing/2` e `/landing/3` levam pra ela. A página inicial `/` é o aparelho do idoso.
-- **Arquivos:** `app/landing/` e `components/landing/`. O texto fica todo em `components/landing/conteudo.ts`. As telas do idoso, o painel da família e as rotas de API pertencem a outras conversas.
+- **Rotas:** `/landing` e a página inicial `/` de quem não tem aparelho ligado. Os endereços antigos `/landing/1`, `/landing/2` e `/landing/3` levam pra `/landing`.
+- **Arquivos:** `app/landing/` e `components/landing/`. O desenho fica em `components/landing/Landing.tsx` e o texto em `components/landing/conteudo.ts`. As telas do idoso, o painel da família e as rotas de API pertencem a outras conversas.
 - **Cópia de trabalho:** uma pasta separada (`git worktree add ~/dev/lia-landing`), com o `node_modules` como link pro de `~/dev/lia`. O envio é `git push origin HEAD:main`, logo depois de buscar o `origin/main` e refazer a base.
-- **Conferência:** `next build --webpack` e `next start`, porque o `next dev` na cópia sai sem estilo. Olhar no celular (375 de largura) e no computador.
+- **Conferência:** `next build --webpack` e `next start`, porque o `next dev` na cópia sai sem estilo. Se a montagem cair com um erro de `WasmHash`, apague a pasta `.next` e monte de novo. Olhar no celular (375 de largura) e no computador.
 - **Publicação (regra de 21/11, 14h20):** quem publica na Vercel é só a conversa "Servidor, voz e banco". A conversa da landing grava no GitHub e pede a publicação a ela por mensagem, sem rodar `vercel deploy`. Publicação feita de outra cópia pode tirar do ar o trabalho de outra conversa.

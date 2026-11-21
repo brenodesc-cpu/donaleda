@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { ASSINATURA, DEFINICAO } from '@/components/landing/conteudo';
-import './landing.css';
 
 export const metadata: Metadata = {
   title: ASSINATURA,

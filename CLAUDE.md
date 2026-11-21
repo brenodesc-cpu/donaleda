@@ -40,7 +40,7 @@ Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da b
 - `app/page.tsx`, `components/` e `hooks/`: o aparelho do idoso, que espera a ligação, toca, atende e mostra a chamada de vídeo.
 - `app/api/chamada/route.ts`, `lib/chamadas.ts` e `lib/relogio.ts`: as ligações que a assistente faz (hora marcada, pedido da família, segunda tentativa e aviso de não atendida).
 - `app/familia/` e `components/familia/`: o painel da família.
-- `app/landing/` e `components/landing/`: a landing page, em `/landing`. O briefing está em `conhecimento/landing.md`.
+- `app/landing/` e `components/landing/`: a landing page, em `/landing` e na página inicial de quem chega sem aparelho ligado. O briefing está em `conhecimento/landing.md`.
 - `app/api/invite-agent/route.ts`: começa a conversa na Agora (escuta, modelo, voz e ações).
 - `app/api/mcp/route.ts` e `lib/ferramentas.ts`: as ações que a Dona Leda faz durante a conversa (anotar, lembrar, avisar, resumir).
 - `app/api/conversa/route.ts` e `lib/regras.ts`: as regras fixas de segurança em cima de cada fala.
