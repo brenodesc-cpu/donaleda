@@ -6,7 +6,7 @@ Desenho de 21/11/2026, pra aprovação do Breno. Nada disto foi construído aind
 
 A Dona Leda já guarda lembranças soltas e põe as 25 mais novas na instrução de cada ligação. O desenho organiza isso em oito gavetas (pessoas, saúde, dificuldades, rotina, gostos, histórias, humor e compromissos com data), deixa o idoso perguntar sobre a própria vida, corrigir, mandar esquecer e pedir segredo, tudo por voz, e mostra à família o que ela sabe, separado por gaveta.
 
-**Recomendação:** construir no hackathon só a parte que cabe dentro da ficha que já existe, sem tabela nova, em umas 3 horas da conversa "Servidor, voz e banco", depois das ações 1 e 2 da `verificacao.md`. O resto fica pra depois da entrega.
+**Recomendação:** construir no hackathon só a parte que cabe dentro da ficha que já existe, sem tabela nova, em umas 3 horas e meia da conversa "Servidor, voz e banco", depois das ações 1 e 2 da `verificacao.md`. O resto fica pra depois da entrega.
 
 ## Antes de desenhar: vale a pena?
 
@@ -27,7 +27,7 @@ A Dona Leda já guarda lembranças soltas e põe as 25 mais novas na instrução
 | Saída | O que é | Custo | Veredito |
 |---|---|---|---|
 | Deixar como está | 25 lembranças soltas na instrução | Nenhum | A lista corta as mais velhas, o compromisso não tem data e o idoso não controla nada |
-| **Fatia do hackathon** | Gavetas, data, pessoa e segredo dentro da ficha atual, uma ação pra corrigir e esquecer, instrução pra responder e painel por gaveta | Umas 3 horas, sem mudança no banco | **Recomendada** |
+| **Fatia do hackathon** | Gavetas, data, pessoa e segredo dentro da ficha atual, uma ação pra corrigir e esquecer, outra pra buscar, instrução pra responder e painel por gaveta | Umas 3 horas e meia, sem mudança no banco | **Recomendada** |
 | Cérebro completo | Tabela própria com busca por significado, cadastro de pessoas, lembrete que vira ligação extra | Dias | Só depois de ter idoso usando de verdade |
 
 O idoso faria isso por vontade própria? Perguntar a data da consulta pra quem está na linha, sim, se ela já tiver acertado uma vez. Ninguém provou isso ainda.
@@ -67,12 +67,14 @@ O humor do dia continua na ficha de cada dia (`Dia.humor`), como hoje. A gaveta 
 
 ## Como a conversa lê
 
-A cada ligação, o servidor monta na instrução um bloco "O que você sabe de dona Helena", por gaveta, com um número na frente de cada lembrança pra ela poder corrigir ou esquecer. Em cima de tudo vêm o compromisso de hoje e o de amanhã, o de ontem (pra ela perguntar como foi) e aniversário nos próximos sete dias.
+A cada ligação, o servidor monta na instrução um bloco "O que você sabe de dona Helena" com 40 a 60 linhas no máximo. No modo de três peças a instrução inteira vai junto com cada resposta, e no Gemini o Google cobra o histórico de novo a cada fala, então cada linha a mais custa tempo e dinheiro em toda fala (conta da conversa "Servidor, voz e banco", 21/11). Cada lembrança leva um número na frente, pra ela poder corrigir ou esquecer.
 
-Cada gaveta tem um teto, pra instrução não passar de umas cem linhas e não atrasar a resposta: pessoas até 30, saúde e dificuldades até 20, rotina e gostos até 15, humor até 10, as 5 histórias mais novas e os compromissos dos próximos 14 dias.
+- **Sempre entra:** o compromisso de ontem (pra ela perguntar como foi), o de hoje e o de amanhã, aniversário nos próximos sete dias, as dificuldades (porque mudam o jeito de ela falar) e as 10 pessoas mais citadas.
+- **Muda a cada ligação:** duas gavetas de assunto (gostos, histórias, rotina, humor e saúde), em rodízio, com até 8 lembranças cada.
+- **O resto ela busca:** quando a pessoa pergunta algo que não está no bloco, ela usa a ação `buscar_lembranca`, que procura na ficha inteira pelas palavras da pergunta e devolve as lembranças achadas.
 
 O que entra nas instruções dela:
-- Quando a pessoa perguntar algo da própria vida, responde só com o que está no bloco e na ficha de hoje, e diz quando soube ("a senhora me contou na terça"). Se não está lá, diz que não sabe e oferece guardar.
+- Quando a pessoa perguntar algo da própria vida, responde só com o que está no bloco, na ficha de hoje ou no que a busca trouxe, e diz quando soube ("a senhora me contou na terça"). Se não está lá, diz que não sabe e oferece guardar.
 - Se perguntarem do remédio, diz o que a pessoa contou hoje e a que horas. Se ela não contou, diz que não sabe. Nunca manda tomar de novo (regra 3 da `guardrails.md`).
 - O que a família ensinou ela atribui: "a Marina me contou que a consulta é quinta".
 - "O que você sabe de mim?" vira três ou quatro frases, sem ler lista.
@@ -114,23 +116,23 @@ O segredo tem um limite, que já está na regra 10 da `guardrails.md`: queda, em
 | `origem` | `conversa` ou `familia` |
 | `atualizadaEm` | Última correção |
 
-**Depois do hackathon, a tabela própria.** A ficha aguenta umas duzentas lembranças por idoso. Passou disso, nem tudo cabe na instrução, e cada lembrança vira uma linha numa tabela `lembrancas`, com busca por significado no próprio Supabase, e a Dona Leda ganha uma ação pra buscar o que precisa no meio da conversa. A ficha é o primeiro passo desse caminho, com o fim já combinado.
+**Depois do hackathon, a tabela própria.** A ficha aguenta umas duzentas lembranças por idoso. Passou disso, nem tudo cabe na instrução, e cada lembrança vira uma linha numa tabela `lembrancas`, e a `buscar_lembranca` passa a achar pelo significado da pergunta, além das palavras, com a busca do próprio Supabase. A ficha é o primeiro passo desse caminho, com o fim já combinado.
 
 ## Quem constrói o quê
 
-O código fica com a conversa "Servidor, voz e banco", que já mexe nestes arquivos. A regra que recusa ordem e número longo encosta no trabalho da conversa "Guardrails e segurança", e as duas combinam quem escreve ela em `lib/regras.ts`.
+O código fica com a conversa "Servidor, voz e banco", que já mexe nestes arquivos. Antes de começar, puxar a gravação be81530, que mexeu em `lib/dados.ts` e `lib/regras.ts`. Depois das 17h de 21/11 ela mexe em `app/api/invite-agent` (espera de silêncio, teto por ligação), arquivo que este trabalho não toca. A regra que recusa ordem e número longo encosta no trabalho da conversa "Guardrails e segurança", e as duas combinam quem escreve ela em `lib/regras.ts`.
 
 | Arquivo | Mudança |
 |---|---|
 | `lib/tipos.ts` | `Lembranca` e `CategoriaDeLembranca` novas; `PainelDaFamilia` ganha `reservadas: number`; `AcaoDaFamilia` ganha ensinar, corrigir e apagar lembrança |
-| `lib/dados.ts` | `guardarLembranca` com os campos novos e o número; `mudarLembranca`; `montarPainel` tira as reservadas e conta; `completar` troca `familia` por `pessoa` e numera as antigas |
+| `lib/dados.ts` | `guardarLembranca` com os campos novos e o número; `mudarLembranca`; `buscarLembrancas` por palavra, sem ligar pra acento; a escolha das gavetas de cada ligação; `montarPainel` tira as reservadas e conta; `completar` troca `familia` por `pessoa` e numera as antigas |
 | `lib/regras.ts` | Recusa de ordem e de número longo na lembrança |
-| `lib/ferramentas.ts` | Campos novos em `guardar_lembranca` e a ação `mudar_lembranca`, nos dois modos (Gemini e três peças) |
-| `lib/persona.ts` | O bloco por gaveta com tetos, as instruções de responder, corrigir e esquecer, e a frase da primeira conversa |
+| `lib/ferramentas.ts` | Campos novos em `guardar_lembranca` e as ações `mudar_lembranca` e `buscar_lembranca`, nos dois modos (Gemini e três peças) |
+| `lib/persona.ts` | O bloco de 40 a 60 linhas (parte fixa e rodízio), as instruções de responder, corrigir e esquecer, e a frase da primeira conversa |
 | `app/api/familia/route.ts` | As três ações novas da família |
 | `components/familia/Lembrancas.tsx` e `formatos.ts` | Gavetas novas, compromissos em cima, quem contou, a conta das reservadas e o campo de ensinar |
 | `lib/exemplo.ts` | A dona Helena com uma lembrança em cada gaveta, uma reservada e uma consulta na quinta |
-| `testes/` | Reservada nunca sai em `/api/familia`; esquecer apaga; ordem e número longo são recusados; `familia` antiga vira `pessoa`; `mudar_lembranca` pelo `/api/mcp` |
+| `testes/` | Reservada nunca sai em `/api/familia`; esquecer apaga; ordem e número longo são recusados; `familia` antiga vira `pessoa`; o bloco nunca passa de 60 linhas; a busca acha "consulta" em "Consulta com o cardiologista"; `mudar_lembranca` e `buscar_lembranca` pelo `/api/mcp` |
 
 ## Na demonstração
 
