@@ -1,4 +1,5 @@
 import {
+  Video,
   Check,
   Frown,
   HeartPulse,
@@ -17,6 +18,8 @@ interface AlertasProps {
   tratamento: string;
   hoje: string;
   onMarcarVisto: (alertaId: string) => void;
+  /** Endereço pra entrar na ligação acontecendo agora, quando há uma. Aparece nos avisos urgentes. */
+  entrarNaLigacao?: string | null;
 }
 
 const ICONE_DO_TIPO: Record<TipoDeAlerta, LucideIcon> = {
@@ -38,6 +41,8 @@ interface CartaoProps {
   tratamento: string;
   hoje: string;
   onMarcarVisto?: (alertaId: string) => void;
+  /** Endereço pra entrar na ligação acontecendo agora, quando há uma. */
+  entrarNaLigacao?: string | null;
 }
 
 function CartaoDoAlerta({
@@ -46,6 +51,7 @@ function CartaoDoAlerta({
   tratamento,
   hoje,
   onMarcarVisto,
+  entrarNaLigacao,
 }: CartaoProps) {
   const Icone = ICONE_DO_TIPO[alerta.tipo] ?? HeartPulse;
   const urgente = alerta.gravidade === 'urgente';
@@ -83,6 +89,15 @@ function CartaoDoAlerta({
           </p>
         </div>
       </div>
+      {cheio && entrarNaLigacao ? (
+        <a
+          href={entrarNaLigacao}
+          className="inline-flex min-h-14 items-center justify-center gap-3 rounded-xl bg-success px-6 text-xl font-semibold text-white hover:bg-success/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <Video aria-hidden="true" className="h-6 w-6" />
+          Entrar na ligação agora
+        </a>
+      ) : null}
       {!alerta.visto && onMarcarVisto ? (
         <button
           type="button"
@@ -103,6 +118,7 @@ export function Alertas({
   tratamento,
   hoje,
   onMarcarVisto,
+  entrarNaLigacao,
 }: AlertasProps) {
   const novos = alertas.filter((a) => !a.visto).sort(maisNovoPrimeiro);
   const vistos = alertas.filter((a) => a.visto).sort(maisNovoPrimeiro);
@@ -119,6 +135,7 @@ export function Alertas({
               tratamento={tratamento}
               hoje={hoje}
               onMarcarVisto={onMarcarVisto}
+              entrarNaLigacao={entrarNaLigacao}
             />
           ))}
         </ul>

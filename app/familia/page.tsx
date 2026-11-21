@@ -1,6 +1,7 @@
 'use client';
 
 import { Alertas } from '@/components/familia/Alertas';
+import { enderecoCom } from '@/components/familia/api';
 import { Esqueleto, ResumoDaConversa, Rodape } from '@/components/familia/Apoio';
 import { Cabecalho } from '@/components/familia/Cabecalho';
 import { DiaDeHoje } from '@/components/familia/DiaDeHoje';
@@ -43,6 +44,7 @@ export default function PainelDaFamiliaPage() {
             tratamento={painel.idoso.tratamento}
             hoje={painel.hoje.data}
             onMarcarVisto={marcarVisto}
+            entrarNaLigacao={painel.ligacaoAoVivo ? enderecoCom('/familia/ligacao', idoso.id) : null}
           />
           <DiaDeHoje hoje={painel.hoje} />
           {resumo ? <ResumoDaConversa resumo={resumo} /> : null}

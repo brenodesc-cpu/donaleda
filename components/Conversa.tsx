@@ -5,6 +5,8 @@ import AgoraRTC, {
   RemoteAudioTrack,
   useClientEvent,
   useJoin,
+  LocalVideoTrack,
+  useLocalCameraTrack,
   useLocalMicrophoneTrack,
   usePublish,
   useRemoteUsers,
@@ -12,7 +14,7 @@ import AgoraRTC, {
   useRTCClient,
 } from 'agora-rtc-react';
 import { PhoneOff } from 'lucide-react';
-import { DEFAULT_AGENT_UID } from '@/lib/agora';
+import { DEFAULT_AGENT_UID, ehDaFamilia } from '@/lib/agora';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import {
   estadoDoRosto,
@@ -125,7 +127,12 @@ export default function Conversa({
   // assistente em si. Por isso a tela toca o som de todos e mostra o vídeo de
   // quem tiver vídeo.
   const alguemNaLinha = usuariosRemotos.length > 0;
-  const comVideo = usuariosRemotos.find((usuario) => usuario.hasVideo);
+  // Alguém da família entrou pelo aviso urgente: o vídeo dela vai pro palco e a
+  // câmera do aparelho liga só enquanto ela estiver na ligação.
+  const familiaNaLinha = usuariosRemotos.some((usuario) => ehDaFamilia(usuario.uid));
+  const comVideo =
+    usuariosRemotos.find((usuario) => ehDaFamilia(usuario.uid) && usuario.hasVideo) ??
+    usuariosRemotos.find((usuario) => usuario.hasVideo);
   const donoDaVoz =
     usuariosRemotos.find(
       (usuario) => String(usuario.uid) === uidDaAssistente && usuario.hasAudio,
@@ -166,10 +173,11 @@ export default function Conversa({
   const estado = estadoDoRosto(estadoDoAgente, alguemNaLinha, nivel);
   // Teto de 10 minutos por ligação e 2 minutos sem o idoso falar. O microfone
   // entra junto da legenda, pra ligação não cair se a legenda falhar.
+  // Com a família na ligação, o teto de tempo e o corte por silêncio ficam parados.
   useTetoDaLigacao(
     transcript,
     uidDaAssistente,
-    alguemNaLinha,
+    alguemNaLinha && !familiaNaLinha,
     estado === 'falando',
     localMicrophoneTrack,
     onEncerrar,
@@ -188,7 +196,11 @@ export default function Conversa({
 
       <div className="flex w-full flex-col items-center gap-2">
         <p role="status" className="text-xl font-medium text-muted-foreground">
-          {estado === 'ligando' ? 'Só um instante...' : TEXTO_DO_ESTADO[estado]}
+          {familiaNaLinha
+            ? 'Sua família está na ligação'
+            : estado === 'ligando'
+              ? 'Só um instante...'
+              : TEXTO_DO_ESTADO[estado]}
         </p>
         <p
           aria-live="polite"
@@ -216,11 +228,28 @@ export default function Conversa({
         </p>
       ) : null}
 
+      {familiaNaLinha && pronto ? <CameraParaAFamilia /> : null}
+
       {/* O som da ligação toca por aqui; nada disso aparece na tela. */}
       <RemoteAudioTrack track={faixaDaVoz} play />
       {outrosComSom.map((usuario) => (
         <SomDoRemoto key={usuario.uid} usuario={usuario} />
       ))}
     </section>
+  );
+}
+
+/**
+ * A câmera do aparelho, ligada só enquanto alguém da família está na ligação.
+ * Sai da tela junto com a família, e aí a câmera desliga e para de ser enviada.
+ */
+function CameraParaAFamilia() {
+  const { localCameraTrack } = useLocalCameraTrack(true);
+  usePublish([localCameraTrack]);
+  if (!localCameraTrack) return null;
+  return (
+    <div className="fixed bottom-4 right-4 h-28 w-20 overflow-hidden rounded-xl border-2 border-background shadow-lg">
+      <LocalVideoTrack track={localCameraTrack} play className="h-full w-full" aria-label="A sua câmera" />
+    </div>
   );
 }

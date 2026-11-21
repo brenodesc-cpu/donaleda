@@ -88,6 +88,11 @@ export interface Conversa {
   resumo?: string;
   /** Vem da tela do idoso no fim da ligação, quando a Agora mandou medições. */
   tempos?: TemposDaConversa;
+  /** A sala da Agora da ligação e a assistente que entrou nela, pra família poder entrar. */
+  canal?: string;
+  agenteId?: string;
+  /** Quando alguém da família entrou na ligação. */
+  familiaEntrouEm?: string;
 }
 
 export interface Idoso {
@@ -147,6 +152,8 @@ export interface PainelDaFamilia {
     resumo?: string;
     emAndamento: boolean;
   } | null;
+  /** Ligação acontecendo agora, em que a família pode entrar. null quando não há. */
+  ligacaoAoVivo: { conversaId: string; inicio: string } | null;
   /** Não vistos primeiro, depois os mais novos. */
   alertas: Alerta[];
   /** Sete dias, do mais antigo até hoje. Dia sem dado vem com os campos vazios. */
@@ -175,6 +182,8 @@ export type AcaoDaFamilia = (
   | { acao: 'atender_sozinho'; ligado: boolean }
   /** Gera o código de 6 números pra ligar um aparelho. Responde `{ ok, ...CodigoDoAparelho }`. */
   | { acao: 'gerar_codigo' }
+  /** Entra na ligação que está acontecendo, com voz e vídeo. Responde `{ ok, ...EntradaNaLigacao }`, ou 409 sem ligação. */
+  | { acao: 'entrar_na_ligacao' }
   /** A família ensina uma lembrança. Responde `{ ok, lembranca }` ou 422 `{ ok:false, erro:'recusada', motivo }`. */
   | { acao: 'ensinar'; texto: string; categoria: CategoriaDeLembranca; sobre?: string; data?: string; hora?: string }
   /** A família corrige uma lembrança que vê. Só os campos que vierem. Responde `{ ok, lembranca }`. */
@@ -278,3 +287,11 @@ export interface AparelhoPareado {
 
 /** Cabeçalho que todo pedido do aparelho do idoso manda pro servidor. */
 export const CABECALHO_DO_APARELHO = 'x-donaleda-aparelho';
+
+/** O que a família recebe pra entrar na sala da Agora em que o idoso está. */
+export interface EntradaNaLigacao {
+  appId: string;
+  canal: string;
+  uid: string;
+  token: string;
+}

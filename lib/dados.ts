@@ -167,7 +167,12 @@ export function guardarLembranca(
   return r.ok ? r.lembranca : null;
 }
 
-export function abrirConversa(base: Base, agora: Date = new Date(), chamadaId?: string): Conversa {
+export function abrirConversa(
+  base: Base,
+  agora: Date = new Date(),
+  chamadaId?: string,
+  sala?: { canal: string; agenteId: string },
+): Conversa {
   // Conversa que ficou aberta (aba fechada, queda de conexão) é encerrada aqui.
   for (const c of base.conversas) {
     if (!c.fim) c.fim = agora.toISOString();
@@ -177,9 +182,17 @@ export function abrirConversa(base: Base, agora: Date = new Date(), chamadaId?: 
     inicio: agora.toISOString(),
     falasDoIdoso: 0,
     ...(chamadaId ? { chamadaId } : {}),
+    ...(sala ? { canal: sala.canal, agenteId: sala.agenteId } : {}),
   };
   base.conversas.push(conversa);
   return conversa;
+}
+
+/** A conversa acontecendo agora numa sala em que a família pode entrar, ou null. */
+export function conversaAoVivo(base: Base, agora: Date = new Date()): Conversa | null {
+  const ultima = base.conversas[base.conversas.length - 1];
+  if (!ultima || ultima.fim || !ultima.canal || !ultima.agenteId) return null;
+  return agora.getTime() - new Date(ultima.inicio).getTime() < DUAS_HORAS ? ultima : null;
 }
 
 export function fecharConversa(
@@ -229,6 +242,8 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     };
   }
 
+  const aoVivo = conversaAoVivo(base, agora);
+
   const alertas = [...base.alertas]
     .sort((a, b) => {
       if (a.visto !== b.visto) return a.visto ? 1 : -1;
@@ -245,6 +260,7 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
       (c) => dataEmBrasilia(new Date(c.inicio)) === hojeData && (c.falasDoIdoso > 0 || !c.fim),
     ),
     ultimaConversa,
+    ligacaoAoVivo: aoVivo ? { conversaId: aoVivo.id, inicio: aoVivo.inicio } : null,
     alertas,
     semana,
     ...paraOPainel(base),
