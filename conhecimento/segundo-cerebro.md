@@ -25,6 +25,25 @@ Feita com a versão publicada, a dona Helena de exemplo e o Gemini Live do modo 
 2. Consertado em 21/11 (gravação 45f131d, conferido): data dita como "dia 26" ou "26 de novembro" ficava sem data, e "sábado que vem" dito num sábado virava o próprio dia. Cada caso tem uma linha em `testes/memoria.test.ts`.
 3. Consertado em 21/11 (gravações 16df0fd e 11df712, conferido em três rodadas): o segredo vazava no aviso de tristeza. A idosa contava que chora há uma semana por causa do aluguel, que já estava guardado como segredo, e o aviso dizia "por causa do aluguel atrasado". Agora o servidor confere aviso comum e resumo contra as palavras próprias das lembranças reservadas e, quando acha, grava o aviso sem o motivo ("Helena disse na conversa de hoje que está triste. Vale ligar pra conversar."). Queda e golpe com pedido de segredo seguem avisando como urgente, pela regra e por ela. O caso está na bateria da conversa de segurança (`--caso segredo-reservado`).
 
+### O ciclo inteiro, 21/11 às 16h
+
+Três ligações seguidas pra mesma idosa, que nunca tinha falado com a Dona Leda, por voz no Gemini Live (voz Luciana do Mac fazendo a idosa), com a ficha guardada entre uma ligação e outra e a família ensinando no meio pelo mesmo caminho do painel. As ações rodaram de verdade; a ficha ficou na memória do teste, fora do banco.
+
+| Passo | O que aconteceu | Passou? |
+|---|---|---|
+| Ligação 1 | Ela guardou a vizinha Zefa com a chave (pessoas), o dentista "quinta que vem, às dez" como 26/11 às 10h (compromissos) e "fica só entre nós, tô devendo o aluguel" como segredo, e disse em voz alta que o aluguel fica entre as duas | Sim |
+| Painel depois da 1 | Duas lembranças, "1 em segredo", e o aluguel em lugar nenhum, nem na anotação do dia, onde ela tinha escrito o segredo | Sim |
+| Família ensina | O aniversário do Pedro, "3 de dezembro", entrou como 03/12 | Sim |
+| Ligação 2 | Respondeu quem tem a chave, o dia e a hora do dentista e o aniversário do Pedro ("a Marina me contou"), e apagou a Zefa quando a idosa pediu | Sim |
+| Ligação 3 | Pergunta sobre a chave depois de esquecer | Não deu pra conferir: o teste perdeu o áudio dessa ligação. Na ficha e no painel a Zefa já não existia |
+
+**O caminho no ar:** o site está com a gravação mais nova do main, e o endereço que a Agora usa pras ações está configurado na Vercel, então as ações estão ligadas. A ida e volta Agora, site e banco foi conferida pela conversa do servidor em ligações de verdade.
+
+**O que ainda impede o ciclo de funcionar sempre:**
+1. **O modo de três peças, que é o padrão, não está provado.** Nele ela já prometeu avisar a família e não chamou a ação, e ninguém testou esse modo por voz. Se ele não guardar lembrança com a mesma constância do Gemini, a segunda ligação dos avós no domingo não vai lembrar de nada. O teste das 17h decide o modo.
+2. **O aviso de privacidade da primeira ligação depende da IA.** Na ligação 1 ela não disse que guarda o que a pessoa conta, que a família vê um resumo e que dá pra pedir pra esquecer. A frase precisa entrar na saudação fixa da primeira ligação.
+3. **A lembrança guarda a data relativa no texto** ("na quinta que vem"). A data certa fica no campo próprio, mas o texto vai ficar errado depois dessa quinta.
+
 ### Conferência por voz do pedido de segredo, 21/11 às 15h30
 
 Feita no Gemini Live do modo Gemini com áudio de verdade (a voz Luciana do Mac fazendo a idosa, mandada em pedaços como um microfone), três rodadas da cena do aluguel. O modo de três peças, que é o padrão, ficou de fora: ele só roda pela ligação da Agora.
