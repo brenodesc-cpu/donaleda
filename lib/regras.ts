@@ -44,7 +44,7 @@ const EMERGENCIA = new RegExp(
 );
 
 const VONTADE_DE_MORRER =
-  /\b(quero morrer|queria morrer|nao quero mais viver|vontade de morrer|me matar|acabar com (a minha|minha) vida|melhor se eu morresse|nao aguento mais viver|(dormir|deitar) e nao acordar|nao (quero|queria) (mais )?acordar|melhor sem mim|(sou|virei) um (peso|fardo|estorvo)|deus (podia|pode|devia|deveria) me levar|(pedir|peco|pedindo) (pra|a) deus (pra )?me levar)\b/;
+  /\b(quero morrer|queria morrer|nao quero mais viver|vontade de morrer|me matar|acabar com (a minha|minha) vida|melhor se eu morresse|nao aguento mais viver|(dormir|deitar) e nao acordar|nao (quero|queria) (mais )?acordar|melhor nao acordar|nao acordar mais|melhor sem mim|(sou|virei) um (peso|fardo|estorvo)|deus (podia|pode|devia|deveria) me levar|(pedir|peco|pedindo) (pra|a) deus (pra )?me levar)\b/;
 
 // Remédio tomado a mais: a palavra do remédio precisa estar na fala, pra "tomei banho duas vezes" não contar.
 const DOSE_A_MAIS =
