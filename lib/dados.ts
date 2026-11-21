@@ -165,7 +165,7 @@ export function guardarLembranca(
   return r.ok ? r.lembranca : null;
 }
 
-export function abrirConversa(base: Base, agora: Date = new Date()): Conversa {
+export function abrirConversa(base: Base, agora: Date = new Date(), chamadaId?: string): Conversa {
   // Conversa que ficou aberta (aba fechada, queda de conexão) é encerrada aqui.
   for (const c of base.conversas) {
     if (!c.fim) c.fim = agora.toISOString();
@@ -174,6 +174,7 @@ export function abrirConversa(base: Base, agora: Date = new Date()): Conversa {
     id: randomUUID(),
     inicio: agora.toISOString(),
     falasDoIdoso: 0,
+    ...(chamadaId ? { chamadaId } : {}),
   };
   base.conversas.push(conversa);
   return conversa;
@@ -237,8 +238,9 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     assistente: NOME_DA_ASSISTENTE,
     idoso: base.idoso,
     hoje: porData.get(hojeData) ?? diaVazio(hojeData),
+    // Ligação que atendeu sozinha e terminou sem o idoso falar não conta como conversa.
     conversouHoje: base.conversas.some(
-      (c) => dataEmBrasilia(new Date(c.inicio)) === hojeData,
+      (c) => dataEmBrasilia(new Date(c.inicio)) === hojeData && (c.falasDoIdoso > 0 || !c.fim),
     ),
     ultimaConversa,
     alertas,

@@ -83,6 +83,8 @@ export interface Conversa {
   inicio: string;
   fim?: string;
   falasDoIdoso: number;
+  /** A ligação que abriu esta conversa, quando foi a assistente que ligou. */
+  chamadaId?: string;
   resumo?: string;
   /** Vem da tela do idoso no fim da ligação, quando a Agora mandou medições. */
   tempos?: TemposDaConversa;

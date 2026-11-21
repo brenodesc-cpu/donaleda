@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   arrumarHorarios,
+  ligacaoSemFala,
   avancarChamadas,
   chamadaTocando,
   pedirChamadaDaFamilia,
@@ -77,6 +78,7 @@ describe('a assistente liga na hora marcada', () => {
     const base = baseDeExemplo(NOVE_EM_PONTO);
     // O idoso ligou pra assistente às 8h40.
     const conversa = abrirConversa(base, as('11:40'));
+    conversa.falasDoIdoso = 3;
     avancarChamadas(base, NOVE_EM_PONTO);
     expect(chamadaTocando(base)).toBeNull();
 
@@ -157,5 +159,52 @@ describe('a saudação muda conforme quem começou a ligação', () => {
     for (const origem of ['horario', 'familia', 'idoso'] as const) {
       expect(montarSaudacao(base, NOVE_EM_PONTO, origem)).toContain('assistente virtual');
     }
+  });
+});
+
+describe('ligação que atende sozinha sem ninguém falar (verificador, 21/11)', () => {
+  const atendeSozinhaECala = (base: ReturnType<typeof baseDeExemplo>, quando: Date) => {
+    avancarChamadas(base, quando);
+    const chamada = chamadaTocando(base)!;
+    responderChamada(base, chamada.id, 'atender', depois(quando, 10));
+    const conversa = abrirConversa(base, depois(quando, 11), chamada.id);
+    fecharConversa(base, conversa.id, depois(quando, 130));
+    ligacaoSemFala(base, conversa.id, depois(quando, 130));
+    return chamada;
+  };
+
+  it('conta como não atendida e a segunda tentativa acontece em 3 minutos', () => {
+    const base = baseDeExemplo(NOVE_EM_PONTO);
+    const primeira = atendeSozinhaECala(base, NOVE_EM_PONTO);
+    expect(primeira.estado).toBe('perdida');
+    avancarChamadas(base, depois(NOVE_EM_PONTO, 130 + 181));
+    const segunda = chamadaTocando(base);
+    expect(segunda?.tentativa).toBe(2);
+  });
+
+  it('depois da segunda sem fala, a família recebe o aviso de não atendeu', () => {
+    const base = baseDeExemplo(NOVE_EM_PONTO);
+    atendeSozinhaECala(base, NOVE_EM_PONTO);
+    atendeSozinhaECala(base, depois(NOVE_EM_PONTO, 130 + 181));
+    expect(base.alertas.some((a) => a.tipo === 'ligacao')).toBe(true);
+  });
+
+  it('o painel não diz que ele conversou hoje', () => {
+    const base = baseDeExemplo(NOVE_EM_PONTO);
+    atendeSozinhaECala(base, NOVE_EM_PONTO);
+    expect(montarPainel(base, depois(NOVE_EM_PONTO, 140)).conversouHoje).toBe(false);
+  });
+
+  it('com o idoso falando, continua atendida e conta como conversa', () => {
+    const base = baseDeExemplo(NOVE_EM_PONTO);
+    avancarChamadas(base, NOVE_EM_PONTO);
+    const chamada = chamadaTocando(base)!;
+    responderChamada(base, chamada.id, 'atender', depois(NOVE_EM_PONTO, 5));
+    const conversa = abrirConversa(base, depois(NOVE_EM_PONTO, 6), chamada.id);
+    conversa.falasDoIdoso = 4;
+    fecharConversa(base, conversa.id, depois(NOVE_EM_PONTO, 300));
+    ligacaoSemFala(base, conversa.id, depois(NOVE_EM_PONTO, 300));
+    expect(chamada.estado).toBe('atendida');
+    expect(montarPainel(base, depois(NOVE_EM_PONTO, 310)).conversouHoje).toBe(true);
   });
 });

@@ -303,7 +303,7 @@ export async function POST(request: NextRequest) {
     });
 
     const agentId = await session.start();
-    const conversa = await mudarBase(idosoId, (b) => abrirConversa(b, agora));
+    const conversa = await mudarBase(idosoId, (b) => abrirConversa(b, agora, chamada?.id));
 
     return NextResponse.json({
       agent_id: agentId,

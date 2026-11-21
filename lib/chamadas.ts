@@ -74,6 +74,34 @@ function novaChamada(
   return chamada;
 }
 
+/** Marca a ligação como não atendida e, na última tentativa, avisa a família. */
+function darPorPerdida(base: Base, chamada: Chamada, agora: Date): void {
+  chamada.estado = 'perdida';
+  chamada.resolvidaEm = agora.toISOString();
+  const ultimaTentativa =
+    chamada.motivo === 'familia' || chamada.tentativa >= TENTATIVAS_POR_HORARIO;
+  if (ultimaTentativa) {
+    const texto =
+      chamada.motivo === 'familia'
+        ? `Não atendeu a ligação que a família pediu às ${horaMinutoEmBrasilia(new Date(chamada.pedidaEm))}.`
+        : `Não atendeu a ligação das ${chamada.horario}, em ${chamada.tentativa} tentativas.`;
+    criarAlerta(base, { tipo: 'ligacao', gravidade: 'atencao', texto, origem: 'regra' }, agora);
+  }
+}
+
+/**
+ * Ligação que atendeu (sozinha ou com um toque) e acabou sem o idoso dizer nada vale
+ * como não atendida: a segunda tentativa acontece e, na última, a família é avisada.
+ */
+export function ligacaoSemFala(base: Base, conversaId: string, agora: Date = new Date()): boolean {
+  const conversa = base.conversas.find((c) => c.id === conversaId);
+  if (!conversa || conversa.falasDoIdoso > 0 || !conversa.chamadaId) return false;
+  const chamada = base.chamadas.find((c) => c.id === conversa.chamadaId);
+  if (!chamada || chamada.estado !== 'atendida') return false;
+  darPorPerdida(base, chamada, agora);
+  return true;
+}
+
 /**
  * Faz o relógio das ligações andar: dá por perdida a ligação que tocou demais e
  * começa a ligação da hora marcada. Devolve se algo mudou, pra só então gravar.
@@ -84,27 +112,17 @@ export function avancarChamadas(base: Base, agora: Date = new Date()): { mudou: 
   for (const chamada of base.chamadas) {
     if (chamada.estado !== 'tocando') continue;
     if (agora.getTime() - new Date(chamada.pedidaEm).getTime() <= TOCA_POR_MS) continue;
-    chamada.estado = 'perdida';
-    chamada.resolvidaEm = agora.toISOString();
+    darPorPerdida(base, chamada, agora);
     mudou = true;
-
-    const ultimaTentativa =
-      chamada.motivo === 'familia' || chamada.tentativa >= TENTATIVAS_POR_HORARIO;
-    if (ultimaTentativa) {
-      const texto =
-        chamada.motivo === 'familia'
-          ? `Não atendeu a ligação que a família pediu às ${horaMinutoEmBrasilia(new Date(chamada.pedidaEm))}.`
-          : `Não atendeu a ligação das ${chamada.horario}, em ${chamada.tentativa} tentativas.`;
-      criarAlerta(base, { tipo: 'ligacao', gravidade: 'atencao', texto, origem: 'regra' }, agora);
-    }
   }
 
   if (chamadaTocando(base) || emConversa(base, agora)) return { mudou };
 
   const hoje = dataEmBrasilia(agora);
   const minutosAgora = emMinutos(horaMinutoEmBrasilia(agora));
+  // Conversa em que o idoso não falou nada não segura a ligação da hora marcada.
   const conversasDeHoje = base.conversas
-    .filter((c) => dataEmBrasilia(new Date(c.inicio)) === hoje)
+    .filter((c) => dataEmBrasilia(new Date(c.inicio)) === hoje && (c.falasDoIdoso > 0 || !c.fim))
     .map((c) => emMinutos(horaMinutoEmBrasilia(new Date(c.inicio))));
 
   for (const horario of arrumarHorarios(base.idoso.horariosDeLigacao)) {

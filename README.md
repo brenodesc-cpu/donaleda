@@ -73,6 +73,8 @@ Preencha o `.env.local`:
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`: do seu projeto no Supabase, em Project Settings, API.
 - `LIA_GEMINI_KEY`: opcional, pro modo Gemini.
 
+No Supabase, em Authentication, desligue a confirmação de e-mail (Confirm email), senão a família não consegue entrar logo depois de criar a conta.
+
 Crie as tabelas rodando `supabase/migrations/20261121130000_inicio.sql` no SQL Editor do Supabase. Depois:
 
 ```bash

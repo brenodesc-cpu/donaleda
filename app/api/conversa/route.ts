@@ -3,6 +3,7 @@
 // quando uma regra dispara, dentro do alerta que vai pra família.
 
 import { NextResponse } from 'next/server';
+import { ligacaoSemFala } from '@/lib/chamadas';
 import { criarAlerta, fecharConversa, mudarBase } from '@/lib/dados';
 import { limparTempos } from '@/lib/medicao';
 import { avaliarFala } from '@/lib/regras';
@@ -28,7 +29,11 @@ export async function POST(request: Request) {
   }
 
   if (evento.tipo === 'fim') {
-    const conversa = await mudarBase(idosoId, (base) => fecharConversa(base, evento.conversaId));
+    const conversa = await mudarBase(idosoId, (base) => {
+      const fechada = fecharConversa(base, evento.conversaId);
+      if (fechada) ligacaoSemFala(base, evento.conversaId);
+      return fechada;
+    });
     return NextResponse.json({ ok: Boolean(conversa) } satisfies RespostaDoEvento, {
       status: conversa ? 200 : 404,
     });
