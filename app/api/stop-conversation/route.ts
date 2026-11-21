@@ -1,27 +1,7 @@
 import { NextResponse } from 'next/server';
-import { AgoraClient, Area } from 'agora-agents';
 import { StopConversationRequest } from '@/types/conversation';
+import { pararAssistente } from '@/lib/pararAssistente';
 import { exigirAparelho } from '@/lib/sessao';
-
-function isAgentAlreadyStoppingOrStopped(error: unknown): boolean {
-  if (!error || typeof error !== 'object') return false;
-
-  const maybeErr = error as {
-    statusCode?: number;
-    body?: { detail?: string; reason?: string };
-    message?: string;
-  };
-
-  const statusCode = maybeErr.statusCode;
-  const reason = maybeErr.body?.reason?.toLowerCase();
-  const detail = maybeErr.body?.detail?.toLowerCase() ?? maybeErr.message?.toLowerCase() ?? '';
-
-  if (statusCode === 404) return true;
-  if (reason === 'invalidrequest' && detail.includes('already in the process of shutting down')) {
-    return true;
-  }
-  return false;
-}
 
 export async function POST(request: Request) {
   const aparelho = await exigirAparelho(request);
@@ -46,23 +26,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // area: change to Area.EU or Area.AP for European or Asia-Pacific deployments.
-    const client = new AgoraClient({
-      area: Area.US,
-      appId,
-      appCertificate,
-    });
-    try {
-      await client.stopAgent(agent_id);
-    } catch (error) {
-      if (isAgentAlreadyStoppingOrStopped(error)) {
-        // Treat stop as idempotent: agent is already exiting (or gone).
-        return NextResponse.json({ success: true, state: 'already-stopping' });
-      }
-      throw error;
-    }
-
-    return NextResponse.json({ success: true });
+    // Pede a saída nos dois endereços da Agora: o do Gemini e o de três peças.
+    const resultado = await pararAssistente(appId, appCertificate, agent_id);
+    return NextResponse.json(
+      resultado === 'parou' ? { success: true } : { success: true, state: 'already-stopping' },
+    );
   } catch (error) {
     console.error('Error stopping conversation:', error);
     return NextResponse.json(
