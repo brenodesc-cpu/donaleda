@@ -114,6 +114,8 @@ export const TEXTO_DO_ESTADO: Record<EstadoDoRosto, string> = {
   falando: 'Falando',
 };
 
+import type { FalaDaSessao } from './tipos';
+
 /**
  * As falas do idoso que mudaram desde o último envio, inclusive as que ainda estão
  * em andamento. A legenda marca cada pedaço como terminado na hora, então o mesmo
@@ -129,5 +131,26 @@ export function falasNovasDoIdoso(
     .filter((item) => item.uid !== uidDaAssistente)
     .map((item) => ({ id: String(item.turn_id), texto: textoDe(item) }))
     .filter((fala) => fala.texto !== '' && enviadas.get(fala.id) !== fala.texto);
+}
+
+/**
+ * Consolida as falas da conversa em ordem (uma por turno/falante) para envio único
+ * no encerramento. O servidor processa em memória pra extrair ficha/lembranças/resumo
+ * e descarta o texto bruto em seguida.
+ */
+export function extrairFalasDaSessao(
+  transcript: ItemDoTranscript[],
+  uidDaAssistente: string,
+): FalaDaSessao[] {
+  const porChave = new Map<string, FalaDaSessao>();
+  for (const item of transcript) {
+    const texto = textoDe(item);
+    if (!texto) continue;
+    const quem: FalaDaSessao['quem'] =
+      String(item.uid) === uidDaAssistente ? 'assistente' : 'idoso';
+    const chave = `${item.turn_id}:${quem}`;
+    porChave.set(chave, { quem, texto: texto.slice(0, 400) });
+  }
+  return Array.from(porChave.values()).slice(-60);
 }
 

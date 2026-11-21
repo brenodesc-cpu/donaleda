@@ -126,6 +126,31 @@ describe('o que a assistente fala', () => {
     expect(instrucoes).not.toContain('registrar_bem_estar');
     expect(instrucoes).toContain('Não prometa avisar a família');
   });
+
+  it('classifica os horários de remédios pela hora atual de Brasília e prioriza mal-estar sobre roteiro', async () => {
+    const { resumirRemediosNoHorario } = await import('@/lib/persona');
+    // 21/11/2026 às 16:30 de Brasília (19:30 UTC).
+    const tarde = new Date('2026-11-21T19:30:00.000Z');
+    const resumo = resumirRemediosNoHorario(
+      [
+        { nome: 'Metformina', horario: '08:00' },
+        { nome: 'Insulina', horario: '17:00' },
+        { nome: 'Losartana', horario: '20:00' },
+      ],
+      tarde,
+    );
+    expect(resumo).toContain('Horário já passou hoje');
+    expect(resumo).toContain('Metformina às 08:00');
+    expect(resumo).toContain('Está na hora ou chegando agora');
+    expect(resumo).toContain('Insulina às 17:00');
+    expect(resumo).toContain('Só mais tarde hoje');
+    expect(resumo).toContain('Losartana às 20:00');
+
+    const instrucoes = montarInstrucoes(baseDeExemplo(tarde), tarde, true);
+    expect(instrucoes).toContain('Prioridade absoluta: mal-estar e saúde vêm antes do roteiro');
+    expect(instrucoes).toContain('PARE IMEDIATAMENTE o roteiro do dia');
+    expect(instrucoes).toContain('hipoglicemia');
+  });
 });
 
 describe('quem contratou, com o artigo certo', () => {

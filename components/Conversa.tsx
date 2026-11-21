@@ -16,6 +16,7 @@ import { DEFAULT_AGENT_UID } from '@/lib/agora';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import {
   estadoDoRosto,
+  extrairFalasDaSessao,
   legendaDaAssistente,
   TEXTO_DO_ESTADO,
 } from '@/lib/conversation';
@@ -41,6 +42,7 @@ export default function Conversa({
   dados,
   rtmClient,
   onRenovarTokens,
+  onFalasAtualizadas,
   onEncerrar,
   onFalha,
 }: PropsDaConversa) {
@@ -95,6 +97,16 @@ export default function Conversa({
     pronto: pronto && entrou,
   });
   useEnviarFalas(transcript, dados.conversaId, uidDaAssistente);
+
+  // Mantém a cópia efêmera das falas pra consolidar resumo/ficha no encerramento.
+  useEffect(() => {
+    if (!onFalasAtualizadas) return;
+    onFalasAtualizadas(extrairFalasDaSessao(transcript, uidDaAssistente));
+  }, [transcript, uidDaAssistente, onFalasAtualizadas]);
+
+  const encerrarComFalas = useCallback(() => {
+    onEncerrar(extrairFalasDaSessao(transcript, uidDaAssistente));
+  }, [onEncerrar, transcript, uidDaAssistente]);
 
   // O tempo de resposta medido pela Agora vai pro servidor uma vez, quando a
   // ligação acaba, e fica junto da conversa. Com ?medir=1 aparece também na tela.
@@ -204,7 +216,7 @@ export default function Conversa({
         </BotaoGrande>
       ) : null}
 
-      <BotaoGrande tom={somPreso ? 'discreto' : 'encerrar'} onClick={onEncerrar}>
+      <BotaoGrande tom={somPreso ? 'discreto' : 'encerrar'} onClick={encerrarComFalas}>
         <PhoneOff aria-hidden className="h-7 w-7 shrink-0" />
         Desligar
       </BotaoGrande>

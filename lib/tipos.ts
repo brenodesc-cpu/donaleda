@@ -166,6 +166,10 @@ export interface PainelDaFamilia {
   chamadaTocando: Chamada | null;
   /** As últimas ligações, da mais nova pra mais antiga. */
   chamadas: Chamada[];
+  /** true quando o aparelho do idoso consultou o servidor nos últimos 30 s (app aberto). */
+  aparelhoOnline?: boolean;
+  /** Último instante em que o aparelho do idoso respondeu ao servidor, ou null. */
+  aparelhoVistoEm?: string | null;
   atualizadoEm: string;
 }
 
@@ -219,10 +223,16 @@ export type RespostaDaChamada =
   | { acao: 'atender'; chamadaId: string }
   | { acao: 'recusar'; chamadaId: string };
 
+/** Uma fala efêmera enviada apenas no fim da ligação pra gerar resumo/ficha em memória e descartar. */
+export interface FalaDaSessao {
+  quem: 'idoso' | 'assistente';
+  texto: string;
+}
+
 /** POST /api/conversa (a tela do idoso avisa o servidor do que acontece na conversa). */
 export type EventoDaConversa =
   | { tipo: 'fala'; conversaId: string; texto: string }
-  | { tipo: 'fim'; conversaId: string }
+  | { tipo: 'fim'; conversaId: string; falas?: FalaDaSessao[] }
   | { tipo: 'tempos'; conversaId: string; tempos: TemposDaConversa };
 
 export interface RespostaDoEvento {

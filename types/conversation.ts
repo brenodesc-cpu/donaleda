@@ -1,4 +1,5 @@
 import type { RTMClient } from 'agora-rtm';
+import type { FalaDaSessao } from '@/lib/tipos';
 
 // Contratos do projeto-base da Agora, usados pelas rotas de token, início e fim.
 export interface AgoraTokenData {
@@ -52,6 +53,7 @@ export interface PropsDaConversa {
   dados: DadosDaLigacao;
   rtmClient: RTMClient;
   onRenovarTokens: (uid: string) => Promise<AgoraRenewalTokens>;
-  onEncerrar: () => void;
+  onFalasAtualizadas?: (falas: FalaDaSessao[]) => void;
+  onEncerrar: (falas?: FalaDaSessao[]) => void;
   onFalha: (motivo: MotivoDaFalha) => void;
 }

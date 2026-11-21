@@ -4,8 +4,13 @@
 
 import { NextResponse } from 'next/server';
 import { ligacaoSemFala } from '@/lib/chamadas';
-import { criarAlerta, fecharConversa, mudarBase } from '@/lib/dados';
+import { criarAlerta, fecharConversa, lerBase, mudarBase } from '@/lib/dados';
 import { limparTempos } from '@/lib/medicao';
+import {
+  aplicarExtracaoNaBase,
+  extrairConhecimentoComIA,
+  limparFalasDaSessao,
+} from '@/lib/posConversa';
 import { avaliarFala } from '@/lib/regras';
 import { exigirAparelho } from '@/lib/sessao';
 import type { Alerta, EventoDaConversa, RespostaDoEvento } from '@/lib/tipos';
@@ -29,7 +34,21 @@ export async function POST(request: Request) {
   }
 
   if (evento.tipo === 'fim') {
+    const falas = limparFalasDaSessao(evento.falas);
+    let extracao = {};
+    if (falas.some((f) => f.quem === 'idoso')) {
+      try {
+        const atual = await lerBase(idosoId);
+        extracao = await extrairConhecimentoComIA(atual.idoso.tratamento, falas);
+      } catch {
+        extracao = {};
+      }
+    }
+
     const conversa = await mudarBase(idosoId, (base) => {
+      if (falas.length > 0) {
+        aplicarExtracaoNaBase(base, evento.conversaId, falas, extracao);
+      }
       const fechada = fecharConversa(base, evento.conversaId);
       if (fechada) ligacaoSemFala(base, evento.conversaId);
       return fechada;

@@ -69,6 +69,7 @@ export default function TelaDoIdoso() {
             dados={dados}
             rtmClient={rtm}
             onRenovarTokens={ligacao.renovarTokens}
+            onFalasAtualizadas={ligacao.atualizarFalas}
             onEncerrar={ligacao.encerrar}
             onFalha={ligacao.falhar}
           />

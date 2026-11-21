@@ -16,6 +16,7 @@ import type { AcaoDaFamilia, CodigoDoAparelho } from '@/lib/tipos';
 export const dynamic = 'force-dynamic';
 
 const TRINTA_MINUTOS = 30 * 60 * 1000;
+const APARELHO_ONLINE_MS = 35_000;
 
 export async function GET(request: Request) {
   const pedido = new URL(request.url).searchParams.get('idoso');
@@ -23,11 +24,27 @@ export async function GET(request: Request) {
   if (!conferido.ok) return conferido.resposta;
 
   const agora = new Date();
-  const painel = await mudarBaseQuando(conferido.valor.idosoId, (base) => {
-    const { mudou } = avancarChamadas(base, agora);
-    return { gravar: mudou, resultado: montarPainel(base, agora) };
-  });
-  return NextResponse.json(painel, { headers: { 'Cache-Control': 'no-store' } });
+  const [painel, aparelhosRes] = await Promise.all([
+    mudarBaseQuando(conferido.valor.idosoId, (base) => {
+      const { mudou } = avancarChamadas(base, agora);
+      return { gravar: mudou, resultado: montarPainel(base, agora) };
+    }),
+    clienteDoServidor()
+      .from('aparelhos')
+      .select('visto_em')
+      .eq('idoso_id', conferido.valor.idosoId)
+      .order('visto_em', { ascending: false })
+      .limit(1),
+  ]);
+
+  const vistoEm = (aparelhosRes.data?.[0]?.visto_em as string | null | undefined) ?? null;
+  const aparelhoOnline =
+    vistoEm !== null && agora.getTime() - new Date(vistoEm).getTime() <= APARELHO_ONLINE_MS;
+
+  return NextResponse.json(
+    { ...painel, aparelhoOnline, aparelhoVistoEm: vistoEm },
+    { headers: { 'Cache-Control': 'no-store' } },
+  );
 }
 
 function texto(valor: unknown, limite: number): string | undefined {

@@ -138,6 +138,25 @@ describe('segundo cérebro: o que vai na instrução', () => {
     expect(instrucoes).toContain('buscar_lembranca');
     expect(instrucoes).toContain('Nunca invente nome, data nem remédio');
   });
+
+  it('saúde e ensinamentos da família entram sempre na 1ª conversa, fora do rodízio e sem duplicar', () => {
+    const base = baseDeExemplo(AGORA, 'id');
+    base.conversas = []; // 1ª conversa: antes saude ficava de fora do rodízio
+    base.lembrancas = [];
+    guardar(base, { texto: 'Possui diabetes', categoria: 'saude', origem: 'familia' }, AGORA);
+    guardar(
+      base,
+      { texto: 'Ele é uma pessoa com personalidade forte', categoria: 'gosto', origem: 'familia' },
+      AGORA,
+    );
+    const bloco = blocoDeLembrancas(base, AGORA);
+    expect(bloco).toContain('## Saúde');
+    expect(bloco).toContain('Possui diabetes');
+    expect(bloco).toContain('Ele é uma pessoa com personalidade forte');
+    // Não duplica no rodízio o que já entrou como ensinamento da família.
+    expect(bloco.match(/Ele é uma pessoa com personalidade forte/g)).toHaveLength(1);
+    expect(bloco.match(/Possui diabetes/g)).toHaveLength(1);
+  });
 });
 
 describe('segundo cérebro: busca', () => {

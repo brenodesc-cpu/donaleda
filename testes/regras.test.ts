@@ -143,3 +143,28 @@ describe('tristeza que dura dias (central, 21/11)', () => {
     expect(avaliarFala(fala)).toBeNull();
   });
 });
+
+describe('crises metabólicas e clínicas agudas (hipoglicemia, pressão, suor frio)', () => {
+  it.each([
+    'Tô com hipoglicemia agora',
+    'Minha glicemia caiu muito hoje',
+    'O açúcar no sangue tá muito baixo e tô tremendo',
+    'Minha pressão subiu demais, tô passando mal',
+    'Tô com suor frio e muito tonto',
+    'Minha vista tá escurecendo',
+  ])('avisa como emergência urgente: %s', (fala) => {
+    const alerta = avaliarFala(fala);
+    expect(alerta?.tipo).toBe('emergencia');
+    expect(alerta?.gravidade).toBe('urgente');
+    expect(alerta?.texto).toContain('192');
+  });
+
+  it.each([
+    'Eu tenho diabetes controlada faz anos',
+    'Evito açúcar no café da manhã',
+    'Medi a pressão cedo e deu tudo certo',
+    'O médico falou pra cuidar da glicose',
+  ])('não dispara à toa em conversa comum sobre condição crônica: %s', (fala) => {
+    expect(avaliarFala(fala)).toBeNull();
+  });
+});

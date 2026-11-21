@@ -5,11 +5,33 @@ import { destravarSom } from './somDoAparelho';
 
 export type EstadoDoAparelho = 'conferindo' | 'precisa' | 'pronto';
 
+const CHAVE_MIC_OK = 'donaleda:microfone-ok';
+
+function jaLiberouAntes(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return window.localStorage.getItem(CHAVE_MIC_OK) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function marcarLiberado(ok: boolean) {
+  if (typeof window === 'undefined') return;
+  try {
+    if (ok) window.localStorage.setItem(CHAVE_MIC_OK, '1');
+    else window.localStorage.removeItem(CHAVE_MIC_OK);
+  } catch {
+    // Sem localStorage.
+  }
+}
+
 /**
  * Diz se este aparelho já pode receber ligações, ou seja, se o microfone já foi
  * liberado neste navegador. Quando não foi, `preparar` pede o microfone e
- * destrava o som. É o filho quem faz isso, uma vez, no dia em que deixa o
- * aparelho com o idoso.
+ * destrava o som. No Android WebView, `permissions.query` costuma responder
+ * `prompt` ou falhar mesmo após concedido; por isso guardamos a confirmação local
+ * para o aparelho já voltar pronto pra receber ligações da família.
  */
 export function useAparelhoPronto() {
   const [estado, setEstado] = useState<EstadoDoAparelho>('conferindo');
@@ -19,8 +41,18 @@ export function useAparelhoPronto() {
     let vivo = true;
     let permissao: PermissionStatus | null = null;
     const ler = () => {
-      if (vivo && permissao) {
-        setEstado(permissao.state === 'granted' ? 'pronto' : 'precisa');
+      if (!vivo || !permissao) return;
+      if (permissao.state === 'granted') {
+        marcarLiberado(true);
+        setNegado(false);
+        setEstado('pronto');
+      } else if (permissao.state === 'denied') {
+        marcarLiberado(false);
+        setNegado(true);
+        setEstado('precisa');
+      } else {
+        // Android WebView frequentemente reporta 'prompt' mesmo depois de já liberado.
+        setEstado(jaLiberouAntes() ? 'pronto' : 'precisa');
       }
     };
 
@@ -33,8 +65,8 @@ export function useAparelhoPronto() {
         ler();
         permissao.addEventListener('change', ler);
       } catch {
-        // Navegador que não responde à consulta é tratado como não liberado.
-        if (vivo) setEstado('precisa');
+        // WebView sem permissions.query: usa a confirmação gravada no aparelho.
+        if (vivo) setEstado(jaLiberouAntes() ? 'pronto' : 'precisa');
       }
     })();
 
@@ -60,8 +92,10 @@ export function useAparelhoPronto() {
       if (!navigator.mediaDevices?.getUserMedia) throw new Error('sem microfone');
       const som = await navigator.mediaDevices.getUserMedia({ audio: true });
       som.getTracks().forEach((faixa) => faixa.stop());
+      marcarLiberado(true);
       setEstado('pronto');
     } catch {
+      marcarLiberado(false);
       setNegado(true);
     }
   }, []);

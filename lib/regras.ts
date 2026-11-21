@@ -38,6 +38,12 @@ const EMERGENCIA = new RegExp(
     '(braco|perna|lado)( (direito|esquerdo|direita|esquerda))?( \\w+){0,2} (fraco|fraca|mole|sem forca|paralisad[oa])',
     '(perna|braco|mao|corpo)( \\w+){0,2} nao (obedece|mexe|responde)', 'nao consigo mexer (o|a|meu|minha) (braco|perna|lado|mao)',
     'fala( \\w+){0,2} (enrolando|enrolada|arrastada)', 'falando( \\w+)? enrolad[oa]', 'lingua enrolando',
+    // crises metabólicas/clínicas agudas (hipoglicemia, pressão extrema, convulsão, suor frio/tontura forte)
+    'hipoglicemi\\w*', 'hiperglicemi\\w*',
+    '(glicemia|glicose|acucar( no sangue)?)( \\w+){0,3} (muito )?(baix[oa]|alta|caiu|baixou|despencou|subiu demais)',
+    'pressao( \\w+){0,2} (muito )?(alta|baixa|subiu demais|caiu demais|despencou|nas alturas)',
+    'convuls\\w*', 'suor frio', 'suando frio', 'tontura forte', 'muito tont[oa]',
+    '(vista|visao)( \\w+){0,2} (escurecendo|escureceu|turva)',
   ]
     .map((p) => `\\b${p}\\b`)
     .join('|'),

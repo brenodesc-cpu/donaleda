@@ -4,7 +4,7 @@
 import type { RTMClient } from 'agora-rtm';
 import { fetchDoAparelho } from '@/lib/aparelho';
 import { avisarServidor } from '@/lib/avisarServidor';
-import type { InicioDaConversa } from '@/lib/tipos';
+import type { FalaDaSessao, InicioDaConversa } from '@/lib/tipos';
 import type {
   ClientStartRequest,
   StopConversationRequest,
@@ -77,8 +77,16 @@ function pararAssistente(agentId: string): Promise<void> {
     .catch(() => undefined);
 }
 
-/** Avisa o fim ao servidor e depois manda a assistente sair da ligação. */
-export async function fecharNoServidor(conversaId: string, agentId: string) {
-  await avisarServidor({ tipo: 'fim', conversaId });
+/** Avisa o fim ao servidor (com as falas efêmeras pra extrair resumo/ficha em memória) e para a assistente. */
+export async function fecharNoServidor(
+  conversaId: string,
+  agentId: string,
+  falas?: FalaDaSessao[],
+) {
+  await avisarServidor({
+    tipo: 'fim',
+    conversaId,
+    ...(falas && falas.length > 0 ? { falas } : {}),
+  });
   await pararAssistente(agentId);
 }

@@ -18,8 +18,8 @@ export const GAVETAS: CategoriaDeLembranca[] = [
   'compromisso',
 ];
 
-/** As gavetas de assunto, que entram em rodízio: duas por ligação. */
-const RODIZIO: CategoriaDeLembranca[] = ['gosto', 'historia', 'rotina', 'humor', 'saude'];
+/** As gavetas de assunto que entram em rodízio: duas por ligação. Saúde e dificuldades são fixas. */
+const RODIZIO: CategoriaDeLembranca[] = ['gosto', 'historia', 'rotina', 'humor'];
 
 const ROTULO: Record<CategoriaDeLembranca, string> = {
   pessoa: 'Pessoas',
@@ -361,9 +361,10 @@ export function linha(l: Lembranca, familiar: string): string {
 }
 
 /**
- * O bloco "o que você sabe" de cada ligação, com até 60 linhas: os compromissos de
- * ontem a 14 dias, os aniversários da semana, as dificuldades e as 10 pessoas mais
- * recentes sempre; duas gavetas de assunto em rodízio, até 8 cada. O resto ela busca.
+ * O bloco "o que você sabe" de cada ligação, com até 60 linhas: compromissos de
+ * ontem a 14 dias, condições de saúde, dificuldades, ensinamentos da família e
+ * as 10 pessoas mais recentes entram sempre; depois duas gavetas de assunto em
+ * rodízio (sem repetir o que já entrou). O resto ela busca com buscar_lembranca.
  */
 export function blocoDeLembrancas(base: Base, agora: Date = new Date()): string {
   normalizarLembrancas(base);
@@ -371,14 +372,18 @@ export function blocoDeLembrancas(base: Base, agora: Date = new Date()): string 
   const ontem = somarDias(hoje, -1);
   const daquiA14 = somarDias(hoje, 14);
   const familiar = base.idoso.familiar.nome;
+  const incluidas = new Set<string>();
   const porGaveta = (g: CategoriaDeLembranca) =>
     base.lembrancas
-      .filter((l) => l.categoria === g)
+      .filter((l) => l.categoria === g && !incluidas.has(l.id))
       .sort((a, b) => (b.atualizadaEm ?? b.criadaEm).localeCompare(a.atualizadaEm ?? a.criadaEm));
 
   const partes: string[] = [];
   const secao = (titulo: string, itens: Lembranca[]) => {
-    if (itens.length) partes.push(`## ${titulo}`, ...itens.map((l) => linha(l, familiar)));
+    const novos = itens.filter((l) => !incluidas.has(l.id));
+    if (!novos.length) return;
+    for (const l of novos) incluidas.add(l.id);
+    partes.push(`## ${titulo}`, ...novos.map((l) => linha(l, familiar)));
   };
 
   const compromissos = base.lembrancas
@@ -386,10 +391,19 @@ export function blocoDeLembrancas(base: Base, agora: Date = new Date()): string 
     .sort((a, b) => `${a.data}${a.hora ?? ''}`.localeCompare(`${b.data}${b.hora ?? ''}`))
     .slice(0, 6);
   secao('Compromissos (de ontem às próximas duas semanas)', compromissos);
+  // Saúde é contexto clínico crítico (ex.: diabetes, hipertensão): nunca fica no rodízio.
+  secao('Saúde (condições e cuidados — sempre considerar na conversa)', porGaveta('saude').slice(0, 10));
   secao('Dificuldades (mudam o seu jeito de falar)', porGaveta('dificuldade').slice(0, 6));
   secao('Pessoas', porGaveta('pessoa').slice(0, 10));
   const semData = porGaveta('compromisso').filter((l) => !l.data).slice(0, 3);
   secao('Compromissos sem data', semData);
+
+  // Ensinamentos cadastrados pela família que ainda não entraram acima (ex.: personalidade, rotina, gostos).
+  const daFamilia = base.lembrancas
+    .filter((l) => l.origem === 'familia' && !incluidas.has(l.id))
+    .sort((a, b) => (b.atualizadaEm ?? b.criadaEm).localeCompare(a.atualizadaEm ?? a.criadaEm))
+    .slice(0, 8);
+  secao(`O que ${familiar} ensinou (considere no jeito de conversar)`, daFamilia);
 
   const vez = base.conversas.length % RODIZIO.length;
   for (const g of [RODIZIO[vez], RODIZIO[(vez + 1) % RODIZIO.length]]) {

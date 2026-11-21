@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { RTMClient } from 'agora-rtm';
+import type { FalaDaSessao } from '@/lib/tipos';
 import type {
   AgoraRenewalTokens,
   DadosDaLigacao,
@@ -33,6 +34,12 @@ export function useLigacao() {
   const ocupado = useRef(false);
   // A ligação da última tentativa, pra "Tentar de novo" repetir a mesma.
   const ultimaChamada = useRef<string | undefined>(undefined);
+  // Falas efêmeras em memória pra consolidar ficha/resumo mesmo se a aba fechar.
+  const ultimasFalas = useRef<FalaDaSessao[]>([]);
+
+  const atualizarFalas = useCallback((falas: FalaDaSessao[]) => {
+    ultimasFalas.current = falas;
+  }, []);
 
   // Os módulos da Agora são pesados: carregar antes deixa o toque no botão mais rápido.
   useEffect(() => {
@@ -41,16 +48,18 @@ export function useLigacao() {
   }, []);
 
   const desligar = useCallback(
-    (proximaFase: FaseDaLigacao, falha: MotivoDaFalha | null) => {
+    (proximaFase: FaseDaLigacao, falha: MotivoDaFalha | null, falas?: FalaDaSessao[]) => {
       if (fimAvisado.current) return;
       fimAvisado.current = true;
+      const falasParaEnviar = falas && falas.length > 0 ? falas : ultimasFalas.current;
+      ultimasFalas.current = [];
       // A tela troca na hora (o som para já); o servidor é avisado em seguida.
       setMotivo(falha);
       setFase(proximaFase);
       setDados(null);
       setRtm(null);
       ocupado.current = false;
-      if (dados) void fecharNoServidor(dados.conversaId, dados.agentId);
+      if (dados) void fecharNoServidor(dados.conversaId, dados.agentId, falasParaEnviar);
       rtm?.logout().catch(() => {});
     },
     [dados, rtm],
@@ -115,7 +124,10 @@ export function useLigacao() {
     setFase((atual) => (atual === 'erro' ? 'parada' : atual));
   }, []);
 
-  const encerrar = useCallback(() => desligar('parada', null), [desligar]);
+  const encerrar = useCallback(
+    (falas?: FalaDaSessao[]) => desligar('parada', null, falas),
+    [desligar],
+  );
 
   const falhar = useCallback(
     (falha: MotivoDaFalha) => desligar('erro', falha),
@@ -140,7 +152,9 @@ export function useLigacao() {
     const aoSair = () => {
       if (fimAvisado.current) return;
       fimAvisado.current = true;
-      void fecharNoServidor(dados.conversaId, dados.agentId);
+      const falasParaEnviar = ultimasFalas.current;
+      ultimasFalas.current = [];
+      void fecharNoServidor(dados.conversaId, dados.agentId, falasParaEnviar);
     };
     window.addEventListener('pagehide', aoSair);
     return () => window.removeEventListener('pagehide', aoSair);
@@ -156,6 +170,7 @@ export function useLigacao() {
     voltar,
     encerrar,
     falhar,
+    atualizarFalas,
     renovarTokens,
   };
 }

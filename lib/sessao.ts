@@ -101,9 +101,9 @@ export async function idosoDoAparelho(request: Request): Promise<string | null> 
     .maybeSingle();
   if (error || !data) return null;
 
-  // "Visto agora" no máximo uma vez por minuto, porque o aparelho pergunta a cada 2 segundos.
+  // Atualiza "visto agora" a cada 15 s pra o painel da família saber se o app está aberto.
   const visto = data.visto_em ? new Date(data.visto_em as string).getTime() : 0;
-  if (Date.now() - visto > 60_000) {
+  if (Date.now() - visto > 15_000) {
     await banco.from('aparelhos').update({ visto_em: new Date().toISOString() }).eq('id', data.id);
   }
   return data.idoso_id as string;

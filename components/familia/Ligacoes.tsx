@@ -69,6 +69,20 @@ export function Ligacoes({ painel, idosoId, pedido, onLigar }: LigacoesProps) {
   return (
     <section aria-label="Ligações" className="flex flex-col gap-2">
       <BotaoDeLigar painel={painel} pedido={pedido} onLigar={onLigar} />
+      {painel.aparelhoOnline === true ? (
+        <p className="flex items-center gap-2 text-sm text-success">
+          <span
+            aria-hidden="true"
+            className="inline-block h-2.5 w-2.5 rounded-full bg-success"
+          />
+          Aparelho aberto e pronto pra receber a ligação
+        </p>
+      ) : painel.aparelhoOnline === false ? (
+        <p className="text-sm text-muted-foreground">
+          O aparelho de {painel.idoso.tratamento} parece estar com a tela fechada agora. A
+          ligação só toca quando o app da Dona Leda estiver aberto na tela.
+        </p>
+      ) : null}
       <div aria-live="polite" className="flex flex-col gap-1">
         {naoDeu ? (
           <p className="text-base font-medium text-foreground">

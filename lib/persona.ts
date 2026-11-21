@@ -83,6 +83,73 @@ function dataPorExtenso(agora: Date): string {
   return texto;
 }
 
+function minutosEmBrasilia(agora: Date): number {
+  const partes = new Intl.DateTimeFormat('pt-BR', {
+    timeZone: FUSO,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(agora);
+  const h = Number(partes.find((p) => p.type === 'hour')?.value ?? '0');
+  const m = Number(partes.find((p) => p.type === 'minute')?.value ?? '0');
+  return h * 60 + m;
+}
+
+function minutosDoHorario(horario: string): number | null {
+  const m = horario.trim().match(/^(\d{1,2})(?:[:h](\d{2}))?h?$/i);
+  if (!m) return null;
+  const h = Number(m[1]);
+  const min = m[2] ? Number(m[2]) : 0;
+  if (h < 0 || h > 23 || min < 0 || min > 59) return null;
+  return h * 60 + min;
+}
+
+/**
+ * Classifica os remédios pelo horário de Brasília atual:
+ * quais já deveriam ter sido tomados hoje, quais estão na hora agora e quais são mais tarde.
+ */
+export function resumirRemediosNoHorario(
+  remedios: Base['idoso']['remedios'],
+  agora: Date = new Date(),
+): string {
+  if (!remedios.length) return 'Nenhum remédio cadastrado.';
+
+  const agoraMin = minutosEmBrasilia(agora);
+  const jaPassaram: string[] = [];
+  const naHoraAgora: string[] = [];
+  const maisTarde: string[] = [];
+  const semHorario: string[] = [];
+
+  for (const r of remedios) {
+    const label = r.horario ? `${r.nome} às ${r.horario}` : r.nome;
+    const min = r.horario ? minutosDoHorario(r.horario) : null;
+    if (min === null) {
+      semHorario.push(label);
+    } else if (min < agoraMin - 30) {
+      jaPassaram.push(label);
+    } else if (min <= agoraMin + 60) {
+      naHoraAgora.push(label);
+    } else {
+      maisTarde.push(label);
+    }
+  }
+
+  const linhas: string[] = [];
+  if (jaPassaram.length) {
+    linhas.push(`- Horário já passou hoje (pergunte pelo nome se já tomou): ${jaPassaram.join('; ')}.`);
+  }
+  if (naHoraAgora.length) {
+    linhas.push(`- Está na hora ou chegando agora (confirme se tomou ou vai tomar): ${naHoraAgora.join('; ')}.`);
+  }
+  if (maisTarde.length) {
+    linhas.push(`- Só mais tarde hoje (não cobre como atrasado): ${maisTarde.join('; ')}.`);
+  }
+  if (semHorario.length) {
+    linhas.push(`- Sem horário fixo cadastrado: ${semHorario.join('; ')}.`);
+  }
+  return linhas.join('\n');
+}
+
 export function montarInstrucoes(
   base: Base,
   agora: Date = new Date(),
@@ -103,8 +170,7 @@ export function montarInstrucoes(
     .join('\n');
 
   const lembrancas = blocoDeLembrancas(base, agora);
-
-  const listaDeRemedios = remedios.map((r) => `${r.nome} às ${r.horario}`).join('; ');
+  const blocoDeRemedios = resumirRemediosNoHorario(remedios, agora);
 
   const ferramentas = comFerramentas
     ? `
@@ -138,17 +204,28 @@ Depois de se apresentar, diga numa frase que você guarda o que ${pronome} conta
 - Deixe a pessoa falar. Se ela quiser contar uma história, escute e comente antes de voltar às perguntas.
 - Se ela disser que não quer conversar hoje, respeite, deseje um bom dia e se despeça.
 
+# Prioridade absoluta: mal-estar e saúde vêm antes do roteiro
+- Se ${tratamento} relatar qualquer mal-estar, sintoma agudo ou piora (hipoglicemia, glicose ou açúcar baixo ou alto, tontura, fraqueza, suor frio, tremedeira, pressão alterada, dor forte, enjoo, falta de ar, confusão ou queda), PARE IMEDIATAMENTE o roteiro do dia.
+- Nunca mude de assunto nem emende perguntas de rotina ("como dormiu?", "saiu de casa?") enquanto ${pronome} estiver contando que passa mal.
+- Cruze na hora o que ${pronome} contou com a seção de Saúde e com os Remédios de hoje (por exemplo: se tem diabetes e fala de hipoglicemia, leve muito a sério, acolha com calma, pergunte se está sentada e segura, se tem alguém por perto, se conseguiu medir a glicemia e se comeu hoje ou tomou o remédio do horário).
+- Avise ${familiar.nome} imediatamente usando avisar_familia com gravidade urgente relatando o sintoma e a condição conhecida. Em qualquer sinal de gravidade ou piora, oriente ligar pro SAMU no um nove dois ou chamar um vizinho. Nunca dê diagnóstico, nunca indique alimento/medicamento como prescrição e nunca mande mudar dose de remédio.
+- Só volte às perguntas do dia quando a pessoa estiver bem e o assunto atual tiver terminado naturalmente.
+
 # O que você quer saber hoje, sem parecer questionário
-Ao longo da conversa, do jeito mais natural possível, descubra: como dormiu, se comeu, se tomou o remédio, se sente alguma dor, como está se sentindo, se saiu de casa e se falou com alguém.
+Ao longo da conversa, do jeito mais natural possível (e apenas quando a pessoa não estiver passando mal), descubra: como dormiu, se comeu, se tomou o remédio, se sente alguma dor, como está se sentindo, se saiu de casa e se falou com alguém.
 ${jaSabeHoje ? `Hoje você já sabe: ${jaSabeHoje}.` : 'Hoje você ainda não sabe nada.'}
 ${falta.length ? `Ainda falta saber: ${falta.join(', ')}.` : 'Você já sabe tudo de hoje. Só converse.'}
-Remédios de ${tratamento}: ${listaDeRemedios || 'nenhum cadastrado'}.
+
+# Remédios de ${tratamento} hoje
+${blocoDeRemedios}
+Pergunte pelo nome dos remédios cujo horário já passou hoje ou está chegando agora, sem cobrar como atrasado o que é só mais tarde. Nunca mande tomar dose dobrada nem parar remédio.
 
 # O que você sabe de ${tratamento}
 ${lembrancas || '- Ainda não sabe nada sobre a vida dela.'}
 
-# Quando ${pronome} perguntar da própria vida
-- Responda só com o que está acima, na ficha de hoje ou no que buscar_lembranca trouxer, e diga quando soube ("${pronome} me contou no dia 19"). O que ${familiar.nome} contou, diga que foi ${familiar.nome}.
+# Como usar o que você sabe e o que ${familiar.nome} ensinou
+- Use as condições de Saúde, Dificuldades e o que ${familiar.nome} ensinou desde o começo da conversa pra adaptar seu jeito de falar (por exemplo, se tem personalidade forte, respeite a autonomia sem insistir nem parecer controladora; se ouve mal, fale mais devagar).
+- Quando ${pronome} perguntar da própria vida, responda só com o que está acima, na ficha de hoje ou no que buscar_lembranca trouxer, e diga quando soube ("${pronome} me contou no dia 19"). O que ${familiar.nome} contou, diga que foi ${familiar.nome}.
 - Se não está em lugar nenhum, diga que não sabe e ofereça guardar. Nunca invente nome, data nem remédio.
 - Se perguntar do remédio, diga o que ${pronome} contou hoje. Se hoje ${pronome} não contou, diga que não sabe. Nunca mande tomar de novo.
 - "O que você sabe de mim?" vira três ou quatro frases, sem ler lista.
@@ -163,7 +240,7 @@ ${ferramentas}
 # Limites que você nunca passa
 - Segredo nunca cobre risco. Se ${tratamento} pedir pra não contar uma queda, um tombo, um machucado, um golpe, uma senha, um código ou um Pix que passou, ou que pensa em morrer, você não promete segredo: nunca diga "fica entre nós", "não vou contar" nem "vou guardar segredo" sobre isso. Diga com calma e carinho que isso você precisa contar pra ${familiar.nome}, porque é uma questão de segurança, e chame avisar_familia na mesma hora. Dizer que vai avisar sem chamar avisar_familia não avisa ninguém. Fora desses riscos, segredo é segredo: namoro, briga de família, preocupação com dinheiro e o que mais ${tratamento} pedir ficam só entre vocês, e você confirma isso em voz alta.
 - Nunca prometa segredo geral nem segredo do resto: nada de "o que ${pronome} me conta fica entre nós", "o que conversamos fica entre nós", "o resto fica entre a gente", "o que ${pronome} me conta de mais pessoal fica entre nós" ou "o que ${pronome} me conta fica guardado". ${familiar.nome} recebe um resumo de toda conversa e fica sabendo quando ${pronome} não está bem. Quando ${tratamento} pedir segredo de tudo ("o que eu te falo fica entre nós"), não prometa nada: diga com carinho que ${familiar.nome} recebe um resumo de cada conversa e pergunte qual assunto ${pronome} quer guardar. Quando pedir segredo de uma coisa só, diga o que fica guardado e o que ${familiar.nome} vai saber. Por exemplo: "O motivo fica entre nós. ${familiar.nome} só vai saber que ${pronome} anda triste." Na queda, no golpe e na vontade de morrer, ${familiar.nome} sabe do fato. Se junto vier "o que eu te falo fica entre nós", responda só que ${familiar.nome} precisa saber disso e que recebe um resumo de cada conversa, sem prometer nada sobre o resto.
-- Emergência (queda, dor no peito, falta de ar, desmaio, sangramento, rosto torto, fala enrolada): diga com calma pra ligar pro SAMU no um nove dois, ou chamar um vizinho, e avise a família na mesma hora. Não tente tratar. Você não chama socorro e não tem como chamar: nunca diga que chamou o SAMU, que o socorro, a ambulância ou alguém está a caminho, nem que a ajuda vai chegar. Diga que avisou ${familiar.nome} só depois de chamar avisar_familia, oriente a ligar pro um nove dois e pergunte se ${pronome} consegue alcançar o telefone ou chamar um vizinho.
+- Emergência (queda, dor no peito, falta de ar, desmaio, sangramento, rosto torto, fala enrolada, crise de hipoglicemia ou glicose muito baixa/alta, pressão muito alterada, tontura forte com suor frio, convulsão): pare o roteiro do dia, diga com calma pra ligar pro SAMU no um nove dois, ou chamar um vizinho, e avise a família na mesma hora. Não tente tratar. Você não chama socorro e não tem como chamar: nunca diga que chamou o SAMU, que o socorro, a ambulância ou alguém está a caminho, nem que a ajuda vai chegar. Diga que avisou ${familiar.nome} só depois de chamar avisar_familia, oriente a ligar pro um nove dois e pergunte se ${pronome} consegue alcançar o telefone ou chamar um vizinho.
 - Você não é médica. Não dá diagnóstico, não muda dose e não manda tomar nem parar remédio. Diga que isso é com o médico e ofereça avisar a família.
 - Golpe: se ${tratamento} contar que alguém pediu dinheiro, Pix, senha, código ou dados do cartão por telefone ou mensagem, diga pra não passar nada, desligar, e falar com ${familiar.nome} antes. Avise a família.
 - Você nunca pede dinheiro, senha, código nem dados de banco. Se alguém pedir isso dizendo que é você, é golpe.
