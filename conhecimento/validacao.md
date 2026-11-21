@@ -4,6 +4,66 @@ Kit das ligações de 21/11/2026, das 20h às 23h. A validação vale 10% da not
 
 **Este repositório é público.** Aqui entram só código (A1, A2...), faixa de idade e números. Nome, telefone, cidade e gravação nunca entram. Os resultados com nome ficam fora do GitHub, com o Breno.
 
+Quem está ligando agora vai direto pro [kit das 20h](#o-que-ter-em-mãos-às-20h).
+
+## Inventário da validação (21/11, 20h40)
+
+A banca conta em validação o teste com gente, o que aprendemos, os limites e os próximos passos. Tudo aqui sai dos registros do time. Os testes de máquina ficam numa tabela à parte, porque não contam como teste com gente. O que está entre colchetes sai da planilha desta noite e de domingo às 9h, e nunca é preenchido com estimativa.
+
+### Testes com gente, já feitos
+
+| Teste | Com quem | O que ensinou | O que mudou por causa dele |
+|---|---|---|---|
+| Primeiro mentor do evento | 1 pessoa | Celular é difícil pra idoso, e quem tem 100 anos não toca em botão | Reforçou a decisão de a Dona Leda ligar pro idoso, que só atende, com a opção de a ligação atender sozinha em 10 segundos |
+| Conversa com a primeira casa parceira (16h21, 13 minutos) | 1 pessoa, a responsável por uma rede pequena de casas de idosos | A maioria dos moradores tem demência, e a casa já cuida do remédio e da rotina. Ela vê mais valor no idoso que mora sozinho em casa, recebe famílias divididas sobre levar o idoso pra lá e paga pelo sistema de gestão uma mensalidade por casa bem abaixo do que a Dona Leda cobraria por morador. Contou também que o idoso diz coisa que não aconteceu, como ter passado a noite em claro depois de dormir a noite inteira | A família volta a pagar, e as casas passam a indicar a Dona Leda às famílias. O plano por morador deu lugar ao plano por casa, e a landing voltou a falar primeiro com a família. A casa topou ser parceira no teste, sem cobrança |
+| Mentora com os pais morando sozinhos (rodada da tarde) | 1 pessoa, filha de um casal de 82 e 81 anos que mora sozinho em outra cidade | A mãe parou um remédio de uso contínuo por conta própria. A irmã, que visita toda semana, não percebeu, e ela percebeu numa ligação de sábado, pela conversa. Disse que pagaria até R$ 500 por mês | Reforçou, horas depois da casa, que a Dona Leda vale mais pro idoso que mora sozinho. O R$ 500 ficou como teto de referência, ao lado dos R$ 129,90 do plano. A história não entra no pitch (decisão do Breno) |
+| Mentor da mesma rodada | 1 pessoa | O produto está pronto, e o problema ainda não tem número. A banca vai querer o tamanho do problema, o tempo e o dinheiro que a Dona Leda poupa e se o idoso usa de fato | As ligações de hoje perguntam quantas horas por semana a família gasta indo ver ou ligando pra checar, e quantas horas a equipe da casa gasta. Entrou o argumento de uma cuidadora a menos por casa |
+| Pergunta do diferencial (rodada da tarde) | os mentores da tarde | Faltava um diferencial claro | Num aviso urgente, ou quando o idoso pede, a família ganha no painel o botão "Entrar na ligação" e entra na mesma sala da Agora |
+| Primeiro retorno escrito dos mentores (tarde) | por escrito | A promessa não pode soar como socorro. O idoso decide o que vai pra família. Aviso entregue e cuidado prestado são coisas diferentes. A voz não serve de senha. Dado de saúde pede o cuidado da LGPD antes de um piloto | A promessa virou "uma ligação combinada que ajuda a família a cuidar" (17h30). O aviso mostra quem viu, em quanto tempo e o que fez. A câmera do idoso fica desligada quando a filha entra. A Dona Leda ganhou instrução pra quem está com o celular do idoso na mão (resultado na tabela de máquina). Nasceu o teste das três versões. A LGPD ficou pros próximos passos |
+| Conversa com um mentor (por volta das 19h) | 1 pessoa | Os jurados poderiam testar por um QR Code que faz a Dona Leda ligar pra eles. Na dúvida sobre a operação sair da Agora ao crescer, a orientação foi mudar o jeito de apresentar | Nada mudou no produto ainda. O QR Code esbarra no cadastro do idoso, que hoje vem antes da ligação |
+| Segundo retorno escrito (noite) | por escrito | Falar todo dia só vale se a conversa ajuda alguém. Elogio, disposição pra testar e uso repetido são sinais diferentes. A idade sozinha não diz se a pessoa consegue usar | O kit anota quem topou a ligação de domingo às 9h e o que cada família fez. O pitch conta quem atendeu de novo e quem aceitou o teste grátis, com o elogio à parte |
+
+O teste da voz das 17h, com gente do time fazendo a idosa em duas duplas, não tem resultado em [teste-de-voz.md](teste-de-voz.md). Se rodou, as tabelas estão com quem testou.
+
+### Testes de máquina (não contam como gente)
+
+| Teste | Como foi feito | Resultado | O que mudou |
+|---|---|---|---|
+| Bateria de ataque | 55 conversas de golpe, queda, segredo e remédio, rodadas por texto com as mesmas instruções e o mesmo modelo da ligação, com um juiz automático dando a nota | 39 e 40 de 55 nas duas rodadas com as instruções curtas, no fim da tarde. Antes, 11 frases de golpe, queda, derrame e vontade de morrer passavam sem aviso | Essas frases e o remédio tomado a mais viraram aviso por regra fixa, sem depender da IA |
+| Alguém com o celular do idoso na mão | 3 casos da bateria, pedidos pelos mentores: a pessoa pede dados, pede pra mudar a configuração ou diz ser a filha | Antes da instrução nova, em 0 de 3 ela disse que pela voz não dá pra saber quem fala. Depois, 9 de 9 no Gemini, com aviso pra família em todos | Ela diz na ligação que contato, horário e avisos só mudam no painel da família |
+| Custo por ligação | Duas ligações no computador, às 19h35 e 19h40, com uma voz gravada no lugar do microfone | US$ 0,062 e US$ 0,066 por minuto. No uso médio de 3 minutos e 20 segundos por dia, a família custa uns R$ 38 por mês, e sobram R$ 67 dos R$ 129,90 depois de imposto e cartão. Com 10 minutos todo dia faltam uns R$ 13 (estimativa feita a partir da ligação de 8 minutos) | As contas de [custos.md](custos.md) usam o custo medido desde as 19h46, no lugar da estimativa, que era menor |
+
+### Hoje à noite e domingo (lugares marcados)
+
+| O que | Número | De onde sai |
+|---|---|---|
+| Avós que participaram | [N], de [X] a [Y] anos | planilha da Stephanie |
+| Ligações que chegaram e quantas o idoso atendeu | [N] de [N] | planilha |
+| Minutos de conversa | [X] na média, e [N] chegaram aos 10 minutos | planilha |
+| Toparam a ligação de domingo às 9h | [N] de [N] | planilha |
+| O que cada família fez | [N] aceitaram começar o teste grátis, [N] deixaram o contato, [N] só elogiaram | planilha |
+| Horas por semana que a família gasta indo ver ou ligando pra checar | [X] no valor do meio | planilha |
+| Preço | R$ [X] no valor do meio, dito antes de ouvir número. [N] de [N] disseram sim aos R$ 129,90 | planilha |
+| Teste das três versões, com cinco adultos do evento | Na primeira versão que cada pessoa viu: com o aviso, [N] de 2 disseram a ação certa, em [X] s; com a conversa inteira, [N] de 2, em [X] s; com o resumo, [N] de 1, em [X] s. [N] de 5 preferiram [versão] | a página do teste, no celular de quem aplicou |
+| Casas e cuidadoras ouvidas pelo roteiro de [entrevistas.md](entrevistas.md) | [N] das 5 ligações marcadas (duas na casa parceira e três em outras casas) | quem ligou pra cada casa |
+| Domingo às 9h | [N] atenderam de novo, [X] minutos na média, e ela lembrou de sábado em [N] | quem ligou no sábado |
+
+### Os limites
+
+- Uma noite e uma manhã, com duas ligações no máximo por idoso.
+- Pouca gente: a meta é de cinco avós e cinco adultos.
+- Alguém da família ficou do lado do idoso, e os avós e a primeira casa vêm de gente próxima do time.
+- A medição de custo usou voz gravada, e a bateria de segurança roda por texto.
+- Ninguém pagou nada: o R$ 500 e o sim aos R$ 129,90 são opinião.
+
+### Próximos passos, com data
+
+1. **Domingo, 22/11, às 9h:** a segunda ligação, sem ninguém pedir pro idoso atender. Mede quem atende de novo, os minutos e se a Dona Leda lembrou de sábado.
+2. **Até segunda, 23/11:** quem aceitou o teste grátis dá um sim novo pra continuar, porque o combinado com quem participou é apagar os dados até esse dia.
+3. **Antes da primeira família indicada pela casa:** o cuidado da LGPD com dado de saúde (finalidade, base legal, por quanto tempo guarda, quem acessa e quais fornecedores), que o sim da família sozinho não resolve.
+4. **A partir de 23/11:** as famílias que a casa parceira indicar. A conta é quantas indicadas começam o teste grátis e quantas contratam depois dos sete dias. A data da primeira indicação ainda não foi combinada com a casa.
+5. **De 22/11 a 21/12, os primeiros 30 dias:** com quem continuar, a Dona Leda liga todo dia, e a conta é em quantas ligações de cada semana o idoso atendeu, da primeira à quarta semana. A ligação não atendida já vira aviso no app, então a conta sai do próprio registro. Junto entra quantas famílias seguem depois dos sete dias grátis.
+
 ## O que ter em mãos às 20h
 
 - O seu código (A1, A2...), recebido até 19h30.
@@ -163,7 +223,7 @@ Os mentores mandaram por escrito, depois da rodada de 21/11, o que falta provar.
 - **Voz não serve de senha.** Alguém pode imitar a voz ou usar o celular desbloqueado, então a identidade e as permissões do familiar são conferidas fora da conversa.
 - **Dado de saúde pede um cuidado próprio na LGPD** (artigos 7, 11 e 46) antes de um piloto de verdade: finalidade, base legal, por quanto tempo guarda, quem acessa e quais fornecedores. O sim da família sozinho não resolve.
 
-- **Do segundo retorno escrito (Terron, à noite):**
+- **Do segundo retorno escrito (à noite):**
   - Frequência de contato e utilidade do contato se medem separado: falar todo dia só vale se a conversa ajuda alguém.
   - Elogio, disposição pra testar e uso repetido são três sinais diferentes, e cada um vai numa coluna da planilha.
   - Facilidade de uso se testa com a pessoa: a idade sozinha não diz se ela consegue usar.
