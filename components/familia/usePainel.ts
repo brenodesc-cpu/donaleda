@@ -1,8 +1,16 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { AcaoDaFamilia, PainelDaFamilia } from '@/lib/tipos';
+import { useRouter } from 'next/navigation';
+import type { PainelDaFamilia } from '@/lib/tipos';
 import { arrumarHorarios } from './formatos';
+import {
+  buscarPainel,
+  deuCerto,
+  enviarAcao,
+  type AcaoComIdoso,
+  type PerfilDoIdoso,
+} from './api';
 
 const INTERVALO_MS = 2000;
 
@@ -21,7 +29,7 @@ function pareceUmPainel(dado: unknown): dado is PainelDaFamilia {
   );
 }
 
-/** Servidor mais antigo não manda os campos das ligações: aqui eles viram vazio. */
+/** Campo que faltar na resposta vira vazio, pra tela nunca quebrar. */
 function completar(dado: PainelDaFamilia): PainelDaFamilia {
   const { idoso } = dado;
   return {
@@ -30,67 +38,49 @@ function completar(dado: PainelDaFamilia): PainelDaFamilia {
     chamadas: Array.isArray(dado.chamadas) ? dado.chamadas : [],
     idoso: {
       ...idoso,
-      horariosDeLigacao: Array.isArray(idoso.horariosDeLigacao)
-        ? idoso.horariosDeLigacao
-        : [],
+      remedios: Array.isArray(idoso.remedios) ? idoso.remedios : [],
+      horariosDeLigacao: Array.isArray(idoso.horariosDeLigacao) ? idoso.horariosDeLigacao : [],
       atenderSozinho: idoso.atenderSozinho === true,
     },
   };
 }
 
-/** Manda uma ação e devolve o status da resposta. Zero quer dizer que nem chegou. */
-async function enviar(acao: AcaoDaFamilia): Promise<number> {
-  try {
-    const resposta = await fetch('/api/familia', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(acao),
-    });
-    return resposta.status;
-  } catch {
-    return 0;
-  }
-}
-
-const deuCerto = (status: number) => status >= 200 && status < 300;
-
 /**
- * Busca o painel a cada 2 segundos e guarda o último dado bom, pra tela nunca
- * piscar nem esvaziar quando uma busca falha. As mudanças feitas aqui aparecem
- * na hora e se acertam com o servidor na busca seguinte.
+ * Busca o painel do idoso escolhido a cada 2 segundos e guarda o último dado
+ * bom, pra tela nunca piscar nem esvaziar quando uma busca falha. As mudanças
+ * feitas aqui aparecem na hora e se acertam com o servidor na busca seguinte.
  */
-export function usePainel() {
+export function usePainel(idosoId: string | null) {
+  const router = useRouter();
   const [bruto, setBruto] = useState<PainelDaFamilia | null>(null);
   const [semConexao, setSemConexao] = useState(false);
-  // Avisos marcados como vistos aqui, antes de o servidor confirmar.
-  const [vistosAqui, setVistosAqui] = useState<ReadonlySet<string>>(
-    () => new Set<string>(),
-  );
-  // O que a família acabou de mudar e o servidor ainda não devolveu.
+  const [vistosAqui, setVistosAqui] = useState<ReadonlySet<string>>(() => new Set<string>());
   const [horariosAqui, setHorariosAqui] = useState<string[] | null>(null);
   const [atenderSozinhoAqui, setAtenderSozinhoAqui] = useState<boolean | null>(null);
   const [pedidoDeLigacao, setPedidoDeLigacao] = useState<PedidoDeLigacao>('parado');
 
   const buscarAgora = useRef<() => Promise<void>>(async () => {});
-  // Só o último pedido de cada tipo pode desfazer a mudança local.
   const versaoDosHorarios = useRef(0);
   const versaoDoAtender = useRef(0);
 
   useEffect(() => {
+    setBruto(null);
+    if (!idosoId) return;
     let vivo = true;
     let espera: ReturnType<typeof setTimeout> | undefined;
 
     const buscar = async () => {
-      try {
-        const resposta = await fetch('/api/familia', { cache: 'no-store' });
-        if (!resposta.ok) throw new Error(`status ${resposta.status}`);
-        const dado: unknown = await resposta.json();
-        if (!pareceUmPainel(dado)) throw new Error('resposta fora do contrato');
-        if (!vivo) return;
+      const { status, dado } = await buscarPainel(idosoId);
+      if (!vivo) return;
+      if (status === 401) {
+        router.replace('/entrar');
+        return;
+      }
+      if (deuCerto(status) && pareceUmPainel(dado)) {
         setBruto(completar(dado));
         setSemConexao(false);
-      } catch {
-        if (vivo) setSemConexao(true);
+      } else {
+        setSemConexao(true);
       }
     };
 
@@ -105,52 +95,83 @@ export function usePainel() {
       vivo = false;
       if (espera) clearTimeout(espera);
     };
-  }, []);
+  }, [idosoId, router]);
 
-  const marcarVisto = useCallback(async (alertaId: string) => {
-    setVistosAqui((antes) => new Set(antes).add(alertaId));
-    const status = await enviar({ acao: 'visto', alertaId });
-    if (deuCerto(status)) return;
-    // Não gravou: o aviso volta a aparecer como não visto.
-    setVistosAqui((antes) => {
-      const depois = new Set(antes);
-      depois.delete(alertaId);
-      return depois;
-    });
-    setSemConexao(true);
-  }, []);
+  /** Manda a ação do idoso escolhido e devolve o status. Zero: nem chegou. */
+  const mandar = useCallback(
+    async (acao: AcaoComIdoso): Promise<number> => {
+      const { status } = await enviarAcao(acao);
+      if (status === 401) router.replace('/entrar');
+      if (status === 0) setSemConexao(true);
+      return status;
+    },
+    [router],
+  );
+
+  const marcarVisto = useCallback(
+    async (alertaId: string) => {
+      if (!idosoId) return;
+      setVistosAqui((antes) => new Set(antes).add(alertaId));
+      if (deuCerto(await mandar({ acao: 'visto', alertaId, idosoId }))) return;
+      setVistosAqui((antes) => {
+        const depois = new Set(antes);
+        depois.delete(alertaId);
+        return depois;
+      });
+    },
+    [idosoId, mandar],
+  );
 
   const ligar = useCallback(async () => {
+    if (!idosoId) return;
     setPedidoDeLigacao('pedindo');
-    const status = await enviar({ acao: 'ligar' });
-    if (!deuCerto(status)) {
+    const status = await mandar({ acao: 'ligar', idosoId });
+    // 409: já está tocando ou em ligação, então não é falha.
+    if (!deuCerto(status) && status !== 409) {
       setPedidoDeLigacao('falhou');
       return;
     }
-    // Busca na hora pra o botão já mostrar que está tocando.
     await buscarAgora.current();
     setPedidoDeLigacao('parado');
-  }, []);
+  }, [idosoId, mandar]);
 
-  const trocarHorarios = useCallback(async (horarios: string[]) => {
-    const lista = arrumarHorarios(horarios);
-    const versao = (versaoDosHorarios.current += 1);
-    setHorariosAqui(lista);
-    const status = await enviar({ acao: 'horarios', horarios: lista });
-    if (deuCerto(status)) await buscarAgora.current();
-    else if (status === 0) setSemConexao(true);
-    // Gravou: o servidor já devolveu a lista nova. Falhou: volta a lista antiga.
-    if (versao === versaoDosHorarios.current) setHorariosAqui(null);
-  }, []);
+  const trocarHorarios = useCallback(
+    async (horarios: string[]) => {
+      if (!idosoId) return;
+      const lista = arrumarHorarios(horarios);
+      const versao = (versaoDosHorarios.current += 1);
+      setHorariosAqui(lista);
+      if (deuCerto(await mandar({ acao: 'horarios', horarios: lista, idosoId }))) {
+        await buscarAgora.current();
+      }
+      if (versao === versaoDosHorarios.current) setHorariosAqui(null);
+    },
+    [idosoId, mandar],
+  );
 
-  const trocarAtenderSozinho = useCallback(async (ligado: boolean) => {
-    const versao = (versaoDoAtender.current += 1);
-    setAtenderSozinhoAqui(ligado);
-    const status = await enviar({ acao: 'atender_sozinho', ligado });
-    if (deuCerto(status)) await buscarAgora.current();
-    else if (status === 0) setSemConexao(true);
-    if (versao === versaoDoAtender.current) setAtenderSozinhoAqui(null);
-  }, []);
+  const trocarAtenderSozinho = useCallback(
+    async (ligado: boolean) => {
+      if (!idosoId) return;
+      const versao = (versaoDoAtender.current += 1);
+      setAtenderSozinhoAqui(ligado);
+      if (deuCerto(await mandar({ acao: 'atender_sozinho', ligado, idosoId }))) {
+        await buscarAgora.current();
+      }
+      if (versao === versaoDoAtender.current) setAtenderSozinhoAqui(null);
+    },
+    [idosoId, mandar],
+  );
+
+  /** Grava o que mudou no cadastro. Devolve true quando o servidor guardou. */
+  const salvarPerfil = useCallback(
+    async (perfil: PerfilDoIdoso): Promise<boolean> => {
+      if (!idosoId) return false;
+      const guardou = deuCerto(await mandar({ acao: 'perfil', idosoId, ...perfil }));
+      if (guardou) await buscarAgora.current();
+      return guardou;
+    },
+    [idosoId, mandar],
+  );
 
   const painel = useMemo<PainelDaFamilia | null>(() => {
     if (!bruto) return null;
@@ -178,5 +199,6 @@ export function usePainel() {
     ligar,
     trocarHorarios,
     trocarAtenderSozinho,
+    salvarPerfil,
   };
 }

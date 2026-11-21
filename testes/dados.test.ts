@@ -98,9 +98,9 @@ describe('o que a assistente fala', () => {
   it('na primeira conversa se apresenta como assistente virtual e diz quem pediu', () => {
     const saudacao = montarSaudacao(baseDeExemplo(AGORA), AGORA);
     expect(saudacao).toContain('Bom dia, dona Helena');
-    expect(saudacao).toContain('assistente virtual');
-    expect(saudacao).toContain('programa de computador');
-    expect(saudacao).toContain('Marina');
+    expect(saudacao).toContain(
+      'Aqui é a Dona Leda, a assistente virtual que a sua filha Marina contratou pra conversar com a senhora todo dia.',
+    );
   });
 
   it('nas outras conversas continua dizendo que é assistente virtual', () => {
@@ -125,5 +125,15 @@ describe('o que a assistente fala', () => {
     const instrucoes = montarInstrucoes(baseDeExemplo(AGORA), AGORA, false);
     expect(instrucoes).not.toContain('registrar_bem_estar');
     expect(instrucoes).toContain('Não prometa avisar a família');
+  });
+});
+
+describe('quem contratou, com o artigo certo', () => {
+  it('acerta o feminino e o masculino do parentesco', async () => {
+    const { quemContratou } = await import('@/lib/persona');
+    expect(quemContratou({ nome: 'Marina', parentesco: 'filha' })).toBe('a sua filha Marina');
+    expect(quemContratou({ nome: 'Paulo', parentesco: 'filho' })).toBe('o seu filho Paulo');
+    expect(quemContratou({ nome: 'Rosa', parentesco: 'mãe' })).toBe('a sua mãe Rosa');
+    expect(quemContratou({ nome: 'Ana', parentesco: 'cuidadora' })).toBe('a sua cuidadora Ana');
   });
 });

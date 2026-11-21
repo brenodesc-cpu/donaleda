@@ -1,12 +1,8 @@
-// A ficha de cada idoso. Nesta primeira versão ela mora num arquivo JSON local
-// (pasta dados/, fora do GitHub). As funções de cima são puras e mexem num objeto
-// Base; as de baixo leem e gravam o arquivo, uma mudança de cada vez.
+// A ficha de cada idoso. As funções de cima são puras e mexem num objeto Base;
+// as de baixo leem e gravam a ficha no banco (Supabase), uma mudança de cada vez.
 
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
-import { baseDeExemplo } from './exemplo';
 import type {
   Alerta,
   Alimentacao,
@@ -264,62 +260,147 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
   };
 }
 
-// ---------- Parte que lê e grava o arquivo ----------
+// ---------- Parte que lê e grava a ficha ----------
+// Cada idoso tem uma linha em `fichas` (Supabase) com o objeto Base inteiro e uma
+// versão. Gravar só vale se a versão for a que foi lida; senão lê de novo e refaz
+// a mudança, até 5 vezes. Nos testes (LIA_DADOS=memoria) a ficha fica na memória.
 
-function caminhoDaBase(): string {
-  return process.env.LIA_DADOS || path.join(/*turbopackIgnore: true*/ process.cwd(), 'dados', 'base.json');
+export class FichaNaoEncontrada extends Error {
+  constructor(idosoId: string) {
+    super(`Ficha não encontrada: ${idosoId}`);
+  }
 }
 
-async function gravar(base: Base): Promise<void> {
-  const destino = caminhoDaBase();
-  await fs.mkdir(path.dirname(destino), { recursive: true });
-  const provisorio = `${destino}.${process.pid}.${Date.now()}.tmp`;
-  await fs.writeFile(provisorio, JSON.stringify(base, null, 2), 'utf8');
-  await fs.rename(provisorio, destino);
+interface FichaLida {
+  base: Base;
+  versao: number;
+}
+
+interface Armazem {
+  ler(idosoId: string): Promise<FichaLida | null>;
+  /** Devolve false quando outra gravação chegou antes. */
+  gravar(idosoId: string, base: Base, versao: number): Promise<boolean>;
+  criar(idosoId: string, base: Base): Promise<void>;
+  listar(): Promise<string[]>;
+}
+
+const memoria = new Map<string, { base: string; versao: number }>();
+
+const armazemNaMemoria: Armazem = {
+  async ler(idosoId) {
+    const linha = memoria.get(idosoId);
+    return linha ? { base: JSON.parse(linha.base) as Base, versao: linha.versao } : null;
+  },
+  async gravar(idosoId, base, versao) {
+    const linha = memoria.get(idosoId);
+    if (!linha || linha.versao !== versao) return false;
+    memoria.set(idosoId, { base: JSON.stringify(base), versao: versao + 1 });
+    return true;
+  },
+  async criar(idosoId, base) {
+    memoria.set(idosoId, { base: JSON.stringify(base), versao: 1 });
+  },
+  async listar() {
+    return [...memoria.keys()];
+  },
+};
+
+async function supabase() {
+  const { clienteDoServidor } = await import('./supabase/servidor');
+  return clienteDoServidor();
+}
+
+const armazemNoSupabase: Armazem = {
+  async ler(idosoId) {
+    const { data, error } = await (await supabase())
+      .from('fichas')
+      .select('base, versao')
+      .eq('idoso_id', idosoId)
+      .maybeSingle();
+    if (error) throw new Error(`Não consegui ler a ficha: ${error.message}`);
+    return data ? { base: data.base as Base, versao: data.versao as number } : null;
+  },
+  async gravar(idosoId, base, versao) {
+    const { data, error } = await (await supabase()).rpc('gravar_ficha', {
+      p_idoso: idosoId,
+      p_base: base,
+      p_versao: versao,
+    });
+    if (error) throw new Error(`Não consegui gravar a ficha: ${error.message}`);
+    return data !== null && data !== undefined;
+  },
+  async criar(idosoId, base) {
+    const { error } = await (await supabase())
+      .from('fichas')
+      .insert({ idoso_id: idosoId, base, versao: 1 });
+    if (error) throw new Error(`Não consegui criar a ficha: ${error.message}`);
+  },
+  async listar() {
+    const { data, error } = await (await supabase()).from('fichas').select('idoso_id');
+    if (error) throw new Error(`Não consegui listar as fichas: ${error.message}`);
+    return (data ?? []).map((l) => l.idoso_id as string);
+  },
+};
+
+function armazem(): Armazem {
+  return process.env.LIA_DADOS === 'memoria' ? armazemNaMemoria : armazemNoSupabase;
 }
 
 /** Completa uma ficha gravada por versão mais antiga, que não tinha as ligações. */
-function completar(base: Base): Base {
+function completar(base: Base, idosoId: string): Base {
   base.chamadas ??= [];
+  base.idoso.id = idosoId;
   base.idoso.horariosDeLigacao ??= ['09:00', '19:00'];
   base.idoso.atenderSozinho ??= false;
   return base;
 }
 
-export async function lerBase(): Promise<Base> {
-  try {
-    return completar(JSON.parse(await fs.readFile(caminhoDaBase(), 'utf8')) as Base);
-  } catch (erro) {
-    if ((erro as NodeJS.ErrnoException).code !== 'ENOENT') throw erro;
-    const base = baseDeExemplo();
-    await gravar(base);
-    return base;
-  }
+export async function criarFicha(idosoId: string, base: Base): Promise<void> {
+  await armazem().criar(idosoId, completar(base, idosoId));
 }
 
-// Uma fila só pra todas as rotas do servidor, guardada no objeto global porque o
-// Next pode carregar este arquivo mais de uma vez no modo de desenvolvimento.
-const global = globalThis as typeof globalThis & { __filaDaLia?: Promise<unknown> };
+export async function listarFichas(): Promise<string[]> {
+  return armazem().listar();
+}
+
+export async function lerBase(idosoId: string): Promise<Base> {
+  const lida = await armazem().ler(idosoId);
+  if (!lida) throw new FichaNaoEncontrada(idosoId);
+  return completar(lida.base, idosoId);
+}
+
+// Uma fila por idoso dentro deste servidor, pra duas mudanças do mesmo processo
+// não brigarem pela versão. Entre servidores diferentes, a versão resolve.
+const global = globalThis as typeof globalThis & {
+  __filasDaDonaLeda?: Map<string, Promise<unknown>>;
+};
+const filas = (global.__filasDaDonaLeda ??= new Map());
 
 /**
- * Lê, aplica a mudança e grava só quando ela pede, uma mudança por vez.
+ * Lê, aplica a mudança e grava só quando ela pede.
  * Serve pras rotas chamadas a cada 2 segundos, que quase nunca mudam nada.
  */
 export function mudarBaseQuando<T>(
+  idosoId: string,
   mudanca: (base: Base) => { gravar: boolean; resultado: T },
 ): Promise<T> {
-  const anterior = global.__filaDaLia ?? Promise.resolve();
+  const anterior = filas.get(idosoId) ?? Promise.resolve();
   const proxima = anterior.then(async () => {
-    const base = await lerBase();
-    const { gravar: precisaGravar, resultado } = mudanca(base);
-    if (precisaGravar) await gravar(base);
-    return resultado;
+    for (let tentativa = 1; tentativa <= 5; tentativa += 1) {
+      const lida = await armazem().ler(idosoId);
+      if (!lida) throw new FichaNaoEncontrada(idosoId);
+      const base = completar(lida.base, idosoId);
+      const { gravar, resultado } = mudanca(base);
+      if (!gravar) return resultado;
+      if (await armazem().gravar(idosoId, base, lida.versao)) return resultado;
+    }
+    throw new Error('A ficha mudou cinco vezes seguidas enquanto eu gravava.');
   });
-  global.__filaDaLia = proxima.catch(() => undefined);
+  filas.set(idosoId, proxima.catch(() => undefined));
   return proxima;
 }
 
-/** Lê, aplica a mudança e grava, uma mudança por vez. */
-export function mudarBase<T>(mudanca: (base: Base) => T): Promise<T> {
-  return mudarBaseQuando((base) => ({ gravar: true, resultado: mudanca(base) }));
+/** Lê, aplica a mudança e grava. */
+export function mudarBase<T>(idosoId: string, mudanca: (base: Base) => T): Promise<T> {
+  return mudarBaseQuando(idosoId, (base) => ({ gravar: true, resultado: mudanca(base) }));
 }

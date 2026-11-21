@@ -23,6 +23,7 @@ import { abrirConversa, lerBase, mudarBase } from '@/lib/dados';
 import { FERRAMENTAS } from '@/lib/ferramentas';
 import { montarInstrucoes, montarSaudacao, type OrigemDaLigacao } from '@/lib/persona';
 import { chaveDasFerramentas, exigirVariavel, urlPublica } from '@/lib/servidor';
+import { exigirAparelho } from '@/lib/sessao';
 import type { InicioDaConversa } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
@@ -98,6 +99,10 @@ function avatar() {
 const AVATAR_UID = '654321';
 
 export async function POST(request: NextRequest) {
+  const aparelho = await exigirAparelho(request);
+  if (!aparelho.ok) return aparelho.resposta;
+  const idosoId = aparelho.valor;
+
   try {
     const body: ClientStartRequest & { chamada_id?: string } = await request.json();
     const { requester_id, channel_name } = body;
@@ -113,9 +118,9 @@ export async function POST(request: NextRequest) {
     }
 
     const agora = new Date();
-    const base = await lerBase();
+    const base = await lerBase(idosoId);
     const enderecoPublico = urlPublica();
-    const chave = chaveDasFerramentas();
+    const chave = chaveDasFerramentas(idosoId);
     const comFerramentas = Boolean(enderecoPublico && chave);
     const instrucoes = montarInstrucoes(base, agora, comFerramentas);
     // A saudação muda conforme quem começou a ligação.
@@ -170,8 +175,8 @@ export async function POST(request: NextRequest) {
             ? {
                 mcpServers: [
                   {
-                    name: 'lia',
-                    endpoint: `${enderecoPublico}/api/mcp?chave=${chave}`,
+                    name: 'donaleda',
+                    endpoint: `${enderecoPublico}/api/mcp?idoso=${encodeURIComponent(idosoId)}&chave=${chave}`,
                     transport: 'streamable_http',
                     headers: { Authorization: `Bearer ${chave}` },
                     allowed_tools: FERRAMENTAS.map((f) => f.name),
@@ -202,7 +207,7 @@ export async function POST(request: NextRequest) {
     });
 
     const agentId = await session.start();
-    const conversa = await mudarBase((b) => abrirConversa(b, agora));
+    const conversa = await mudarBase(idosoId, (b) => abrirConversa(b, agora));
 
     return NextResponse.json({
       agent_id: agentId,

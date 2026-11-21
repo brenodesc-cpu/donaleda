@@ -1,5 +1,6 @@
 // Endereço das ações da assistente, no protocolo MCP (transporte "streamable HTTP").
 // Quem chama é a nuvem da Agora, no meio da conversa, quando o modelo decide agir.
+// O endereço leva o idoso (?idoso=) e a chave dele (?chave=, HMAC do id).
 // Implementação direta de JSON-RPC, sem estado entre chamadas.
 
 import { NextResponse } from 'next/server';
@@ -27,7 +28,7 @@ function chaveRecebida(request: Request): string | null {
   return new URL(request.url).searchParams.get('chave');
 }
 
-async function atender(pedido: Pedido): Promise<Resposta | null> {
+async function atender(idosoId: string, pedido: Pedido): Promise<Resposta | null> {
   const { id = null, method, params = {} } = pedido;
   // Notificação (sem id) não tem resposta.
   const ehNotificacao = pedido.id === undefined;
@@ -40,7 +41,7 @@ async function atender(pedido: Pedido): Promise<Resposta | null> {
       result: {
         protocolVersion: VERSOES.includes(pedida) ? pedida : VERSOES[0],
         capabilities: { tools: { listChanged: false } },
-        serverInfo: { name: 'lia', version: '0.1.0' },
+        serverInfo: { name: 'donaleda', version: '0.2.0' },
       },
     };
   }
@@ -56,7 +57,7 @@ async function atender(pedido: Pedido): Promise<Resposta | null> {
   if (method === 'tools/call') {
     const nome = typeof params.name === 'string' ? params.name : '';
     try {
-      const texto = await executarFerramenta(nome, params.arguments);
+      const texto = await executarFerramenta(idosoId, nome, params.arguments);
       return {
         jsonrpc: '2.0',
         id,
@@ -82,7 +83,8 @@ async function atender(pedido: Pedido): Promise<Resposta | null> {
 }
 
 export async function POST(request: Request) {
-  if (!chaveConfere(chaveRecebida(request))) {
+  const idosoId = new URL(request.url).searchParams.get('idoso');
+  if (!chaveConfere(idosoId, chaveRecebida(request)) || !idosoId) {
     return NextResponse.json(
       { jsonrpc: '2.0', id: null, error: { code: -32001, message: 'Chave inválida' } },
       { status: 401 },
@@ -103,7 +105,7 @@ export async function POST(request: Request) {
   const pedidos = (emLote ? corpo : [corpo]) as Pedido[];
   const respostas: Resposta[] = [];
   for (const pedido of pedidos) {
-    const resposta = await atender(pedido ?? {});
+    const resposta = await atender(idosoId, pedido ?? {});
     if (resposta) respostas.push(resposta);
   }
 

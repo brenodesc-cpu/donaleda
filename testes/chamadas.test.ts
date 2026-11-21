@@ -146,7 +146,7 @@ describe('a saudação muda conforme quem começou a ligação', () => {
   });
 
   it('pedido da família: diz quem pediu', () => {
-    expect(montarSaudacao(base, NOVE_EM_PONTO, 'familia')).toContain('A Marina pediu pra eu ligar');
+    expect(montarSaudacao(base, NOVE_EM_PONTO, 'familia')).toContain('A sua filha Marina pediu pra eu ligar');
   });
 
   it('o idoso ligou: agradece o chamado', () => {

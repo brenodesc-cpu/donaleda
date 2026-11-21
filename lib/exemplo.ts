@@ -2,9 +2,9 @@
 // leva `exemplo: true`, e o painel da família mostra essa marca.
 
 import { dataEmBrasilia, somarDias } from './assistente';
-import type { Base, Dia, Lembranca } from './tipos';
+import type { Base, Dia, Lembranca, NovoIdoso } from './tipos';
 
-export function baseDeExemplo(agora: Date = new Date()): Base {
+export function baseDeExemplo(agora: Date = new Date(), idosoId = 'helena'): Base {
   const hoje = dataEmBrasilia(agora);
   const dia = (atras: number, resto: Omit<Dia, 'data' | 'observacoes' | 'exemplo'>): Dia => ({
     data: somarDias(hoje, -atras),
@@ -27,7 +27,7 @@ export function baseDeExemplo(agora: Date = new Date()): Base {
 
   return {
     idoso: {
-      id: 'helena',
+      id: idosoId,
       nome: 'Helena',
       tratamento: 'dona Helena',
       idade: 78,
@@ -56,6 +56,28 @@ export function baseDeExemplo(agora: Date = new Date()): Base {
       lembranca('ex-5', 'rotina', 'Faz hidroginástica às terças e quintas de manhã.'),
       lembranca('ex-6', 'compromisso', 'Tem consulta com o cardiologista na quinta-feira.'),
     ],
+    alertas: [],
+    conversas: [],
+    chamadas: [],
+  };
+}
+
+/** Ficha em branco de um idoso que a família acabou de cadastrar. */
+export function baseNova(idosoId: string, novo: NovoIdoso): Base {
+  return {
+    idoso: {
+      id: idosoId,
+      nome: novo.nome,
+      tratamento: novo.tratamento,
+      idade: novo.idade,
+      familiar: novo.familiar,
+      remedios: novo.remedios,
+      primeiraConversaFeita: false,
+      horariosDeLigacao: novo.horariosDeLigacao,
+      atenderSozinho: false,
+    },
+    dias: [],
+    lembrancas: [],
     alertas: [],
     conversas: [],
     chamadas: [],

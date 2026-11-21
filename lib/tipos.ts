@@ -68,12 +68,12 @@ export interface Conversa {
 export interface Idoso {
   id: string;
   nome: string;
-  /** Como a Lia chama a pessoa: "dona Helena", "seu Antônio". */
+  /** Como a assistente chama a pessoa: "dona Helena", "seu Antônio". */
   tratamento: string;
   idade: number;
   familiar: { nome: string; parentesco: string };
   remedios: { nome: string; horario: string }[];
-  /** A primeira conversa leva a apresentação completa da Lia como assistente virtual. */
+  /** A primeira conversa leva a apresentação completa da assistente virtual. */
   primeiraConversaFeita: boolean;
   /** Horas em que a assistente liga todo dia, "HH:MM" no horário de Brasília. */
   horariosDeLigacao: string[];
@@ -134,14 +134,29 @@ export interface PainelDaFamilia {
   atualizadoEm: string;
 }
 
-/** POST /api/familia */
-export type AcaoDaFamilia =
+/**
+ * POST /api/familia. Toda ação leva `idosoId`; sem ele, vale o primeiro idoso da família.
+ * Resposta: `{ ok: true, ... }` ou `{ ok: false, erro }` com 400, 401, 403, 404 ou 409.
+ */
+export type AcaoDaFamilia = (
   | { acao: 'visto'; alertaId: string }
-  /** Faz o aparelho do idoso tocar agora. */
+  /** Faz o aparelho do idoso tocar agora. Responde `{ ok, chamada }`, ou 409 se já está tocando. */
   | { acao: 'ligar' }
-  /** Troca as horas das ligações de todo dia ("HH:MM"). */
+  /** Troca as horas das ligações de todo dia ("HH:MM"). Responde `{ ok, horarios }`. */
   | { acao: 'horarios'; horarios: string[] }
-  | { acao: 'atender_sozinho'; ligado: boolean };
+  | { acao: 'atender_sozinho'; ligado: boolean }
+  /** Gera o código de 6 números pra ligar um aparelho. Responde `{ ok, ...CodigoDoAparelho }`. */
+  | { acao: 'gerar_codigo' }
+  /** Muda o perfil. Só os campos que vierem. Responde `{ ok, idoso }`. */
+  | {
+      acao: 'perfil';
+      nome?: string;
+      tratamento?: string;
+      idade?: number;
+      remedios?: { nome: string; horario: string }[];
+      familiar?: { nome: string; parentesco: string };
+    }
+) & { idosoId?: string };
 
 /** GET /api/chamada: o aparelho do idoso pergunta isto a cada 2 segundos. */
 export interface SituacaoDaChamada {
@@ -197,7 +212,10 @@ export interface IdosoDaFamilia {
   papel: 'responsavel' | 'familiar';
 }
 
-/** POST /api/idosos: a família cadastra um idoso. */
+/**
+ * POST /api/idosos: a família cadastra um idoso. Também aceita `{ exemplo: true }`,
+ * que cria a dona Helena com dias de exemplo. Responde `{ ok: true, id }`.
+ */
 export interface NovoIdoso {
   nome: string;
   tratamento: string;

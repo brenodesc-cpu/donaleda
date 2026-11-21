@@ -23,6 +23,20 @@ function cumprimento(agora: Date): string {
 /** Quem começou a ligação: a hora marcada, a família pelo painel ou o próprio idoso. */
 export type OrigemDaLigacao = 'horario' | 'familia' | 'idoso';
 
+const PARENTESCO_FEMININO = /^(m[aã]e|irm[aã]|nora|av[oó]|madrinha|esposa|mulher|tia)$/;
+
+/** "a sua filha Marina", "o seu filho Paulo", "a sua cuidadora Ana". */
+export function quemContratou(familiar: { nome: string; parentesco: string }): string {
+  const parentesco = familiar.parentesco.trim().toLowerCase();
+  if (!parentesco) return familiar.nome;
+  const feminino = parentesco.endsWith('a') || PARENTESCO_FEMININO.test(parentesco);
+  return `${feminino ? 'a sua' : 'o seu'} ${parentesco} ${familiar.nome}`;
+}
+
+function primeiraMaiuscula(texto: string): string {
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
 export function montarSaudacao(
   base: Base,
   agora: Date = new Date(),
@@ -31,12 +45,13 @@ export function montarSaudacao(
   const { tratamento, familiar, primeiraConversaFeita } = base.idoso;
   const pronome = pronomeDeTratamento(tratamento);
   const oi = `${cumprimento(agora)}, ${tratamento}!`;
+  const quem = quemContratou(familiar);
   if (!primeiraConversaFeita) {
-    return `${oi} Eu sou a ${NOME_DA_ASSISTENTE}, uma assistente virtual. Sou um programa de computador, e a sua ${familiar.parentesco} ${familiar.nome} me pediu pra ligar pra ${pronome} todo dia. Como ${pronome} está hoje?`;
+    return `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, a assistente virtual que ${quem} contratou pra conversar com ${pronome} todo dia. Como ${pronome} está hoje?`;
   }
   const souEu = `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, sua assistente virtual.`;
   if (origem === 'familia') {
-    return `${souEu} A ${familiar.nome} pediu pra eu ligar e saber como ${pronome} está.`;
+    return `${souEu} ${primeiraMaiuscula(quem)} pediu pra eu ligar e saber como ${pronome} está.`;
   }
   if (origem === 'idoso') {
     return `${souEu} Que bom que ${pronome} me chamou. Como ${pronome} está?`;

@@ -3,7 +3,7 @@
 // aviso de "não atendeu" quando ninguém está olhando.
 
 import { avancarChamadas } from './chamadas';
-import { mudarBaseQuando } from './dados';
+import { listarFichas, mudarBaseQuando } from './dados';
 
 const global = globalThis as typeof globalThis & {
   __relogioDaLia?: ReturnType<typeof setInterval>;
@@ -13,10 +13,18 @@ export function ligarRelogio(): void {
   if (global.__relogioDaLia) return;
   global.__relogioDaLia = setInterval(() => {
     const agora = new Date();
-    mudarBaseQuando((base) => ({
-      gravar: avancarChamadas(base, agora).mudou,
-      resultado: null,
-    })).catch((erro) => console.error('[relógio] não consegui avançar as ligações:', erro));
+    listarFichas()
+      .then((idosos) =>
+        Promise.all(
+          idosos.map((idosoId) =>
+            mudarBaseQuando(idosoId, (base) => ({
+              gravar: avancarChamadas(base, agora).mudou,
+              resultado: null,
+            })),
+          ),
+        ),
+      )
+      .catch((erro) => console.error('[relógio] não consegui avançar as ligações:', erro));
   }, 5000);
   global.__relogioDaLia.unref?.();
 }

@@ -4,4 +4,9 @@ README.md
 .gitignore
 .DS_Store
 node_modules
-*.log 
+*.log ios
+android
+recursos
+dados
+testes
+.env*

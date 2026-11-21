@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { AgoraClient, Area } from 'agora-agents';
 import { StopConversationRequest } from '@/types/conversation';
+import { exigirAparelho } from '@/lib/sessao';
 
 function isAgentAlreadyStoppingOrStopped(error: unknown): boolean {
   if (!error || typeof error !== 'object') return false;
@@ -23,6 +24,9 @@ function isAgentAlreadyStoppingOrStopped(error: unknown): boolean {
 }
 
 export async function POST(request: Request) {
+  const aparelho = await exigirAparelho(request);
+  if (!aparelho.ok) return aparelho.resposta;
+
   try {
     const body: StopConversationRequest = await request.json();
     const { agent_id } = body;

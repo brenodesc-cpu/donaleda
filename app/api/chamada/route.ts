@@ -4,13 +4,16 @@
 import { NextResponse } from 'next/server';
 import { avancarChamadas, responderChamada, situacaoDaChamada } from '@/lib/chamadas';
 import { mudarBase, mudarBaseQuando } from '@/lib/dados';
+import { exigirAparelho } from '@/lib/sessao';
 import type { RespostaDaChamada } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
+  const aparelho = await exigirAparelho(request);
+  if (!aparelho.ok) return aparelho.resposta;
   const agora = new Date();
-  const situacao = await mudarBaseQuando((base) => {
+  const situacao = await mudarBaseQuando(aparelho.valor, (base) => {
     const { mudou } = avancarChamadas(base, agora);
     return { gravar: mudou, resultado: situacaoDaChamada(base, agora) };
   });
@@ -18,6 +21,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const aparelho = await exigirAparelho(request);
+  if (!aparelho.ok) return aparelho.resposta;
+
   let resposta: RespostaDaChamada;
   try {
     resposta = (await request.json()) as RespostaDaChamada;
@@ -30,7 +36,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
 
-  const chamada = await mudarBase((base) =>
+  const chamada = await mudarBase(aparelho.valor, (base) =>
     responderChamada(base, resposta.chamadaId, resposta.acao),
   );
   if (!chamada) return NextResponse.json({ ok: false }, { status: 404 });

@@ -135,6 +135,7 @@ export class FerramentaDesconhecida extends Error {}
 
 /** Executa uma ação e devolve uma frase curta pro modelo. */
 export async function executarFerramenta(
+  idosoId: string,
   nome: string,
   argumentos: unknown,
   agora: Date = new Date(),
@@ -156,7 +157,7 @@ export async function executarFerramenta(
     };
     const veioAlgo = Object.values(parcial).some((v) => v !== undefined);
     if (!veioAlgo) return 'Nada foi anotado: nenhum campo válido chegou.';
-    const { dia, alertas } = await mudarBase((base) => aplicarBemEstar(base, parcial, agora));
+    const { dia, alertas } = await mudarBase(idosoId, (base) => aplicarBemEstar(base, parcial, agora));
     const falta = oQueFaltaSaber(dia);
     const avisou = alertas.length ? ' A família foi avisada.' : '';
     return falta.length
@@ -168,7 +169,7 @@ export async function executarFerramenta(
     const frase = texto(a.texto, 240);
     const categoria = escolha(a.categoria, CATEGORIAS) ?? 'historia';
     if (!frase) return 'Nada foi guardado: faltou o texto.';
-    await mudarBase((base) => guardarLembranca(base, frase, categoria, agora));
+    await mudarBase(idosoId, (base) => guardarLembranca(base, frase, categoria, agora));
     return 'Guardado.';
   }
 
@@ -177,7 +178,7 @@ export async function executarFerramenta(
     if (!mensagem) return 'Aviso não enviado: faltou a mensagem.';
     const tipo = escolha(a.tipo, TIPOS) ?? 'saude';
     const gravidade = escolha(a.gravidade, GRAVIDADES) ?? 'atencao';
-    await mudarBase((base) =>
+    await mudarBase(idosoId, (base) =>
       criarAlerta(base, { tipo, gravidade, texto: mensagem, origem: 'assistente' }, agora),
     );
     return 'A família foi avisada.';
@@ -186,7 +187,7 @@ export async function executarFerramenta(
   if (nome === 'resumir_conversa') {
     const resumo = texto(a.resumo, 600);
     if (!resumo) return 'Resumo não guardado: faltou o texto.';
-    await mudarBase((base) => resumirConversa(base, resumo));
+    await mudarBase(idosoId, (base) => resumirConversa(base, resumo));
     return 'Resumo guardado.';
   }
 

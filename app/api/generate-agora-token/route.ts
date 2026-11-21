@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { RtcTokenBuilder, RtcRole } from 'agora-token';
+import { exigirAparelho } from '@/lib/sessao';
 
 const EXPIRATION_TIME_IN_SECONDS = 3600;
 
@@ -10,6 +11,10 @@ function generateChannelName(): string {
 }
 
 export async function GET(request: NextRequest) {
+  // Só o aparelho pareado entra numa sala da Agora.
+  const aparelho = await exigirAparelho(request);
+  if (!aparelho.ok) return aparelho.resposta;
+
   // console.log('Generating Agora token...');
   const APP_ID = process.env.NEXT_PUBLIC_AGORA_APP_ID;
   const APP_CERTIFICATE = process.env.NEXT_AGORA_APP_CERTIFICATE;

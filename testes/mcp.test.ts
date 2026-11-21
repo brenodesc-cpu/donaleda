@@ -1,25 +1,29 @@
-import { mkdtempSync, readFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import path from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { Base } from '@/lib/tipos';
 
 // As ações da assistente, chamadas do jeito que a nuvem da Agora chama.
 
+const IDOSO = 'idoso-de-teste';
+const OUTRO = 'outro-idoso';
+
 let POST: (request: Request) => Promise<Response>;
 let chave: string;
-let arquivo: string;
+let lerBase: (idosoId: string) => Promise<Base>;
 
 beforeAll(async () => {
-  arquivo = path.join(mkdtempSync(path.join(tmpdir(), 'lia-')), 'base.json');
-  process.env.LIA_DADOS = arquivo;
+  process.env.LIA_DADOS = 'memoria';
   process.env.NEXT_AGORA_APP_CERTIFICATE = 'certificado-de-teste';
   ({ POST } = await import('@/app/api/mcp/route'));
-  chave = (await import('@/lib/servidor')).chaveDasFerramentas() ?? '';
+  chave = (await import('@/lib/servidor')).chaveDasFerramentas(IDOSO) ?? '';
+  const dados = await import('@/lib/dados');
+  lerBase = dados.lerBase;
+  const { baseDeExemplo } = await import('@/lib/exemplo');
+  await dados.criarFicha(IDOSO, baseDeExemplo(new Date(), IDOSO));
+  await dados.criarFicha(OUTRO, baseDeExemplo(new Date(), OUTRO));
 });
 
-function pedido(corpo: unknown, comChave = true): Request {
-  return new Request('http://localhost/api/mcp', {
+function pedido(corpo: unknown, comChave = true, idoso = IDOSO): Request {
+  return new Request(`http://localhost/api/mcp?idoso=${idoso}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +34,7 @@ function pedido(corpo: unknown, comChave = true): Request {
   });
 }
 
-const base = (): Base => JSON.parse(readFileSync(arquivo, 'utf8')) as Base;
+const base = (): Promise<Base> => lerBase(IDOSO);
 
 describe('ações da assistente (/api/mcp)', () => {
   it('recusa quem não tem a chave', async () => {
@@ -38,9 +42,14 @@ describe('ações da assistente (/api/mcp)', () => {
     expect(resposta.status).toBe(401);
   });
 
+  it('a chave de um idoso não abre a ficha de outro', async () => {
+    const resposta = await POST(pedido({ jsonrpc: '2.0', id: 1, method: 'ping' }, true, OUTRO));
+    expect(resposta.status).toBe(401);
+  });
+
   it('aceita a chave pelo endereço também', async () => {
     const resposta = await POST(
-      new Request(`http://localhost/api/mcp?chave=${chave}`, {
+      new Request(`http://localhost/api/mcp?idoso=${IDOSO}&chave=${chave}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'ping' }),
@@ -82,7 +91,7 @@ describe('ações da assistente (/api/mcp)', () => {
     expect(resposta.result.isError).toBe(false);
     expect(resposta.result.content[0].text).toContain('A família foi avisada');
 
-    const gravado = base();
+    const gravado = await base();
     const hoje = gravado.dias[gravado.dias.length - 1];
     expect(hoje.sono).toBe('mal');
     expect(hoje.remedio).toBe('nao_tomou');
@@ -102,7 +111,7 @@ describe('ações da assistente (/api/mcp)', () => {
         },
       }),
     );
-    const alerta = base().alertas.find((a) => a.tipo === 'golpe');
+    const alerta = (await base()).alertas.find((a) => a.tipo === 'golpe');
     expect(alerta?.origem).toBe('assistente');
     expect(alerta?.visto).toBe(false);
   });

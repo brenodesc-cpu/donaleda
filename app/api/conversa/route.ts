@@ -5,11 +5,16 @@
 import { NextResponse } from 'next/server';
 import { criarAlerta, fecharConversa, mudarBase } from '@/lib/dados';
 import { avaliarFala } from '@/lib/regras';
+import { exigirAparelho } from '@/lib/sessao';
 import type { Alerta, EventoDaConversa, RespostaDoEvento } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
+  const aparelho = await exigirAparelho(request);
+  if (!aparelho.ok) return aparelho.resposta;
+  const idosoId = aparelho.valor;
+
   let evento: EventoDaConversa;
   try {
     evento = (await request.json()) as EventoDaConversa;
@@ -22,7 +27,7 @@ export async function POST(request: Request) {
   }
 
   if (evento.tipo === 'fim') {
-    const conversa = await mudarBase((base) => fecharConversa(base, evento.conversaId));
+    const conversa = await mudarBase(idosoId, (base) => fecharConversa(base, evento.conversaId));
     return NextResponse.json({ ok: Boolean(conversa) } satisfies RespostaDoEvento, {
       status: conversa ? 200 : 404,
     });
@@ -31,7 +36,7 @@ export async function POST(request: Request) {
   if (evento.tipo === 'fala') {
     const fala = typeof evento.texto === 'string' ? evento.texto.slice(0, 2000) : '';
     const regra = avaliarFala(fala);
-    const resultado = await mudarBase((base) => {
+    const resultado = await mudarBase(idosoId, (base) => {
       const conversa = base.conversas.find((c) => c.id === evento.conversaId);
       if (!conversa) return null;
       conversa.falasDoIdoso += 1;
