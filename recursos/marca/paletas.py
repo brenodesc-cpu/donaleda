@@ -1,4 +1,4 @@
-"""Paletas das três direções da Dona Leda e a conferência de contraste (WCAG 2).
+"""Paletas das quatro direções da Dona Leda e a conferência de contraste (WCAG 2).
 
 Rodar: python3 recursos/marca/paletas.py (--css imprime o CSS, --ts grava a tabela da página /marca)
 Imprime o contraste de cada par usado nas telas e as linhas de CSS (HSL) pro globals.css.
@@ -6,6 +6,18 @@ Imprime o contraste de cada par usado nas telas e as linhas de CSS (HSL) pro glo
 import colorsys, sys
 
 DIRECOES = {
+    # Gema: a direção que o time escolheu em 21/11/2026. O disco do telefone antigo, amarelo.
+    'gema': {
+        'background': '#FFF8E8', 'card': '#FFFFFF', 'foreground': '#33200F',
+        'muted': '#F7EDD6', 'muted-foreground': '#6A4628', 'border': '#D9C4A0',
+        'primary': '#33200F', 'primary-foreground': '#FFF8E8',
+        'secondary': '#FDEBB5', 'accent': '#F7B90F', 'accent-foreground': '#33200F',
+        'destructive': '#B03A22', 'destructive-foreground': '#FFFFFF',
+        'success': '#1B7A3D', 'success-soft': '#E0F0E2',
+        'warning': '#7A4E00', 'warning-soft': '#FDEBB5', 'danger-soft': '#FBE3DC',
+        'ring': '#33200F',
+        'leda-pele': '#FFFFFF', 'leda-cabelo': '#FFF8E8', 'leda-roupa': '#F7B90F', 'leda-traco': '#33200F',
+    },
     'varanda': {
         'background': '#FBF5EC', 'card': '#FFFFFF', 'foreground': '#2B1D14',
         'muted': '#F3E9DC', 'muted-foreground': '#5A4636', 'border': '#D9C7B1',

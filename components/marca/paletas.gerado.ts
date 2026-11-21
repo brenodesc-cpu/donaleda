@@ -1,5 +1,99 @@
 // Gerado por recursos/marca/paletas.py --ts. Não edite à mão.
 export const PALETAS = {
+  "gema": {
+    "cores": {
+      "background": "#FFF8E8",
+      "card": "#FFFFFF",
+      "foreground": "#33200F",
+      "muted": "#F7EDD6",
+      "muted-foreground": "#6A4628",
+      "border": "#D9C4A0",
+      "primary": "#33200F",
+      "primary-foreground": "#FFF8E8",
+      "secondary": "#FDEBB5",
+      "accent": "#F7B90F",
+      "accent-foreground": "#33200F",
+      "destructive": "#B03A22",
+      "destructive-foreground": "#FFFFFF",
+      "success": "#1B7A3D",
+      "success-soft": "#E0F0E2",
+      "warning": "#7A4E00",
+      "warning-soft": "#FDEBB5",
+      "danger-soft": "#FBE3DC",
+      "ring": "#33200F",
+      "leda-pele": "#FFFFFF",
+      "leda-cabelo": "#FFF8E8",
+      "leda-roupa": "#F7B90F",
+      "leda-traco": "#33200F"
+    },
+    "pares": [
+      {
+        "uso": "texto principal na página",
+        "contraste": 14.65,
+        "minimo": 7.0
+      },
+      {
+        "uso": "texto principal no cartão",
+        "contraste": 15.51,
+        "minimo": 7.0
+      },
+      {
+        "uso": "texto secundário na página",
+        "contraste": 7.88,
+        "minimo": 4.5
+      },
+      {
+        "uso": "texto secundário no cartão",
+        "contraste": 8.33,
+        "minimo": 4.5
+      },
+      {
+        "uso": "texto secundário em fundo apagado",
+        "contraste": 7.16,
+        "minimo": 4.5
+      },
+      {
+        "uso": "botão principal",
+        "contraste": 14.65,
+        "minimo": 4.5
+      },
+      {
+        "uso": "botão verde Atender",
+        "contraste": 5.39,
+        "minimo": 4.5
+      },
+      {
+        "uso": "botão Encerrar",
+        "contraste": 6.04,
+        "minimo": 4.5
+      },
+      {
+        "uso": "selo de destaque",
+        "contraste": 8.79,
+        "minimo": 4.5
+      },
+      {
+        "uso": "aviso bom",
+        "contraste": 4.55,
+        "minimo": 4.5
+      },
+      {
+        "uso": "aviso de atenção",
+        "contraste": 6.08,
+        "minimo": 4.5
+      },
+      {
+        "uso": "aviso urgente",
+        "contraste": 4.93,
+        "minimo": 4.5
+      },
+      {
+        "uso": "texto em fundo apagado",
+        "contraste": 13.32,
+        "minimo": 7.0
+      }
+    ]
+  },
   "varanda": {
     "cores": {
       "background": "#FBF5EC",

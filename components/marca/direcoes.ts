@@ -1,10 +1,11 @@
-// As três direções de marca da Dona Leda. A ativa vale pro app inteiro.
+// As direções de marca da Dona Leda. A ativa vale pro app inteiro.
+// A Gema é a que o time escolheu em 21/11/2026; as outras três ficam pra comparação em /marca.
 // Pra trocar de direção, mude MARCA_ATIVA aqui. Se a fonte da nova direção for
 // outra, troque também qual fonte tem `preload: true` em app/layout.tsx.
 
-export type Direcao = 'varanda' | 'radio' | 'jardim';
+export type Direcao = 'gema' | 'varanda' | 'radio' | 'jardim';
 
-export const MARCA_ATIVA: Direcao = 'varanda';
+export const MARCA_ATIVA: Direcao = 'gema';
 
 export interface InfoDaDirecao {
   id: Direcao;
@@ -19,6 +20,15 @@ export interface InfoDaDirecao {
 }
 
 export const DIRECOES: InfoDaDirecao[] = [
+  {
+    id: 'gema',
+    nome: 'Gema',
+    resumo: 'Amarelo de gema e marrom de café, com o disco do telefone antigo no lugar do rosto.',
+    motivo:
+      'Foi a escolhida pelo time: quem tem mais de 70 anos discou a vida inteira num telefone de disco, e o botão de atender fica sendo o único verde da tela.',
+    fonte: 'Gabarito no título e Atkinson Hyperlegible Next no texto',
+    amostraDeTexto: 'Bom dia, dona Helena! Dormiu bem?',
+  },
   {
     id: 'varanda',
     nome: 'Varanda',

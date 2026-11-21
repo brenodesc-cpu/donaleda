@@ -6,6 +6,28 @@ import { MARCA_ATIVA, type Direcao } from './direcoes';
 
 const TRACO = 'stroke-leda-traco';
 
+// O disco do telefone em tamanho de símbolo (o mesmo desenho do rosto, pela metade).
+const FUROS_DO_SIMBOLO: Array<[number, number]> = [
+  [70.35, 98.65], [49.65, 98.65], [31.7, 88.3], [21.35, 70.35], [21.35, 49.65],
+  [31.7, 31.7], [49.65, 21.35], [70.35, 21.35], [88.3, 31.7], [98.65, 49.65],
+];
+
+function SimboloGema() {
+  return (
+    <>
+      <circle cx={60} cy={60} r={54} className="fill-leda-roupa" />
+      {FUROS_DO_SIMBOLO.map(([cx, cy]) => (
+        <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={6.5} className="fill-leda-cabelo" />
+      ))}
+      <path d="M 97.25 81.5 L 111 89.5" className={cn('fill-none', TRACO)} strokeWidth={4.5} strokeLinecap="round" />
+      <circle cx={60} cy={60} r={25} className="fill-leda-pele" />
+      <ellipse cx={52} cy={55.5} rx={2.75} ry={4.25} className="fill-leda-traco" />
+      <ellipse cx={68} cy={55.5} rx={2.75} ry={4.25} className="fill-leda-traco" />
+      <path d="M 49.5 65 Q 60 75 70.5 65" className={cn('fill-none', TRACO)} strokeWidth={3.25} strokeLinecap="round" />
+    </>
+  );
+}
+
 function SimboloVaranda() {
   return (
     <>
@@ -51,6 +73,7 @@ function SimboloJardim() {
 }
 
 const SIMBOLOS: Record<Direcao, () => React.JSX.Element> = {
+  gema: SimboloGema,
   varanda: SimboloVaranda,
   radio: SimboloRadio,
   jardim: SimboloJardim,
@@ -66,6 +89,7 @@ export function Simbolo({ estilo = MARCA_ATIVA, className }: { estilo?: Direcao;
 }
 
 const NOME_ESCRITO: Record<Direcao, { texto: string; classe: string }> = {
+  gema: { texto: 'Dona Leda', classe: 'font-titulo font-extrabold tracking-tight' },
   varanda: { texto: 'Dona Leda', classe: 'font-bold tracking-tight' },
   radio: { texto: 'DONA LEDA', classe: 'font-black tracking-wide' },
   jardim: { texto: 'dona leda', classe: 'font-extrabold tracking-tight' },

@@ -1,15 +1,23 @@
 import type { Metadata, Viewport } from 'next';
-import { Atkinson_Hyperlegible_Next, Lexend, Nunito } from 'next/font/google';
+import { Atkinson_Hyperlegible_Next, Gabarito, Lexend, Nunito } from 'next/font/google';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import { MARCA_ATIVA } from '@/components/marca/direcoes';
+import { PALETAS } from '@/components/marca/paletas.gerado';
 import { cn } from '@/lib/utils';
 import './globals.css';
 
-// As fontes das três direções da marca (components/marca/direcoes.ts).
-// Só a da direção ativa carrega antes da tela aparecer; as outras, só na página /marca.
+// As fontes das direções da marca (components/marca/direcoes.ts).
+// A Gema, que é a ativa, usa a Gabarito no título e a Atkinson no texto: as duas
+// carregam antes da tela aparecer. As outras fontes, só na página /marca.
 const fonteVaranda = Atkinson_Hyperlegible_Next({
   subsets: ['latin', 'latin-ext'],
   variable: '--fonte-varanda',
+  display: 'swap',
+  preload: true,
+});
+const fonteGemaTitulo = Gabarito({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--fonte-gema-titulo',
   display: 'swap',
   preload: true,
 });
@@ -30,7 +38,7 @@ const fonteJardim = Nunito({
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#FBF5EC',
+  themeColor: PALETAS[MARCA_ATIVA].cores.background,
 };
 
 export const metadata: Metadata = {
@@ -59,7 +67,13 @@ export default function RootLayout({
     <html
       lang="pt-BR"
       data-marca={MARCA_ATIVA}
-      className={cn('h-full', fonteVaranda.variable, fonteRadio.variable, fonteJardim.variable)}
+      className={cn(
+        'h-full',
+        fonteVaranda.variable,
+        fonteGemaTitulo.variable,
+        fonteRadio.variable,
+        fonteJardim.variable,
+      )}
     >
       <body className="h-full min-h-screen font-sans text-lg antialiased">{children}</body>
     </html>

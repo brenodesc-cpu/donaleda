@@ -13,6 +13,7 @@ const config: Config = {
   	extend: {
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        titulo: ['var(--font-titulo)', 'system-ui', 'sans-serif'],
       },
   		colors: {
         // The <alpha-value> placeholder enables Tailwind opacity modifiers like

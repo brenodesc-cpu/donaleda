@@ -1,6 +1,7 @@
-// O desenho da Dona Leda em cada direção da marca. Ela é uma senhora desenhada,
-// de coque e óculos, com fone de atendente: tem cara de gente, mas ninguém
-// confunde com uma pessoa de verdade.
+// O desenho da Dona Leda em cada direção da marca. Na Gema, que é a escolhida,
+// ela é o disco do telefone antigo com um rosto no miolo. Nas outras três ela é
+// uma senhora desenhada, de coque e óculos, com fone de atendente. Em todas tem
+// cara de personagem: ninguém confunde com uma pessoa de verdade.
 
 import { cn } from '@/lib/utils';
 import { Boca, Olhos, type PartesDoRosto } from './partesDoRosto';
@@ -88,6 +89,60 @@ export function DesenhoJardim({ partes }: { partes: PartesDoRosto }) {
       <circle cx={186} cy={138} r={14} className="fill-primary" />
       <path d="M 54 150 Q 60 182 92 184" className="fill-none stroke-primary" strokeWidth={6} strokeLinecap="round" />
       <circle cx={96} cy={184} r={6} className="fill-primary" />
+    </>
+  );
+}
+
+// Os dez furos do disco, um a cada 30 graus. O vão sem furo fica embaixo, à direita.
+const FUROS: Array<[number, number]> = [
+  [140.7, 197.3], [99.3, 197.3], [63.4, 176.6], [42.7, 140.7], [42.7, 99.3],
+  [63.4, 63.4], [99.3, 42.7], [140.7, 42.7], [176.6, 63.4], [197.3, 99.3],
+];
+
+/**
+ * Gema: o disco do telefone antigo, amarelo, com o rosto no miolo.
+ * Ligando, o disco gira e volta, como quem disca. Ouvindo, um anel cresce em volta.
+ * Pensando, os furos acendem um por um. Falando, a boca abre com a voz.
+ */
+export function DesenhoGema({ partes }: { partes: PartesDoRosto }) {
+  const { estado, pulsar, piscar } = partes;
+  const discando = pulsar && estado === 'ligando';
+  return (
+    <>
+      {estado === 'ouvindo' && (
+        <circle cx={120} cy={120} r={119} className={cn('fill-secondary', pulsar && 'animate-pulse')} />
+      )}
+      <g className={cn(discando && 'disco-discando')}>
+        <circle cx={120} cy={120} r={108} className="fill-leda-roupa" />
+        {FUROS.map(([cx, cy]) => (
+          <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r={13} className="fill-background" />
+        ))}
+        {estado === 'pensando' &&
+          FUROS.map(([cx, cy], i) =>
+            piscar ? (
+              <circle key={`aceso-${cx}-${cy}`} cx={cx} cy={cy} r={13} className="fill-leda-traco" opacity={0}>
+                <animate
+                  attributeName="opacity"
+                  values="0;1;1;0;0"
+                  keyTimes="0;0.1;0.3;0.4;1"
+                  dur="2s"
+                  begin={`${i * 0.2}s`}
+                  repeatCount="indefinite"
+                />
+              </circle>
+            ) : i >= 6 && i <= 8 ? (
+              <circle key={`aceso-${cx}-${cy}`} cx={cx} cy={cy} r={13} className="fill-leda-traco" />
+            ) : null,
+          )}
+      </g>
+      {/* A trava do dedo, que no telefone de verdade para o disco. */}
+      <path d="M 194.5 163 L 222 179" className="fill-none stroke-leda-traco" strokeWidth={9} strokeLinecap="round" />
+      <circle cx={120} cy={120} r={50} className="fill-leda-pele" />
+      {/* Olhos e boca são os mesmos das outras direções, encolhidos pra caber no miolo. */}
+      <g transform="translate(120 120) scale(0.75) translate(-120 -142)">
+        <Olhos partes={partes} rx={7.5} ry={11} />
+        <Boca partes={partes} espessura={8.5} />
+      </g>
     </>
   );
 }

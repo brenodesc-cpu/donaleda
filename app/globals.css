@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 /*
- * Marca da Dona Leda. Três direções, cada uma num bloco de variáveis.
+ * Marca da Dona Leda. Quatro direções, cada uma num bloco de variáveis.
+ * A Gema é a que o time escolheu em 21/11/2026 (o disco do telefone antigo, amarelo).
  * A direção ativa é o atributo data-marca do <html> (components/marca/direcoes.ts).
  * Qualquer elemento com data-marca="..." usa as cores e a fonte daquela direção,
- * e é assim que a página /marca mostra as três lado a lado.
+ * e é assim que a página /marca mostra todas lado a lado.
  * Os valores saem de recursos/marca/paletas.py, que confere o contraste de cada par.
  * Só tema claro, de propósito: contraste alto pra quem enxerga menos.
  */
@@ -41,6 +42,7 @@
   --leda-traco: 23 37% 12%;
   --radius: 1rem;
   --font-sans: var(--fonte-varanda), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-titulo: var(--font-sans);
 }
 
 [data-marca='radio'] {
@@ -69,6 +71,7 @@
   --leda-traco: 0 0% 7%;
   --radius: 0.375rem;
   --font-sans: var(--fonte-radio), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-titulo: var(--font-sans);
 }
 
 [data-marca='jardim'] {
@@ -97,6 +100,36 @@
   --leda-traco: 146 36% 12%;
   --radius: 1.5rem;
   --font-sans: var(--fonte-jardim), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-titulo: var(--font-sans);
+}
+
+[data-marca='gema'] {
+  --background: 42 100% 95%;
+  --card: 0 0% 100%;
+  --foreground: 28 55% 13%;
+  --muted: 42 67% 90%;
+  --muted-foreground: 27 45% 29%;
+  --border: 38 43% 74%;
+  --primary: 28 55% 13%;
+  --primary-foreground: 42 100% 95%;
+  --secondary: 45 95% 85%;
+  --accent: 44 94% 51%;
+  --accent-foreground: 28 55% 13%;
+  --destructive: 10 68% 41%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 141 64% 29%;
+  --success-soft: 127 35% 91%;
+  --warning: 38 100% 24%;
+  --warning-soft: 45 95% 85%;
+  --danger-soft: 14 79% 92%;
+  --ring: 28 55% 13%;
+  --leda-pele: 0 0% 100%;
+  --leda-cabelo: 42 100% 95%;
+  --leda-roupa: 44 94% 51%;
+  --leda-traco: 28 55% 13%;
+  --radius: 1.25rem;
+  --font-sans: var(--fonte-varanda), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-titulo: var(--fonte-gema-titulo), var(--fonte-varanda), system-ui, sans-serif;
 }
 
 /* Tokens que repetem os de cima. Ficam no mesmo elemento da direção pra seguirem a troca. */
@@ -128,6 +161,35 @@
   --viz-stop-1: var(--primary);
   --viz-stop-2: var(--border);
   --viz-stop-3: var(--accent);
+}
+
+/* Título, nome e botão grande usam a fonte de título da direção. */
+h1,
+h2,
+h3,
+.font-titulo {
+  font-family: var(--font-titulo);
+}
+
+/* Gema: o disco gira e volta, como quem disca, enquanto a Dona Leda está ligando. */
+@keyframes discar {
+  0%,
+  10% {
+    transform: rotate(0deg);
+  }
+  45%,
+  55% {
+    transform: rotate(150deg);
+  }
+  90%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.disco-discando {
+  transform-origin: 120px 120px;
+  animation: discar 2.4s cubic-bezier(0.5, 0, 0.3, 1) infinite;
 }
 
 body {

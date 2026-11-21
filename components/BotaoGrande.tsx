@@ -29,7 +29,7 @@ export function BotaoGrande({
       type={type}
       className={cn(
         'flex min-h-20 w-full max-w-md items-center justify-center gap-3 rounded-2xl px-6 py-4',
-        'text-2xl font-semibold shadow-md transition-colors',
+        'font-titulo text-2xl font-semibold shadow-md transition-colors',
         'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
         'active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60',
         TONS[tom],

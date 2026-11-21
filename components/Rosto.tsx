@@ -6,6 +6,7 @@ import type { EstadoDoRosto } from '@/lib/conversation';
 import { cn } from '@/lib/utils';
 import { MARCA_ATIVA, type Direcao } from '@/components/marca/direcoes';
 import {
+  DesenhoGema,
   DesenhoJardim,
   DesenhoRadio,
   DesenhoVaranda,
@@ -30,6 +31,7 @@ const DESCRICAO: Record<EstadoDoRosto, string> = {
 };
 
 const DESENHOS: Record<Direcao, (props: { partes: PartesDoRosto }) => React.JSX.Element> = {
+  gema: DesenhoGema,
   varanda: DesenhoVaranda,
   radio: DesenhoRadio,
   jardim: DesenhoJardim,
