@@ -155,7 +155,7 @@ export default function PaginaDeInvestidores() {
             <h2 id="titulo-validacao" className="text-3xl font-bold tracking-tight sm:text-5xl">Modelo e validação</h2>
             <p className="mt-4 text-muted-foreground">A hipótese inicial é uma assinatura familiar para acompanhamento. A margem depende da duração real das chamadas, do custo por minuto de voz e do preço que a família aceita pagar.</p>
             <div className="mt-5 rounded-2xl border border-border bg-accent/15 p-5">
-              <p className="text-lg font-bold">Cenário ilustrativo · cerca de R$ 16 por mês</p>
+              <p className="text-lg font-bold">Cenário ilustrativo · cerca de R$ 26 por mês</p>
               <p className="mt-1 text-sm text-muted-foreground">Estimativa de custo de voz e áudio por pessoa no modo direto, em que o aparelho conversa direto com o Gemini e a Agora mantém a sala de áudio, para uma ligação de 3 minutos e 20 segundos por dia durante 30 dias, com preço de tabela e câmbio de R$ 5,89 por dólar. O modo direto ainda está em construção. Custos operacionais à parte.</p>
               <a href="https://docs.agora.io/en/ai/reference/pricing" className="mt-2 inline-block text-sm font-bold text-primary underline underline-offset-4">Tabela de preços da Agora</a>
             </div>
