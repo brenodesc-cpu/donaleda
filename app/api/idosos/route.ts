@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 import { arrumarHorarios } from '@/lib/chamadas';
 import { criarFicha } from '@/lib/dados';
 import { baseDeExemplo, baseNova } from '@/lib/exemplo';
-import { exigirFamilia } from '@/lib/sessao';
+import { exigirFamilia, exigirIdosoDaFamilia } from '@/lib/sessao';
 import { clienteDoServidor } from '@/lib/supabase/servidor';
 import type { IdosoDaFamilia, NovoIdoso } from '@/lib/tipos';
 
@@ -138,4 +138,21 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({ ok: true, id });
+}
+
+/**
+ * DELETE /api/idosos?id=<id>: apaga o idoso e tudo dele (ficha, aparelhos, códigos,
+ * quem acompanha). Só quem cadastrou pode apagar. Não tem volta.
+ */
+export async function DELETE(request: Request) {
+  const id = new URL(request.url).searchParams.get('id');
+  if (!id) return NextResponse.json({ ok: false, erro: 'sem_id' }, { status: 400 });
+  const conferida = await exigirIdosoDaFamilia(id);
+  if (!conferida.ok) return conferida.resposta;
+  if (conferida.valor.papel !== 'responsavel') {
+    return NextResponse.json({ ok: false, erro: 'sem_acesso' }, { status: 403 });
+  }
+  const { error } = await clienteDoServidor().from('idosos').delete().eq('id', id);
+  if (error) return NextResponse.json({ ok: false, erro: 'banco' }, { status: 500 });
+  return NextResponse.json({ ok: true });
 }

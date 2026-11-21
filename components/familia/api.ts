@@ -60,6 +60,9 @@ export const buscarIdosos = () => pedir<IdosoDaFamilia[]>('/api/idosos');
 export const criarIdoso = (novo: NovoIdoso | { exemplo: true }) =>
   pedir<{ id: string }>('/api/idosos', postar(novo));
 
+export const apagarIdoso = (idosoId: string) =>
+  pedir<{ ok: boolean }>(`/api/idosos?id=${encodeURIComponent(idosoId)}`, { method: 'DELETE' });
+
 export const buscarPainel = (idosoId: string) =>
   pedir<PainelDaFamilia>(`/api/familia?idoso=${encodeURIComponent(idosoId)}`);
 

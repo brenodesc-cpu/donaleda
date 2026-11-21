@@ -1,6 +1,7 @@
 'use client';
 
 import { AjustesDoIdoso } from '@/components/familia/AjustesDoIdoso';
+import { ApagarIdoso } from '@/components/familia/ApagarIdoso';
 import { Esqueleto } from '@/components/familia/Apoio';
 import { comMaiuscula } from '@/components/familia/formatos';
 import { Moldura } from '@/components/familia/Moldura';
@@ -33,6 +34,9 @@ export default function AjustesPage() {
             onTrocarAtenderSozinho={trocarAtenderSozinho}
             onSalvarPerfil={salvarPerfil}
           />
+          {idoso?.papel === 'responsavel' ? (
+            <ApagarIdoso idosoId={painel.idoso.id} tratamento={painel.idoso.tratamento} />
+          ) : null}
         </>
       ) : (
         <Esqueleto />
