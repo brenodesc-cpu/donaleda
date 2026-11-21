@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { ArrowDown, ArrowRight, Bell, CalendarClock, ClipboardList, Phone, ShieldCheck } from 'lucide-react';
 import { Logo } from '@/components/marca/Logo';
 import { Rosto } from '@/components/Rosto';
+import { Comparacao } from './Comparacao';
+import { Mercado } from './Mercado';
 
 export const metadata: Metadata = {
   title: 'Dona Leda | Apresentação para investidores',
@@ -14,59 +16,6 @@ const secoes = [
   { id: 'concorrencia', nome: 'Concorrência' },
   { id: 'diferenciais', nome: 'Diferenciais' },
   { id: 'validacao', nome: 'Validação' },
-];
-
-const concorrentesBrasileiros = [
-  {
-    nome: 'Naian',
-    oferta: 'Ligações diárias por IA via WhatsApp, lembretes e relatórios para familiares.',
-    diferencial: 'Parcerias comerciais com farmácias.',
-  },
-  {
-    nome: 'MemoryLife AI',
-    oferta: 'Assistente Helena, com ligações proativas, memória de conversas e lembretes.',
-    diferencial: 'Atendimento pelo telefone comum e oferta para instituições.',
-  },
-  {
-    nome: 'Ello Care',
-    oferta: 'Ligações de acompanhamento, lembretes e resumos para familiares.',
-    diferencial: 'Acompanhamento de rotinas.',
-  },
-  {
-    nome: 'ElderCare',
-    oferta: 'Plataforma de apoio a pessoas idosas, famílias e cuidadores.',
-    diferencial: 'Integração entre familiares e a rede de cuidado.',
-  },
-];
-
-const concorrentes = [
-  {
-    categoria: 'Acompanhamento por telefone',
-    referencias: [
-      { nome: 'Joy Calls', url: 'https://joycalls.ai' },
-      { nome: 'inTouch', url: 'https://intouch.family' },
-    ],
-    oferta: 'Ligações programadas pelo telefone convencional, com resumos ou avisos para a família.',
-    comparacao: 'O telefone convencional reduz a barreira de acesso. A Dona Leda aposta numa tela simples e no histórico da semana, em um aparelho com internet.',
-  },
-  {
-    categoria: 'Teleassistência no Brasil',
-    referencias: [
-      { nome: 'TeleHelp', url: 'https://telehelp.com.br' },
-      { nome: 'Tecnosenior', url: 'https://tecnosenior.com' },
-    ],
-    oferta: 'Botões de emergência, sensores ou serviços de atendimento, conforme o plano.',
-    comparacao: 'A Dona Leda atua na rotina diária. A conversa dá contexto à família sobre como foi o dia e o que pode merecer atenção.',
-  },
-  {
-    categoria: 'Aparelhos dedicados',
-    referencias: [
-      { nome: 'Komp', url: 'https://komp.family' },
-      { nome: 'ElliQ', url: 'https://elliq.com' },
-    ],
-    oferta: 'Komp simplifica chamadas de familiares. ElliQ oferece companhia e sugere atividades.',
-    comparacao: 'A Dona Leda combina a conversa proativa e o painel da família em um serviço que pode usar um celular ou tablet compatível.',
-  },
 ];
 
 const diferenciais = [
@@ -147,64 +96,11 @@ export default function PaginaDeInvestidores() {
           </figure>
         </section>
 
-        <section id="mercado" aria-labelledby="titulo-mercado" className="scroll-mt-4 bg-foreground text-background">
-          <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16">
-            <h2 id="titulo-mercado" className="text-3xl font-bold tracking-tight sm:text-5xl">Dados de mercado</h2>
-            <div className="mt-8 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="border-t border-background/30 pt-4">
-                <p className="text-5xl font-bold text-accent">32,1 mi</p>
-                <p className="mt-2 text-lg">pessoas com 60 anos ou mais no Brasil</p>
-                <a className="text-sm underline underline-offset-4" href="https://censo2022.ibge.gov.br/">IBGE · Censo 2022</a>
-              </div>
-              <div className="border-t border-background/30 pt-4">
-                <p className="text-5xl font-bold text-accent">≈ 6 mi</p>
-                <p className="mt-2 text-lg">pessoas com 60 anos ou mais que moram sozinhas no Brasil</p>
-                <a className="text-sm underline underline-offset-4" href="https://www.ibge.gov.br/estatisticas/sociais/populacao/17270-pnad-continua.html">Estimativa arredondada · PNAD Contínua 2025</a>
-              </div>
-              <div className="border-t border-background/30 pt-4">
-                <h3 className="text-xl font-bold">Público inicial</h3>
-                <p className="mt-2 text-base leading-relaxed">Famílias que acompanham à distância uma pessoa idosa que mora sozinha e tem celular ou tablet com internet. Os números do IBGE dimensionam o contexto demográfico. A demanda pagante ainda será estimada.</p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <Mercado />
 
         <section id="concorrencia" aria-labelledby="titulo-concorrencia" className="mx-auto max-w-7xl scroll-mt-4 px-5 py-12 sm:px-8 sm:py-16">
           <h2 id="titulo-concorrencia" className="text-3xl font-bold tracking-tight sm:text-5xl">Análise de concorrência</h2>
-          <p className="mt-3 max-w-2xl text-muted-foreground">As famílias já têm opções de acompanhamento, socorro e comunicação. A escolha depende de como querem participar da rotina da pessoa idosa.</p>
-          <h3 className="mt-8 text-2xl font-bold">Concorrentes diretos no Brasil</h3>
-          <div className="mt-4 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
-            {concorrentesBrasileiros.map(({ nome, oferta, diferencial }) => (
-              <article key={nome} className="grid gap-3 p-5 sm:grid-cols-[1fr_2fr_2fr] sm:gap-6 sm:p-6">
-                <h4 className="text-lg font-bold">{nome}</h4>
-                <div>
-                  <p className="text-sm font-bold text-primary">O que oferece</p>
-                  <p className="mt-1 text-base text-muted-foreground">{oferta}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-primary">Diferencial da oferta</p>
-                  <p className="mt-1 text-base text-muted-foreground">{diferencial}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-          <p className="mt-3 text-sm text-muted-foreground">Perfis brasileiros com base no levantamento fornecido. As ofertas podem mudar.</p>
-          <h3 className="mt-8 text-2xl font-bold">Outras referências de mercado</h3>
-          <div className="mt-7 grid gap-4 lg:grid-cols-3">
-            {concorrentes.map(({ categoria, referencias, oferta, comparacao }) => (
-              <article key={categoria} className="rounded-2xl border border-border bg-card p-5 sm:p-6">
-                <h4 className="text-xl font-bold">{categoria}</h4>
-                <p className="mt-2 text-base text-muted-foreground">{oferta}</p>
-                <p className="mt-4 border-t border-border pt-4 text-base">{comparacao}</p>
-                <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm font-bold text-primary">
-                  {referencias.map(({ nome, url }) => (
-                    <li key={nome}><a href={url} className="underline underline-offset-4">{nome}</a></li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-          <p className="mt-4 text-sm text-muted-foreground">Comparação qualitativa com base na pesquisa da equipe de novembro de 2026. As ofertas podem mudar.</p>
+          <Comparacao />
         </section>
 
         <section id="diferenciais" aria-labelledby="titulo-diferenciais" className="scroll-mt-4 border-y border-border bg-card">
