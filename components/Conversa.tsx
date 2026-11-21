@@ -38,6 +38,14 @@ type AgoraComParametros = typeof AgoraRTC & {
   setParameter?: (chave: string, valor: unknown) => void;
 };
 
+// Perfil de voz de baixa latência (32 kHz mono, 24 kbps) + AEC/ANS/AGC nativos do WebRTC.
+const CONFIG_DO_MICROFONE = {
+  AEC: true,
+  ANS: true,
+  AGC: true,
+  encoderConfig: 'speech_standard' as const,
+};
+
 /** A ligação em andamento, com cara de chamada de vídeo. */
 export default function Conversa({
   dados,
@@ -76,7 +84,7 @@ export default function Conversa({
   // O microfone nasce depois de `pronto` pelo mesmo motivo do canal: duas
   // faixas no StrictMode deixariam uns 3 segundos de silêncio no começo.
   const { localMicrophoneTrack, error: erroDoMicrofone } =
-    useLocalMicrophoneTrack(pronto);
+    useLocalMicrophoneTrack(pronto, CONFIG_DO_MICROFONE);
   usePublish([localMicrophoneTrack]);
   // Filtro de barulho da Agora: tira TV e conversa de fundo antes do áudio sair.
   useFiltroDeRuido(localMicrophoneTrack);

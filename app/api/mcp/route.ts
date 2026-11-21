@@ -8,6 +8,7 @@ import { FERRAMENTAS, FerramentaDesconhecida, executarFerramenta } from '@/lib/f
 import { chaveConfere } from '@/lib/servidor';
 
 export const dynamic = 'force-dynamic';
+export const preferredRegion = 'iad1';
 
 const VERSOES = ['2025-06-18', '2025-03-26', '2024-11-05'];
 

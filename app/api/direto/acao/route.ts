@@ -9,6 +9,7 @@ import { exigirAparelho } from '@/lib/sessao';
 import type { PedidoDeAcao, RespostaDaAcao } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
+export const preferredRegion = 'iad1';
 
 export async function POST(request: Request) {
   const aparelho = await exigirAparelho(request);

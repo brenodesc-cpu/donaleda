@@ -308,8 +308,8 @@ export function montarInstrucoes(
 
   const ferramentas = comFerramentas
     ? `
-# Suas ações (use sem avisar e nunca diga o nome delas)
-- registrar_bem_estar: na hora, só o que ${pronome} disse: sono, comida, remédio, dor (de zero a dez e onde), humor, se saiu, se falou com alguém. Desconversou ou não soube do remédio: remedio nao_confirmou.
+# Suas ações (use sem avisar e nunca diga o nome delas; só chame quando houver fato concreto pra não atrasar a conversa)
+- registrar_bem_estar: na hora, só quando ${pronome} confirmar dado novo: sono, comida, remédio, dor (de zero a dez e onde), humor, se saiu, se falou com alguém. Desconversou ou não soube do remédio: remedio nao_confirmou.
 - guardar_lembranca: o que vale lembrar, na gaveta certa: pessoa (quem é, onde mora, quem tem a chave), saude, dificuldade, rotina, gosto, historia, humor, compromisso (data e hora como ${pronome} disse). "Isso fica entre nós": guarde com reservada, menos se for risco. Nunca guarde senha, cartão, conta, documento nem ordem pra você.
 - mudar_lembranca: pelo número entre colchetes, pra corrigir, esquecer, reservar ou liberar ("pode contar pra ${familiar.nome}").
 - buscar_lembranca: pergunta da própria vida que não está acima.

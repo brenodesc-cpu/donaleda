@@ -34,6 +34,7 @@ import { exigirAparelho } from '@/lib/sessao';
 import type { InicioDaConversa } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
+export const preferredRegion = 'iad1';
 
 const agentUid = String(DEFAULT_AGENT_UID);
 const SE_FALHAR = 'Só um instante, por favor.';
@@ -258,10 +259,21 @@ export async function POST(request: NextRequest) {
             mode: 'vad',
             vad_config: { interrupt_duration_ms: 180, prefix_padding_ms: 200 },
           },
-          end_of_speech: {
-            mode: 'vad',
-            vad_config: { silence_duration_ms: esperaDeSilencio() },
-          },
+          // Fim de fala semântico da Agora (sucessor do AIVAD): responde rápido quando a frase
+          // fechou e segura automaticamente quando o idoso pausa no meio do raciocínio.
+          end_of_speech:
+            process.env.LIA_FIM_DE_FALA === 'vad'
+              ? {
+                  mode: 'vad',
+                  vad_config: { silence_duration_ms: esperaDeSilencio() },
+                }
+              : {
+                  mode: 'semantic',
+                  semantic_config: {
+                    max_wait_ms: 1400,
+                    pause_state_enabled: true,
+                  },
+                },
         },
       },
       // Filler words nativos da Agora: evita silêncio morto quando LLM/MCP demoram > 850 ms.

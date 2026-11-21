@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { RtcTokenBuilder, RtcRole } from 'agora-token';
 import { exigirAparelho } from '@/lib/sessao';
 
+export const dynamic = 'force-dynamic';
+export const preferredRegion = 'iad1';
+
 const EXPIRATION_TIME_IN_SECONDS = 3600;
 
 function generateChannelName(): string {

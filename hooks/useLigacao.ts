@@ -14,7 +14,11 @@ import {
   fecharNoServidor,
   ligarRtm,
   pedirToken,
+  type TokenDaAgora,
 } from './pedidosDaLigacao';
+
+/** Token pré-aquecido vale por 40 min (a Agora emite com 60 min). */
+const VALIDADE_TOKEN_PREAQUECIDO_MS = 40 * 60_000;
 
 export type FaseDaLigacao = 'parada' | 'ligando' | 'conversando' | 'erro';
 
@@ -36,16 +40,29 @@ export function useLigacao() {
   const ultimaChamada = useRef<string | undefined>(undefined);
   // Falas efêmeras em memória pra consolidar ficha/resumo mesmo se a aba fechar.
   const ultimasFalas = useRef<FalaDaSessao[]>([]);
+  // Token pré-aquecido em segundo plano: zera a espera de ~450 ms ao tocar em Ligar/Atender.
+  const tokenPreaquecido = useRef<{ valor: TokenDaAgora; criadoEm: number } | null>(null);
+
+  const preaquecerToken = useCallback(() => {
+    void pedirToken()
+      .then((valor) => {
+        tokenPreaquecido.current = { valor, criadoEm: Date.now() };
+      })
+      .catch(() => undefined);
+  }, []);
 
   const atualizarFalas = useCallback((falas: FalaDaSessao[]) => {
     ultimasFalas.current = falas;
   }, []);
 
-  // Os módulos da Agora são pesados: carregar antes deixa o toque no botão mais rápido.
+  // Os módulos da Agora e a tela da conversa são pesados: pré-carrega tudo + 1 token pronto.
   useEffect(() => {
     import('agora-rtc-react').catch(() => {});
     import('agora-rtm').catch(() => {});
-  }, []);
+    import('@/components/Conversa').catch(() => {});
+    import('@/components/ProvedorDaAgora').catch(() => {});
+    preaquecerToken();
+  }, [preaquecerToken]);
 
   const desligar = useCallback(
     (proximaFase: FaseDaLigacao, falha: MotivoDaFalha | null, falas?: FalaDaSessao[]) => {
@@ -61,8 +78,10 @@ export function useLigacao() {
       ocupado.current = false;
       if (dados) void fecharNoServidor(dados.conversaId, dados.agentId, falasParaEnviar);
       rtm?.logout().catch(() => {});
+      // Já deixa um token novo pronto pra próxima ligação abrir instantaneamente.
+      preaquecerToken();
     },
-    [dados, rtm],
+    [dados, rtm, preaquecerToken],
   );
 
   const ligar = useCallback(async (chamadaId?: string) => {
@@ -72,8 +91,16 @@ export function useLigacao() {
     setFase('ligando');
     setMotivo(null);
     try {
-      // Microfone e token da Agora rodam em paralelo pra cortar ~400 ms na abertura.
-      const [temMicrofone, token] = await Promise.all([conseguirMicrofone(), pedirToken()]);
+      // Consome o token pré-aquecido se ainda estiver fresco (< 40 min); senão busca em paralelo.
+      const cache = tokenPreaquecido.current;
+      tokenPreaquecido.current = null;
+      const tokenFresco =
+        cache && Date.now() - cache.criadoEm < VALIDADE_TOKEN_PREAQUECIDO_MS ? cache.valor : null;
+
+      const [temMicrofone, token] = await Promise.all([
+        conseguirMicrofone(),
+        tokenFresco ? Promise.resolve(tokenFresco) : pedirToken(),
+      ]);
       if (!temMicrofone) {
         ocupado.current = false;
         setMotivo('microfone');

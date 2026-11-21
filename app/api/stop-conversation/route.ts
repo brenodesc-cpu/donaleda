@@ -3,6 +3,9 @@ import { AgoraClient, Area, generateConvoAIToken } from 'agora-agents';
 import { StopConversationRequest } from '@/types/conversation';
 import { exigirAparelho } from '@/lib/sessao';
 
+export const dynamic = 'force-dynamic';
+export const preferredRegion = 'iad1';
+
 const INSTRUCAO_DE_DESPEDIDA =
   '[Aviso interno de tempo: falta cerca de um minuto pro limite desta ligação. Não interrompa a pessoa de forma brusca; na sua próxima resposta, valide com carinho o que ela acabou de contar, reforce qualquer combinado importante e encaminhe a despedida com naturalidade, dizendo quando vocês conversam de novo.]';
 

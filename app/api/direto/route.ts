@@ -15,6 +15,7 @@ import { exigirAparelho } from '@/lib/sessao';
 import type { InicioDaConversa } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
+export const preferredRegion = 'iad1';
 
 /** O mesmo silêncio do modo da Agora: 500 ms por padrão, trocado por LIA_SILENCIO_MS. */
 function esperaDeSilencio(): number {

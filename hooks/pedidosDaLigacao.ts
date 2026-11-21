@@ -16,12 +16,36 @@ export interface TokenDaAgora {
   channel: string;
 }
 
-/** Pede o microfone antes de chamar a assistente, pra não gastar a ligação se a pessoa negar. */
+/**
+ * Confere se o microfone está liberado antes de chamar a assistente.
+ * Se a permissão já foi concedida antes, evita abrir e fechar o hardware de áudio à toa (~300 ms).
+ */
 export async function conseguirMicrofone(): Promise<boolean> {
   if (!navigator.mediaDevices?.getUserMedia) return false;
   try {
+    if (typeof window !== 'undefined' && window.localStorage.getItem('donaleda:microfone-ok') === '1') {
+      return true;
+    }
+  } catch {
+    // Segue pro permissions.query / getUserMedia.
+  }
+  try {
+    if (navigator.permissions?.query) {
+      const estado = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+      if (estado.state === 'granted') return true;
+      if (estado.state === 'denied') return false;
+    }
+  } catch {
+    // WebView/Safari sem permissions.query: pede via getUserMedia.
+  }
+  try {
     const som = await navigator.mediaDevices.getUserMedia({ audio: true });
     som.getTracks().forEach((faixa) => faixa.stop());
+    try {
+      window.localStorage.setItem('donaleda:microfone-ok', '1');
+    } catch {
+      // Ignora em aba anônima cheia.
+    }
     return true;
   } catch {
     return false;

@@ -6,10 +6,15 @@
 // sem ele, sem a pessoa perceber nada. NEXT_PUBLIC_LIA_FILTRO_DE_RUIDO=0 desliga.
 
 import { useEffect } from 'react';
+import { Capacitor } from '@capacitor/core';
 import AgoraRTC, { type IMicrophoneAudioTrack } from 'agora-rtc-react';
 import type { AIDenoiserExtension, IAIDenoiserProcessor } from 'agora-extension-ai-denoiser';
 
-const LIGADO = process.env.NEXT_PUBLIC_LIA_FILTRO_DE_RUIDO !== '0';
+// Na WebView mobile (Capacitor Android/iOS), o Chromium/WebKit já aplica AEC+NS nativo em C++.
+// Rodar o denoiser em WASM dentro da WebView adiciona +50 a 120 ms de latência local;
+// por isso fica ligado no desktop e desligado no app nativo (forçável com =1).
+const FORCADO = process.env.NEXT_PUBLIC_LIA_FILTRO_DE_RUIDO;
+const LIGADO = FORCADO === '1' || (FORCADO !== '0' && !Capacitor.isNativePlatform());
 
 // A extensão é registrada uma vez por página; registrar de novo dá erro.
 let extensao: AIDenoiserExtension | null = null;
