@@ -4,6 +4,7 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 | Data | Decisão | Por quê |
 |---|---|---|
+| 21/11/2026 | A Dona Leda começa vendendo pra empresa: o residencial sênior paga por morador, a família acompanha, e a venda direta pra família vira a segunda aposta. O sonho, a definição, a frase do dinheiro e a assinatura seguem iguais | Decisão do Breno depois de uma conversa do time. O filho pagar todo mês era a premissa mais arriscada, um contrato traz muitos idosos de uma vez e, lá fora, quem paga mais é empresa e governo. A conversa não ficou escrita, e o ajuste assumiu o residencial como a primeira empresa por ser o único contato do time |
 | 21/11/2026 | A página inicial mostra a landing pra quem chega sem aparelho ligado, com os botões "Sou da família" e "Este aparelho vai receber as ligações" no topo. Aparelho ligado continua abrindo direto a tela do idoso, e o app de iPhone e Android continua na tela de boas-vindas | O Breno decidiu ("Já agora"). Quem abre o endereço pela primeira vez, como a banca, vê o que a Dona Leda é, e as famílias dos testes continuam achando os dois caminhos |
 | 21/11/2026 | A landing page é a direção "Produto em cena", em `/landing`: a ligação toca na tela e o painel da família aparece conforme a pessoa rola | O Breno escolheu entre três direções. A página inicial continua sendo o aparelho do idoso |
 | 21/11/2026 | Remédio tomado a mais (duas vezes, em dobro, remédio trocado) vira aviso urgente por regra fixa, e as regras de golpe, queda, derrame e vontade de morrer passaram a pegar as 11 frases da bateria de ataque que escapavam | A bateria de ataque mostrou que motoboy buscando cartão, código de seis dígitos, "melhor sem mim" e boca torta com braço fraco passavam sem aviso. Um aviso desses não pode depender de o modelo decidir avisar |
@@ -31,6 +32,8 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 ## Em aberto
 
-- Quem paga no pitch: o filho ou a filha que mora longe compra primeiro, e o residencial sênior é o caminho de venda. Esse caminho ainda depende de uma conversa do Vitor com os sócios da rede de residenciais.
+- A primeira empresa: o ajuste de 21/11 assumiu o residencial sênior, e falta o Breno confirmar. A conversa do Vitor com os sócios da rede de residenciais ainda não aconteceu.
+- A landing e o texto do problema falam com a família e do idoso que mora sozinho em casa. Falta decidir se a landing passa a falar primeiro com o residencial.
+- O que construir pra atender uma casa inteira (a lista está em `proposta-de-valor.md`, em "O que muda no produto").
 - O preço.
 - Avatar em vídeo de verdade ou o rosto desenhado. O código já aceita avatar da Anam ou da HeyGen pela Agora (`LIA_AVATAR`), sem teste ainda, porque falta a conta num dos dois.

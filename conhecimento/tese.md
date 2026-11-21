@@ -9,9 +9,9 @@ Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (40% dos 1
 ## Pra quem
 
 - **Quem usa:** a pessoa idosa que mora sozinha ou passa o dia sozinha. Ela só precisa atender.
-- **Quem contrata, no primeiro produto:** o filho ou a filha que mora longe. É o mesmo comprador do botão de emergência.
-- **Por onde vende:** o residencial sênior, pelo contato do Vitor. Ele entrega a família sem gasto com anúncio.
-- **Quem pode contratar depois:** plano de saúde de idoso e prefeitura, que já falam a língua do envelhecimento ativo. Eles compram resultado medido, então entram depois de um piloto com dado próprio.
+- **Quem contrata primeiro (ajuste de 21/11, às 15h):** o residencial sênior, que paga por morador e oferece a Dona Leda como serviço da casa. O caminho é o contato do Vitor. A família do morador acompanha pelo painel.
+- **Quem pode contratar depois:** empresa de teleassistência e franquia de cuidadores, que já cobram a família do idoso que mora em casa, e plano de saúde de idoso e prefeitura, que compram resultado medido num piloto.
+- **A família, direto:** o filho ou a filha que mora longe continua podendo contratar pelo site, como segunda aposta. É o mesmo comprador do botão de emergência.
 
 ## A solução
 
@@ -41,7 +41,7 @@ Em aberto. Hipóteses do brainstorm de 21/11:
 - **Residencial sênior paga** e oferece aos moradores como um serviço a mais. Aqui o remédio já é cuidado pela equipe, então a Dona Leda entra como companhia e como aviso à família.
 - **Médico ou hospital indica ao paciente.** Exige um médico responsável, que o time não tem hoje.
 
-Na narrativa aprovada em 21/11/2026, quem compra primeiro é o filho ou a filha que mora longe, e o residencial sênior é o caminho de venda, porque entrega a família sem gasto com anúncio. Plano de saúde e prefeitura vêm depois. Os detalhes estão em `proposta-de-valor.md`.
+Desde o ajuste de 21/11/2026, às 15h, a Dona Leda começa vendendo pra empresa: quem compra primeiro é o residencial sênior, por morador, e a família acompanha. Teleassistência, plano de saúde e prefeitura vêm depois, e a venda direta pra família fica como segunda aposta. O raciocínio está em `proposta-de-valor.md`, na seção "Por onde a gente começa".
 
 ### Quanto custa a conversa e quanto cobrar (conta de 21/11/2026, à tarde)
 
@@ -90,6 +90,8 @@ A primeira metade da frase foi ajustada pelo Breno em 21/11. A aposentadoria mé
 **Recomendação**
 
 O Essencial a R$ 229,90 pra família e o Residencial a R$ 179,90 por morador, os dois com 150 minutos por mês. São os planos que cumprem a frase do décimo contra o cuidador de 12 horas e dão lucro no teto mesmo no Gemini, e o Essencial cai na faixa que a verificação calculou (R$ 220 a 250). O Companhia espera a medida do uso real e a compressão ligada. A decisão é da Stephanie e do Breno.
+
+Com o ajuste de 21/11 (começar pela empresa), o plano que abre a venda passou a ser o Residencial, e ele tem a margem mais apertada da tabela: R$ 13 por morador no teto com o Gemini e R$ 63 no modo de três peças. O preço do Residencial virou a decisão de preço mais importante.
 
 **Antes de falar disso pra banca**
 - O teto de minutos ainda não existe no código: a ligação só termina sozinha 2 minutos depois de todo mundo sair da sala.
