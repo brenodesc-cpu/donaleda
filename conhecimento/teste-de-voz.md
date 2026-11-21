@@ -4,7 +4,7 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 
 ## Antes de começar
 
-- **Endereço:** https://donaleda.vercel.app, no ar até as 16h. O túnel do Mac não serve pro teste, porque o endereço dele troca sozinho.
+- **Endereço:** https://donaleda.vercel.app, no ar desde as 12h45 de 21/11. O túnel do Mac não serve pro teste, porque o endereço dele troca sozinho.
 - **Preparar:** no notebook, entre em `/entrar`, crie uma conta e escolha "Ver com um exemplo". Em `/familia/aparelho`, mande o link pro celular de teste pelo WhatsApp e abra direto do WhatsApp, como a avó vai abrir às 20h: o celular fica pronto sozinho. Se o microfone não funcionar aberto pelo WhatsApp, anote como falha.
 - **Três pessoas:** quem fala (faz o papel do idoso), quem cronometra e anota, e quem olha o painel da família.
 - **Aparelho do idoso:** um celular apoiado, volume alto, numa sala sem barulho. O painel da família fica num notebook.
