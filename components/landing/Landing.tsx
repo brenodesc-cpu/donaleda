@@ -9,7 +9,7 @@
 import Link from 'next/link';
 import { HeartHandshake, Smartphone } from 'lucide-react';
 import { Logo } from '@/components/marca/Logo';
-import { AparelhoDoTopo, CamadaEmAbas, CenaDaLigacao } from '@/components/landing/CenaDaLigacao';
+import { AparelhoDoTopo, CenaDaLigacao } from '@/components/landing/CenaDaLigacao';
 import { Disco } from '@/components/landing/Disco';
 import {
   ASSINATURA,
@@ -105,20 +105,14 @@ export function Landing({ comCaminhos = false }: LandingProps) {
             <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
               <BotaoPrincipal tom="casca" />
               <BotaoDeContato tom="escuro" mensagem={MENSAGEM_DO_CONTATO} />
-              <a
-                href="#como-funciona"
-                className="flex min-h-11 items-center text-lg font-semibold underline hover:no-underline sm:ml-1"
-              >
-                Ver como funciona
-              </a>
             </div>
           </div>
           <AparelhoDoTopo />
         </section>
 
         <section id="como-funciona" aria-labelledby="cena-titulo" className={`${LARGURA} pb-20 lg:pb-10`}>
-          <h2 id="cena-titulo" className={`${TITULO} max-w-[18ch]`}>
-            Ela liga, a pessoa atende e você fica sabendo
+          <h2 id="cena-titulo" className={TITULO}>
+            Como funciona
           </h2>
           <div className="mt-14 lg:mt-4">
             <CenaDaLigacao />
@@ -127,18 +121,6 @@ export function Landing({ comCaminhos = false }: LandingProps) {
       </div>
 
       <main>
-        <section aria-labelledby="camada-titulo" className={`${LARGURA} py-20 lg:py-28`}>
-          <h2 id="camada-titulo" className={TITULO}>
-            O que ela faz hoje
-          </h2>
-          <p className="mt-4 max-w-[40rem] text-xl leading-relaxed text-muted-foreground">
-            Escolha uma necessidade pra ver o que a Dona Leda já faz em cada uma.
-          </p>
-          <div className="mt-9">
-            <CamadaEmAbas />
-          </div>
-        </section>
-
         <section aria-labelledby="dinheiro-titulo" className="bg-accent text-accent-foreground">
           <div className={`${LARGURA} grid gap-12 py-20 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-28`}>
             <h2 id="dinheiro-titulo" className={TITULO}>
@@ -165,12 +147,10 @@ export function Landing({ comCaminhos = false }: LandingProps) {
                 </div>
               </div>
               <p className="mt-8 text-lg leading-relaxed">
-                Por mês. 62,5% de quem recebe do INSS ganha um salário mínimo, de R$ 1.621, e só o piso do salário de
-                um cuidador com carteira é de R$ 1.760,44.
+                Por mês. 62,5% de quem recebe do INSS ganha um salário mínimo, de R$ 1.621.
               </p>
-              <p className="mt-4 text-base leading-relaxed">
-                Fontes: <FonteDoNumero fonte={FONTES.cidesp} />; <FonteDoNumero fonte={FONTES.inss} />;{' '}
-                <FonteDoNumero fonte={FONTES.caged} />.
+              <p className="mt-3 text-base leading-relaxed">
+                Fontes: <FonteDoNumero fonte={FONTES.cidesp} />; <FonteDoNumero fonte={FONTES.inss} />.
               </p>
             </div>
           </div>
@@ -180,13 +160,13 @@ export function Landing({ comCaminhos = false }: LandingProps) {
           <h2 id="confianca-titulo" className={TITULO}>
             O que ela faz e o que ela não faz
           </h2>
-          <ul className="mt-12 grid gap-x-14 gap-y-10 md:grid-cols-2">
+          <ul className="mt-10 grid gap-x-14 md:grid-cols-2">
             {CONFIANCA.map((regra) => (
-              <li key={regra.titulo} className="border-t-2 border-foreground pt-5">
-                <h3 className="font-titulo text-[1.625rem] font-bold leading-tight tracking-[-0.01em] sm:text-[1.75rem]">
-                  {regra.titulo}
-                </h3>
-                <p className="mt-3 text-lg leading-relaxed text-muted-foreground sm:text-xl">{regra.texto}</p>
+              <li
+                key={regra}
+                className="border-t-2 border-foreground py-5 font-titulo text-[1.5rem] font-bold leading-tight tracking-[-0.01em] sm:text-[1.75rem]"
+              >
+                {regra}
               </li>
             ))}
           </ul>
@@ -207,19 +187,8 @@ export function Landing({ comCaminhos = false }: LandingProps) {
               />
             </div>
 
-            <ul className="mt-12 grid gap-x-10 gap-y-9 md:grid-cols-3">
-              {CASAS.itens.map((item) => (
-                <li key={item.titulo} className="border-t-2 border-foreground pt-5">
-                  <h3 className="font-titulo text-[1.625rem] font-bold leading-tight tracking-[-0.01em]">
-                    {item.titulo}
-                  </h3>
-                  <p className="mt-3 text-lg leading-relaxed sm:text-xl">{item.texto}</p>
-                </li>
-              ))}
-            </ul>
-
             {/* A tela de verdade, com pessoas de exemplo. Mora em /telas/ver/casa, com os botões travados. */}
-            <figure className="mt-12">
+            <figure className="mt-10">
               <div className="overflow-hidden rounded-2xl border-[10px] border-[#1F1308] bg-background shadow-[0_30px_60px_-30px_rgba(51,32,15,0.65)]">
                 <iframe
                   src="/telas/ver/casa"

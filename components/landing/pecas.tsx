@@ -151,9 +151,6 @@ export function Rodape({ tom = 'claro', className }: { tom?: 'claro' | 'escuro';
         <Link href="/privacidade" className="underline hover:no-underline">
           Privacidade
         </Link>
-        <Link href="/entrar" className="underline hover:no-underline">
-          Entrar
-        </Link>
       </p>
     </footer>
   );

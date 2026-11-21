@@ -71,41 +71,12 @@ export const ASSINATURA = 'Dona Leda: longevidade com qualidade de vida.';
 export const SAUDACAO_DE_EXEMPLO =
   'Bom dia, dona Helena! Aqui é a Dona Leda, a assistente virtual que a sua filha Marina contratou pra conversar com a senhora todo dia. Como a senhora está hoje?';
 
-// --- A camada de cuidado, com o que ela faz hoje ---
-
-export const CAMADA = [
-  {
-    nome: 'Companhia',
-    hoje: 'Liga todo dia na hora marcada, ou quando a família pede, e conversa lembrando do que a pessoa contou antes: o neto, a consulta, o joelho.',
-  },
-  {
-    nome: 'Segurança',
-    hoje: 'Avisa a família quando a pessoa fala em queda, dor no peito ou num pedido de dinheiro ou senha, e quando ela não atende. A Dona Leda nunca pede dinheiro.',
-  },
-  {
-    nome: 'Saúde',
-    hoje: 'Pergunta do sono, da comida, do remédio e da dor, anota, e avisa a família de dor forte ou de remédio não tomado.',
-  },
-  {
-    nome: 'Comunicação',
-    hoje: 'A família vê o dia, a semana, os avisos e o resumo da conversa no painel, e pode mandar ela ligar na hora. A pessoa também liga pra Dona Leda quando quiser.',
-  },
-  {
-    nome: 'Rotina',
-    hoje: 'Liga nos horários que a família marcou.',
-  },
-] as const;
-
 // --- O dinheiro: a conta do cuidador ---
 
 export const FONTES = {
   inss: {
     nome: 'INSS, em reportagem do jornal O Povo, 2026',
     url: 'https://www.opovo.com.br/trends/teto-do-inss-chega-a-r-8-475-em-2026-mas-a-maioria-dos-aposentados-esta-muito-longe-desse-valor/',
-  },
-  caged: {
-    nome: 'Caged, pelo site Salário',
-    url: 'https://www.salario.com.br/profissao/cuidador-de-idosos-cbo-516210',
   },
   cidesp: {
     nome: 'Cidesp, maio de 2026',
@@ -118,65 +89,27 @@ export type Fonte = (typeof FONTES)[keyof typeof FONTES];
 // --- Confiança ---
 
 export const CONFIANCA = [
-  {
-    titulo: 'Ela sempre diz que é assistente virtual',
-    texto:
-      'Em toda ligação ela se apresenta como assistente virtual. O rosto é um desenho, e ela nunca finge ser parente, médica ou banco.',
-  },
-  {
-    titulo: 'A conversa inteira não fica guardada',
-    texto:
-      'Ficam a ficha do dia, as lembranças que ajudam a puxar assunto, os avisos e um resumo curto. A fala só fica registrada dentro de um aviso de segurança, e a família apaga tudo quando quiser.',
-  },
-  {
-    titulo: 'Queda e golpe avisam a família por regra fixa',
-    texto:
-      'Quando a pessoa fala em queda, dor no peito ou num pedido de dinheiro ou senha, o aviso sai por uma regra escrita no programa. Ele nunca depende só de a inteligência artificial decidir avisar.',
-  },
-  {
-    titulo: 'Ela não substitui médico',
-    texto:
-      'A Dona Leda não dá diagnóstico e não muda remédio. Em emergência, ela orienta ligar pro SAMU no 192 e avisa a família.',
-  },
+  'Ela sempre diz que é assistente virtual',
+  'A conversa inteira não fica guardada',
+  'Queda e golpe avisam a família por regra fixa',
+  'Ela não substitui médico',
 ] as const;
 
-// --- Pra residenciais ---
+// --- Pra casas de repouso parceiras ---
 
-// As casas de repouso parceiras, tirado de conhecimento/proposta-de-valor.md
-// ("Quem paga e quem indica"): a família contrata, e a casa indica. Só entra o que já
-// existe. O convite pra família liberar a casa a acompanhar o idoso ainda não existe
-// no código, então aparece como parte da fase de teste.
+// Tirado de conhecimento/proposta-de-valor.md ("Quem paga e quem indica"): a família
+// contrata, e a casa indica. O convite pra família liberar a casa a acompanhar o idoso
+// ainda não existe no código, então aparece como parte da fase de teste.
 export const CASAS = {
   titulo: 'Pra casas de repouso parceiras',
   texto:
-    'Toda semana chegam à casa famílias que ainda não querem levar o pai ou a mãe. A casa parceira indica a Dona Leda a elas, e o idoso continua na casa dele, com uma ligação combinada todo dia.',
-  legendaDaTela: 'A tela "Todos os moradores", com oito pessoas de exemplo.',
-  itens: [
-    {
-      titulo: 'A casa indica',
-      texto: 'A família que procura a casa conhece a Dona Leda ali e contrata direto, pela própria conta.',
-    },
-    {
-      titulo: 'A casa acompanha quem indicou',
-      texto:
-        'A tela "Todos os moradores" mostra num lugar só quem tem aviso novo, quem ainda não conversou hoje e quem conversou sem aviso. O convite pra família liberar esse acompanhamento entra na fase de teste.',
-    },
-    {
-      titulo: 'Serve aos moradores lúcidos',
-      texto:
-        'A mesma conta acompanha os moradores da casa que usam celular e atendem a chamada de vídeo. O remédio continua com a equipe.',
-    },
-  ],
+    'A casa indica a Dona Leda às famílias que ainda não querem levar o pai ou a mãe, e acompanha quem indicou na tela abaixo. O convite pra família liberar esse acompanhamento entra na fase de teste.',
+  legendaDaTela: 'Tela "Todos os moradores", com pessoas de exemplo.',
 } as const;
 
 // --- Perguntas frequentes ---
 
 export const PERGUNTAS = [
-  {
-    pergunta: 'A Dona Leda é uma pessoa?',
-    resposta:
-      'A Dona Leda é uma assistente virtual, um programa de computador, e ela diz isso em toda ligação. O rosto que aparece na tela é um desenho.',
-  },
   {
     pergunta: 'Meu pai ou minha mãe precisa saber mexer no celular?',
     resposta:
@@ -195,7 +128,7 @@ export const PERGUNTAS = [
   {
     pergunta: 'Ela substitui o médico ou o socorro?',
     resposta:
-      'A Dona Leda liga no horário combinado, pergunta como a pessoa está e avisa a família. Quem age é a família. Ela não dá diagnóstico, não muda remédio e não é serviço de emergência: numa urgência, orienta ligar pro SAMU no 192 e avisa a família.',
+      'A Dona Leda liga no horário combinado, pergunta como a pessoa está e avisa a família. Quem age é a família. Ela não dá diagnóstico, não muda remédio e não é serviço de emergência: numa urgência, orienta ligar pro SAMU no 192.',
   },
   {
     pergunta: 'Ela pede dinheiro ou senha?',
@@ -204,23 +137,12 @@ export const PERGUNTAS = [
   },
   {
     pergunta: 'Quanto custa?',
-    resposta:
-      'Menos de um décimo do preço de um cuidador, que hoje custa de R$ 2.800 a 4.500 por mês (Cidesp, maio de 2026). O valor dos planos ainda está sendo definido.',
+    resposta: 'O valor dos planos ainda está sendo definido. A referência é menos de um décimo do preço de um cuidador.',
   },
   {
     pergunta: 'Como uma casa de repouso vira parceira?',
     resposta:
       'Falando com o time. A parceria está em fase de teste: a casa indica a Dona Leda às famílias que a procuram, e cada família contrata pela própria conta.',
-  },
-  {
-    pergunta: 'O que a casa parceira acompanha?',
-    resposta:
-      'Na tela "Todos os moradores", a casa vê num lugar só as pessoas que acompanha, com os avisos e a ficha do dia de cada uma. O convite pra família liberar esse acompanhamento entra na fase de teste.',
-  },
-  {
-    pergunta: 'A casa pode usar com os próprios moradores?',
-    resposta:
-      'Pode, com os moradores lúcidos. Alguém da equipe deixa o aparelho pronto uma vez e fica ao lado na primeira ligação. O remédio continua com a equipe da casa.',
   },
 ] as const;
 
