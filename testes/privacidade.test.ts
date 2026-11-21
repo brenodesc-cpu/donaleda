@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { abrirConversa, fecharConversa, montarPainel } from '@/lib/dados';
 import { baseDeExemplo } from '@/lib/exemplo';
-import { montarSaudacao } from '@/lib/persona';
+import { montarInstrucoes, montarSaudacao } from '@/lib/persona';
 import { VERSAO_DO_AVISO_DE_PRIVACIDADE } from '@/lib/privacidade';
 import { frasesDoAvisoDePrivacidade } from '@/components/familia/Lembrancas';
 
@@ -22,6 +22,10 @@ describe('aviso de privacidade da primeira ligação', () => {
     expect(saudacao).toContain('recebe um resumo');
     expect(saudacao).toContain('é só pedir que eu esqueço');
     expect(saudacao.trim().endsWith('Como a senhora está hoje?')).toBe(true);
+  });
+
+  it('sai da instrução, porque a saudação fixa já fala', () => {
+    expect(montarInstrucoes(novaIdosa(), AGORA, true)).not.toContain('# Primeira conversa');
   });
 
   it('não se repete depois da primeira conversa', () => {

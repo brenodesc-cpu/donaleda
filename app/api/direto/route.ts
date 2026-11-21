@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { abrirConversa, lerBase, mudarBase } from '@/lib/dados';
 import { calcularCompressao, estimarTokens, MINUTOS_ANTES_DE_COMPRIMIR, montarAbertura } from '@/lib/direto';
 import { FERRAMENTAS } from '@/lib/ferramentas';
+import { podeComecarConversa, TETO_NORMAL_MS, tetoDaConversaMs } from '@/lib/limiteDoDia';
 import { pedirPasseDoGemini } from '@/lib/passeDoGemini';
 import { montarInstrucoes, montarSaudacao, type OrigemDaLigacao } from '@/lib/persona';
 import { exigirAparelho } from '@/lib/sessao';
@@ -51,6 +52,14 @@ export async function POST(request: NextRequest) {
       ? base.chamadas.find((c) => c.id === body.chamada_id)
       : undefined;
     const origem: OrigemDaLigacao = chamada ? chamada.motivo : 'idoso';
+    // Os minutos de conversa de hoje acabaram: só a ligação pedida pela família passa.
+    if (!podeComecarConversa(base, origem, agora)) {
+      return NextResponse.json(
+        { error: 'limite_do_dia', mensagem: 'Os minutos de conversa de hoje acabaram.' },
+        { status: 409 },
+      );
+    }
+    const tetoMs = tetoDaConversaMs(base, origem, TETO_NORMAL_MS, agora);
     const saudacao = montarSaudacao(base, agora, origem);
     const modelo = process.env.LIA_MODELO_GEMINI?.trim() || 'models/gemini-3.8-live';
 
@@ -74,6 +83,7 @@ export async function POST(request: NextRequest) {
       ferramentas: true,
       avatar: false,
       modo: 'direto',
+      teto_ms: tetoMs,
       direto: {
         passe: passe.token,
         abertura: montarAbertura({
