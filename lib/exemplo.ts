@@ -66,7 +66,7 @@ export function baseDeExemplo(agora: Date = new Date(), idosoId = 'helena'): Bas
       lembranca('ex-8', 'historia', 'Foi costureira por 30 anos em Ribeirão Preto.'),
       lembranca('ex-9', 'humor', 'Domingo é o dia mais difícil desde que o marido morreu.'),
       lembranca('ex-10', 'compromisso', 'Consulta com o cardiologista, o doutor Renato.', { data: quinta, hora: '14:00', origem: 'familia' }),
-      lembranca('ex-11', 'compromisso', 'Aniversário do neto Pedro.', { sobre: 'Pedro', data: somarDias(hoje, 5) }),
+      lembranca('ex-11', 'compromisso', 'Aniversário de 10 anos do neto Pedro.', { sobre: 'Pedro', data: somarDias(hoje, 5) }),
       lembranca('ex-12', 'humor', 'Anda preocupada com o aluguel e não quer que a filha saiba.', { reservada: true }),
     ],
     alertas: [],
