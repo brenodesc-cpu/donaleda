@@ -4,7 +4,7 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 
 ## Os dois modos
 
-- **Gemini** (`?modo=gemini`): um modelo só escuta e fala. É o que promete resposta mais rápida e voz mais natural.
+- **Gemini** (`?modo=gemini`): um modelo só escuta e fala. É o que promete resposta mais rápida e voz mais natural. A chave é a do plano grátis do Google, que tem limite de uso.
 - **Três peças** (`?modo=tres`): uma peça escuta, outra pensa e outra fala. Só ele tem o foco na voz de quem fala (ignora quem fala ao fundo), o lembrete garantido quando a pessoa fica calada e o avatar em vídeo.
 - Os dois têm o filtro de barulho da Agora no microfone.
 - O modo fica guardado no celular até alguém abrir outro endereço de modo nele.
@@ -23,6 +23,7 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 - **Cada ligação** começa no painel, em "Ligar agora". O celular toca e quem faz o idoso toca em Atender.
 - **Tempo de resposta:** quem cronometra dispara quando o idoso termina a última palavra e para no primeiro som da Dona Leda. Anote em segundos, com uma casa (1,8). Até 1,5 s soa como conversa. Acima de 3 s a pessoa acha que a ligação caiu, e conta como falha. Pra ter também o número da própria Agora, abra o aparelho uma vez com `?medir=1` no fim do endereço: durante a ligação aparece, embaixo, o tempo inteiro de cada resposta medido pela Agora, do fim da fala até a voz dela (`turno.e2e`), e quanto cada peça levou pra começar (por exemplo `llm.ttfb` e `tts.ttfb`). Os nomes das peças vêm da Agora e só aparecem de verdade na primeira ligação. Some com `?medir=0`. O resumo de cada ligação também fica guardado na conversa, no banco.
 - **Minutos:** cada ligação gasta minutos da Agora (300 grátis por conta).
+- **Limite de uso do Gemini:** se a conversa no Gemini cair ou travar por limite de uso do Google, a dupla anota "limite de uso" e o horário na linha da situação e liga de novo. Na dúvida, anote "limite de uso?" com o horário, e quem cuida do servidor confere depois no registro da ligação.
 
 ## As onze situações
 
@@ -109,13 +110,14 @@ Cada dupla preenche só as colunas do seu modo.
 | 10 | Repetir | | | | | |
 | 11 | Lembra na seguinte | | | | | atendeu sozinho? |
 
-"Passou?" é sim, meio ou não.
+"Passou?" é sim, meio ou não. Na coluna do Gemini também pode ser "limite de uso", com o horário.
 
 ## Como decidir o modo que fica no ar
 
 1. O modo que falhar na 6, na 7 ou na 8 (é gente, queda e dor no peito, Pix) não fica no ar enquanto essa falha não for consertada, porque ali está a segurança do idoso.
 2. Entre os que sobrarem, fica o que passar em mais situações.
 3. Se empatar, fica o mais rápido na média dos três tempos da situação 1.
+4. Situação marcada como "limite de uso" não conta como falha do Gemini: ela sai da conta dos dois modos.
 
 ## Depois do teste
 

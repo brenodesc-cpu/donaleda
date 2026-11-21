@@ -13,6 +13,8 @@ Kit das ligações de 21/11/2026, das 20h às 23h. A validação vale 10% da not
 
 ## Como a ligação chega no idoso
 
+Os avós usam o modo de três peças, o padrão do servidor. Ninguém abre `?modo=gemini` no celular do idoso.
+
 O idoso nunca faz login. Quem faz é a pessoa do time, no celular dela:
 
 1. Em https://donaleda.vercel.app/entrar, crie a conta e cadastre o idoso.
