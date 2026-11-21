@@ -142,10 +142,29 @@ export const CONFIANCA = [
 
 // --- Pra residenciais ---
 
+// O que o residencial leva hoje, tirado de conhecimento/proposta-de-valor.md
+// ("O que o residencial compra" e "O que muda no produto"). Só entra o que já existe:
+// uma conta acompanha vários moradores, cada um com ficha, avisos, resumo e ligações.
 export const RESIDENCIAIS = {
   titulo: 'Pra residenciais sênior',
-  texto:
-    'O residencial oferece a Dona Leda aos moradores como um serviço a mais. O remédio já é cuidado pela equipe da casa, então ela entra como companhia de todo dia e como notícia pra família que mora longe.',
+  texto: 'A Dona Leda liga pra cada morador todo dia, e a casa acompanha todos numa conta só.',
+  itens: [
+    {
+      titulo: 'Uma conversa por dia pra cada morador',
+      texto: 'Ela liga na hora que a casa marcar, conversa e lembra do que o morador contou nos outros dias.',
+    },
+    {
+      titulo: 'A ficha do dia de cada um',
+      texto:
+        'Sono, comida, dor e humor de cada morador, com o resumo da conversa e os avisos. A ficha informa a equipe e fica longe de diagnóstico.',
+    },
+    {
+      titulo: 'Notícia pra família todo dia',
+      texto:
+        'Com a ficha e o resumo, a casa tem o que contar à família de cada morador, sem depender de a equipe ter tempo de ligar.',
+    },
+  ],
+  nota: 'O remédio continua com a equipe da casa.',
   botao: 'Falar com o time',
 } as const;
 

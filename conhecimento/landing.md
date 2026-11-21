@@ -38,9 +38,10 @@ A página usa a marca Gema de `marca.md`: Café e Casca, o amarelo só em área 
 
 - **Topo, em fundo Café:** o sonho, a definição, o botão e um celular desenhado com a tela da ligação tocando. O botão Atender do desenho funciona e leva pra tela da conversa.
 - **Como funciona:** cinco passos (ela liga, a pessoa atende, o dia, os avisos, a semana). Na tela larga o celular fica parado e troca de tela conforme a pessoa rola. No celular de quem lê, cada passo traz a sua tela.
+- **Pra residenciais sênior, em fundo Manteiga, logo depois de "como funciona":** subiu pra cá em 21/11/2026, por decisão do Breno ("sim, sobe a parte do residencial"), porque o residencial passou a ser quem compra primeiro. Diz o que a casa leva hoje: uma conversa por dia pra cada morador, a ficha do dia de cada um e notícia pra família, com o botão "Falar com o time". Só entra o que o produto já faz: uma conta acompanha vários moradores, um de cada vez. A tela da casa com todos juntos e o convite pra família de cada morador ainda não existem, então ficam fora do texto.
 - **A camada de cuidado:** uma aba por necessidade, com o que ela faz hoje.
 - **O dinheiro, em fundo amarelo:** a frase aprovada e duas barras, a do cuidador de 12 horas e a da Dona Leda.
-- **Depois:** confiança, residenciais, perguntas frequentes e o botão de novo.
+- **Depois:** confiança, perguntas frequentes e os botões de novo.
 
 As telas do celular desenhado repetem os textos das telas reais (`components/ChamadaTocando.tsx`, `components/familia/formatos.ts` e `lib/regras.ts`) e usam a pessoa de exemplo de `lib/exemplo.ts`, com a marca "Exemplo". Quando uma tela real mudar de texto, o desenho em `components/landing/Aparelho.tsx` muda junto.
 

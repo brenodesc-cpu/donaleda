@@ -122,6 +122,36 @@ export function Landing({ comCaminhos = false }: LandingProps) {
       </div>
 
       <main>
+        <section aria-labelledby="residenciais-titulo" className="bg-secondary">
+          <div className={`${LARGURA} py-20 lg:py-28`}>
+            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
+              <div>
+                <h2 id="residenciais-titulo" className={TITULO}>
+                  {RESIDENCIAIS.titulo}
+                </h2>
+                <p className="mt-4 max-w-[40rem] text-xl leading-relaxed sm:text-[1.375rem]">{RESIDENCIAIS.texto}</p>
+              </div>
+              <BotaoDeContato
+                mensagem={MENSAGEM_DO_RESIDENCIAL}
+                className="border-primary bg-primary text-primary-foreground hover:bg-[#4A2F17]"
+              >
+                {RESIDENCIAIS.botao}
+              </BotaoDeContato>
+            </div>
+            <ul className="mt-12 grid gap-x-10 gap-y-9 md:grid-cols-3">
+              {RESIDENCIAIS.itens.map((item) => (
+                <li key={item.titulo} className="border-t-2 border-foreground pt-5">
+                  <h3 className="font-titulo text-[1.625rem] font-bold leading-tight tracking-[-0.01em]">
+                    {item.titulo}
+                  </h3>
+                  <p className="mt-3 text-lg leading-relaxed sm:text-xl">{item.texto}</p>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-9 text-lg leading-relaxed sm:text-xl">{RESIDENCIAIS.nota}</p>
+          </div>
+        </section>
+
         <section aria-labelledby="camada-titulo" className={`${LARGURA} py-20 lg:py-28`}>
           <h2 id="camada-titulo" className={TITULO}>
             O que ela cuida hoje
@@ -185,18 +215,6 @@ export function Landing({ comCaminhos = false }: LandingProps) {
               </li>
             ))}
           </ul>
-        </section>
-
-        <section aria-labelledby="residenciais-titulo" className="bg-secondary">
-          <div className={`${LARGURA} grid gap-8 py-16 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-16 lg:py-20`}>
-            <div>
-              <h2 id="residenciais-titulo" className="font-titulo text-4xl font-extrabold tracking-[-0.02em]">
-                {RESIDENCIAIS.titulo}
-              </h2>
-              <p className="mt-4 max-w-[42rem] text-xl leading-relaxed">{RESIDENCIAIS.texto}</p>
-            </div>
-            <BotaoDeContato mensagem={MENSAGEM_DO_RESIDENCIAL}>{RESIDENCIAIS.botao}</BotaoDeContato>
-          </div>
         </section>
 
         <section aria-labelledby="perguntas-titulo" className={`${LARGURA} py-20 lg:py-28`}>
