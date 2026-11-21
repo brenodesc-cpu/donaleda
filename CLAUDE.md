@@ -19,6 +19,7 @@ Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta
 | [conhecimento/ideias.md](conhecimento/ideias.md) | Ideias e conselhos de mentores que ainda não viraram decisão | Ao pensar no que vem depois ou montar o pitch |
 | [conhecimento/teste-de-voz.md](conhecimento/teste-de-voz.md) | O roteiro de teste da conversa por voz e as falhas achadas | Antes de mexer na voz, na escuta ou no tempo de resposta |
 | [conhecimento/validacao.md](conhecimento/validacao.md) | O kit das ligações com idosos de verdade e os resultados sem nome | Ao montar a validação ou o pitch |
+| [conhecimento/verificacao.md](conhecimento/verificacao.md) | A Dona Leda conferida contra o regulamento: regras que eliminam, nota provável por critério, as ações que mais sobem a nota e a análise do Gemini Live | Ao priorizar o que falta até a entrega |
 
 Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da base no mesmo envio do código. Escreva o que vale hoje, com a data.
 
