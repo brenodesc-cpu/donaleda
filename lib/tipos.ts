@@ -207,6 +207,8 @@ export interface PainelDaFamilia {
   chamadaTocando: Chamada | null;
   /** As últimas ligações, da mais nova pra mais antiga. */
   chamadas: Chamada[];
+  /** Os minutos de conversa de hoje, somando as ligações, contra o limite do plano. */
+  limiteDoDia?: LimiteDoDia;
   /** true quando o aparelho do idoso consultou o servidor nos últimos 30 s (app aberto). */
   aparelhoOnline?: boolean;
   /** Último instante em que o aparelho do idoso respondeu ao servidor, ou null. */
@@ -258,7 +260,11 @@ export interface SituacaoDaChamada {
   atenderSozinhoEm: number | null;
   /** Próxima hora marcada de hoje ou de amanhã, "HH:MM", ou null. */
   proximaLigacao: string | null;
+  /** true quando a próxima ligação marcada é só amanhã. */
+  proximaEAmanha?: boolean;
   horariosDeLigacao: string[];
+  /** Os minutos de conversa de hoje: quando acaba, o idoso não começa outra conversa. */
+  limiteDoDia?: LimiteDoDia;
 }
 
 /** POST /api/chamada: o aparelho do idoso conta o que aconteceu com a ligação. */
@@ -301,6 +307,8 @@ export interface InicioDaConversa {
   modo?: 'gemini' | 'tres' | 'direto';
   /** Só no modo direto: o que o aparelho precisa pra abrir a conversa com o Gemini. */
   direto?: InicioDireto;
+  /** Teto desta ligação em milissegundos: o normal ou o que sobra do limite do dia. */
+  teto_ms?: number;
 }
 
 /** POST /api/direto devolve isto dentro de InicioDaConversa. */
@@ -333,6 +341,18 @@ export interface PedidoDeUso {
   conversaId: string;
   uso: UsoDoGemini;
   segundos: number;
+}
+
+/**
+ * Minutos de conversa do dia contra o limite do plano (lib/limiteDoDia.ts). A ligação
+ * pedida pela família no "Ligar agora" passa mesmo quando o limite acabou.
+ */
+export interface LimiteDoDia {
+  limiteMin: number;
+  usadoMin: number;
+  restanteMs: number;
+  /** Sobra menos de 1 minuto: ligação marcada e ligação do idoso não começam mais hoje. */
+  acabou: boolean;
 }
 
 // ---------- Contas, idosos e aparelhos (21/11, contrato entre servidor, painel e app) ----------

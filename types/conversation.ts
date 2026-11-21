@@ -34,7 +34,7 @@ export interface AgoraRenewalTokens {
 // Tela do idoso.
 
 /** Por que a ligação não deu certo, em termos que viram texto simples na tela. */
-export type MotivoDaFalha = 'microfone' | 'conexao';
+export type MotivoDaFalha = 'microfone' | 'conexao' | 'limite';
 
 /** Tudo que a tela precisa pra entrar na conversa e avisar o servidor depois. */
 export interface DadosDaLigacao {
@@ -49,6 +49,8 @@ export interface DadosDaLigacao {
   modo?: 'gemini' | 'tres' | 'direto';
   /** Só no modo direto: o passe e a abertura da conversa com o Gemini. */
   direto?: InicioDireto;
+  /** Teto desta ligação: o normal ou o que sobra dos minutos de hoje. */
+  tetoMs?: number;
 }
 
 export interface PropsDaConversa {

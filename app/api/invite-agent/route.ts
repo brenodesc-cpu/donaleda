@@ -28,6 +28,7 @@ import { DEFAULT_AGENT_UID } from '@/lib/agora';
 import { assistenteNaoEntrou } from '@/lib/chamadas';
 import { abrirConversa, lerBase, mudarBase } from '@/lib/dados';
 import { FERRAMENTAS } from '@/lib/ferramentas';
+import { podeComecarConversa, TETO_NORMAL_MS, tetoDaConversaMs } from '@/lib/limiteDoDia';
 import { montarInstrucoes, montarSaudacao, type OrigemDaLigacao } from '@/lib/persona';
 import { chaveDasFerramentas, exigirVariavel, urlPublica } from '@/lib/servidor';
 import { exigirAparelho } from '@/lib/sessao';
@@ -175,6 +176,14 @@ export async function POST(request: NextRequest) {
       ? base.chamadas.find((c) => c.id === body.chamada_id)
       : undefined;
     const origem: OrigemDaLigacao = chamada ? chamada.motivo : 'idoso';
+    // Os minutos de conversa de hoje acabaram: só a ligação pedida pela família passa.
+    if (!podeComecarConversa(base, origem, agora)) {
+      return NextResponse.json(
+        { error: 'limite_do_dia', mensagem: 'Os minutos de conversa de hoje acabaram.' },
+        { status: 409 },
+      );
+    }
+    const tetoMs = tetoDaConversaMs(base, origem, TETO_NORMAL_MS, agora);
     const saudacao = montarSaudacao(base, agora, origem);
 
     const client = new AgoraClient({ area: Area.US, appId, appCertificate });
@@ -317,6 +326,7 @@ export async function POST(request: NextRequest) {
       ferramentas: comFerramentas,
       avatar: Boolean(video),
       modo,
+      teto_ms: tetoMs,
     } satisfies InicioDaConversa);
   } catch (error) {
     console.error('Erro ao começar a conversa:', error);
