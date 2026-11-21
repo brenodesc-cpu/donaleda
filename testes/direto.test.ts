@@ -3,9 +3,11 @@ import type { Base, InicioDaConversa } from '@/lib/tipos';
 import {
   avancarFala,
   base64ParaSom,
+  calcularCompressao,
   criarReamostrador,
   custoEmDolar,
   custoPorMinuto,
+  estimarTokens,
   FALA_EM_ANDAMENTO,
   FALA_INTERROMPIDA,
   FALA_TERMINADA,
@@ -40,6 +42,7 @@ interface Setup {
   tools: { functionDeclarations: { name: string }[] }[];
   inputAudioTranscription: unknown;
   outputAudioTranscription: unknown;
+  contextWindowCompression?: { triggerTokens: number; slidingWindow: { targetTokens: number } };
 }
 
 // O aparelho pareado: quem manda o token de teste é o aparelho do IDOSO.
@@ -145,6 +148,41 @@ describe('a abertura mandada ao Gemini', () => {
     expect(abertura.setup.outputAudioTranscription).toEqual({});
     expect(abertura.setup.realtimeInputConfig.automaticActivityDetection.silenceDurationMs).toBe(650);
     expect(abertura.setup.model).toBe('models/gemini-3.8-live');
+  });
+});
+
+describe('a compressão da conversa', () => {
+  it('só começa depois de uns 4 minutos de conversa e deixa a metade mais nova', () => {
+    expect(calcularCompressao(5000)).toEqual({ gatilho: 5000 + 4000, alvo: 5000 + 2000 });
+    expect(calcularCompressao(5000, 2)).toEqual({ gatilho: 5000 + 2000, alvo: 5000 + 1000 });
+  });
+
+  it('desliga com zero minutos', () => {
+    expect(calcularCompressao(5000, 0)).toBeNull();
+    expect(calcularCompressao(5000, Number.NaN)).toBeNull();
+  });
+
+  it('estima os tokens das instruções e das ações pelo tamanho do texto', () => {
+    const tokens = estimarTokens('a'.repeat(13_033), FERRAMENTAS);
+    // Medido em 21/11: 13.033 letras de instrução mais as ações deram 5.148 tokens no Google.
+    expect(tokens).toBeGreaterThan(4_800);
+    expect(tokens).toBeLessThan(5_500);
+  });
+
+  it('vai na abertura quando pedida, e fica de fora quando não', () => {
+    const pedido = { modelo: 'gemini-3.8-live', voz: 'Leda', instrucoes: 'i', ferramentas: FERRAMENTAS, silencioMs: 650 };
+    const com = montarAbertura({ ...pedido, compressao: { gatilho: 8000, alvo: 6500 } }) as unknown as { setup: Setup };
+    expect(com.setup.contextWindowCompression).toEqual({ triggerTokens: 8000, slidingWindow: { targetTokens: 6500 } });
+    const sem = montarAbertura(pedido) as unknown as { setup: Setup };
+    expect(sem.setup.contextWindowCompression).toBeUndefined();
+  });
+
+  it('já vem ligada no começo da conversa direta (/api/direto)', async () => {
+    const inicio = (await (await abrir(pedido('', {}) as never)).json()) as InicioDaConversa;
+    const setup = (inicio.direto?.abertura as unknown as { setup: Setup }).setup;
+    const tamanho = estimarTokens(setup.systemInstruction.parts[0].text, FERRAMENTAS);
+    expect(setup.contextWindowCompression?.triggerTokens).toBe(tamanho + 4000);
+    expect(setup.contextWindowCompression?.slidingWindow.targetTokens).toBe(tamanho + 2000);
   });
 });
 

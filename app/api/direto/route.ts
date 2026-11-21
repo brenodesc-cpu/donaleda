@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { abrirConversa, lerBase, mudarBase } from '@/lib/dados';
-import { montarAbertura } from '@/lib/direto';
+import { calcularCompressao, estimarTokens, MINUTOS_ANTES_DE_COMPRIMIR, montarAbertura } from '@/lib/direto';
 import { FERRAMENTAS } from '@/lib/ferramentas';
 import { pedirPasseDoGemini } from '@/lib/passeDoGemini';
 import { montarInstrucoes, montarSaudacao, type OrigemDaLigacao } from '@/lib/persona';
@@ -20,6 +20,14 @@ export const dynamic = 'force-dynamic';
 function esperaDeSilencio(): number {
   const pedido = Number(process.env.LIA_SILENCIO_MS);
   return Number.isFinite(pedido) && pedido >= 300 && pedido <= 2000 ? pedido : 650;
+}
+
+/** Minutos de conversa antes de descartar as falas mais antigas. LIA_COMPRESSAO_MIN troca, e 0 desliga. */
+function minutosAntesDeComprimir(): number {
+  const pedido = process.env.LIA_COMPRESSAO_MIN?.trim();
+  if (!pedido) return MINUTOS_ANTES_DE_COMPRIMIR;
+  const numero = Number(pedido);
+  return Number.isFinite(numero) && numero >= 0 && numero <= 15 ? numero : MINUTOS_ANTES_DE_COMPRIMIR;
 }
 
 export async function POST(request: NextRequest) {
@@ -74,6 +82,7 @@ export async function POST(request: NextRequest) {
           instrucoes,
           ferramentas: FERRAMENTAS,
           silencioMs: esperaDeSilencio(),
+          compressao: calcularCompressao(estimarTokens(instrucoes, FERRAMENTAS), minutosAntesDeComprimir()),
         }),
         saudacao,
         modelo,
