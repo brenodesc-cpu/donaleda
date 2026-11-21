@@ -73,7 +73,8 @@ Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 - Pra família: "Você colocaria isso pra ela todo dia? Por quê?" (sim, talvez, não)
 - Pra família: "O que vocês usam hoje pra saber se está tudo bem com ela?" (ligação, visita, câmera, grupo de WhatsApp, nada)
 - Pra família: "Quanto tempo por semana vocês gastam indo ver ou ligando pra checar se está tudo bem com ela?" Anote em horas, somando quem vai e quem liga.
-- Pra família: "Quanto você pagaria por mês por isso?" Anote o número que a pessoa disser, sem sugerir valor.
+- Pra família: "Quanto você pagaria por mês por isso?" Anote o número que a pessoa disser, sem falar número nenhum antes.
+- Pra família, logo depois: "Pagaria R$ 129,90 por mês por uma ligação por dia com os avisos no painel?" Anote o sim ou o não.
 - Pra família: "Quem decide uma compra dessas na família?"
 - Pros dois: "Posso pedir pra Dona Leda ligar de novo amanhã, domingo, às 9h?" Só marque com o sim dos dois.
 
@@ -90,18 +91,18 @@ A Stephanie preenche uma linha por idoso. Os combinados pra contar igual:
 - **Minutos:** do atender ao tchau, no cronômetro.
 - **Precisou de ajuda:** em que passo (abrir, código, microfone, atender, durante a conversa).
 
-| Código | Idade | Mora sozinho? | Atendeu? | Minutos | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | O que usam hoje | Horas por semana checando | Pagaria por mês (R$) | Quem decide a compra | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| A1 | | | | | | | | | | | | | | | | | |
-| A2 | | | | | | | | | | | | | | | | | |
-| A3 | | | | | | | | | | | | | | | | | |
-| A4 | | | | | | | | | | | | | | | | | |
-| A5 | | | | | | | | | | | | | | | | | |
+| Código | Idade | Mora sozinho? | Atendeu? | Minutos | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | O que usam hoje | Horas por semana checando | Pagaria por mês, sem ouvir número (R$) | Pagaria R$ 129,90? | Quem decide a compra | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| A1 | | | | | | | | | | | | | | | | | | |
+| A2 | | | | | | | | | | | | | | | | | | |
+| A3 | | | | | | | | | | | | | | | | | | |
+| A4 | | | | | | | | | | | | | | | | | | |
+| A5 | | | | | | | | | | | | | | | | | | |
 
 Pra colar numa planilha:
 
 ```
-Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,O que usam hoje,Horas por semana checando,Pagaria por mês (R$),Quem decide a compra,Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
+Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,O que usam hoje,Horas por semana checando,Pagaria por mês sem ouvir número (R$),"Pagaria R$ 129,90?",Quem decide a compra,Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
 ```
 
 ## 4. O que vai pro pitch
@@ -110,7 +111,7 @@ Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia a
 - Quantos atenderam, de quantas ligações que chegaram.
 - Os minutos médios de conversa.
 - Quantos disseram que atenderiam no domingo e quantos atenderam de verdade às 9h.
-- Quantas famílias usariam e o valor do meio entre os que elas disseram que pagariam por mês.
+- Quantas famílias usariam, o valor do meio que elas disseram sem ouvir número e quantas disseram sim aos R$ 129,90 por mês.
 - As horas por semana que a família gasta indo ver ou ligando pra checar, no valor do meio. É o número de tamanho do problema que os mentores pediram (ver "O que a banca vai querer ver" em [entrevistas.md](entrevistas.md)).
 - O que aprendemos, em duas ou três frases tiradas do que confundiu e do que gostou.
 - O teste das três versões (parte 5): acertos e segundos de cada versão, na primeira vez que a pessoa viu.

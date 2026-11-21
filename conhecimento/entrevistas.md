@@ -24,7 +24,7 @@ Numa rodada de mentoria do hackathon, uma mentora contou o caso dos pais dela e 
 - **O caso:** a mãe parou um remédio de uso contínuo por conta própria. Quem visitava toda semana não percebeu, e ela percebeu numa ligação de sábado, pela conversa. A mãe precisou ir pro hospital.
 - **O remédio:** na rodada ficou dito que o idoso esquece e mente sobre o remédio, e toma de novo porque esqueceu que já tinha tomado.
 - **Ela não está sozinha:** "eu tenho muitos amigos da minha idade que estão passando por isso".
-- **O preço:** comparou com a academia e disse "eu investiria até R$ 500" por mês, pra ter tranquilidade sobre como os pais estão. O time pensava em bem menos (o plano Essencial proposto é R$ 229,90). Plano de saúde pros pais passaria de R$ 5 mil por mês pra cada um, e ela não dá conta.
+- **O preço:** comparou com a academia e disse "eu investiria até R$ 500" por mês, pra ter tranquilidade sobre como os pais estão. O time pensava em bem menos. Desde as 17h50 de 21/11 o preço pra família é R$ 129,90 por mês. Plano de saúde pros pais passaria de R$ 5 mil por mês pra cada um, e ela não dá conta.
 - **O dado:** na rodada ficou dito que a rotina do idoso é informação muito valiosa pra plano de saúde.
 
 O que pesa mais é o que ela já faz (a ligação de todo sábado e a visita de toda semana). O R$ 500 é a opinião de uma pessoa que ainda não pagou nada e serve de referência de teto.
@@ -69,7 +69,7 @@ Pra cada casa que o time liga, e pra pessoa que está a par de tudo na primeira 
 6. **Como está sendo a implantação do prontuário eletrônico? Quanto tempo levou, quem treinou a equipe, quem resistiu?**
    Reforça: foi tranquilo. Derruba entrar agora: a equipe está sofrendo com um sistema novo e não quer outro, e a Dona Leda só cabe se não der trabalho nenhum pra ela.
 7. **Quanto a casa paga por mês pelo prontuário ou por outro sistema? Quem decide uma compra dessas na casa, e quanto tempo levou da primeira conversa até começar a usar?**
-   Reforça: a casa já paga algumas centenas de reais por mês e decide em semanas. Derruba o plano Casa: a casa paga bem menos que R$ 229,90 por mês por todo o sistema dela.
+   Reforça: a casa já paga algumas centenas de reais por mês e decide em semanas. Derruba o plano Casa: a casa paga por todo o sistema dela menos do que pagaria pela Dona Leda.
 8. **Quanto as famílias pagam de verdade na mensalidade, na média? E o que pagam por fora (remédio, fralda, acompanhante, passeio)?**
    Reforça: já existe um extra pago pela família, e a Dona Leda pode ser mais um. Derruba a cobrança pela família: nada é cobrado por fora e a mensalidade já pesa. O valor vai só pro Breno, fora do GitHub.
 9. **No último mês, quantas famílias procuraram a casa e desistiram ou adiaram? Por quê?**
@@ -137,7 +137,9 @@ Pra família que cada casa indicar. Serve também pra família de idoso que mora
 
 **Pra fechar, mostre o painel da família e peça: "Quer que a Dona Leda ligue pro seu pai esta semana e te mande o resumo?"**
 
-Reforça: sim, e a pessoa já diz o horário. Derruba: "depois eu vejo". Se perguntarem o preço, diga R$ 229,90 por mês e anote a reação. "Você pagaria?" sozinha vale pouco.
+Reforça: sim, e a pessoa já diz o horário. Derruba: "depois eu vejo".
+
+Depois do fechamento vem o preço, nesta ordem. Primeiro, sem dizer número nenhum: "Quanto você pagaria por mês por isso?", e anote o valor. Depois: "Pagaria R$ 129,90 por mês por uma ligação por dia com os avisos no painel?", e anote o sim ou o não.
 
 ## D. O próprio idoso (se a casa e a família deixarem)
 
@@ -162,6 +164,7 @@ Cada ligação vira um bloco com estes campos, e a Stephanie junta os números p
 - Moradores por cuidadora, por turno.
 - O que usam hoje pra saber se está tudo bem (ligação, visita, câmera, grupo de WhatsApp, nada).
 - Quem decide uma compra dessas, na família ou na casa.
+- Na família: o valor que a pessoa disse sem ouvir número, e o sim ou o não pros R$ 129,90.
 - Próximo passo com data: sim ou não.
 - A frase que mais pesou, do jeito que a pessoa falou.
 
