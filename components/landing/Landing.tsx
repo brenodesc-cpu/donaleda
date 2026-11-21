@@ -129,7 +129,7 @@ export function Landing({ comCaminhos = false }: LandingProps) {
       <main>
         <section aria-labelledby="camada-titulo" className={`${LARGURA} py-20 lg:py-28`}>
           <h2 id="camada-titulo" className={TITULO}>
-            O que ela cuida hoje
+            O que ela faz hoje
           </h2>
           <p className="mt-4 max-w-[40rem] text-xl leading-relaxed text-muted-foreground">
             Escolha uma necessidade pra ver o que a Dona Leda já faz em cada uma.

@@ -149,7 +149,7 @@ export const CONFIANCA = [
 export const CASAS = {
   titulo: 'Pra casas de repouso parceiras',
   texto:
-    'Toda semana chegam à casa famílias que ainda não querem levar o pai ou a mãe. A casa parceira indica a Dona Leda a elas, e o idoso continua na casa dele com cuidado todo dia.',
+    'Toda semana chegam à casa famílias que ainda não querem levar o pai ou a mãe. A casa parceira indica a Dona Leda a elas, e o idoso continua na casa dele, com uma ligação combinada todo dia.',
   legendaDaTela: 'A tela "Todos os moradores", com oito pessoas de exemplo.',
   itens: [
     {
@@ -195,7 +195,7 @@ export const PERGUNTAS = [
   {
     pergunta: 'Ela substitui o médico ou o socorro?',
     resposta:
-      'A Dona Leda cuida do dia a dia perguntando, lembrando e avisando. Ela não dá diagnóstico, não muda remédio e não é serviço de emergência: numa urgência, orienta ligar pro SAMU no 192 e avisa a família.',
+      'A Dona Leda liga no horário combinado, pergunta como a pessoa está e avisa a família. Quem age é a família. Ela não dá diagnóstico, não muda remédio e não é serviço de emergência: numa urgência, orienta ligar pro SAMU no 192 e avisa a família.',
   },
   {
     pergunta: 'Ela pede dinheiro ou senha?',

@@ -57,7 +57,7 @@ const CENAS: Array<{ tela: Tela; titulo: string; texto: string; onde: string }> 
   },
   {
     tela: 'aviso',
-    titulo: 'O aviso aparece quando algo sai do normal',
+    titulo: 'O aviso chega quando a pessoa conta uma queda ou um golpe',
     texto:
       'Queda, dor no peito, pedido de dinheiro ou senha e ligação não atendida viram aviso no painel. Os de queda e de golpe saem por regra fixa.',
     onde: 'No seu celular',
@@ -157,7 +157,7 @@ export function CamadaEmAbas() {
 
   return (
     <div>
-      <div role="tablist" aria-label="As necessidades que a Dona Leda cuida" className="flex flex-wrap gap-2.5">
+      <div role="tablist" aria-label="O que a Dona Leda faz em cada necessidade" className="flex flex-wrap gap-2.5">
         {CAMADA.map((parte, i) => (
           <button
             key={parte.nome}
