@@ -5,6 +5,7 @@
 // Conta pura em cima da Base: quem chama decide o que fazer com o resultado.
 
 import { dataEmBrasilia } from './assistente';
+import { AVISO_DE_ENCERRAMENTO_MS } from './teto';
 import type { Base, LimiteDoDia } from './tipos';
 
 function minutosDaVariavel(variavel: string | undefined, padrao: number): number {
@@ -18,8 +19,12 @@ export const LIMITE_DO_DIA_MIN = minutosDaVariavel(process.env.LIA_LIMITE_DO_DIA
 /** Teto normal de cada ligação, o mesmo da tela (NEXT_PUBLIC_LIA_TETO_MIN, 10 minutos). */
 export const TETO_NORMAL_MS = minutosDaVariavel(process.env.NEXT_PUBLIC_LIA_TETO_MIN, 10) * 60_000;
 
-/** Com menos que isso sobrando, uma conversa nova não começa: não dá nem pra se despedir. */
-export const SOBRA_MINIMA_MS = 60_000;
+/**
+ * Com menos que isso sobrando, uma conversa nova não começa. Tem que caber o sinal de
+ * encaminhar a despedida (lib/teto.ts, 90 s antes do teto) e mais um pouco de conversa,
+ * pra toda ligação terminar com a despedida gentil e nunca cortada no meio.
+ */
+export const SOBRA_MINIMA_MS = AVISO_DE_ENCERRAMENTO_MS + 30_000;
 
 /** Conversa sem fim depois disso conta como encerrada (aba fechada, queda de conexão). */
 const CONVERSA_ABERTA_CONTA_ATE_MS = 15 * 60_000;
