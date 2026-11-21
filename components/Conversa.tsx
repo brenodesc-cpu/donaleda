@@ -13,6 +13,7 @@ import AgoraRTC, {
 } from 'agora-rtc-react';
 import { PhoneOff } from 'lucide-react';
 import { DEFAULT_AGENT_UID } from '@/lib/agora';
+import { fetchDoAparelho } from '@/lib/aparelho';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import {
   estadoDoRosto,
@@ -175,16 +176,31 @@ export default function Conversa({
   }, [client, onRenovarTokens, rtmClient]);
   useClientEvent(client, 'token-privilege-will-expire', renovarTokens);
 
+  const avisarFimDaLigacao = useCallback(() => {
+    if (!dados.agentId) return;
+    void fetchDoAparelho('/api/stop-conversation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        agent_id: dados.agentId,
+        channel_name: dados.channel,
+        acao: 'avisar_fim',
+      }),
+    }).catch(() => undefined);
+  }, [dados.agentId, dados.channel]);
+
   const estado = estadoDoRosto(estadoDoAgente, alguemNaLinha, nivel);
-  // Teto de 10 minutos por ligação e 2 minutos sem o idoso falar. O microfone
-  // entra junto da legenda, pra ligação não cair se a legenda falhar.
+  // Teto de 10 minutos por ligação (com sinal suave pra IA encaminhar a despedida aos 8m30s)
+  // e 2 minutos sem o idoso falar. O microfone entra junto da legenda, pra ligação não cair
+  // se a legenda falhar.
   useTetoDaLigacao(
     transcript,
     uidDaAssistente,
     alguemNaLinha,
     estado === 'falando',
     localMicrophoneTrack,
-    onEncerrar,
+    encerrarComFalas,
+    avisarFimDaLigacao,
   );
   const legenda = useMemo(
     () => legendaDaAssistente(transcript, uidDaAssistente),

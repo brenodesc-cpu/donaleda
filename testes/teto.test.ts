@@ -63,4 +63,16 @@ describe('teto da ligação', () => {
     const semParar = (): LeituraDoTeto => ({ ...QUIETO, volumeDoIdoso: 0.5 });
     expect(rodar(semParar, 12 * 60_000)).toEqual({ encerrar: 'teto', em: 10 * 60_000 + 30_000 });
   });
+
+  it('dispara avisarFim uma única vez 90 segundos antes do teto de 10 minutos', () => {
+    let relogios: RelogiosDoTeto = RELOGIOS_ZERADOS;
+    const avisosEm: number[] = [];
+    const falando: LeituraDoTeto = { ...QUIETO, volumeDoIdoso: 0.4 };
+    for (let ms = 250; ms <= 9 * 60_000; ms += 250) {
+      const r = avancarTeto(relogios, falando, 250, { tetoMs: 10 * 60_000, semFalaMs: 0 });
+      relogios = r.relogios;
+      if (r.avisarFim) avisosEm.push(ms);
+    }
+    expect(avisosEm).toEqual([8 * 60_000 + 30_000]);
+  });
 });

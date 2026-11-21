@@ -151,6 +151,76 @@ describe('o que a assistente fala', () => {
     expect(instrucoes).toContain('PARE IMEDIATAMENTE o roteiro do dia');
     expect(instrucoes).toContain('hipoglicemia');
   });
+
+  it('adapta a saudação e o roteiro ao período do dia (madrugada, manhã e noite com pendências)', async () => {
+    const { montarRoteiroDoMomento, periodoDoDia } = await import('@/lib/persona');
+
+    // 21/11/2026 02:30 Brasília (05:30 UTC) = madrugada
+    const madrugada = new Date('2026-11-21T05:30:00.000Z');
+    const baseMadrugada = baseDeExemplo(madrugada);
+    baseMadrugada.idoso.primeiraConversaFeita = true;
+    expect(periodoDoDia(madrugada)).toBe('madrugada');
+    const oiMadrugada = montarSaudacao(baseMadrugada, madrugada, 'idoso');
+    expect(oiMadrugada).toContain('madrugada');
+    expect(oiMadrugada).not.toContain('Boa noite');
+    expect(montarRoteiroDoMomento(baseMadrugada, madrugada)).toContain('MADRUGADA');
+
+    // 21/11/2026 08:30 Brasília (11:30 UTC) = manhã com compromisso hoje
+    const manha = new Date('2026-11-21T11:30:00.000Z');
+    const baseManha = baseDeExemplo(manha);
+    baseManha.lembrancas.push({
+      id: 'comp-hoje',
+      numero: 99,
+      texto: 'Consulta no cardiologista',
+      categoria: 'compromisso',
+      data: '2026-11-21',
+      hora: '14:00',
+      origem: 'familia',
+      criadaEm: manha.toISOString(),
+    });
+    const roteiroManha = montarRoteiroDoMomento(baseManha, manha);
+    expect(roteiroManha).toContain('MANHÃ');
+    expect(roteiroManha).toContain('Compromisso previsto pra HOJE às 14:00');
+    expect(roteiroManha).toContain('Consulta no cardiologista');
+
+    // 21/11/2026 20:00 Brasília (23:00 UTC) = noite cobrando pendências do dia + continuidade
+    const noite = new Date('2026-11-21T23:00:00.000Z');
+    const baseNoite = baseDeExemplo(noite);
+    baseNoite.idoso.remedios = [{ nome: 'Metformina', horario: '08:00' }];
+    baseNoite.dias = [];
+    baseNoite.lembrancas.push({
+      id: 'comp-passou',
+      numero: 100,
+      texto: 'Exame de sangue no posto',
+      categoria: 'compromisso',
+      data: '2026-11-21',
+      hora: '09:00',
+      origem: 'familia',
+      criadaEm: manha.toISOString(),
+    });
+    baseNoite.alertas.push({
+      id: 'alerta-hoje',
+      tipo: 'saude',
+      gravidade: 'atencao',
+      texto: 'Relatou tontura leve após o almoço.',
+      criadoEm: '2026-11-21T17:00:00.000Z',
+      origem: 'assistente',
+      visto: false,
+    });
+    baseNoite.conversas.push({
+      id: 'conv-manha',
+      inicio: '2026-11-21T12:00:00.000Z',
+      fim: '2026-11-21T12:06:00.000Z',
+      falasDoIdoso: 5,
+      resumo: 'Contou que ia fazer exame de sangue e almoçar sopa.',
+    });
+    const roteiroNoite = montarRoteiroDoMomento(baseNoite, noite);
+    expect(roteiroNoite).toContain('NOITE');
+    expect(roteiroNoite).toContain('Compromisso de hoje que JÁ PASSOU (09:00)');
+    expect(roteiroNoite).toContain('Pendente hoje (ainda não confirmou remédio): pergunte pelo nome se tomou Metformina (08:00)');
+    expect(roteiroNoite).toContain('Relatou tontura leve após o almoço');
+    expect(roteiroNoite).toContain('Contou que ia fazer exame de sangue e almoçar sopa');
+  });
 });
 
 describe('quem contratou, com o artigo certo', () => {

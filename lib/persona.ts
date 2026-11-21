@@ -1,7 +1,7 @@
 // O jeito de a assistente falar e o que ela sabe da pessoa antes de cada conversa.
 // As instruções são montadas no servidor a cada ligação, com a ficha de hoje.
 
-import { FUSO, NOME_DA_ASSISTENTE, dataEmBrasilia, horaEmBrasilia } from './assistente';
+import { FUSO, NOME_DA_ASSISTENTE, dataEmBrasilia, horaEmBrasilia, somarDias } from './assistente';
 import { diaVazio, oQueFaltaSaber } from './dados';
 import { blocoDeLembrancas } from './memoria';
 import type { Base, Dia } from './tipos';
@@ -14,10 +14,22 @@ export function pronomeDeTratamento(tratamento: string): string {
   return 'você';
 }
 
-function cumprimento(agora: Date): string {
+export type PeriodoDoDia = 'madrugada' | 'manha' | 'tarde' | 'noite';
+
+/** Classifica o horário atual de Brasília em madrugada, manhã, tarde ou noite. */
+export function periodoDoDia(agora: Date): PeriodoDoDia {
   const hora = horaEmBrasilia(agora);
-  if (hora >= 5 && hora < 12) return 'Bom dia';
-  if (hora >= 12 && hora < 18) return 'Boa tarde';
+  if (hora < 5) return 'madrugada';
+  if (hora < 12) return 'manha';
+  if (hora < 18) return 'tarde';
+  return 'noite';
+}
+
+function cumprimento(agora: Date): string {
+  const periodo = periodoDoDia(agora);
+  if (periodo === 'madrugada') return 'Oi';
+  if (periodo === 'manha') return 'Bom dia';
+  if (periodo === 'tarde') return 'Boa tarde';
   return 'Boa noite';
 }
 
@@ -51,6 +63,12 @@ export function montarSaudacao(
     return `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, a assistente virtual que ${quem} contratou pra conversar com ${pronome} todo dia. Como ${pronome} está hoje?`;
   }
   const souEu = `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, sua assistente virtual.`;
+  if (periodoDoDia(agora) === 'madrugada') {
+    if (origem === 'familia') {
+      return `${souEu} ${primeiraMaiuscula(quem)} pediu pra eu ligar agora de madrugada — está tudo bem com ${pronome}?`;
+    }
+    return `${souEu} Vi que ${pronome} está acordado agora de madrugada — está tudo bem com ${pronome}?`;
+  }
   if (origem === 'familia') {
     return `${souEu} ${primeiraMaiuscula(quem)} pediu pra eu ligar e saber como ${pronome} está.`;
   }
@@ -150,6 +168,121 @@ export function resumirRemediosNoHorario(
   return linhas.join('\n');
 }
 
+function horaCurtaDeIso(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return new Intl.DateTimeFormat('pt-BR', {
+    timeZone: FUSO,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(d);
+}
+
+/**
+ * Monta o foco natural do período atual (madrugada/manhã/tarde/noite), compromissos
+ * do dia/amanhã, pendências que ficaram abertas hoje e o gancho da última conversa.
+ */
+export function montarRoteiroDoMomento(base: Base, agora: Date = new Date()): string {
+  const periodo = periodoDoDia(agora);
+  const hojeData = dataEmBrasilia(agora);
+  const amanhaData = somarDias(hojeData, 1);
+  const agoraMin = minutosEmBrasilia(agora);
+  const hoje = base.dias.find((d) => d.data === hojeData) ?? diaVazio(hojeData);
+  const pronome = pronomeDeTratamento(base.idoso.tratamento);
+
+  const orientacaoPorPeriodo: Record<PeriodoDoDia, string> = {
+    madrugada:
+      `- Agora é MADRUGADA (entre 0h e 5h). NÃO cobre rotina do dia (almoço, passeio, tarefas). Pergunte primeiro com calma por que ${pronome} está acordado essa hora (insônia, dor, mal-estar, sede, preocupação), acolha com voz tranquila e confira se está seguro.`,
+    manha:
+      `- Agora é MANHÃ. Foco natural: como dormiu, se já tomou café e os remédios da manhã, e JÁ AVISAR logo cedo os compromissos e remédios previstos pro resto do dia.`,
+    tarde:
+      `- Agora é TARDE. Foco natural: se almoçou, remédios do meio do dia, perguntar como foi algum compromisso que já passou de manhã e lembrar compromissos que ainda vêm hoje.`,
+    noite:
+      `- Agora é NOITE. Foco natural: fechamento do dia — cobre com leveza o que ficou pendente durante o dia (remédios que já passaram sem confirmação, se jantou, como foi o compromisso de hoje, como evoluiu algum incômodo de mais cedo) e já lembre compromissos de amanhã.`,
+  };
+
+  const linhas: string[] = [orientacaoPorPeriodo[periodo]];
+
+  // 1. Compromissos de hoje (separa o que ainda vem do que já passou) e de amanhã.
+  const compromissosHoje = base.lembrancas.filter(
+    (l) => l.categoria === 'compromisso' && l.data === hojeData,
+  );
+  for (const c of compromissosHoje) {
+    const min = c.hora ? minutosDoHorario(c.hora) : null;
+    const tag = c.reservada ? ' (só entre vocês)' : '';
+    const hora = c.hora ? ` às ${c.hora}` : '';
+    if (min !== null && min < agoraMin - 30) {
+      linhas.push(`- Compromisso de hoje que JÁ PASSOU (${c.hora}): "${c.texto}"${tag} — pergunte como foi.`);
+    } else {
+      linhas.push(`- Compromisso previsto pra HOJE${hora}: "${c.texto}"${tag} — avise ou lembre com carinho.`);
+    }
+  }
+
+  if (periodo === 'tarde' || periodo === 'noite') {
+    const compromissosAmanha = base.lembrancas.filter(
+      (l) => l.categoria === 'compromisso' && l.data === amanhaData,
+    );
+    for (const c of compromissosAmanha) {
+      const hora = c.hora ? ` às ${c.hora}` : '';
+      linhas.push(`- Compromisso de AMANHÃ${hora}: "${c.texto}" — vale já deixar o lembrete.`);
+    }
+  }
+
+  // 2. Pendências reais de hoje: remédio que já passou do horário sem confirmação.
+  if (periodo !== 'madrugada' && hoje.remedio !== 'tomou') {
+    const atrasados = base.idoso.remedios.filter((r) => {
+      const min = r.horario ? minutosDoHorario(r.horario) : null;
+      return min !== null && min < agoraMin - 30;
+    });
+    if (atrasados.length > 0) {
+      const nomes = atrasados.map((r) => `${r.nome} (${r.horario})`).join(', ');
+      linhas.push(`- Pendente hoje (ainda não confirmou remédio): pergunte pelo nome se tomou ${nomes}.`);
+    }
+  }
+
+  // 3. Pontos de atenção registrados mais cedo hoje (alertas ou dor/observações).
+  const alertasDeHoje = base.alertas
+    .filter(
+      (a) =>
+        dataEmBrasilia(new Date(a.criadoEm)) === hojeData &&
+        (a.tipo === 'saude' || a.tipo === 'remedio' || a.tipo === 'humor' || a.tipo === 'emergencia'),
+    )
+    .slice(-2);
+  for (const a of alertasDeHoje) {
+    linhas.push(`- Ponto de atenção mais cedo hoje (${horaCurtaDeIso(a.criadoEm)}): ${a.texto} — retome esse assunto pra saber como está agora.`);
+  }
+  if (typeof hoje.dor === 'number' && hoje.dor >= 4 && alertasDeHoje.length === 0) {
+    linhas.push(
+      `- Mais cedo hoje relatou dor ${hoje.dor} de 10${hoje.ondeDoi ? ` ${hoje.ondeDoi}` : ''} — pergunte se melhorou.`,
+    );
+  }
+
+  // 4. Continuidade da conversa anterior (evita perder o fio da meada no mesmo dia).
+  const ultimaComResumo = [...base.conversas]
+    .reverse()
+    .find((c) => Boolean(c.fim && c.resumo?.trim()));
+  if (ultimaComResumo?.resumo) {
+    const dataConv = dataEmBrasilia(new Date(ultimaComResumo.inicio));
+    const ontemData = somarDias(hojeData, -1);
+    if (dataConv === hojeData || dataConv === ontemData) {
+      const quando =
+        dataConv === hojeData
+          ? `hoje às ${horaCurtaDeIso(ultimaComResumo.inicio)}`
+          : 'ontem';
+      linhas.push(
+        `- Última conversa (${quando}): ${ultimaComResumo.resumo.trim()} — use como continuidade natural e NÃO pergunte de novo o que já ficou claro.`,
+      );
+    }
+  }
+
+  linhas.push(
+    `- Linha de raciocínio: conecte cada pergunta ao que ${pronome} acabou de responder ou a um ponto concreto acima. Nunca faça perguntas genéricas soltas nem chova no molhado.`,
+  );
+
+  return linhas.join('\n');
+}
+
 export function montarInstrucoes(
   base: Base,
   agora: Date = new Date(),
@@ -171,6 +304,7 @@ export function montarInstrucoes(
 
   const lembrancas = blocoDeLembrancas(base, agora);
   const blocoDeRemedios = resumirRemediosNoHorario(remedios, agora);
+  const roteiroDoMomento = montarRoteiroDoMomento(base, agora);
 
   const ferramentas = comFerramentas
     ? `
@@ -198,8 +332,11 @@ Devagar, com carinho, como uma boa vizinha: uma ou duas frases curtas e uma perg
 - Cruze com a Saúde e os Remédios de hoje (diabetes com hipoglicemia é sério): pergunte com calma se está sentada e segura, se tem alguém perto, se mediu a glicemia, se comeu e se tomou o remédio do horário.
 - Chame avisar_familia urgente com o sintoma e a condição conhecida. Em sinal de gravidade, oriente ligar pro SAMU no um nove dois ou chamar um vizinho. Sem diagnóstico, sem indicar alimento ou remédio, sem mudar dose.
 
+# Momento do dia e linha de raciocínio
+${roteiroDoMomento}
+
 # O que você quer saber hoje
-Sem parecer questionário, e só se ${pronome} estiver bem: sono, comida, remédio, dor, como está se sentindo, se saiu de casa e se falou com alguém.
+Sem parecer questionário, e só se ${pronome} estiver bem e combinar com o horário: sono, comida, remédio, dor, como está se sentindo, se saiu de casa e se falou com alguém.
 ${jaSabeHoje ? `Hoje você já sabe: ${jaSabeHoje}.` : 'Hoje você ainda não sabe nada.'}
 ${falta.length ? `Ainda falta saber: ${falta.join(', ')}.` : 'Você já sabe tudo de hoje. Só converse.'}
 
@@ -241,6 +378,6 @@ ${ferramentas}
 # Silêncio
 Calada uns dez segundos: pergunte numa frase curta se ainda está aí. Continuando calada, diga que fica esperando, sem repetir a última pergunta.
 
-# Despedida
-A ligação dura de 3 a 10 minutos e acaba sozinha. Perto do fim, despeça-se com carinho sem cortar o assunto, diga quando liga de novo e que ${familiar.nome} recebe um resumo de como ${pronome} está.`;
+# Despedida e limite de tempo
+A conversa ideal dura de 5 a 8 minutos, com teto máximo de 10 minutos (encerra sozinha). Quando já tiver coberto o essencial do momento ou receber um aviso interno de tempo perto do limite, conduza com carinho pra despedida sem cortar o assunto: valide o que ${pronome} contou, reforce o principal combinado, diga quando liga de novo e que ${familiar.nome} recebe um resumo de como ${pronome} está.`;
 }

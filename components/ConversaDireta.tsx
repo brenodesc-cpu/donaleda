@@ -158,8 +158,18 @@ export default function ConversaDireta({
     [onEncerrar, onFalha],
   );
 
-  const { transcript, naLinha, falando, agindo, nivel, faixaDaVoz, conta, somPreso, soltarSom } =
-    useGeminiDireto({
+  const {
+    transcript,
+    naLinha,
+    falando,
+    agindo,
+    nivel,
+    faixaDaVoz,
+    conta,
+    somPreso,
+    soltarSom,
+    avisarEncerramento,
+  } = useGeminiDireto({
       direto: dados.direto!,
       conversaId: dados.conversaId,
       uidDaAssistente,
@@ -210,15 +220,16 @@ export default function ConversaDireta({
         ? 'pensando'
         : 'ouvindo';
 
-  // O mesmo teto da ligação comum: 10 minutos, esperando um respiro pra desligar.
-  // O teto só lê o volume do microfone, que a faixa da sala também informa.
+  // O mesmo teto da ligação comum: 10 minutos, com sinal suave aos 8m30s pra IA encaminhar
+  // a despedida antes do corte. O teto só lê o volume do microfone, que a faixa da sala informa.
   useTetoDaLigacao(
     transcript,
     uidDaAssistente,
     naLinha,
     falando,
     microfoneNaSala as IMicrophoneAudioTrack | null,
-    onEncerrar,
+    encerrarComFalas,
+    avisarEncerramento,
   );
 
   const legenda = useMemo(

@@ -65,6 +65,7 @@ export function useGeminiDireto({ direto, conversaId, uidDaAssistente, microfone
   const [somPreso, setSomPreso] = useState(false);
 
   const contexto = useRef<AudioContext | null>(null);
+  const socket = useRef<WebSocket | null>(null);
   // O relógio lê sempre o valor mais novo destas coisas, sem reabrir a conversa.
   const cair = useRef(aoCair);
   const inicio = useRef(direto);
@@ -154,6 +155,7 @@ export function useGeminiDireto({ direto, conversaId, uidDaAssistente, microfone
     }, INTERVALO_DO_NIVEL_MS);
 
     const ws = new WebSocket(`${ENDERECO_DO_GEMINI}?access_token=${encodeURIComponent(inicio.current.passe)}`);
+    socket.current = ws;
     // Em bytes, pra cada mensagem ser lida na ordem em que chegou: a voz vem em pedaços.
     ws.binaryType = 'arraybuffer';
     const leitor = new TextDecoder();
@@ -342,6 +344,7 @@ export function useGeminiDireto({ direto, conversaId, uidDaAssistente, microfone
       } catch {
         // já fechado
       }
+      socket.current = null;
       contexto.current = null;
       void ctx.close().catch(() => undefined);
       setFaixaDaVoz(null);
@@ -359,6 +362,29 @@ export function useGeminiDireto({ direto, conversaId, uidDaAssistente, microfone
     setSomPreso(false);
   }, []);
 
+  /** Injeta aviso interno suave ~90 s antes do teto pra IA encaminhar a despedida sem cortar o idoso. */
+  const avisarEncerramento = useCallback(() => {
+    const ws = socket.current;
+    if (!ws || ws.readyState !== WebSocket.OPEN) return;
+    ws.send(
+      JSON.stringify({
+        clientContent: {
+          turns: [
+            {
+              role: 'user',
+              parts: [
+                {
+                  text: '[Aviso interno de tempo: falta cerca de um minuto pro limite desta ligação. Na sua próxima resposta, valide com carinho o que a pessoa acabou de contar e comece a se despedir com naturalidade, dizendo quando vocês conversam de novo.]',
+                },
+              ],
+            },
+          ],
+          turnComplete: false,
+        },
+      }),
+    );
+  }, []);
+
   return {
     /** As falas no mesmo formato da legenda da Agora, pra tela reaproveitar o resto. */
     transcript: legenda.falas as unknown as ItemDoTranscript[],
@@ -370,5 +396,6 @@ export function useGeminiDireto({ direto, conversaId, uidDaAssistente, microfone
     conta,
     somPreso,
     soltarSom,
+    avisarEncerramento,
   };
 }

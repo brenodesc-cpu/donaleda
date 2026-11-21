@@ -45,19 +45,22 @@ export function useTetoDaLigacao(
   assistenteFalando: boolean,
   microfone: IMicrophoneAudioTrack | null,
   onEncerrar: () => void,
+  onAvisoDeFim?: () => void,
 ): void {
   // O relógio lê sempre o valor mais novo destas coisas, sem recomeçar a cada render.
   const encerrar = useRef(onEncerrar);
+  const avisarFim = useRef(onAvisoDeFim);
   const falando = useRef(assistenteFalando);
   const mic = useRef(microfone);
   const marca = marcaDaFalaDoIdoso(transcript, uidDaAssistente);
   const marcaAtual = useRef(marca);
   useEffect(() => {
     encerrar.current = onEncerrar;
+    avisarFim.current = onAvisoDeFim;
     falando.current = assistenteFalando;
     mic.current = microfone;
     marcaAtual.current = marca;
-  }, [onEncerrar, assistenteFalando, microfone, marca]);
+  }, [onEncerrar, onAvisoDeFim, assistenteFalando, microfone, marca]);
 
   useEffect(() => {
     if (!assistenteNaLinha) return;
@@ -82,6 +85,9 @@ export function useTetoDaLigacao(
         { tetoMs: TETO_DA_LIGACAO_MS, semFalaMs: TETO_SEM_FALA_MS },
       );
       relogios = resultado.relogios;
+      if (resultado.avisarFim) {
+        avisarFim.current?.();
+      }
       if (resultado.encerrar) {
         encerrou = true;
         encerrar.current();
