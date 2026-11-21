@@ -171,7 +171,7 @@ export function abrirConversa(
   base: Base,
   agora: Date = new Date(),
   chamadaId?: string,
-  sala?: { canal: string; agenteId: string },
+  sala?: { canal: string; agenteId: string; modo?: 'gemini' | 'tres' },
 ): Conversa {
   // Conversa que ficou aberta (aba fechada, queda de conexão) é encerrada aqui.
   for (const c of base.conversas) {
@@ -182,7 +182,7 @@ export function abrirConversa(
     inicio: agora.toISOString(),
     falasDoIdoso: 0,
     ...(chamadaId ? { chamadaId } : {}),
-    ...(sala ? { canal: sala.canal, agenteId: sala.agenteId } : {}),
+    ...(sala ? { canal: sala.canal, agenteId: sala.agenteId, ...(sala.modo ? { modo: sala.modo } : {}) } : {}),
   };
   base.conversas.push(conversa);
   return conversa;

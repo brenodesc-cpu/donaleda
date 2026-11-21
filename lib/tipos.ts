@@ -91,6 +91,8 @@ export interface Conversa {
   /** A sala da Agora da ligação e a assistente que entrou nela, pra família poder entrar. */
   canal?: string;
   agenteId?: string;
+  /** O jeito de voz da ligação: as ligações do Gemini respondem por outro endereço da Agora. */
+  modo?: 'gemini' | 'tres';
   /** Quando alguém da família entrou na ligação. */
   familiaEntrouEm?: string;
 }

@@ -48,5 +48,6 @@ describe('família na ligação', () => {
     const recado = recadoDaEntrada(baseDeExemplo(AGORA, 'id'));
     expect(recado).toContain('Marina acabou de entrar nesta ligação');
     expect(recado).toContain('Só volte a falar se chamarem você pelo nome');
+    expect(recado).toContain('"Dona helena, a sua filha Marina entrou na ligação."'.replace('helena', 'Helena'));
   });
 });

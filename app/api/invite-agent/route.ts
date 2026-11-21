@@ -304,7 +304,7 @@ export async function POST(request: NextRequest) {
 
     const agentId = await session.start();
     const conversa = await mudarBase(idosoId, (b) =>
-      abrirConversa(b, agora, chamada?.id, { canal: channel_name, agenteId: agentId }),
+      abrirConversa(b, agora, chamada?.id, { canal: channel_name, agenteId: agentId, modo }),
     );
 
     return NextResponse.json({

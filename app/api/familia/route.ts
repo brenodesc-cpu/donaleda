@@ -7,7 +7,7 @@ import { randomInt } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { arrumarHorarios, avancarChamadas, pedirChamadaDaFamilia } from '@/lib/chamadas';
 import { conversaAoVivo, montarPainel, mudarBase, mudarBaseQuando } from '@/lib/dados';
-import { avisarAssistente, entradaDaFamilia, recadoDaEntrada } from '@/lib/familiaNaLigacao';
+import { avisarAssistente, entradaDaFamilia } from '@/lib/familiaNaLigacao';
 import { dataPedida, GAVETAS, guardar, horaPedida, mudar } from '@/lib/memoria';
 import { exigirIdosoDaFamilia } from '@/lib/sessao';
 import { clienteDoServidor } from '@/lib/supabase/servidor';
@@ -160,11 +160,11 @@ export async function POST(request: Request) {
       if (!conversa) return null;
       const primeira = !conversa.familiaEntrouEm;
       if (primeira) conversa.familiaEntrouEm = new Date().toISOString();
-      return { conversa: { ...conversa }, primeira, recado: recadoDaEntrada(base) };
+      return { conversa: { ...conversa }, primeira, base: structuredClone(base) };
     });
     if (!achada) return NextResponse.json({ ok: false, erro: 'sem_ligacao' }, { status: 409 });
     const entrada = entradaDaFamilia(achada.conversa.canal!);
-    if (achada.primeira) await avisarAssistente(achada.conversa, achada.recado);
+    if (achada.primeira) await avisarAssistente(achada.conversa, achada.base);
     return NextResponse.json({ ok: true, ...entrada });
   }
 
