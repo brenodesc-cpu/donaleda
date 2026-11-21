@@ -74,7 +74,7 @@ Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 - Pra família: "O que vocês usam hoje pra saber se está tudo bem com ela?" (ligação, visita, câmera, grupo de WhatsApp, nada)
 - Pra família: "Quanto tempo por semana vocês gastam indo ver ou ligando pra checar se está tudo bem com ela?" Anote em horas, somando quem vai e quem liga.
 - Pra família: "Quanto você pagaria por mês por isso?" Anote o número que a pessoa disser, sem falar número nenhum antes.
-- Pra família, logo depois: "Pagaria R$ 129,90 por mês por uma ligação por dia com os avisos no painel?" Anote o sim ou o não.
+- Pra família, logo depois: "Pagaria R$ 129,90 por mês por uma ligação por dia, de até 10 minutos, com os avisos no painel?" Anote o sim ou o não.
 - Pra família: "Quem decide uma compra dessas na família?"
 - Pros dois: "Posso pedir pra Dona Leda ligar de novo amanhã, domingo, às 9h?" Só marque com o sim dos dois.
 
@@ -88,28 +88,29 @@ Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 
 A Stephanie preenche uma linha por idoso. Os combinados pra contar igual:
 - **Atendeu:** "sim" quando ele atendeu e falou pelo menos uma frase com ela. "Não" quando tocou e ele não atendeu. "Não chegou" quando a ligação nem tocou por falha nossa; essa linha sai da conta de quem atendeu e entra nos limites.
-- **Minutos:** do atender ao tchau, no cronômetro.
+- **Minutos conversados:** do atender ao tchau, no cronômetro. É o número da conta de custo, porque o plano de R$ 129,90 dá até 10 minutos por dia.
+- **Chegou aos 10 min?:** "sim" quando a ligação bateu o limite de 10 minutos e foi cortada.
 - **Precisou de ajuda:** em que passo (abrir, código, microfone, atender, durante a conversa).
 
-| Código | Idade | Mora sozinho? | Atendeu? | Minutos | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | O que usam hoje | Horas por semana checando | Pagaria por mês, sem ouvir número (R$) | Pagaria R$ 129,90? | Quem decide a compra | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| A1 | | | | | | | | | | | | | | | | | | |
-| A2 | | | | | | | | | | | | | | | | | | |
-| A3 | | | | | | | | | | | | | | | | | | |
-| A4 | | | | | | | | | | | | | | | | | | |
-| A5 | | | | | | | | | | | | | | | | | | |
+| Código | Idade | Mora sozinho? | Atendeu? | Minutos conversados | Chegou aos 10 min? | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | O que usam hoje | Horas por semana checando | Pagaria por mês, sem ouvir número (R$) | Pagaria R$ 129,90? | Quem decide a compra | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| A1 | | | | | | | | | | | | | | | | | | | |
+| A2 | | | | | | | | | | | | | | | | | | | |
+| A3 | | | | | | | | | | | | | | | | | | | |
+| A4 | | | | | | | | | | | | | | | | | | | |
+| A5 | | | | | | | | | | | | | | | | | | | |
 
 Pra colar numa planilha:
 
 ```
-Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,O que usam hoje,Horas por semana checando,Pagaria por mês sem ouvir número (R$),"Pagaria R$ 129,90?",Quem decide a compra,Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
+Código,Idade,Mora sozinho?,Atendeu?,Minutos conversados,Chegou aos 10 min?,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,O que usam hoje,Horas por semana checando,Pagaria por mês sem ouvir número (R$),"Pagaria R$ 129,90?",Quem decide a compra,Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
 ```
 
 ## 4. O que vai pro pitch
 
 - Quantos idosos participaram e a faixa de idade.
 - Quantos atenderam, de quantas ligações que chegaram.
-- Os minutos médios de conversa.
+- Os minutos médios de conversa e quantas ligações chegaram ao limite de 10 minutos. Eles entram na conta de custo do plano de R$ 129,90.
 - Quantos disseram que atenderiam no domingo e quantos atenderam de verdade às 9h.
 - Quantas famílias usariam, o valor do meio que elas disseram sem ouvir número e quantas disseram sim aos R$ 129,90 por mês.
 - As horas por semana que a família gasta indo ver ou ligando pra checar, no valor do meio. É o número de tamanho do problema que os mentores pediram (ver "O que a banca vai querer ver" em [entrevistas.md](entrevistas.md)).

@@ -139,7 +139,7 @@ Pra família que cada casa indicar. Serve também pra família de idoso que mora
 
 Reforça: sim, e a pessoa já diz o horário. Derruba: "depois eu vejo".
 
-Depois do fechamento vem o preço, nesta ordem. Primeiro, sem dizer número nenhum: "Quanto você pagaria por mês por isso?", e anote o valor. Depois: "Pagaria R$ 129,90 por mês por uma ligação por dia com os avisos no painel?", e anote o sim ou o não.
+Depois do fechamento vem o preço, nesta ordem. Primeiro, sem dizer número nenhum: "Quanto você pagaria por mês por isso?", e anote o valor. Depois: "Pagaria R$ 129,90 por mês por uma ligação por dia, de até 10 minutos, com os avisos no painel?", e anote o sim ou o não.
 
 ## D. O próprio idoso (se a casa e a família deixarem)
 
