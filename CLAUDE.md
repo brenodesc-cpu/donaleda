@@ -24,6 +24,7 @@ Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta
 | [conhecimento/entrevistas.md](conhecimento/entrevistas.md) | O roteiro das ligações com casas de idosos, cuidadoras e famílias, o que cada resposta reforça ou derruba e o que decide depois | Antes de ligar pra uma casa, e ao montar a validação ou o pitch |
 | [conhecimento/segundo-cerebro.md](conhecimento/segundo-cerebro.md) | O desenho do que a Dona Leda aprende da vida do idoso, como a conversa lê e grava, o que a família vê e o que o idoso controla por voz, como ficou construído e a conferência de 21/11 com os defeitos abertos | Antes de mexer nas lembranças, na instrução da conversa ou no painel da família |
 | [conhecimento/verificacao.md](conhecimento/verificacao.md) | A Dona Leda conferida contra o regulamento: regras que eliminam, nota provável por critério, as ações que mais sobem a nota e a análise do Gemini Live | Ao priorizar o que falta até a entrega |
+| [conhecimento/modo-direto.md](conhecimento/modo-direto.md) | O modo de voz sem o motor de conversa da Agora (`?modo=direto`): como funciona, o custo medido por ligação e o que falta pra ele virar o padrão | Antes de mexer na voz, no custo por família ou na conta da operação |
 | [conhecimento/landing.md](conhecimento/landing.md) | O briefing da página de apresentação: quem lê, os blocos, as regras do conteúdo, a direção escolhida e como publicar | Ao montar ou mexer na landing page |
 
 Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da base no mesmo envio do código. Escreva o que vale hoje, com a data.
@@ -47,6 +48,7 @@ Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da b
 - `public/teste-tres-versoes.html`: a página solta do teste das três versões com adultos (parte 5 de `conhecimento/validacao.md`), em `/teste-tres-versoes.html`. Tudo nela é inventado.
 - `app/landing/` e `components/landing/`: a landing page, em `/landing` e na página inicial de quem chega sem aparelho ligado. O briefing está em `conhecimento/landing.md`.
 - `app/api/invite-agent/route.ts`: começa a conversa na Agora (escuta, modelo, voz e ações).
+- `app/api/direto/`, `hooks/useGeminiDireto.ts`, `components/ConversaDireta.tsx` e `lib/direto.ts`: o modo direto da voz (`?modo=direto`), em que o aparelho fala com o Gemini e a Agora fica só com a sala. Não é o padrão; ver `conhecimento/modo-direto.md`.
 - `app/api/mcp/route.ts` e `lib/ferramentas.ts`: as ações que a Dona Leda faz durante a conversa (anotar, lembrar, avisar, resumir).
 - `app/api/conversa/route.ts` e `lib/regras.ts`: as regras fixas de segurança em cima de cada fala.
 - `app/api/familia/route.ts` e `lib/dados.ts`: a ficha e o que o painel mostra.
