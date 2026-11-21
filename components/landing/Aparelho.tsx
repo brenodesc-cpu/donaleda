@@ -1,4 +1,4 @@
-// O celular desenhado da direção 2, com as telas que o produto mostra de verdade:
+// O celular desenhado da landing page, com as telas que o produto mostra de verdade:
 // a ligação tocando e a conversa (aparelho do idoso) e o painel (celular da família).
 // Os textos repetem os das telas reais: components/ChamadaTocando.tsx,
 // components/familia/formatos.ts e lib/regras.ts. A pessoa é a do exemplo (lib/exemplo.ts).

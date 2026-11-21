@@ -67,7 +67,7 @@ html:has(.lp) {
   transform: rotate(45deg);
 }
 
-/* Direção 2: a troca de tela dentro do aparelho. */
+/* A troca de tela dentro do aparelho. */
 @keyframes lp-tela-entra {
   from {
     opacity: 0;
@@ -85,7 +85,7 @@ html:has(.lp) {
   animation: lp-tela-entra 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Direção 2: o anel que pulsa atrás do disco enquanto a ligação toca. */
+/* O anel que pulsa atrás do disco enquanto a ligação toca. */
 @keyframes lp-anel {
   0% {
     transform: scale(0.82);
@@ -102,25 +102,9 @@ html:has(.lp) {
   animation: lp-anel 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
 }
 
-/* Direção 3: as barras da conta crescem uma vez, quando a página abre. */
-@keyframes lp-barra {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
-.lp-barra {
-  transform-origin: left center;
-  animation: lp-barra 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .lp-tela-entra,
-  .lp-anel,
-  .lp-barra {
+  .lp-anel {
     animation: none;
   }
 

@@ -1,6 +1,6 @@
 'use client';
 
-// Direção 2: as partes interativas. No topo, o celular toca e o botão Atender
+// As partes interativas da landing page. No topo, o celular toca e o botão Atender
 // funciona. Em "como funciona", o celular fica parado na tela larga e troca de
 // tela conforme a pessoa rola; no celular de quem lê, cada passo traz a sua tela.
 

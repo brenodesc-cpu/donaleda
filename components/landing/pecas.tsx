@@ -1,5 +1,4 @@
-// Peças que as três direções da landing dividem: o botão, a fonte de um número,
-// as perguntas frequentes, o rodapé e a faixa de escolha entre as direções.
+// Peças da landing page: o botão, a fonte de um número, as perguntas frequentes e o rodapé.
 
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
@@ -21,43 +20,6 @@ export function SemViuva({ texto, palavras = 3 }: { texto: string; palavras?: nu
       {partes.slice(0, -palavras).join(' ')}{' '}
       <span className="whitespace-nowrap">{partes.slice(-palavras).join(' ')}</span>
     </>
-  );
-}
-
-const NOMES_DAS_DIRECOES = ['Carta', 'Produto em cena', 'Conta e prova'] as const;
-
-/**
- * Faixa do topo enquanto o Breno escolhe a direção: diz qual é esta e leva às outras.
- * Sai da página quando uma direção for escolhida.
- */
-export function FaixaDeEscolha({ atual }: { atual: 1 | 2 | 3 }) {
-  return (
-    <nav
-      aria-label="Direções da landing page"
-      className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 bg-[#1F1308] px-4 py-2 text-sm text-[#FFF8E8]"
-    >
-      <span>
-        Direção {atual} de 3: {NOMES_DAS_DIRECOES[atual - 1]}
-      </span>
-      <span className="flex items-center gap-1">
-        {[1, 2, 3].map((n) => (
-          <Link
-            key={n}
-            href={`/landing/${n}`}
-            aria-current={n === atual ? 'page' : undefined}
-            className={cn(
-              'flex h-8 min-w-8 items-center justify-center rounded-full px-2 font-semibold',
-              n === atual ? 'bg-[#F7B90F] text-[#33200F]' : 'underline hover:bg-white/10',
-            )}
-          >
-            {n}
-          </Link>
-        ))}
-        <Link href="/landing" className="ml-2 flex h-8 items-center underline hover:no-underline">
-          Ver as três
-        </Link>
-      </span>
-    </nav>
   );
 }
 
@@ -92,9 +54,8 @@ export function BotaoPrincipal({
   );
 }
 
-/** A fonte de um número, com link quando a base tem o endereço. */
+/** A fonte de um número, com o link pra quem quiser conferir. */
 export function FonteDoNumero({ fonte, className }: { fonte: Fonte; className?: string }) {
-  if (!fonte.url) return <span className={className}>{fonte.nome}</span>;
   return (
     <a href={fonte.url} target="_blank" rel="noreferrer" className={cn('underline hover:no-underline', className)}>
       {fonte.nome}

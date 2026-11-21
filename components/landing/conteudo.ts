@@ -24,32 +24,11 @@ export const DINHEIRO = [
 
 export const ASSINATURA = 'Dona Leda: longevidade com qualidade de vida.';
 
-// --- Como funciona ---
-
-export const PASSOS = [
-  {
-    titulo: 'A Dona Leda liga na hora marcada',
-    texto:
-      'O celular ou o tablet toca como uma chamada de vídeo comum. A família escolhe os horários e também pode pedir uma ligação na hora.',
-  },
-  {
-    titulo: 'Seu pai ou sua mãe só atende',
-    texto:
-      'Um toque no botão verde e a conversa começa. Ela pergunta do sono, da comida, do remédio e da dor, e lembra do que ouviu nos outros dias.',
-  },
-  {
-    titulo: 'Você vê o resumo do dia e os avisos',
-    texto:
-      'Depois da ligação, o painel da família mostra como foi o dia, a semana e um resumo curto da conversa. Se algo sai do normal, o aviso aparece ali.',
-  },
-] as const;
+// --- A conversa ---
 
 /** A frase que a Dona Leda usa na primeira ligação (lib/persona.ts), com a pessoa de exemplo. */
 export const SAUDACAO_DE_EXEMPLO =
   'Bom dia, dona Helena! Aqui é a Dona Leda, a assistente virtual que a sua filha Marina contratou pra conversar com a senhora todo dia. Como a senhora está hoje?';
-
-export const NOTA_DO_EXEMPLO =
-  'Dona Helena e Marina são pessoas de exemplo. A frase é a que a Dona Leda usa na primeira ligação.';
 
 // --- A camada de cuidado, com o que ela faz hoje ---
 
@@ -91,91 +70,9 @@ export const FONTES = {
     nome: 'Cidesp, maio de 2026',
     url: 'https://cidesp.com.br/conteudo/tabela-de-preco-de-cuidador-de-idoso-2026-guia-completo',
   },
-  tecnosenior: {
-    nome: 'Tecnosenior, preço lido em 21/11/2026',
-    url: 'https://tecnosenior.com/solucoes/vidafone-fixo/',
-  },
-  setor: { nome: 'preço do setor, levantado pelo time em 21/11/2026', url: null },
-  projecoes: { nome: 'IBGE, Projeções da População, 2024', url: null },
-  pnad: { nome: 'IBGE, PNAD Contínua 2025', url: null },
 } as const;
 
 export type Fonte = (typeof FONTES)[keyof typeof FONTES];
-
-/** As linhas da conta de um mês, da menor pra maior. */
-export const CONTA = [
-  {
-    oQue: 'Aposentadoria de um salário mínimo',
-    detalhe: 'É o que recebem 62,5% dos beneficiários do INSS',
-    valor: 'R$ 1.621',
-    numero: 1621,
-    fonte: FONTES.inss,
-  },
-  {
-    oQue: 'Cuidador com carteira, pelo piso',
-    detalhe: 'Só o salário, sem 13º, férias e encargos',
-    valor: 'R$ 1.760,44',
-    numero: 1760.44,
-    fonte: FONTES.caged,
-  },
-  {
-    oQue: 'Cuidador de 12 horas por dia',
-    detalhe: 'Pela tabela de preço de 2026',
-    valor: 'R$ 2.800 a 4.500',
-    numero: 4500,
-    fonte: FONTES.cidesp,
-  },
-] as const;
-
-/** O que a família usa hoje, quanto custa e o que falta em cada saída. */
-export const SAIDAS_DE_HOJE = [
-  {
-    oQue: 'Ligar ela mesma',
-    custo: 'Tempo',
-    falta: 'Não acontece todo dia',
-    fonte: null,
-  },
-  {
-    oQue: 'Botão de emergência',
-    custo: 'R$ 189 a 249 por mês',
-    falta: 'Só serve depois que algo deu errado',
-    fonte: FONTES.tecnosenior,
-  },
-  {
-    oQue: 'Cuidador',
-    custo: 'R$ 2.800 a 4.500 por mês',
-    falta: 'Caro pra quem ainda vive sozinho e bem',
-    fonte: FONTES.cidesp,
-  },
-  {
-    oQue: 'Residencial',
-    custo: 'R$ 6 mil a 11 mil por mês',
-    falta: 'É pra quando a autonomia acabou',
-    fonte: FONTES.setor,
-  },
-] as const;
-
-export const ONDE_ELA_ENTRA =
-  'A Dona Leda entra no espaço entre a família ligar quando dá e contratar um cuidador: a pessoa ainda mora sozinha e precisa de cuidado todo dia.';
-
-/** Os números do país, cada um com a fonte. */
-export const PAIS = [
-  {
-    numero: '36 milhões',
-    oQue: 'de brasileiros têm 60 anos ou mais',
-    fonte: FONTES.projecoes,
-  },
-  {
-    numero: '6 milhões',
-    oQue: 'é mais ou menos quantos deles moram sozinhos',
-    fonte: FONTES.pnad,
-  },
-  {
-    numero: '2029',
-    oQue: 'é o ano em que o país passa a ter mais idosos que crianças',
-    fonte: FONTES.projecoes,
-  },
-] as const;
 
 // --- Confiança ---
 
@@ -200,20 +97,6 @@ export const CONFIANCA = [
     texto:
       'A Dona Leda não dá diagnóstico e não muda remédio. Em emergência, ela orienta ligar pro SAMU no 192 e avisa a família.',
   },
-] as const;
-
-export const SEMPRE = [
-  'Diz que é assistente virtual, em toda ligação.',
-  'Avisa a família de queda, dor no peito e pedido de dinheiro ou senha, por regra fixa.',
-  'Avisa quando a pessoa não atende, depois de duas tentativas.',
-  'Orienta ligar pro SAMU no 192 em emergência.',
-] as const;
-
-export const NUNCA = [
-  'Guarda a conversa inteira.',
-  'Pede dinheiro, senha ou código.',
-  'Dá diagnóstico ou muda remédio.',
-  'Finge ser parente, médica ou banco.',
 ] as const;
 
 // --- Pra residenciais ---
