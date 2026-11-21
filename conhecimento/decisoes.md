@@ -4,6 +4,8 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 | Data | Decisão | Por quê |
 |---|---|---|
+| 21/11/2026 | A marca aplicada é a Gema: disco de telefone antigo amarelo com o rosto no miolo, Café e Casca, Gabarito nos títulos e Atkinson no texto | Aprovada pelo time no brand book. Quem tem mais de 70 anos discou a vida inteira num telefone de disco, e o botão de atender fica sendo o único verde da tela |
+| 21/11/2026 | Na família, vermelho só no aviso urgente; remédio não tomado e dor forte aparecem como atenção | O brand book reserva a Goiabada pro urgente, e o próprio aviso de remédio já é de atenção |
 | 21/11/2026 | Filtro de barulho da Agora (AI Noise Suppression) no microfone do aparelho, nos dois modos, no nível suave | Demonstração em salão cheio e TV ligada na casa do idoso. O nível suave preserva a voz baixa. Se o aparelho não aguentar, o microfone segue sem filtro |
 | 21/11/2026 | Foco na voz de quem fala (selective attention locking da Agora) ligado só no modo de três peças | A Agora recusa o foco junto com o Gemini Live: o pedido volta com erro 400, testado em 21/11 |
 | 21/11/2026 | Lembrete de silêncio: depois de 9 s calado, ela pergunta com calma se a pessoa ainda está aí | No modo de três peças é o recurso da Agora (`silence_config`). No Gemini a Agora não aplica esse recurso, e a regra fica só nas instruções, sem garantia de que ela fale sozinha |

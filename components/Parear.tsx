@@ -106,7 +106,7 @@ export function Parear() {
       </div>
 
       {erro ? (
-        <p role="alert" className="max-w-md rounded-2xl bg-danger-soft px-5 py-4 text-center text-xl font-medium text-destructive">
+        <p role="alert" className="max-w-md rounded-2xl border-2 border-foreground bg-secondary px-5 py-4 text-center text-xl font-medium text-foreground">
           {erro}
         </p>
       ) : null}

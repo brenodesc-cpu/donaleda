@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Rosto } from './Rosto';
 
 const BOTAO =
-  'flex min-h-24 w-full max-w-md items-center gap-4 rounded-2xl px-6 py-5 text-left text-2xl font-semibold shadow-md transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]';
+  'flex min-h-24 w-full max-w-md items-center gap-4 rounded-2xl px-6 py-5 text-left font-titulo text-2xl font-semibold shadow-md transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]';
 
 /** A primeira abertura do app num aparelho novo: quem está com ele na mão. */
 export function BoasVindas() {
@@ -31,7 +31,7 @@ export function BoasVindas() {
           <HeartHandshake aria-hidden className="h-9 w-9 shrink-0" />
           <span>
             Sou da família
-            <span className="block text-lg font-normal opacity-90">
+            <span className="block font-sans text-lg font-normal opacity-90">
               Quero acompanhar quem eu cuido
             </span>
           </span>
@@ -45,8 +45,8 @@ export function BoasVindas() {
         >
           <Smartphone aria-hidden className="h-9 w-9 shrink-0" />
           <span>
-            Este aparelho é do idoso
-            <span className="block text-lg font-normal text-muted-foreground">
+            Este aparelho vai receber as ligações
+            <span className="block font-sans text-lg font-normal text-muted-foreground">
               Vou digitar o código que a família mandou
             </span>
           </span>

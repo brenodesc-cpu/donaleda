@@ -34,7 +34,7 @@ export default function AparelhoPage() {
               <li>
                 No celular ou tablet de {idoso.tratamento}, abra o app Dona Leda.
               </li>
-              <li>Toque em &quot;Este aparelho é do idoso&quot;.</li>
+              <li>Toque em &quot;Este aparelho vai receber as ligações&quot;.</li>
               <li>Digite o código que aparece aqui embaixo.</li>
             </ol>
             <p className="text-base text-muted-foreground">

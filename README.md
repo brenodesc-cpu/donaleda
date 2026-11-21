@@ -42,7 +42,7 @@ A pessoa idosa que mora sozinha usa, e só precisa atender. O filho ou a filha q
 | `/familia/novo` | Cadastrar o idoso |
 | `/familia/aparelho` | Gerar o código ou mandar o link |
 | `/familia/ajustes` | Horários, atender sozinho, remédios, apagar os dados |
-| `/marca` | As três direções de marca estudadas |
+| `/marca` | As quatro direções de marca, com a Gema aplicada |
 
 ## Como a Agora entra
 
@@ -130,7 +130,7 @@ A lista completa com as versões está em `package.json` e `pnpm-lock.yaml`.
 - o banco no Supabase, o login da família e o código que liga o aparelho do idoso (`supabase/`, `lib/dados.ts`, `lib/sessao.ts`, `app/api/idosos`, `app/api/aparelho`);
 - a tela do idoso com o rosto animado e a tela do código (`components/`, `hooks/`, `app/parear`);
 - o painel da família, o cadastro, o código do aparelho e os ajustes (`app/familia`, `app/entrar`, `components/familia`);
-- a marca: três direções, a aplicada, o rosto e o ícone (`app/marca`, `components/marca`, `conhecimento/marca.md`);
+- a marca: quatro direções, a Gema aplicada, o rosto de disco de telefone e o ícone (`app/marca`, `components/marca`, `conhecimento/marca.md`);
 - os apps de iPhone e Android (`capacitor.config.ts`, `ios/`, `android/`);
 - as conferências automáticas (`testes/`);
 - a base de conhecimento do time (`conhecimento/`).

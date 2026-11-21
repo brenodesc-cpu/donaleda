@@ -75,7 +75,7 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
     return (
       <div role="status" className="flex flex-col items-center gap-3 rounded-2xl bg-success-soft p-6 text-center">
         <CheckCircle2 aria-hidden="true" className="h-12 w-12 text-success" />
-        <p className="text-xl font-semibold text-success">Aparelho ligado</p>
+        <p className="font-titulo text-xl font-semibold text-success">Aparelho ligado</p>
         <p className="text-base text-foreground">
           A partir de agora a Dona Leda liga pra {idoso.tratamento} nesse aparelho.
         </p>

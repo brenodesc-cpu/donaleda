@@ -70,16 +70,15 @@ export function lerAlimentacao(dia: Dia): Leitura {
 
 export function lerRemedio(dia: Dia): Leitura {
   if (dia.remedio === 'tomou') return { texto: 'Tomou o remédio', tom: 'bom' };
-  if (dia.remedio === 'nao_tomou') return { texto: 'Não tomou', tom: 'ruim' };
+  if (dia.remedio === 'nao_tomou') return { texto: 'Não tomou', tom: 'atencao' };
   if (dia.remedio === 'nao_confirmou')
     return { texto: 'Não confirmou', tom: 'atencao' };
   return SEM_RESPOSTA;
 }
 
-/** Dor de 7 pra cima é vermelho, de 4 a 6 é atenção, abaixo disso fica neutra. */
+/** Dor de 4 pra cima pede atenção, abaixo disso fica neutra. Vermelho fica só pro urgente. */
 export function tomDaDor(dor: number): Tom {
   if (dor <= 0) return 'bom';
-  if (dor >= 7) return 'ruim';
   if (dor >= 4) return 'atencao';
   return 'neutro';
 }

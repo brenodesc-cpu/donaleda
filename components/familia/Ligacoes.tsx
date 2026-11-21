@@ -72,7 +72,7 @@ export function Ligacoes({ painel, idosoId, pedido, onLigar }: LigacoesProps) {
       <BotaoDeLigar painel={painel} pedido={pedido} onLigar={onLigar} />
       <div aria-live="polite" className="flex flex-col gap-1">
         {naoDeu ? (
-          <p className="text-base text-destructive">
+          <p className="text-base text-warning">
             Não deu pra ligar agora. Confira se o aparelho está ligado na internet.
           </p>
         ) : null}

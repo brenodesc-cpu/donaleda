@@ -66,7 +66,7 @@ export function ChamadaTocando({
         </BotaoGrande>
         <BotaoGrande
           tom="discreto"
-          className="min-h-16 text-xl"
+          className="text-xl"
           onClick={onRecusar}
         >
           Agora não

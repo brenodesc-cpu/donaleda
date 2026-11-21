@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, type ChangeEvent } from 'react';
 import { LogOut, Settings, Smartphone, LayoutDashboard } from 'lucide-react';
-import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
+import { Logo } from '@/components/marca/Logo';
 import type { IdosoDaFamilia } from '@/lib/tipos';
 import { enderecoCom } from './api';
 import { sair } from './conta';
@@ -49,9 +49,9 @@ export function BarraDoTopo({ idosos, idoso, onEscolher, ativa }: BarraDoTopoPro
       <div className="flex items-center justify-between gap-3">
         <Link
           href={enderecoCom('/familia', id)}
-          className="text-xl font-bold tracking-tight text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          {NOME_DA_ASSISTENTE}
+          <Logo className="text-xl" />
         </Link>
         <button
           type="button"

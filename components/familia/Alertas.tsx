@@ -49,10 +49,11 @@ function CartaoDoAlerta({
 }: CartaoProps) {
   const Icone = ICONE_DO_TIPO[alerta.tipo] ?? HeartPulse;
   const urgente = alerta.gravidade === 'urgente';
+  // Urgente é Goiabada cheia; atenção é Manteiga com contorno Café (brand book).
   const cores = urgente
-    ? 'bg-danger-soft border-destructive/40'
-    : 'bg-warning-soft border-warning/40';
-  const destaque = urgente ? 'text-destructive' : 'text-warning';
+    ? 'border-2 border-destructive bg-destructive'
+    : 'border-2 border-foreground bg-warning-soft';
+  const destaque = urgente ? 'text-destructive-foreground' : 'text-foreground';
   const origem =
     alerta.origem === 'assistente'
       ? `avisado pela ${assistente}`
@@ -62,7 +63,7 @@ function CartaoDoAlerta({
 
   return (
     <li
-      className={`flex flex-col gap-3 rounded-2xl border p-5 ${cores} ${
+      className={`flex flex-col gap-3 rounded-2xl p-5 ${cores} ${
         alerta.visto ? 'opacity-60' : ''
       }`}
     >
@@ -73,8 +74,8 @@ function CartaoDoAlerta({
             {rotuloDoAlerta(alerta.tipo, tratamento)}
             {urgente ? <span className="sr-only"> (urgente)</span> : null}
           </p>
-          <p className="text-lg text-foreground">{alerta.texto}</p>
-          <p className="text-base text-muted-foreground">
+          <p className={`text-lg ${urgente ? 'text-destructive-foreground' : 'text-foreground'}`}>{alerta.texto}</p>
+          <p className={`text-base ${urgente ? 'text-destructive-foreground' : 'text-muted-foreground'}`}>
             {quandoFoi(alerta.criadoEm, hoje)}, {origem}
           </p>
         </div>

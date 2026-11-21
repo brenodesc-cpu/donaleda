@@ -192,6 +192,12 @@ h3,
   animation: discar 2.4s cubic-bezier(0.5, 0, 0.3, 1) infinite;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .disco-discando {
+    animation: none;
+  }
+}
+
 body {
   font-family: var(--font-sans);
   color: hsl(var(--foreground));

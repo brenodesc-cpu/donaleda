@@ -10,8 +10,8 @@ export function AmostraDaLigacao({ estilo }: { estilo: Direcao }) {
     <div className="mx-auto w-full max-w-[19rem] rounded-[2rem] border-4 border-foreground/80 bg-background px-5 pb-6 pt-5 text-center shadow-lg">
       <p className="text-base text-muted-foreground">Chamada de vídeo</p>
       <Rosto estilo={estilo} estado="ligando" nivel={0} className="mx-auto h-40 w-40 sm:h-40 sm:w-40" />
-      <p className="mt-1 text-3xl font-bold text-foreground">Dona Leda</p>
-      <p className="text-lg text-muted-foreground">está te ligando</p>
+      <p className="mt-1 font-titulo text-3xl font-semibold text-foreground">Dona Leda está ligando</p>
+      <p className="text-lg text-muted-foreground">Sua assistente virtual</p>
       <span className="mt-5 flex min-h-20 w-full items-center justify-center gap-3 rounded-2xl bg-success text-2xl font-semibold text-white shadow-md">
         <Phone aria-hidden className="h-7 w-7" />
         Atender
@@ -37,7 +37,7 @@ export function AmostraDoCartao() {
       <p className="mt-1 text-base text-muted-foreground">
         Conversou com a Dona Leda às 10h12, por 7 minutos
       </p>
-      <div className="mt-4 rounded-xl border border-destructive/40 bg-danger-soft p-3 text-base font-semibold text-destructive">
+      <div className="mt-4 rounded-xl border-2 border-foreground bg-warning-soft p-3 text-base font-semibold text-foreground">
         Não tomou o remédio da pressão
       </div>
       <div className="mt-3 grid grid-cols-3 gap-2">

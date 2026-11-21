@@ -70,7 +70,7 @@ export function Esperando({ horarios, proxima, onLigar }: EsperandoProps) {
       </div>
       <Link
         href="/familia"
-        className="inline-flex min-h-11 items-center rounded-lg px-3 text-base text-muted-foreground underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="inline-flex min-h-11 items-center rounded-lg px-3 text-lg text-muted-foreground underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         Painel da família
       </Link>
@@ -108,7 +108,7 @@ export function AvisoDeFalha({ motivo, onTentar, onVoltar }: AvisoDeFalhaProps) 
       <div className="flex w-full flex-col items-center gap-4">
         <BotaoGrande onClick={onTentar}>Tentar de novo</BotaoGrande>
         {onVoltar ? (
-          <BotaoGrande tom="discreto" className="min-h-16 text-xl" onClick={onVoltar}>
+          <BotaoGrande tom="discreto" className="text-xl" onClick={onVoltar}>
             Voltar
           </BotaoGrande>
         ) : null}

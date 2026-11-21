@@ -44,7 +44,7 @@ export function Campo({ id, rotulo, ajuda, className, ...resto }: CampoProps) {
 export function Erro({ texto }: { texto: string | null }) {
   if (!texto) return null;
   return (
-    <p role="alert" className="rounded-lg bg-danger-soft px-4 py-3 text-base text-destructive">
+    <p role="alert" className="rounded-lg border-2 border-foreground bg-warning-soft px-4 py-3 text-base text-foreground">
       {texto}
     </p>
   );

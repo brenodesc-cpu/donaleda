@@ -47,7 +47,6 @@ const LINHAS: Linha[] = [
 const LEGENDA: { tom: Tom; texto: string }[] = [
   { tom: 'bom', texto: 'Foi bem' },
   { tom: 'atencao', texto: 'Pede atenção' },
-  { tom: 'ruim', texto: 'Precisa de cuidado' },
   { tom: 'neutro', texto: 'Ficou em casa' },
   { tom: 'vazio', texto: 'Sem resposta' },
 ];

@@ -3,6 +3,7 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
+import { Logo } from '@/components/marca/Logo';
 import { Campo, CLASSE_DO_BOTAO_PRINCIPAL, Erro } from '@/components/familia/campos';
 import { criarConta, entrar, jaEntrou } from '@/components/familia/conta';
 
@@ -57,7 +58,9 @@ export default function EntrarPage() {
     <main className="flex min-h-dvh flex-col items-center bg-background px-4 py-10 text-base text-foreground">
       <div className="flex w-full max-w-md flex-col gap-6">
         <header className="flex flex-col gap-2 text-center">
-          <p className="text-3xl font-bold tracking-tight text-primary">{NOME_DA_ASSISTENTE}</p>
+          <p>
+            <Logo className="text-3xl" />
+          </p>
           <h1 className="text-xl font-semibold text-foreground">
             {modo === 'entrar' ? 'Entre pra ver como ela está' : 'Crie a sua conta'}
           </h1>

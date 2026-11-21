@@ -166,7 +166,7 @@ export default function Conversa({
         </BotaoGrande>
       ) : null}
 
-      <BotaoGrande tom="encerrar" onClick={onEncerrar}>
+      <BotaoGrande tom={somPreso ? 'discreto' : 'encerrar'} onClick={onEncerrar}>
         <PhoneOff aria-hidden className="h-7 w-7 shrink-0" />
         Desligar
       </BotaoGrande>

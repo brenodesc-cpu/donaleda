@@ -50,7 +50,7 @@ export function PalcoDaAssistente({
     <div
       className={cn(
         'relative flex min-h-64 w-full max-w-md flex-1 items-center justify-center overflow-hidden rounded-3xl',
-        comVideo ? 'bg-foreground' : 'bg-primary/10',
+        comVideo ? 'bg-foreground' : 'bg-muted',
       )}
     >
       {comVideo ? (
@@ -58,7 +58,7 @@ export function PalcoDaAssistente({
       ) : (
         <Rosto estado={estado} nivel={nivel} className="sm:h-80 sm:w-80" />
       )}
-      <p className="absolute left-3 top-3 rounded-full bg-card/90 px-4 py-1.5 text-base font-medium shadow-sm">
+      <p className="absolute left-3 top-3 rounded-full bg-card/90 px-4 py-1.5 font-titulo text-lg font-semibold shadow-sm">
         {NOME_DA_ASSISTENTE}, assistente virtual
       </p>
     </div>
