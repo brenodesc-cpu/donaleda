@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Teste das três versões</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Gabarito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  /* Página solta do teste com cinco adultos (validacao.md). Tudo é inventado:
+     a dona Helena e a Marina são as pessoas de exemplo do app. */
+  :root {
+    --fundo: #fffdf5;
+    --cartao: #ffffff;
+    --texto: #121212;
+    --suave: #5b5548;
+    --linha: #e7e0cc;
+    --gema: #f5c518;
+    --gema-escura: #8a6a00;
+    --certo: #23633a;
+    --certo-fundo: #e3f2e6;
+    --errado: #9b2a1c;
+    --errado-fundo: #fbe7e3;
+    --aviso-fundo: #fff4d6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--fundo); color: var(--texto); }
+  body {
+    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 18px; line-height: 1.45;
+    padding: 16px 16px calc(120px + env(safe-area-inset-bottom));
+    max-width: 560px; margin: 0 auto;
+  }
+  h1, h2 { font-family: 'Gabarito', system-ui, sans-serif; line-height: 1.15; margin: 0 0 12px; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 22px; }
+  p { margin: 0 0 12px; }
+  .miuda { font-size: 15px; color: var(--suave); }
+  .cartao { background: var(--cartao); border: 1px solid var(--linha); border-radius: 16px; padding: 16px; margin: 0 0 16px; }
+  .fala { margin: 0 0 10px; }
+  .fala b { display: block; font-size: 14px; color: var(--suave); font-weight: 700; }
+  .resumo li { margin: 0 0 10px; }
+  .aviso { background: var(--aviso-fundo); border: 2px solid var(--gema); }
+  .aviso .topo { font-size: 14px; font-weight: 700; color: var(--gema-escura); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px; }
+  .aviso .principal { font-family: 'Gabarito', system-ui, sans-serif; font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+  .aviso .botoes { display: grid; gap: 8px; margin-top: 12px; }
+  .aviso .botoes span { display: block; text-align: center; padding: 12px; border-radius: 12px; border: 2px solid var(--texto); font-weight: 700; }
+  .aviso .botoes span:first-child { background: var(--texto); color: #fff; }
+  button {
+    font: inherit; font-weight: 700; border: 0; border-radius: 14px; padding: 16px; width: 100%;
+    background: var(--gema); color: var(--texto); cursor: pointer; min-height: 56px;
+  }
+  button.secundario { background: transparent; border: 2px solid var(--linha); }
+  button.certo { background: var(--certo); color: #fff; }
+  button.errado { background: var(--errado); color: #fff; }
+  .duas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .barra {
+    position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: rgba(255, 253, 245, .96); border-top: 1px solid var(--linha);
+  }
+  .barra > div { max-width: 528px; margin: 0 auto; display: grid; gap: 10px; }
+  .pilha { display: grid; gap: 10px; }
+  label { display: block; font-weight: 700; margin: 0 0 6px; }
+  input, textarea {
+    font: inherit; width: 100%; padding: 12px; border-radius: 12px; border: 2px solid var(--linha); background: #fff; color: var(--texto);
+  }
+  textarea { min-height: 72px; }
+  .etiqueta { display: inline-block; font-size: 14px; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: var(--linha); margin-bottom: 10px; }
+  .tempo { font-family: 'Gabarito', system-ui, sans-serif; font-size: 40px; font-weight: 800; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--linha); vertical-align: top; }
+  .tabela { overflow-x: auto; }
+  .ok { color: var(--certo); font-weight: 700; }
+  .nao { color: var(--errado); font-weight: 700; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- Tela 1: o entrevistador escolhe a pessoa -->
+<section id="tela-inicio">
+  <h1>Teste das três versões</h1>
+  <p>A mesma manhã da dona Helena mostrada de três jeitos. Cada pessoa vê as três, uma por vez, e responde "o que você faria agora?".</p>
+  <div class="cartao">
+    <h2>Pra quem aplica</h2>
+    <ul class="miuda">
+      <li>Cinco adultos do evento, uns cinco minutos cada. Não explique o app antes.</li>
+      <li>Toque em "Mostrar" quando a pessoa começar a ler, e em "Respondeu" quando ela disser o que faria.</li>
+      <li><b>Ação certa:</b> qualquer ação imediata por causa do remédio da pressão tomado duas vezes (ligar pra mãe, pedir pra alguém ir ver, ligar pro médico). <b>Errada:</b> esperar, só anotar, falar de outra coisa (joelho, aniversário) ou "não sei".</li>
+      <li>A ordem das versões muda de pessoa pra pessoa. Os resultados ficam guardados neste celular, no fim da página.</li>
+    </ul>
+  </div>
+  <label for="pessoa">Pessoa número (1 a 5)</label>
+  <input id="pessoa" type="number" inputmode="numeric" min="1" max="5" value="1">
+  <p class="miuda" id="ordem-texto"></p>
+  <div class="pilha">
+    <button id="comecar">Começar com esta pessoa</button>
+    <button class="secundario" id="ver-resultados">Ver os resultados</button>
+  </div>
+</section>
+
+<!-- Tela 2: o que se lê pra pessoa -->
+<section id="tela-briefing" hidden>
+  <span class="etiqueta" id="briefing-etiqueta"></span>
+  <h2>Leia pra pessoa</h2>
+  <div class="cartao">
+    <p>"Imagine que você é a Marina. A sua mãe, a dona Helena, tem 78 anos e mora sozinha em outra cidade. Uma assistente virtual liga pra ela todo dia de manhã e te conta como ela está."</p>
+    <p>"Vou te mostrar o que chegou pra você hoje. Leia e me diga: o que você faria agora?"</p>
+  </div>
+  <p class="miuda" id="briefing-repete" hidden>Na segunda e na terceira versão, diga só: "Agora a mesma manhã, mostrada de outro jeito. O que você faria agora?"</p>
+  <div class="barra"><div><button id="mostrar">Mostrar</button></div></div>
+</section>
+
+<!-- Tela 3: a versão -->
+<section id="tela-versao" hidden>
+  <span class="etiqueta" id="versao-etiqueta"></span>
+
+  <div id="v-conversa" hidden>
+    <h2>A conversa de hoje, 9h</h2>
+    <div class="cartao">
+      <p class="fala"><b>Dona Leda</b>Bom dia, dona Helena! Aqui é a Dona Leda, a assistente virtual que liga pra senhora. Como a senhora passou a noite?</p>
+      <p class="fala"><b>Dona Helena</b>Bom dia, minha filha. Dormi mais ou menos, o joelho doeu de madrugada. Esfriou, né?</p>
+      <p class="fala"><b>Dona Leda</b>Esfriou mesmo. É o joelho direito de novo?</p>
+      <p class="fala"><b>Dona Helena</b>O direito. Mas já melhorou, passei aquela pomada.</p>
+      <p class="fala"><b>Dona Leda</b>Que bom. E o café da manhã, a senhora já tomou?</p>
+      <p class="fala"><b>Dona Helena</b>Tomei, pão com manteiga e café com leite. A Zefa trouxe um bolo de fubá ontem, comi um pedaço também.</p>
+      <p class="fala"><b>Dona Leda</b>A vizinha Zefa é um amor. E a novela ontem, a senhora viu?</p>
+      <p class="fala"><b>Dona Helena</b>Vi! Aquela moça descobriu tudo, eu sabia. Fiquei acordada até tarde.</p>
+      <p class="fala"><b>Dona Leda</b>E o remédio da pressão de hoje?</p>
+      <p class="fala"><b>Dona Helena</b>Tomei às oito. Aí, quando fui lavar a xícara, vi a cartela e tomei de novo, achei que não tinha tomado. Só depois, contando os comprimidos, vi que faltavam dois.</p>
+      <p class="fala"><b>Dona Leda</b>Entendi, a senhora tomou duas vezes hoje. Como a senhora está se sentindo agora?</p>
+      <p class="fala"><b>Dona Helena</b>Um pouco mole, mas deve ser o frio. Não é nada, não.</p>
+      <p class="fala"><b>Dona Leda</b>Vou deixar a Marina sabendo, tá bom? E as orquídeas, como estão?</p>
+      <p class="fala"><b>Dona Helena</b>A branca vai abrir uma flor nova essa semana. Quero mandar foto pro Pedro.</p>
+      <p class="fala"><b>Dona Leda</b>O aniversário dele é quinta, né? Dez anos.</p>
+      <p class="fala"><b>Dona Helena</b>Quinta! Preciso ligar pra ele. Não deixa eu esquecer.</p>
+      <p class="fala"><b>Dona Leda</b>Pode deixar, eu lembro a senhora na quinta de manhã. Hoje tem hidroginástica?</p>
+      <p class="fala"><b>Dona Helena</b>Hoje não, é terça e quinta. Hoje eu fico quietinha em casa.</p>
+      <p class="fala"><b>Dona Leda</b>Então descansa, dona Helena. Amanhã eu ligo de novo no mesmo horário. Um beijo!</p>
+      <p class="fala"><b>Dona Helena</b>Outro, minha filha. Obrigada.</p>
+    </div>
+  </div>
+
+  <div id="v-resumo" hidden>
+    <h2>Resumo de hoje, 9h</h2>
+    <div class="cartao">
+      <ol class="resumo">
+        <li>Dona Helena dormiu mais ou menos por causa do joelho direito, que já melhorou.</li>
+        <li>Tomou o remédio da pressão duas vezes hoje de manhã, por esquecimento, e disse que está "um pouco mole".</li>
+        <li>Pediu pra lembrar do aniversário do neto Pedro na quinta. Hoje ela fica em casa.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div id="v-aviso" hidden>
+    <h2>Hoje, 9h12</h2>
+    <div class="cartao aviso">
+      <div class="topo">Precisa de alguém</div>
+      <div class="principal">Marina, sua mãe contou que tomou o remédio da pressão duas vezes. Quem liga pra ela?</div>
+      <p class="miuda">Ela disse que está "um pouco mole".</p>
+      <div class="botoes"><span>Eu ligo agora</span><span>Peço pra outra pessoa</span></div>
+    </div>
+  </div>
+
+  <div class="barra"><div><button id="respondeu">Respondeu</button></div></div>
+</section>
+
+<!-- Tela 4: anotar -->
+<section id="tela-anotar" hidden>
+  <span class="etiqueta" id="anotar-etiqueta"></span>
+  <p class="miuda">Tempo até a resposta</p>
+  <p class="tempo" id="anotar-tempo"></p>
+  <label for="disse">O que a pessoa disse (as palavras dela)</label>
+  <textarea id="disse"></textarea>
+  <p class="miuda">A ação foi certa?</p>
+  <div class="duas">
+    <button class="certo" data-certo="sim">Certa</button>
+    <button class="errado" data-certo="nao">Errada ou não sabe</button>
+  </div>
+</section>
+
+<!-- Tela 5: fim da pessoa -->
+<section id="tela-fim-pessoa" hidden>
+  <h2 id="fim-titulo"></h2>
+  <p>Pergunte, se der tempo: "Qual das três você queria receber de verdade? Por quê?"</p>
+  <label for="preferiu">A que ela preferiu e o motivo</label>
+  <textarea id="preferiu"></textarea>
+  <div class="pilha" style="margin-top:12px">
+    <button id="salvar-pessoa">Guardar e ir pra próxima pessoa</button>
+  </div>
+</section>
+
+<!-- Tela 6: resultados -->
+<section id="tela-resultados" hidden>
+  <h1>Resultados</h1>
+  <div class="cartao" id="resumo-numeros"></div>
+  <div class="cartao tabela" id="tabela"></div>
+  <div class="pilha">
+    <button id="copiar">Copiar os resultados</button>
+    <button class="secundario" id="voltar">Voltar ao começo</button>
+    <button class="secundario" id="apagar">Apagar tudo deste celular</button>
+  </div>
+  <p class="miuda" id="copiado" hidden>Copiado. Cole na conversa do time ou em validacao.md.</p>
+</section>
+
+<script>
+(function () {
+  var NOMES = { C: 'Conversa inteira', R: 'Resumo de três linhas', A: 'Aviso com responsável' };
+  var BLOCOS = { C: 'v-conversa', R: 'v-resumo', A: 'v-aviso' };
+  // A ordem muda por pessoa, pra que cada versão apareça primeiro pra alguém.
+  var ORDENS = { 1: ['C', 'R', 'A'], 2: ['A', 'C', 'R'], 3: ['R', 'A', 'C'], 4: ['A', 'R', 'C'], 5: ['C', 'A', 'R'] };
+  var CHAVE = 'donaleda-teste-tres-versoes';
+
+  var estado = { pessoa: 1, passo: 0, inicio: 0, segundos: 0, respostas: [] };
+
+  function ler() {
+    try { return JSON.parse(localStorage.getItem(CHAVE)) || []; } catch (e) { return []; }
+  }
+  function gravar(lista) {
+    try { localStorage.setItem(CHAVE, JSON.stringify(lista)); } catch (e) {}
+  }
+  var memoria = ler();
+
+  function $(id) { return document.getElementById(id); }
+  function mostrar(id) {
+    ['tela-inicio', 'tela-briefing', 'tela-versao', 'tela-anotar', 'tela-fim-pessoa', 'tela-resultados'].forEach(function (t) {
+      $(t).hidden = t !== id;
+    });
+    window.scrollTo(0, 0);
+  }
+  function ordem() { return ORDENS[estado.pessoa] || ORDENS[1]; }
+  function versaoAtual() { return ordem()[estado.passo]; }
+  function etiqueta() { return 'Pessoa ' + estado.pessoa + ' · versão ' + (estado.passo + 1) + ' de 3'; }
+
+  function atualizarOrdem() {
+    var n = parseInt($('pessoa').value, 10);
+    if (!(n >= 1 && n <= 5)) n = 1;
+    estado.pessoa = n;
+    $('ordem-texto').textContent = 'Ordem desta pessoa: ' + ordem().map(function (v) { return NOMES[v]; }).join(', ') + '.';
+  }
+  $('pessoa').addEventListener('input', atualizarOrdem);
+
+  $('comecar').onclick = function () {
+    atualizarOrdem();
+    estado.passo = 0;
+    estado.respostas = [];
+    abrirBriefing();
+  };
+  function abrirBriefing() {
+    $('briefing-etiqueta').textContent = etiqueta();
+    $('briefing-repete').hidden = estado.passo === 0;
+    mostrar('tela-briefing');
+  }
+
+  $('mostrar').onclick = function () {
+    var v = versaoAtual();
+    Object.keys(BLOCOS).forEach(function (k) { $(BLOCOS[k]).hidden = k !== v; });
+    $('versao-etiqueta').textContent = etiqueta();
+    estado.inicio = Date.now();
+    mostrar('tela-versao');
+  };
+
+  $('respondeu').onclick = function () {
+    estado.segundos = Math.round((Date.now() - estado.inicio) / 1000);
+    $('anotar-etiqueta').textContent = etiqueta() + ' · ' + NOMES[versaoAtual()];
+    $('anotar-tempo').textContent = estado.segundos + ' s';
+    $('disse').value = '';
+    mostrar('tela-anotar');
+  };
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-certo]'), function (b) {
+    b.onclick = function () {
+      estado.respostas.push({
+        pessoa: estado.pessoa,
+        posicao: estado.passo + 1,
+        versao: versaoAtual(),
+        segundos: estado.segundos,
+        certo: b.getAttribute('data-certo') === 'sim',
+        disse: $('disse').value.trim()
+      });
+      estado.passo += 1;
+      if (estado.passo < 3) { abrirBriefing(); return; }
+      $('fim-titulo').textContent = 'Pessoa ' + estado.pessoa + ': as três versões estão anotadas';
+      $('preferiu').value = '';
+      mostrar('tela-fim-pessoa');
+    };
+  });
+
+  $('salvar-pessoa').onclick = function () {
+    var preferiu = $('preferiu').value.trim();
+    // Refazer uma pessoa substitui o que estava guardado dela.
+    memoria = memoria.filter(function (r) { return r.pessoa !== estado.pessoa; });
+    estado.respostas.forEach(function (r) { r.preferiu = preferiu; memoria.push(r); });
+    gravar(memoria);
+    $('pessoa').value = Math.min(estado.pessoa + 1, 5);
+    atualizarOrdem();
+    mostrar('tela-inicio');
+  };
+
+  function media(lista) {
+    if (!lista.length) return '-';
+    var s = 0; lista.forEach(function (r) { s += r.segundos; });
+    return Math.round(s / lista.length) + ' s';
+  }
+  function linhaResumo(lista, v) {
+    var da = lista.filter(function (r) { return r.versao === v; });
+    var certas = da.filter(function (r) { return r.certo; }).length;
+    return NOMES[v] + ': ' + certas + ' de ' + da.length + ' certas, ' + media(da) + ' em média';
+  }
+  function textoResultados() {
+    var primeiras = memoria.filter(function (r) { return r.posicao === 1; });
+    var linhas = ['Teste das três versões (' + new Set(memoria.map(function (r) { return r.pessoa; })).size + ' pessoas)', '', 'Todas as respostas:'];
+    ['C', 'R', 'A'].forEach(function (v) { linhas.push('- ' + linhaResumo(memoria, v)); });
+    linhas.push('', 'Só a primeira versão que cada pessoa viu:');
+    ['C', 'R', 'A'].forEach(function (v) { linhas.push('- ' + linhaResumo(primeiras, v)); });
+    linhas.push('', 'Pessoa | Posição | Versão | Segundos | Certa? | O que disse | Preferiu');
+    memoria.slice().sort(function (a, b) { return a.pessoa - b.pessoa || a.posicao - b.posicao; }).forEach(function (r) {
+      linhas.push(['P' + r.pessoa, r.posicao, NOMES[r.versao], r.segundos, r.certo ? 'sim' : 'não', r.disse || '', r.posicao === 1 ? (r.preferiu || '') : ''].join(' | '));
+    });
+    return linhas.join('\n');
+  }
+  function abrirResultados() {
+    var primeiras = memoria.filter(function (r) { return r.posicao === 1; });
+    var html = '<p><b>Todas as respostas</b></p><ul>';
+    ['C', 'R', 'A'].forEach(function (v) { html += '<li>' + linhaResumo(memoria, v) + '</li>'; });
+    html += '</ul><p><b>Só a primeira versão que cada pessoa viu</b> (a que vale mais, porque a pessoa ainda não sabia do remédio)</p><ul>';
+    ['C', 'R', 'A'].forEach(function (v) { html += '<li>' + linhaResumo(primeiras, v) + '</li>'; });
+    html += '</ul>';
+    $('resumo-numeros').innerHTML = memoria.length ? html : '<p>Nenhuma pessoa anotada ainda.</p>';
+    var t = '<table><tr><th>Pessoa</th><th>Ordem</th><th>Versão</th><th>Seg.</th><th>Certa?</th></tr>';
+    memoria.slice().sort(function (a, b) { return a.pessoa - b.pessoa || a.posicao - b.posicao; }).forEach(function (r) {
+      t += '<tr><td>P' + r.pessoa + '</td><td>' + r.posicao + 'ª</td><td>' + NOMES[r.versao] + '</td><td>' + r.segundos + '</td><td class="' + (r.certo ? 'ok">sim' : 'nao">não') + '</td></tr>';
+    });
+    $('tabela').innerHTML = t + '</table>';
+    $('tabela').hidden = !memoria.length;
+    $('copiado').hidden = true;
+    mostrar('tela-resultados');
+  }
+  $('ver-resultados').onclick = abrirResultados;
+  $('voltar').onclick = function () { mostrar('tela-inicio'); };
+  $('copiar').onclick = function () {
+    var texto = textoResultados();
+    function feito() { $('copiado').hidden = false; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(feito, function () { window.prompt('Copie o texto:', texto); });
+    } else { window.prompt('Copie o texto:', texto); }
+  };
+  $('apagar').onclick = function () {
+    if (!window.confirm('Apagar os resultados guardados neste celular?')) return;
+    memoria = []; gravar(memoria); abrirResultados();
+  };
+
+  atualizarOrdem();
+})();
+</script>
+</body>
+</html>

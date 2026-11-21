@@ -60,7 +60,7 @@ Pra cada casa que o time liga, e pra pessoa que está a par de tudo na primeira 
    Reforça: um terço ou mais usa celular. Derruba: dois ou três por casa, e aí cada contrato traz pouca gente.
 2. **Como a família fica sabendo de como o morador está? Na última semana, quantas vezes uma família ligou ou mandou mensagem perguntando? Quem respondeu, e de qual celular?**
    Reforça: a família procura toda semana e a equipe responde pelo WhatsApp do próprio celular. Derruba: a família quase não procura, ou um grupo de WhatsApp com foto já deixa todo mundo satisfeito.
-3. **Quem fica sabendo que um morador dormiu mal, está triste ou com dor? Como fica sabendo, e onde anota?**
+3. **O que vocês usam hoje pra saber se está tudo bem com cada morador? Quem fica sabendo que um morador dormiu mal, está triste ou com dor, e onde anota?**
    Reforça: depende de alguém perguntar, e muita coisa não chega na ficha. Derruba: a equipe vê tudo no mesmo dia e anota no prontuário, e a ficha da Dona Leda repete o que a casa já sabe.
 4. **Já aconteceu de um morador contar pra família uma coisa que não era bem assim? O que aconteceu depois?**
    Reforça: acontece, e a casa queria um registro pra mostrar o que houve de verdade. Derruba o aviso direto pra família: a casa não aceita a família recebendo o que o idoso diz sem a equipe ver antes.
@@ -68,7 +68,7 @@ Pra cada casa que o time liga, e pra pessoa que está a par de tudo na primeira 
    Reforça: ficam parados e pedem conversa pra equipe. Derruba a companhia: a agenda é cheia e ninguém sente falta de conversa.
 6. **Como está sendo a implantação do prontuário eletrônico? Quanto tempo levou, quem treinou a equipe, quem resistiu?**
    Reforça: foi tranquilo. Derruba entrar agora: a equipe está sofrendo com um sistema novo e não quer outro, e a Dona Leda só cabe se não der trabalho nenhum pra ela.
-7. **Quanto a casa paga por mês pelo prontuário ou por outro sistema? Quem decidiu contratar, e quanto tempo levou da primeira conversa até começar a usar?**
+7. **Quanto a casa paga por mês pelo prontuário ou por outro sistema? Quem decide uma compra dessas na casa, e quanto tempo levou da primeira conversa até começar a usar?**
    Reforça: a casa já paga algumas centenas de reais por mês e decide em semanas. Derruba o plano Casa: a casa paga bem menos que R$ 229,90 por mês por todo o sistema dela.
 8. **Quanto as famílias pagam de verdade na mensalidade, na média? E o que pagam por fora (remédio, fralda, acompanhante, passeio)?**
    Reforça: já existe um extra pago pela família, e a Dona Leda pode ser mais um. Derruba a cobrança pela família: nada é cobrado por fora e a mensalidade já pesa. O valor vai só pro Breno, fora do GitHub.
@@ -118,7 +118,7 @@ Pra família que cada casa indicar. Serve também pra família de idoso que mora
 
 1. **Quando você falou com o seu pai (ou a sua mãe) pela última vez? Quem ligou? Quanto tempo durou?**
    Reforça: faz dias, e quase sempre é o filho quem liga. Derruba: eles falam todo dia.
-2. **Como você fica sabendo de como ele está no dia a dia? Quantas vezes por semana você tem notícia?**
+2. **O que vocês usam hoje pra saber se está tudo bem com ele? Quantas vezes por semana você tem notícia?**
    Reforça: só quando pergunta ou quando dá problema. Derruba: a casa já manda notícia todo dia, e isso basta.
 3. **Da última vez que você ficou preocupado com ele, o que fez? Quanto tempo levou pra ter resposta?**
    Reforça: ligou pra casa, esperou horas, ficou sem saber. Derruba: teve resposta na hora.
@@ -132,6 +132,8 @@ Pra família que cada casa indicar. Serve também pra família de idoso que mora
    Reforça: a família está dividida e ele ficou em casa, que é onde a Dona Leda entra. Derruba: nunca pensaram nisso, ou já decidiram e está resolvido.
 8. **Quanto tempo por semana a família gasta indo ver ou ligando pra checar se está tudo bem com ele?** Anote em horas, somando quem vai e quem liga.
    Reforça: horas por semana, com viagem ou alguém que se reveza. Derruba: alguns minutos, e a família acha suficiente.
+9. **Quem decide uma compra dessas na família?**
+   Mostra com quem a venda conversa. Se quem decide é um irmão que não participa do cuidado, a Dona Leda precisa falar com ele também.
 
 **Pra fechar, mostre o painel da família e peça: "Quer que a Dona Leda ligue pro seu pai esta semana e te mande o resumo?"**
 
@@ -158,6 +160,8 @@ Cada ligação vira um bloco com estes campos, e a Stephanie junta os números p
 - Quanto a casa paga hoje por sistema, por mês.
 - Horas por semana: da equipe perguntando, anotando e respondendo família, ou da família indo ver e ligando pra checar.
 - Moradores por cuidadora, por turno.
+- O que usam hoje pra saber se está tudo bem (ligação, visita, câmera, grupo de WhatsApp, nada).
+- Quem decide uma compra dessas, na família ou na casa.
 - Próximo passo com data: sim ou não.
 - A frase que mais pesou, do jeito que a pessoa falou.
 

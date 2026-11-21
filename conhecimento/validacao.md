@@ -4,6 +4,16 @@ Kit das ligações de 21/11/2026, das 20h às 23h. A validação vale 10% da not
 
 **Este repositório é público.** Aqui entram só código (A1, A2...), faixa de idade e números. Nome, telefone, cidade e gravação nunca entram. Os resultados com nome ficam fora do GitHub, com o Breno.
 
+## O que ter em mãos às 20h
+
+- O seu código (A1, A2...), recebido até 19h30.
+- O seu celular com o painel da família aberto e a conta criada (donaleda.vercel.app, "Sou da família").
+- O celular do idoso carregado, com internet, volume alto e apoiado.
+- O aviso do Breno às 19h45 sobre a chave do Gemini. Sem a troca, o celular do idoso abre `donaleda.vercel.app/?modo=tres`.
+- Este kit aberto: o pedido de permissão (parte 1) e as perguntas de depois (parte 2).
+- Um cronômetro e a planilha da Stephanie, ou papel.
+- O 192 em mente: se o idoso contar algo sério de verdade, o teste para.
+
 ## Quem participa
 
 - Avó, avô ou outra pessoa com 65 anos ou mais, de preferência quem mora sozinho ou passa o dia sozinho.
@@ -61,8 +71,10 @@ Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 - "Teve alguma hora em que a senhora não entendeu?"
 - "Se ela ligasse amanhã nesse horário, a senhora atendia?" (sim, talvez, não)
 - Pra família: "Você colocaria isso pra ela todo dia? Por quê?" (sim, talvez, não)
+- Pra família: "O que vocês usam hoje pra saber se está tudo bem com ela?" (ligação, visita, câmera, grupo de WhatsApp, nada)
 - Pra família: "Quanto tempo por semana vocês gastam indo ver ou ligando pra checar se está tudo bem com ela?" Anote em horas, somando quem vai e quem liga.
 - Pra família: "Quanto você pagaria por mês por isso?" Anote o número que a pessoa disser, sem sugerir valor.
+- Pra família: "Quem decide uma compra dessas na família?"
 - Pros dois: "Posso pedir pra Dona Leda ligar de novo amanhã, domingo, às 9h?" Só marque com o sim dos dois.
 
 **Domingo às 9h (a segunda ligação)**
@@ -78,18 +90,18 @@ A Stephanie preenche uma linha por idoso. Os combinados pra contar igual:
 - **Minutos:** do atender ao tchau, no cronômetro.
 - **Precisou de ajuda:** em que passo (abrir, código, microfone, atender, durante a conversa).
 
-| Código | Idade | Mora sozinho? | Atendeu? | Minutos | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | Horas por semana checando | Pagaria por mês (R$) | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| A1 | | | | | | | | | | | | | | | |
-| A2 | | | | | | | | | | | | | | | |
-| A3 | | | | | | | | | | | | | | | |
-| A4 | | | | | | | | | | | | | | | |
-| A5 | | | | | | | | | | | | | | | |
+| Código | Idade | Mora sozinho? | Atendeu? | Minutos | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | O que usam hoje | Horas por semana checando | Pagaria por mês (R$) | Quem decide a compra | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| A1 | | | | | | | | | | | | | | | | | |
+| A2 | | | | | | | | | | | | | | | | | |
+| A3 | | | | | | | | | | | | | | | | | |
+| A4 | | | | | | | | | | | | | | | | | |
+| A5 | | | | | | | | | | | | | | | | | |
 
 Pra colar numa planilha:
 
 ```
-Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,Horas por semana checando,Pagaria por mês (R$),Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
+Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,O que usam hoje,Horas por semana checando,Pagaria por mês (R$),Quem decide a compra,Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
 ```
 
 ## 4. O que vai pro pitch
@@ -101,7 +113,35 @@ Código,Idade,Mora sozinho?,Atendeu?,Minutos,Precisou de ajuda? Onde,Atenderia a
 - Quantas famílias usariam e o valor do meio entre os que elas disseram que pagariam por mês.
 - As horas por semana que a família gasta indo ver ou ligando pra checar, no valor do meio. É o número de tamanho do problema que os mentores pediram (ver "O que a banca vai querer ver" em [entrevistas.md](entrevistas.md)).
 - O que aprendemos, em duas ou três frases tiradas do que confundiu e do que gostou.
+- O teste das três versões (parte 5): acertos e segundos de cada versão, na primeira vez que a pessoa viu.
 - Os limites: poucas pessoas, avós de quem estava no evento, duas ligações no máximo e alguém da família do lado.
+
+## 5. Teste das três versões (cinco adultos do evento)
+
+O primeiro teste que os mentores sugeriram: a família entende melhor um aviso com responsável do que a conversa inteira? É o mesmo começo de manhã, inventado, da dona Helena (a pessoa de exemplo do app), mostrado de três jeitos: a conversa inteira transcrita, um resumo de três linhas e o aviso "Marina, sua mãe contou que tomou o remédio da pressão duas vezes. Quem liga pra ela?".
+
+**A página:** `donaleda.vercel.app/teste-tres-versoes.html` (arquivo `public/teste-tres-versoes.html`). Abre no celular, mostra uma versão por vez, mede os segundos e guarda as respostas no próprio celular, com um botão pra copiar o resultado.
+
+**Como aplicar (5 minutos por pessoa):**
+1. Escolha um adulto do evento que não conhece o app. Na página, digite o número da pessoa (1 a 5): a ordem das versões muda pra cada número.
+2. Leia pra ela o texto da tela: ela é a Marina, a mãe mora sozinha, e chegou isto hoje.
+3. Toque em "Mostrar" quando ela começar a ler, e em "Respondeu" quando ela disser o que faria.
+4. Anote as palavras dela e marque se a ação foi certa.
+5. Repita com as outras duas versões e pergunte qual ela queria receber de verdade.
+
+**Ação certa:** qualquer ação imediata por causa do remédio tomado duas vezes (ligar pra mãe, pedir pra alguém ir ver, ligar pro médico). **Errada:** esperar, só anotar, falar de outra coisa ou "não sei".
+
+**O número que vale mais** é o da primeira versão que cada pessoa viu, porque nas seguintes ela já sabe do remédio. Com cinco pessoas, a conversa inteira e o aviso aparecem primeiro duas vezes cada, e o resumo, uma.
+
+| Pessoa | Ordem | 1ª versão: certa? | Segundos | 2ª versão: certa? | Segundos | 3ª versão: certa? | Segundos | Preferiu |
+|---|---|---|---|---|---|---|---|---|
+| P1 | conversa, resumo, aviso | | | | | | | |
+| P2 | aviso, conversa, resumo | | | | | | | |
+| P3 | resumo, aviso, conversa | | | | | | | |
+| P4 | aviso, resumo, conversa | | | | | | | |
+| P5 | conversa, aviso, resumo | | | | | | | |
+
+**Vai pro pitch:** em quantas pessoas cada versão levou à ação certa e quantos segundos levou, na primeira vez que a pessoa viu. No formato "com o aviso, X de 2 pessoas disseram a ação certa, em Y segundos na média", com os números da página.
 
 ## O retorno escrito dos mentores (21/11)
 
@@ -128,5 +168,7 @@ O texto inteiro está com o Breno, fora do GitHub.
 ## Resultados
 
 _Preencher depois das ligações, sem nome._
+
+**Teste das três versões:** _preencher com o resultado copiado da página._
 
 **Fora das ligações, a primeira resposta de preço de alguém da família (21/11):** uma mentora do hackathon, com os pais de 82 e 81 anos morando sozinhos em outra cidade, disse que pagaria até R$ 500 por mês. Ela liga pra mãe todo sábado, e foi numa dessas ligações que percebeu um problema que a visita semanal da família não tinha pegado. O caso inteiro, sem nome, está em [entrevistas.md](entrevistas.md).
