@@ -56,7 +56,7 @@ Toda tabela tem RLS ligada sem política: só o servidor, com a chave secreta, l
 | `/` | Aparelho pareado: a tela do idoso. Sem par: escolha entre "Sou da família" e "Este aparelho é do idoso" |
 | `/parear` | O idoso (ou quem está com ele) digita o código de 6 números |
 | `/entrar` | Família: entrar ou criar conta |
-| `/familia` | Painel. Sem login vai pra `/entrar`. Sem idoso vai pra `/familia/novo` |
+| `/familia` | Painel. Quem não entrou é levado pra `/entrar`, e quem ainda não cadastrou ninguém, pra `/familia/novo` |
 | `/familia/novo` | Cadastrar o idoso |
 | `/familia/aparelho` | Gerar o código pra ligar o aparelho |
 | `/familia/ajustes` | Horários das ligações, atender sozinho, remédios |
