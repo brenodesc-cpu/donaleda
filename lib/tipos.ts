@@ -143,6 +143,11 @@ export interface Idoso {
   remedios: { nome: string; horario: string }[];
   /** A primeira conversa leva a apresentação completa da assistente virtual. */
   primeiraConversaFeita: boolean;
+  /**
+   * Quando o idoso ouviu o aviso de privacidade (lib/privacidade.ts): na saudação da
+   * primeira ligação em que ele falou. A versão diz qual texto foi dito.
+   */
+  avisoDePrivacidade?: { dadoEm: string; versao: number };
   /** Horas em que a assistente liga todo dia, "HH:MM" no horário de Brasília. */
   horariosDeLigacao: string[];
   /** Quando ligado, a ligação é atendida sozinha depois de alguns segundos tocando. */

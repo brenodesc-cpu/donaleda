@@ -3,6 +3,7 @@
 
 import { FUSO, NOME_DA_ASSISTENTE, dataEmBrasilia, horaEmBrasilia, somarDias } from './assistente';
 import { diaVazio, oQueFaltaSaber } from './dados';
+import { avisoDePrivacidade } from './privacidade';
 import { blocoDeLembrancas } from './memoria';
 import type { Base, Dia } from './tipos';
 
@@ -60,7 +61,7 @@ export function montarSaudacao(
   const oi = `${cumprimento(agora)}, ${tratamento}!`;
   const quem = quemContratou(familiar);
   if (!primeiraConversaFeita) {
-    return `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, a assistente virtual que ${quem} contratou pra conversar com ${pronome} todo dia. Como ${pronome} está hoje?`;
+    return `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, a assistente virtual que ${quem} contratou pra conversar com ${pronome} todo dia. ${avisoDePrivacidade(pronome, familiar.nome)} Como ${pronome} está hoje?`;
   }
   const souEu = `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, sua assistente virtual.`;
   if (periodoDoDia(agora) === 'madrugada') {
