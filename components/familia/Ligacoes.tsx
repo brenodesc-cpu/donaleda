@@ -79,8 +79,9 @@ export function Ligacoes({ painel, idosoId, pedido, onLigar }: LigacoesProps) {
         </p>
       ) : painel.aparelhoOnline === false ? (
         <p className="text-sm text-muted-foreground">
-          O aparelho de {painel.idoso.tratamento} parece estar com a tela fechada agora. A
-          ligação só toca quando o app da Dona Leda estiver aberto na tela.
+          {painel.aparelhoPushAtivo
+            ? `O aparelho de ${painel.idoso.tratamento} está com a tela fechada — a ligação toca como chamada normal.`
+            : `O aparelho de ${painel.idoso.tratamento} parece estar com a tela fechada agora. Abra o app da Dona Leda uma vez no celular pra ativar o toque com a tela fechada.`}
         </p>
       ) : null}
       <div aria-live="polite" className="flex flex-col gap-1">

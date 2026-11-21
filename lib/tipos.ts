@@ -211,6 +211,8 @@ export interface PainelDaFamilia {
   aparelhoOnline?: boolean;
   /** Último instante em que o aparelho do idoso respondeu ao servidor, ou null. */
   aparelhoVistoEm?: string | null;
+  /** true quando o aparelho do idoso tem push nativo (FCM / APNs VoIP) registrado. */
+  aparelhoPushAtivo?: boolean;
   atualizadoEm: string;
 }
 

@@ -254,6 +254,7 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     ...paraOPainel(base),
     chamadaTocando: base.chamadas.find((c) => c.estado === 'tocando') ?? null,
     chamadas: [...base.chamadas].reverse().slice(0, 10),
+    aparelhoPushAtivo: (base.aparelhosPush?.length ?? 0) > 0,
     atualizadoEm: agora.toISOString(),
   };
 }

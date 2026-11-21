@@ -1,20 +1,14 @@
 package app.donaleda;
 
 import android.app.KeyguardManager;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -23,6 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Tela cheia de chamada recebida sobre a tela bloqueada (paleta Gema da Dona
+ * Leda).
+ * O toque contínuo e a vibração são controlados pelo
+ * IncomingCallRingtoneService.
+ */
 public class IncomingCallActivity extends AppCompatActivity {
     public static final String EXTRA_CHAMADA_ID = "chamadaId";
     public static final String EXTRA_ASSISTENTE = "assistente";
@@ -31,8 +31,6 @@ public class IncomingCallActivity extends AppCompatActivity {
     private static final long TIMEOUT_MS = 45_000L;
 
     private String chamadaId = "";
-    private Ringtone ringtone;
-    private Vibrator vibrator;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable timeoutTask = this::finishCallScreen;
 
@@ -43,9 +41,11 @@ public class IncomingCallActivity extends AppCompatActivity {
         configureLockScreenWakeup();
 
         chamadaId = getIntent().getStringExtra(EXTRA_CHAMADA_ID);
-        if (chamadaId == null) chamadaId = "";
+        if (chamadaId == null)
+            chamadaId = "";
         String assistente = getIntent().getStringExtra(EXTRA_ASSISTENTE);
-        if (assistente == null || assistente.trim().isEmpty()) assistente = "Dona Leda";
+        if (assistente == null || assistente.trim().isEmpty())
+            assistente = "Dona Leda";
 
         String autoAction = getIntent().getStringExtra(EXTRA_AUTO_ACTION);
         if ("atender".equals(autoAction)) {
@@ -58,7 +58,6 @@ public class IncomingCallActivity extends AppCompatActivity {
         }
 
         setContentView(buildGemaCallLayout(assistente));
-        startRingtoneAndVibration();
         handler.postDelayed(timeoutTask, TIMEOUT_MS);
     }
 
@@ -72,10 +71,9 @@ public class IncomingCallActivity extends AppCompatActivity {
             }
         } else {
             getWindow().addFlags(
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                    | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                    | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-            );
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                            | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                            | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         }
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
@@ -103,9 +101,8 @@ public class IncomingCallActivity extends AppCompatActivity {
         title.setTypeface(Typeface.DEFAULT_BOLD);
         title.setGravity(Gravity.CENTER);
         LinearLayout.LayoutParams titleLp = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        );
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
         titleLp.topMargin = dp(16);
         titleLp.bottomMargin = dp(48);
         root.addView(title, titleLp);
@@ -113,18 +110,16 @@ public class IncomingCallActivity extends AppCompatActivity {
         Button answerBtn = makeRoundedButton("Atender", "#1B7A3D", 24, dp(76));
         answerBtn.setOnClickListener(v -> onAnswerClicked());
         LinearLayout.LayoutParams answerLp = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            dp(76)
-        );
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                dp(76));
         answerLp.bottomMargin = dp(20);
         root.addView(answerBtn, answerLp);
 
         Button declineBtn = makeRoundedButton("Agora não", "#B03A22", 20, dp(64));
         declineBtn.setOnClickListener(v -> onDeclineClicked());
         LinearLayout.LayoutParams declineLp = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            dp(64)
-        );
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                dp(64));
         root.addView(declineBtn, declineLp);
 
         return root;
@@ -148,86 +143,48 @@ public class IncomingCallActivity extends AppCompatActivity {
 
     private int dp(int value) {
         return Math.round(
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                value,
-                getResources().getDisplayMetrics()
-            )
-        );
-    }
-
-    private void startRingtoneAndVibration() {
-        try {
-            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-            ringtone = RingtoneManager.getRingtone(this, uri);
-            if (ringtone != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    ringtone.setLooping(true);
-                }
-                ringtone.play();
-            }
-        } catch (Exception ignored) {
-            // Segue mesmo se o aparelho estiver sem toque configurado.
-        }
-
-        try {
-            vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-            if (vibrator != null && vibrator.hasVibrator()) {
-                long[] pattern = new long[] { 0, 700, 600 };
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0));
-                } else {
-                    vibrator.vibrate(pattern, 0);
-                }
-            }
-        } catch (Exception ignored) {
-            // Permissão ou hardware indisponível.
-        }
-    }
-
-    private void stopRingtoneAndNotification() {
-        handler.removeCallbacks(timeoutTask);
-        try {
-            if (ringtone != null && ringtone.isPlaying()) ringtone.stop();
-        } catch (Exception ignored) {
-        }
-        try {
-            if (vibrator != null) vibrator.cancel();
-        } catch (Exception ignored) {
-        }
-        NotificationManager manager = getSystemService(NotificationManager.class);
-        if (manager != null) {
-            manager.cancel(DonaLedaFirebaseMessagingService.NOTIFICATION_ID_CALL);
-        }
+                TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        value,
+                        getResources().getDisplayMetrics()));
     }
 
     private void onAnswerClicked() {
-        stopRingtoneAndNotification();
+        handler.removeCallbacks(timeoutTask);
+        IncomingCallRingtoneService.stop(getApplicationContext());
         if (!chamadaId.isEmpty()) {
+            DonaLedaCallPushPlugin.sendCallResponseAsync(getApplicationContext(), "atender", chamadaId);
             DonaLedaCallPushPlugin.dispatchCallAction(getApplicationContext(), "atender", chamadaId);
         }
         Intent openMain = new Intent(this, MainActivity.class);
-        openMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        openMain.addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(openMain);
         finish();
     }
 
     private void onDeclineClicked() {
-        stopRingtoneAndNotification();
+        handler.removeCallbacks(timeoutTask);
+        IncomingCallRingtoneService.stop(getApplicationContext());
         if (!chamadaId.isEmpty()) {
-            DonaLedaCallPushPlugin.dispatchCallAction(getApplicationContext(), "recusar", chamadaId);
+            // Avisa o servidor direto em segundo plano (funciona mesmo com o app fechado!)
+            DonaLedaCallPushPlugin.sendCallResponseAsync(getApplicationContext(), "recusar", chamadaId);
+            DonaLedaCallPushPlugin.notifyIfActive(getApplicationContext(), "recusar", chamadaId);
         }
         finish();
     }
 
     private void finishCallScreen() {
-        stopRingtoneAndNotification();
+        handler.removeCallbacks(timeoutTask);
+        IncomingCallRingtoneService.stop(getApplicationContext());
         finish();
     }
 
     @Override
     protected void onDestroy() {
-        stopRingtoneAndNotification();
+        handler.removeCallbacks(timeoutTask);
         super.onDestroy();
     }
 }

@@ -18,6 +18,37 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
     private var pendingAction: (acao: String, chamadaId: String)?
     weak var activePlugin: DonaLedaCallPushPlugin?
 
+    private static let keyAparelhoToken = "donaleda_aparelho_token"
+    private static let keyServerUrl = "donaleda_server_url"
+    private static let defaultServerUrl = "https://donaleda.vercel.app"
+
+    func saveCredentials(aparelhoToken: String?, serverUrl: String?) {
+        let defaults = UserDefaults.standard
+        if let token = aparelhoToken?.trimmingCharacters(in: .whitespacesAndNewlines), !token.isEmpty {
+            defaults.set(token, forKey: Self.keyAparelhoToken)
+        }
+        if let url = serverUrl?.trimmingCharacters(in: .whitespacesAndNewlines),
+           url.hasPrefix("https://") || url.hasPrefix("http://") {
+            defaults.set(url.trimmingCharacters(in: CharacterSet(charactersIn: "/")), forKey: Self.keyServerUrl)
+        }
+    }
+
+    func sendCallResponseInBackground(acao: String, chamadaId: String) {
+        let defaults = UserDefaults.standard
+        guard let token = defaults.string(forKey: Self.keyAparelhoToken), !token.isEmpty else { return }
+        let baseUrl = defaults.string(forKey: Self.keyServerUrl) ?? Self.defaultServerUrl
+        guard let url = URL(string: "\(baseUrl)/api/chamada") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 8
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(token, forHTTPHeaderField: "x-aparelho-token")
+        let body: [String: String] = ["acao": acao, "chamadaId": chamadaId]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        URLSession.shared.dataTask(with: request).resume()
+    }
+
     private override init() {
         let config = CXProviderConfiguration(localizedName: "Dona Leda")
         config.supportsVideo = false
@@ -99,6 +130,7 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
         let chamadaId = activeCalls[action.callUUID]
         configureAudioSessionForVoice()
         if let id = chamadaId {
+            sendCallResponseInBackground(acao: "atender", chamadaId: id)
             dispatchAction(acao: "atender", chamadaId: id)
         }
         action.fulfill()
@@ -106,6 +138,7 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
 
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
         if let id = activeCalls.removeValue(forKey: action.callUUID) {
+            sendCallResponseInBackground(acao: "recusar", chamadaId: id)
             dispatchAction(acao: "recusar", chamadaId: id)
         }
         action.fulfill()
@@ -146,6 +179,10 @@ public class DonaLedaCallPushPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func register(_ call: CAPPluginCall) {
+        DonaLedaVoipCoordinator.shared.saveCredentials(
+            aparelhoToken: call.getString("aparelhoToken"),
+            serverUrl: call.getString("serverUrl")
+        )
         DonaLedaVoipCoordinator.shared.start()
         var result: [String: Any] = [:]
         if let token = DonaLedaVoipCoordinator.shared.lastVoipToken {

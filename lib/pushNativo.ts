@@ -3,7 +3,7 @@
 // No navegador comum, tudo aqui é no-op seguro.
 
 import { Capacitor, registerPlugin, type PluginListenerHandle } from '@capacitor/core';
-import { fetchDoAparelho } from './aparelho';
+import { fetchDoAparelho, tokenDoAparelho } from './aparelho';
 
 export interface AcaoDeChamadaNativa {
   acao: 'atender' | 'recusar';
@@ -16,7 +16,10 @@ interface TokenNativo {
 }
 
 interface DonaLedaCallPushPlugin {
-  register(): Promise<{ token?: string; plataforma?: 'android' | 'ios' }>;
+  register(options?: {
+    aparelhoToken?: string;
+    serverUrl?: string;
+  }): Promise<{ token?: string; plataforma?: 'android' | 'ios' }>;
   getPendingCall(): Promise<{ acao?: string; chamadaId?: string }>;
   addListener(
     eventName: 'tokenReceived',
@@ -72,7 +75,10 @@ export function iniciarPushDeChamadaNativa(
       });
       handles.push(hAcao);
 
-      const registro = await plugin.register();
+      const registro = await plugin.register({
+        aparelhoToken: tokenDoAparelho() ?? '',
+        serverUrl: typeof window !== 'undefined' ? window.location.origin : '',
+      });
       if (
         ativo &&
         registro?.token &&

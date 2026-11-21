@@ -14,7 +14,12 @@ import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import org.json.JSONObject;
 
 @CapacitorPlugin(
     name = "DonaLedaCallPush",
@@ -25,8 +30,11 @@ import java.lang.ref.WeakReference;
 public class DonaLedaCallPushPlugin extends Plugin {
     private static final String PREFS = "donaleda_call_push";
     private static final String KEY_TOKEN = "fcm_token";
+    private static final String KEY_APARELHO_TOKEN = "aparelho_token";
+    private static final String KEY_SERVER_URL = "server_url";
     private static final String KEY_PENDING_ACTION = "pending_action";
     private static final String KEY_PENDING_CALL_ID = "pending_call_id";
+    private static final String DEFAULT_SERVER_URL = "https://donaleda.vercel.app";
 
     private static WeakReference<DonaLedaCallPushPlugin> activeInstance = new WeakReference<>(null);
 
@@ -46,6 +54,19 @@ public class DonaLedaCallPushPlugin extends Plugin {
 
     @PluginMethod
     public void register(PluginCall call) {
+        String aparelhoToken = call.getString("aparelhoToken");
+        String serverUrl = call.getString("serverUrl");
+        SharedPreferences.Editor editor = getContext()
+            .getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .edit();
+        if (aparelhoToken != null && !aparelhoToken.trim().isEmpty()) {
+            editor.putString(KEY_APARELHO_TOKEN, aparelhoToken.trim());
+        }
+        if (serverUrl != null && (serverUrl.startsWith("https://") || serverUrl.startsWith("http://"))) {
+            editor.putString(KEY_SERVER_URL, serverUrl.replaceAll("/+$", ""));
+        }
+        editor.apply();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && getPermissionState("notifications") != PermissionState.GRANTED) {
             requestPermissionForAlias("notifications", call, "onNotificationPermissionResult");
@@ -113,6 +134,16 @@ public class DonaLedaCallPushPlugin extends Plugin {
         }
     }
 
+    public static void notifyIfActive(Context context, String acao, String chamadaId) {
+        DonaLedaCallPushPlugin plugin = activeInstance.get();
+        if (plugin != null) {
+            JSObject data = new JSObject();
+            data.put("acao", acao);
+            data.put("chamadaId", chamadaId);
+            plugin.notifyListeners("callAction", data);
+        }
+    }
+
     public static void dispatchCallAction(Context context, String acao, String chamadaId) {
         DonaLedaCallPushPlugin plugin = activeInstance.get();
         if (plugin != null) {
@@ -127,5 +158,50 @@ public class DonaLedaCallPushPlugin extends Plugin {
             .putString(KEY_PENDING_ACTION, acao)
             .putString(KEY_PENDING_CALL_ID, chamadaId)
             .apply();
+    }
+
+    /** Envia POST /api/chamada em thread de fundo (para recusar/atender com app fechado). */
+    public static void sendCallResponseAsync(Context context, String acao, String chamadaId) {
+        Context appContext = context.getApplicationContext();
+        new Thread(() -> sendCallResponseSync(appContext, acao, chamadaId)).start();
+    }
+
+    /** Envia POST /api/chamada de forma síncrona (usado em BroadcastReceiver.goAsync). */
+    public static void sendCallResponseSync(Context context, String acao, String chamadaId) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String aparelhoToken = prefs.getString(KEY_APARELHO_TOKEN, null);
+        if (aparelhoToken == null || aparelhoToken.trim().isEmpty()) {
+            return;
+        }
+        String serverUrl = prefs.getString(KEY_SERVER_URL, DEFAULT_SERVER_URL);
+        if (serverUrl == null || serverUrl.trim().isEmpty()) {
+            serverUrl = DEFAULT_SERVER_URL;
+        }
+
+        HttpURLConnection conn = null;
+        try {
+            URL url = new URL(serverUrl + "/api/chamada");
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setConnectTimeout(8_000);
+            conn.setReadTimeout(8_000);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("x-aparelho-token", aparelhoToken.trim());
+
+            JSONObject body = new JSONObject();
+            body.put("acao", acao);
+            body.put("chamadaId", chamadaId);
+            byte[] payload = body.toString().getBytes(StandardCharsets.UTF_8);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(payload);
+            }
+            conn.getResponseCode();
+        } catch (Exception ignored) {
+            // Rede indisponível no momento; fallback no servidor expira a chamada após 45s.
+        } finally {
+            if (conn != null) conn.disconnect();
+        }
     }
 }
