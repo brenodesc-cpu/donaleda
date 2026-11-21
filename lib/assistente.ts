@@ -1,6 +1,6 @@
 // Nome da assistente e fuso. O nome muda num lugar só.
 export const NOME_DA_ASSISTENTE =
-  process.env.NEXT_PUBLIC_NOME_DA_ASSISTENTE?.trim() || 'Lia';
+  process.env.NEXT_PUBLIC_NOME_DA_ASSISTENTE?.trim() || 'Dona Leda';
 
 export const FUSO = 'America/Sao_Paulo';
 

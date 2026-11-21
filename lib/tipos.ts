@@ -183,3 +183,43 @@ export interface InicioDaConversa {
   /** true quando um avatar em vídeo entra na ligação junto com a voz. */
   avatar: boolean;
 }
+
+// ---------- Contas, idosos e aparelhos (21/11, contrato entre servidor, painel e app) ----------
+
+/** Um idoso que a família logada acompanha. GET /api/idosos devolve a lista. */
+export interface IdosoDaFamilia {
+  id: string;
+  nome: string;
+  tratamento: string;
+  /** Quantos aparelhos estão ligados a este idoso. */
+  aparelhos: number;
+  /** Papel de quem está logado: quem cadastrou ou quem foi convidado. */
+  papel: 'responsavel' | 'familiar';
+}
+
+/** POST /api/idosos: a família cadastra um idoso. */
+export interface NovoIdoso {
+  nome: string;
+  tratamento: string;
+  idade: number;
+  /** Nome e parentesco de quem está cadastrando ("Marina", "filha"). */
+  familiar: { nome: string; parentesco: string };
+  remedios: { nome: string; horario: string }[];
+  horariosDeLigacao: string[];
+}
+
+/** POST /api/familia { acao: 'gerar_codigo', idosoId } devolve isto. O código vale 30 minutos. */
+export interface CodigoDoAparelho {
+  codigo: string;
+  expiraEm: string;
+}
+
+/** POST /api/aparelho/parear { codigo } devolve isto. O aparelho guarda o token pra sempre. */
+export interface AparelhoPareado {
+  token: string;
+  idosoId: string;
+  tratamento: string;
+}
+
+/** Cabeçalho que todo pedido do aparelho do idoso manda pro servidor. */
+export const CABECALHO_DO_APARELHO = 'x-donaleda-aparelho';
