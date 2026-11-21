@@ -36,7 +36,23 @@ Em aberto. Hipóteses do brainstorm de 21/11:
 - **Residencial sênior paga** e oferece aos moradores como um serviço a mais. Aqui o remédio já é cuidado pela equipe, então a Lia entra como companhia e como aviso à família.
 - **Médico ou hospital indica ao paciente.** Exige um médico responsável, que o time não tem hoje.
 
-Conta de custo na Agora: US$ 0,10 por minuto. Cinco minutos por dia dão 150 minutos por mês, perto de R$ 82 por idoso. O preço precisa passar disso, ou a voz roda num fornecedor mais barato depois do hackathon.
+### Quanto custa a conversa (conta de 21/11/2026)
+
+O preço é o de tabela da Agora (docs.agora.io/en/ai/reference/pricing): US$ 0,10 por minuto de conversa, já com a escuta, o modelo e a voz. O áudio da chamada soma US$ 0,001 por minuto por participante. Dólar a R$ 5,50. No hackathon o uso está liberado.
+
+| Conversa por dia | Minutos no mês | Custo por idoso no mês |
+|---|---:|---:|
+| 5 minutos | 150 | R$ 84 |
+| 10 minutos | 300 | R$ 168 |
+| 15 minutos | 450 | R$ 252 |
+| 30 minutos | 900 | R$ 505 |
+
+Trinta minutos por dia no preço de tabela custam mais que qualquer mensalidade que uma família pagaria. As saídas, todas com a Agora:
+
+- Oferecer 30 minutos disponíveis e fazer a conta pelo uso real. Falta medir quanto o idoso conversa de verdade.
+- Negociar preço por volume com a Agora.
+- Usar a Agora só pra chamada (áudio e vídeo) e ligar um modelo de voz direto, como o Gemini Live. Pela estimativa do Breno de outubro, sai perto de US$ 0,02 por minuto, uns R$ 100 por mês nos 30 minutos por dia. Número a confirmar com medição.
+- Vender pra quem paga mais por idoso: residencial e plano de saúde.
 
 ## Quem já faz parecido
 
