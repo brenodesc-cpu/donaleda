@@ -170,11 +170,16 @@ const SONO_MEIO = /\bdormi mais ou menos\b/;
 const COMEU_NADA = /\b(nao (comi|almocei|jantei|tomei cafe)|fiquei sem comer)\b/;
 const COMEU_POUCO = /\b(comi pouco|almocei pouco|jantei pouco|quase nao comi|sem fome|so (uma )?(sopa|fruta|bolacha))\b/;
 const COMEU_BEM = /\b(comi bem|almocei bem|jantei bem|comi muito bem)\b/;
+const HUMOR_SOZINHO = /\b(me sinto|me sentindo|sinto|estou|to|ando) (muito |meio |um pouco )?(sozinh[oa]|solitari[oa])\b/;
+const HUMOR_TRISTE = /\b(estou|to|ando|me sinto|me sentindo|fiquei) (muito |meio |um pouco )?(triste|desanimad[oa]|pra baixo)\b/;
+const HUMOR_ANSIOSO = /\b(estou|to|ando|me sinto|me sentindo|fiquei) (muito |meio |um pouco )?(ansios[oa]|preocupad[oa]|nervos[oa]|agitad[oa])\b/;
+const HUMOR_BEM = /\b(estou|to|me sinto|me sentindo) (muito )?(bem|otim[oa]|feliz|animad[oa])\b/;
 
 /**
- * Uma leitura simples do sono, da comida e do remédio nas falas do visitante.
- * Vale só quando a leitura do Google não respondeu (a cota do modelo leve acabou
- * em 21/11), pra cena do fim não sair vazia. O que o Google leu tem preferência.
+ * Uma leitura simples do sono, da comida, do remédio e do humor nas falas do
+ * visitante, sem chamar serviço nenhum. A demonstração usa só esta leitura e as
+ * regras fixas: a leitura do Google tem cota por dia (500 pedidos no modelo leve,
+ * esgotada em 21/11), e essa cota fica pras ligações dos idosos de verdade.
  */
 export function leituraSimplesDasFalas(falas: FalaDaSessao[]): NonNullable<ExtracaoDaConversa['bemEstar']> {
   const texto = falas
@@ -190,6 +195,10 @@ export function leituraSimplesDasFalas(falas: FalaDaSessao[]): NonNullable<Extra
   else if (COMEU_BEM.test(texto)) bemEstar.alimentacao = 'comeu_bem';
   if (REMEDIO_NAO.test(texto)) bemEstar.remedio = 'nao_tomou';
   else if (REMEDIO_SIM.test(texto)) bemEstar.remedio = 'tomou';
+  if (HUMOR_SOZINHO.test(texto)) bemEstar.humor = 'sozinho';
+  else if (HUMOR_TRISTE.test(texto)) bemEstar.humor = 'triste';
+  else if (HUMOR_ANSIOSO.test(texto)) bemEstar.humor = 'ansioso';
+  else if (HUMOR_BEM.test(texto)) bemEstar.humor = 'bem';
   return bemEstar;
 }
 

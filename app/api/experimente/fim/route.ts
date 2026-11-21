@@ -1,12 +1,15 @@
 // O fim da ligação da demonstração: manda a assistente da Agora embora e devolve
-// o que a família veria daquela conversa (a ficha do dia, o aviso e o resumo).
+// o que a família veria daquela conversa (os avisos e a ficha do dia).
 // As falas chegam do aparelho do visitante, são lidas em memória e descartadas:
-// nada vai pro banco nem pro registro do servidor.
+// nada vai pro banco nem pro registro do servidor. A leitura do Google
+// (lib/posConversa.ts) fica de fora de propósito: ela tem cota por dia, e a cota
+// é das ligações dos idosos de verdade. Aqui valem as regras fixas e a leitura
+// simples das falas de lib/demonstracao.ts, que não chamam serviço nenhum.
 
 import { NextResponse } from 'next/server';
 import { AgoraClient, Area } from 'agora-agents';
 import { conferirPasseDaFicha, fichaDaDemonstracao } from '@/lib/demonstracao';
-import { extrairConhecimentoComIA, limparFalasDaSessao } from '@/lib/posConversa';
+import { limparFalasDaSessao } from '@/lib/posConversa';
 import type { FichaDaDemonstracao } from '@/lib/tiposDaDemonstracao';
 
 export const dynamic = 'force-dynamic';
@@ -28,11 +31,9 @@ export async function POST(request: Request) {
   if (!conferido) {
     return NextResponse.json({ ok: false } satisfies FichaDaDemonstracao, { status: 403 });
   }
-  const parar = pararAssistente(conferido.agentId);
+  await pararAssistente(conferido.agentId);
   const falas = limparFalasDaSessao(pedido?.falas);
-  const extracao = await extrairConhecimentoComIA('você', falas);
-  await parar;
-  const painel = fichaDaDemonstracao(falas, extracao, conferido.inicio);
+  const painel = fichaDaDemonstracao(falas, {}, conferido.inicio);
   return NextResponse.json({ ok: true, painel } satisfies FichaDaDemonstracao, {
     headers: { 'Cache-Control': 'no-store' },
   });

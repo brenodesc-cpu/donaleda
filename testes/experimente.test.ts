@@ -1,4 +1,4 @@
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   SEGUNDOS_POR_LIGACAO,
   baseDaDemonstracao,
@@ -149,7 +149,7 @@ describe('a ficha do fim', () => {
     expect(painel.hoje.alimentacao).toBe('comeu_bem');
   });
 
-  it('sem a leitura do Google, as falas ainda dão o sono, a comida e o remédio', () => {
+  it('sem chamar o Google, as falas dão o sono, a comida, o remédio e o humor', () => {
     const falas = [
       { quem: 'idoso' as const, texto: 'Dormi mal essa noite, acordei várias vezes.' },
       { quem: 'idoso' as const, texto: 'Não, eu esqueci de tomar o remédio da pressão hoje.' },
@@ -160,6 +160,9 @@ describe('a ficha do fim', () => {
       sono: 'bem',
       remedio: 'tomou',
     });
+    expect(leituraSimplesDasFalas([{ quem: 'idoso', texto: 'Hoje eu estou meio triste.' }])).toEqual({ humor: 'triste' });
+    expect(leituraSimplesDasFalas([{ quem: 'idoso', texto: 'Ando me sentindo muito sozinha.' }]).humor).toBe('sozinho');
+    expect(leituraSimplesDasFalas([{ quem: 'idoso', texto: 'Estou bem, graças a Deus.' }]).humor).toBe('bem');
     // O que a Dona Leda fala não conta.
     expect(leituraSimplesDasFalas([{ quem: 'assistente', texto: 'Você não tomou o remédio?' }])).toEqual({});
     const painel = fichaDaDemonstracao(falas, {}, AGORA);
@@ -169,5 +172,31 @@ describe('a ficha do fim', () => {
     const lida = fichaDaDemonstracao(falas, { bemEstar: { sono: 'mais_ou_menos' } }, AGORA);
     expect(lida.hoje.sono).toBe('mais_ou_menos');
     expect(lida.hoje.alimentacao).toBe('comeu_pouco');
+  });
+
+  it('o fim da ligação não chama o Google: a cota do resumo fica pros idosos de verdade', async () => {
+    const { POST } = await import('@/app/api/experimente/fim/route');
+    const chamadas = vi.fn(async () => new Response('{}'));
+    vi.stubGlobal('fetch', chamadas);
+    // Com a chave presente, a leitura do Google chamaria fetch se a rota usasse ela.
+    process.env.LIA_GEMINI_KEY = 'chave-de-teste';
+    try {
+      const resposta = await POST(
+        new Request('http://localhost/api/experimente/fim', {
+          method: 'POST',
+          body: JSON.stringify({
+            passe: passeDaFicha(new Date(), ''),
+            falas: [{ quem: 'idoso', texto: 'Eu caí no banheiro e não tomei o remédio.' }],
+          }),
+        }),
+      );
+      const corpo = await resposta.json();
+      expect(corpo.ok).toBe(true);
+      expect(corpo.painel.alertas.map((a: { tipo: string }) => a.tipo)).toEqual(expect.arrayContaining(['emergencia', 'remedio']));
+      expect(chamadas).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllGlobals();
+      delete process.env.LIA_GEMINI_KEY;
+    }
   });
 });
