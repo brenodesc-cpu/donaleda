@@ -76,7 +76,7 @@ Hoje essa camada é feita por gente: a filha, de graça, o cuidador por R$ 2.800
 | O que a família usa hoje | Quanto custa | O que falta |
 |---|---|---|
 | Ligar ela mesma | Tempo | Não acontece todo dia |
-| Botão de emergência | De R$ 100 a 230 por mês | Só serve depois que algo deu errado |
+| Botão de emergência | De R$ 189 a 249 por mês (Tecnosenior, conferido em 21/11) | Só serve depois que algo deu errado |
 | Cuidador | De R$ 2.800 a 4.500 por mês | Caro pra quem ainda vive sozinho e bem |
 | Residencial | De R$ 6 mil a 11 mil por mês | É pra quando a autonomia acabou |
 
@@ -85,8 +85,8 @@ A Dona Leda entra no espaço entre a família ligar quando dá e contratar um cu
 ## Quem usa, quem compra e por onde vende
 
 - **Quem usa:** o idoso, que só precisa atender.
-- **Quem compra primeiro:** o filho ou a filha que mora longe. É o mesmo comprador do botão de emergência.
-- **Por onde vende:** o residencial sênior, pelo contato do Vitor. Ele entrega a família sem gasto com anúncio, e R$ 84 por mês pesam perto de 1% da mensalidade.
+- **Quem compra primeiro:** o filho ou a filha que mora longe. É o mesmo comprador do botão de emergência, que paga de R$ 189 a 249 por mês por ele.
+- **Por onde vende:** o residencial sênior, pelo contato do Vitor. Ele entrega a família sem gasto com anúncio, e o custo da conversa (de R$ 89 a 139 por mês por idoso) pesa perto de 2% da mensalidade.
 - **Quem compra depois:** plano de saúde de idoso e prefeitura, que já falam a língua do envelhecimento ativo. Eles compram resultado medido, então entram depois de um piloto com dado próprio.
 
 ## Público
@@ -106,7 +106,7 @@ A Dona Leda entra no espaço entre a família ligar quando dá e contratar um cu
 | 4 | Vídeo funciona melhor que só voz | Ninguém provou. Quase todos os concorrentes usam telefone comum | Sem teste nosso. A ligação só de voz é o plano B |
 | 5 | A assistente ligar funciona melhor que o idoso abrir um aplicativo | Os maiores programas (CareCall, Madri, Singapura) ligam pro idoso | Coerente com a pesquisa |
 | 6 | Dá pra entregar isso sem ser serviço médico | Software de bem-estar e de registro fica fora da regra da Anvisa | Vale enquanto a promessa não falar de doença |
-| 7 | A conta fecha | 5 minutos por dia custam R$ 84 por mês na tabela da Agora. O preço de mercado vai de R$ 100 a 230 | Só fecha com ligação curta ou voz mais barata |
+| 7 | A conta fecha | 5 minutos por dia custam R$ 89 por mês no modo reserva e perto de R$ 139 no Gemini, com o dólar de 19/11. O plano Essencial proposto custa R$ 229,90 (seção do preço em `tese.md`) | Só fecha com ligação curta ou voz mais barata |
 | 8 | O residencial é o caminho de venda | Lá fora, venda direta à família dura pouco e acaba virando venda pra empresa | Depende de uma conversa do Vitor com os sócios |
 | 9 | Com a Dona Leda, o idoso fica mais ativo | Ligação diária feita por gente reduziu a solidão em quatro semanas (JAMA Psychiatry, 2021). Com IA não há estudo longo | Sem teste nosso. Medir semana a semana em quantos dias ele saiu de casa e conversou com alguém |
 
@@ -162,7 +162,7 @@ A Dona Leda entra no espaço entre a família ligar quando dá e contratar um cu
 | O que é "mais ativo"? Como vocês medem? | Em quantos dias da semana a pessoa saiu de casa e conversou com alguém. A ficha anota isso todo dia |
 | Por que "amiga", se é uma IA? | No pitch a palavra descreve o papel dela. No produto ela se apresenta sempre como assistente virtual |
 | Por que vídeo, se lá fora quase todos usam telefone? | Ninguém provou que vídeo ganha. 76% dos idosos conectados já fazem chamada de voz ou vídeo, e a ligação só de voz é o plano B |
-| A conta fecha? | Cinco minutos por dia custam R$ 84 por mês, então a ligação tem teto de tempo. E o residencial leva a Dona Leda até as famílias sem gasto com anúncio |
+| A conta fecha? | Cinco minutos por dia custam de R$ 89 a 139 por mês, e o plano proposto pra família custa R$ 229,90, com 150 minutos por mês. O residencial leva a Dona Leda até as famílias sem gasto com anúncio. Só dizer que a ligação tem teto depois de ele existir no código |
 | Isso troca o filho por uma máquina? | O risco existe. Ela se apresenta como assistente virtual, e a família fica por perto pelo painel, pelos avisos e pela ligação que pode mandar fazer na hora |
 | E se ela cair depois da ligação? | A Dona Leda não é serviço de emergência e não promete isso. Pra queda existe o botão, que pode ser um parceiro |
 
@@ -250,7 +250,7 @@ Três propostas foram escritas e julgadas por um avaliador que não escreveu nen
 | O que a família usa hoje | Quanto custa | O que falta |
 |---|---|---|
 | Ligar ela mesma | Tempo | Não acontece todo dia |
-| Botão de emergência | De R$ 100 a 230 por mês | Só serve depois que algo deu errado |
+| Botão de emergência | De R$ 189 a 249 por mês (Tecnosenior, conferido em 21/11) | Só serve depois que algo deu errado |
 | Cuidador | De R$ 2.800 a 4.500 por mês | Caro pra quem ainda vive sozinho e bem |
 | Residencial | De R$ 6 mil a 11 mil por mês | É pra quando a autonomia acabou |
 
@@ -262,7 +262,7 @@ A Dona Leda entra no espaço entre ligar e contratar um cuidador: o idoso ainda 
 |---|---|---|---|---|
 | **1. A ligação diária e a notícia pra família** | Ela liga, conversa, e a família fica sabendo como ele está e se atendeu | Família, de US$ 10 a 50 por mês lá fora | É a promessa mais vendida no varejo. No Brasil ninguém oferece | **Agora. É o produto** |
 | 2. Rotina | Perguntar do remédio, lembrar a consulta | Vem junto da camada 1 | Lembrete por ligação melhora pouco a adesão | Já está na conversa, sem virar promessa |
-| 3. Proteção contra golpe | Ela nunca pede dinheiro e avisa a família de pedido de Pix ou senha | Ninguém vende isso | Nenhum concorrente fala de golpe | Já existe no código. Bom argumento no Brasil |
+| 3. Proteção contra golpe | Ela nunca pede dinheiro e avisa a família de pedido de Pix ou senha | Ninguém vende isso | Nenhum concorrente fala de golpe (corrigido em 21/11: a NTT, no Japão, e a SK Telecom, na Coreia, já avisam a família durante a ligação do golpista) | Já existe no código. Bom argumento no Brasil |
 | 4. Ponte com a família | Depois da ligação, o filho recebe o que ela contou e um motivo pra ligar | Ninguém vende isso | A crítica mais dura a um concorrente foi "a empresa liga por você" | Próximo passo depois do hackathon |
 | 5. Tarefas | Pedir remédio, chamar corrida, marcar consulta | Família (Meela e Callie Care) | Foi pra onde os concorrentes de companhia cresceram | Depois, com parceiro |
 | 6. Muitos idosos de uma vez | Painel pra equipe de residencial, plano de saúde ou prefeitura | Empresas e governo, que pagam mais | É onde está o dinheiro grande lá fora | Caminho de venda, pelo contato do Vitor |
