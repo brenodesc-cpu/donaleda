@@ -2,6 +2,28 @@
 
 Proposta de 21/11/2026, pro time decidir. Nasceu da pesquisa em `concorrentes.md`. O que virar decisão passa pra `decisoes.md`.
 
+## Onde estamos: a frase do Breno e o sonho (21/11, fim da tarde)
+
+**A frase que define a empresa, escrita pelo Breno:**
+
+> A Dona Leda é a camada de cuidado de quem envelhece: uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina.
+
+**O sonho, nas palavras dele:** manter o idoso mais ativo até o fim, com qualidade de vida e longevidade com qualidade.
+
+**O nome que isso já tem:** a OMS chama de envelhecimento ativo. São três pilares (saúde, participação e segurança), e o objetivo declarado é a qualidade de vida de quem envelhece. É a língua que prefeitura e plano de saúde já falam.
+
+**Opções pra frase do sonho (nenhuma aprovada):**
+1. "O nosso sonho é que todo brasileiro envelheça ativo até o fim da vida."
+2. "O brasileiro já vive 76 anos. O nosso sonho é que ele chegue lá ativo, com companhia e dono da própria rotina."
+3. "Ninguém deveria passar os últimos anos da vida parado e sozinho em casa."
+4. "Dona Leda: longevidade com qualidade de vida."
+
+**O bloco falado, proposto (uns 25 segundos):** a frase 3, a frase 1, a frase do Breno e, pra fechar, "A aposentadoria média do brasileiro não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço."
+
+**O número do sonho:** a ficha já anota todo dia se a pessoa saiu de casa e se falou com alguém. Somando a semana, o painel pode mostrar em quantos dias ela saiu e em quantos conversou. Isso mede se o idoso está mais ativo.
+
+**A conferir:** a expectativa de vida de 76,6 anos é do IBGE (2024). O número de anos vividos com a saúde limitada, da OMS, não foi confirmado e fica fora do slide.
+
 ## Direção do Breno desde a tarde de 21/11: uma camada de cuidado
 
 O Breno reprovou as duas rodadas de frase. As primeiras vendiam uma ligação de conferência pro filho. As segundas vendiam "um assistente de IA", sem remeter a idoso e sem mostrar o dinheiro do mercado. A direção dele: **a Dona Leda é toda uma camada que cuida da qualidade de vida de quem envelhece**, e a assistente é o jeito de essa camada chegar na pessoa.
