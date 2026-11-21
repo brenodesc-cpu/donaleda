@@ -4,6 +4,7 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 
 | Data | Decisão | Por quê |
 |---|---|---|
+| 21/11/2026 | O plano de R$ 129,90 dá até 10 minutos de conversa por dia. Os 10 minutos são o máximo, e a conta de custo usa o uso médio de 3 minutos e 20 segundos (média da NANA, de Singapura) | Decisão do Breno às 19h10. A família no uso médio deixa R$ 79, a que usa tudo todo dia dá uns R$ 16 de prejuízo com a compressão, e uma no uso médio cobre até 5 dessas (`custos.md`) |
 | 21/11/2026 | A operação da Dona Leda é no modo direto: o aparelho do idoso conversa direto com o Gemini, e a Agora entra com a sala de áudio. A conta de custo inteira fica em `custos.md` | Decisão do Breno às 18h55: no uso médio de 3 minutos e 20 segundos por dia, cada família custa uns R$ 26 por mês e sobram R$ 79, contra R$ 59 a mais por idoso no motor de conversa da Agora. Até a entrega, o protótipo continua no motor de conversa |
 | 21/11/2026 | Até a entrega, o protótipo fica no motor de conversa da Agora. O jeito da operação (só a sala de áudio da Agora, com o Gemini ligado pelo nosso servidor) entra no pitch como conta, marcado como ainda não construído | O regulamento pede que a Agora funcione na demonstração e não diz qual serviço usar. Na operação, cada família custaria de R$ 14 a 26 por mês, contra R$ 84 hoje (conta em `tese.md`) |
 | 21/11/2026 | A landing mostra o preço da família na pergunta "Quanto custa?": R$ 129,90 por mês, com uma ligação por dia de uns 3 minutos e sete dias de teste grátis antes. A resposta diz que a cobrança ainda não começou | O Breno decidiu às 18h40 ("Mostra o preço"). A banca ouve esse número no pitch, e a cobrança e o teste grátis ainda não existem no código |
@@ -53,6 +54,5 @@ Uma linha por decisão, com a data. A mais nova fica em cima.
 - Quantas famílias a primeira casa parceira indica e quantas contratam. A rede de residenciais do contato do Vitor pode entrar do mesmo jeito, como parceira que indica.
 - O que construir pra atender uma casa inteira (a lista está em `proposta-de-valor.md`, em "O que muda no produto").
 - O preço do Companhia e do Casa, que não mudaram com o Essencial novo.
-- O teto de 100 minutos por mês, que ainda não existe no código.
-- Se os 10 minutos por dia são o máximo de cada ligação ou o uso de todo dia. No uso de todo dia, R$ 129,90 não cobre o custo (`custos.md`, item 6).
+- O teto de 10 minutos por dia no código: hoje o app corta cada ligação aos 10 minutos, mas liga duas vezes por dia.
 - Avatar em vídeo de verdade ou o rosto desenhado. O código já aceita avatar da Anam ou da HeyGen pela Agora (`LIA_AVATAR`), sem teste ainda, porque falta a conta num dos dois.

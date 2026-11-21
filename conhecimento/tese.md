@@ -24,13 +24,13 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
 
 - **O custo, em cinco linhas** (a conta inteira, com as fontes, está em [custos.md](custos.md)):
   - Na operação, o aparelho do idoso conversa direto com o Gemini, e a sala da Agora mantém a chamada e deixa a família entrar.
-  - Cada idoso custa uns R$ 26 por mês com uma ligação de 3 minutos e 20 segundos por dia: R$ 25 de Gemini e R$ 1 de sala da Agora.
+  - No uso médio de 3 minutos e 20 segundos por dia, cada idoso custa uns R$ 26 por mês: R$ 25 de Gemini e R$ 1 de sala da Agora.
   - Dos R$ 129,90 saem R$ 24,50 de imposto e cartão, e sobram R$ 79 por família. Se a compressão e as instruções curtas renderem o esperado, sobram R$ 89, ainda sem medida.
-  - Os custos fixos, site e banco, somam R$ 265 por mês e se pagam com 4 famílias. Com 10 minutos de conversa todo dia, o preço não cobre o custo.
+  - Os custos fixos, site e banco, somam R$ 265 por mês e se pagam com 4 famílias. A família que usa os 10 minutos todo dia dá uns R$ 16 de prejuízo, e uma família no uso médio cobre até 5 dessas.
   - O modo direto ainda está em construção. O protótipo roda hoje no motor de conversa da Agora, que custa R$ 59 a mais por idoso.
 - **O que a família já paga por algo parecido:** o botão de emergência custa de R$ 189 a 249 por mês (Tecnosenior, conferido em 21/11). Nos EUA, a ligação diária da CheckWellCall custa US$ 29,99, uns R$ 177. O cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 (Cidesp, maio de 2026).
 - **As respostas de preço que temos:** uma só. Uma mentora com os pais morando longe disse "eu investiria até R$ 500" por mês (21/11, `entrevistas.md`). As ligações das 20h trazem mais.
-- **O preço decidido:** R$ 129,90 por mês, com 100 minutos de conversa, uns 3 minutos e 20 segundos por dia. O Breno decidiu em 21/11, às 17h50, porque achou R$ 229,90 caro pra um produto que acabou de surgir. Fica abaixo do botão de emergência e é menos de 5% do preço do cuidador de 12 horas.
+- **O preço decidido:** R$ 129,90 por mês, com até 10 minutos de conversa por dia. O Breno decidiu o preço em 21/11, às 17h50, porque achou R$ 229,90 caro pra um produto que acabou de surgir, e os 10 minutos às 19h10. Fica abaixo do botão de emergência e é menos de 5% do preço do cuidador de 12 horas.
 - **O preço pra testar hoje à noite:** depois de a família dizer quanto pagaria, perguntar se pagaria R$ 129,90 por mês por uma ligação por dia com os avisos no painel. Anotar o primeiro valor que ela disse e o sim ou o não.
 
 ### 3. Quem já faz parecido
@@ -120,7 +120,7 @@ Desde 21/11/2026, às 17h, a família paga e a casa de repouso indica. Das 15h �
 
 ### O preço e o custo
 
-O plano da família custa R$ 129,90 por mês, com uma ligação por dia de 3 minutos e 20 segundos, decidido pelo Breno em 21/11. A conta de custo, com a operação no modo direto e as fontes, está em [custos.md](custos.md). Os planos Companhia e Casa, calculados antes do preço novo, saíram da tese e voltam quando houver medida de uso.
+O plano da família custa R$ 129,90 por mês, com até 10 minutos de conversa por dia, decidido pelo Breno em 21/11. A conta de custo, com a operação no modo direto e as fontes, está em [custos.md](custos.md). Os planos Companhia e Casa, calculados antes do preço novo, saíram da tese e voltam quando houver medida de uso.
 
 **A frase do décimo** vale com folga: R$ 129,90 é menos de 5% do cuidador de 12 horas por dia, que custa de R$ 2.800 a 4.500 (Cidesp, maio de 2026). A primeira metade da frase foi ajustada pelo Breno em 21/11: "A aposentadoria da maioria dos brasileiros não paga um cuidador", porque 62,5% dos beneficiários do INSS recebem um salário mínimo (R$ 1.621), menos que o piso do cuidador no Caged (R$ 1.760,44). A aposentadoria média, de R$ 2.697 (IBGE 2025), paga um cuidador com carteira.
 

@@ -83,7 +83,7 @@ A dona de uma casa de repouso com três unidades topou ser a primeira parceira, 
 
 ### A conta
 
-- **A família:** plano Essencial, R$ 129,90 por mês com uma ligação por dia de 3 minutos e 20 segundos, decidido pelo Breno em 21/11. Na operação, no modo direto, cada família custa uns R$ 26 por mês e sobram R$ 79 (conta em `custos.md`).
+- **A família:** plano Essencial, R$ 129,90 por mês com até 10 minutos de conversa por dia, decidido pelo Breno em 21/11. No uso médio de 3 minutos e 20 segundos, cada família custa uns R$ 26 por mês no modo direto e sobram R$ 79 (conta em `custos.md`).
 - **A casa parceira:** não paga pra indicar nem pra acompanhar os idosos que indicou.
 - **A casa que quiser a Dona Leda pros próprios moradores lúcidos:** plano Casa, ainda sem preço depois do preço novo da família.
 - **A decisão do preço continua com a Stephanie e o Breno.**
@@ -196,7 +196,7 @@ Ordem decidida em 21/11, às 17h. O raciocínio está em "Quem paga e quem indic
 | 4 | Vídeo funciona melhor que só voz | Ninguém provou. Quase todos os concorrentes usam telefone comum | Sem teste nosso. A ligação só de voz é o plano B |
 | 5 | A assistente ligar funciona melhor que o idoso abrir um aplicativo | Os maiores programas (CareCall, Madri, Singapura) ligam pro idoso | Coerente com a pesquisa |
 | 6 | Dá pra entregar isso sem ser serviço médico | Software de bem-estar e de registro fica fora da regra da Anvisa | Vale enquanto a promessa não falar de doença |
-| 7 | A conta fecha | No modo direto, cada família custa uns R$ 26 por mês com uma ligação de 3 minutos e 20 segundos por dia, e o plano custa R$ 129,90 (conta em `custos.md`) | Sobram R$ 79 por família no uso médio. Com 10 minutos todo dia o preço não cobre. O modo direto ainda está em construção |
+| 7 | A conta fecha | O plano custa R$ 129,90 com até 10 minutos por dia. No uso médio, cada família custa uns R$ 26 por mês no modo direto (conta em `custos.md`) | Sobram R$ 79 no uso médio. Quem usa os 10 minutos todo dia dá uns R$ 16 de prejuízo, e uma família no uso médio cobre até 5 dessas |
 | 8 | A casa de repouso indica famílias | A primeira casa parceira se ofereceu pra indicar em 21/11. Ela recebe famílias divididas sobre levar o idoso | Sem teste nosso. Falta ver quantas famílias ela indica e quantas contratam |
 | 9 | Com a Dona Leda, o idoso fica mais ativo | Ligação diária feita por gente reduziu a solidão em quatro semanas (JAMA Psychiatry, 2021). Com IA não há estudo longo | Sem teste nosso. Medir semana a semana em quantos dias ele saiu de casa e conversou com alguém |
 | 10 | A família deixa a casa que indicou acompanhar o idoso | Sem pesquisa | Sem teste nosso. Perguntar às famílias que a casa indicar |

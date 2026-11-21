@@ -1,10 +1,10 @@
 # Custos
 
-A página única de custo da Dona Leda, refeita em 21/11/2026 à noite a pedido do Breno, com a operação no modo direto. A conta usa o plano de R$ 129,90 por mês, uma ligação por dia e o dólar oficial de 19/11, a R$ 5,8889. Os números são os conservadores, sem contar com ajuste que ainda não foi medido.
+A página única de custo da Dona Leda, refeita em 21/11/2026 à noite a pedido do Breno, com a operação no modo direto. O plano custa R$ 129,90 por mês e dá até 10 minutos de conversa por dia (decisão do Breno em 21/11, às 19h10). A conta usa o uso médio de 3 minutos e 20 segundos por dia, a média da NANA, de Singapura, e o dólar oficial de 19/11, a R$ 5,8889. Os números são os conservadores, sem contar com ajuste que ainda não foi medido.
 
 ## 1. Em uma frase
 
-Cada idoso custa uns R$ 26 por mês com uma ligação de 3 minutos e 20 segundos por dia, e dos R$ 129,90 sobram R$ 79.
+No uso médio de 3 minutos e 20 segundos por dia, cada idoso custa uns R$ 26 por mês, e dos R$ 129,90 sobram R$ 79. O plano dá até 10 minutos por dia.
 
 ## 2. Como a ligação funciona na operação
 
@@ -58,11 +58,11 @@ O custo cresce mais rápido que os minutos, porque o Google cobra de novo a conv
 | 15 minutos todo dia, com compressão | R$ 186 | Faltam R$ 81 |
 | 15 minutos todo dia, sem compressão | R$ 367 | Faltam R$ 262 |
 
-**Os 10 minutos por dia têm duas leituras,** e a escolha é do Breno. O app já encerra a ligação com 10 minutos.
-- **Os 10 minutos como o máximo de cada dia,** com o custo calculado no uso médio de 3 minutos e 20 segundos: R$ 26 por família, e sobram R$ 79.
-- **Os 10 minutos usados todo dia:** R$ 121 por família com a compressão ligada, e os R$ 129,90 não cobrem. Esse uso pede outro preço.
+**O risco dos 10 minutos.** O plano dá até 10 minutos por dia, e o app já encerra a ligação aos 10 minutos. A família no uso médio custa R$ 26 e deixa R$ 79. A família que usa os 10 minutos todo dia custa R$ 121 com a compressão ligada e dá uns R$ 16 de prejuízo. A Hermet, da Espanha, informa média de 23 minutos por ligação (dado da empresa), então vai ter família usando o máximo todo dia.
 
-A Hermet, da Espanha, informa média de 23 minutos por ligação (dado da empresa). Tem idoso que vai usar o máximo todo dia.
+- **Com a compressão ligada,** uma família no uso médio cobre o prejuízo de até 5 famílias que usam os 10 minutos todo dia. A conta fecha enquanto houver pelo menos 1 família no uso médio pra cada 5 no máximo.
+- **Sem a compressão,** cada família no máximo dá uns R$ 68 de prejuízo, e uma família no uso médio cobre só uma. A compressão só existe no modo direto.
+- **Com metade das famílias em cada ponta,** cada família deixa em média R$ 32 por mês, e os custos fixos pedem 9 famílias.
 
 ## 7. De onde vem cada número
 
@@ -89,8 +89,8 @@ Fontes: [preço do Gemini Live](https://aistudio.google.com/docs/pricing#gemini-
 
 - **O modo direto está em construção** num ramo separado, na conversa "Voz direta no Gemini", e ainda não foi ao ar.
 - **O protótipo roda no motor de conversa da Agora,** que custa R$ 59 a mais por idoso por mês (US$ 0,10 por minuto). A conta da Agora está no plano grátis, com 300 minutos do motor por mês, e o Breno vai perguntar à Agora se o hackathon libera mais.
-- **A compressão da conversa e as instruções uns 40% mais curtas** foram aprovadas pelo Breno em 21/11 e estão em teste.
-- **A premissa do plano é uma ligação por dia.** O app hoje liga duas vezes por dia por padrão (9h e 19h), e o teto de minutos por mês ainda não existe no código.
+- **A compressão da conversa e as instruções uns 40% mais curtas** foram aprovadas pelo Breno em 21/11 e estão em teste. A conversa do servidor testou que o motor de conversa da Agora não repassa a compressão ao Gemini, então ela só existe no modo direto.
+- **O plano dá até 10 minutos por dia.** O app encerra cada ligação aos 10 minutos, mas liga duas vezes por dia por padrão (9h e 19h), o que deixa chegar a 20 minutos. Falta o teto por dia no código, ou uma ligação só por dia.
 - **Vender pelo app custa comissão:** no Brasil a Apple cobra de 10% a 15%, mesmo quando o app manda pagar no site. Vendendo só pelo site, a comissão não entra.
 
 ## 9. O que falta medir
