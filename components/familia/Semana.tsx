@@ -5,12 +5,15 @@ import {
   diaEMes,
   lerAlimentacao,
   lerDor,
+  lerFalouComAlguem,
   lerHumor,
   lerRemedio,
+  lerSaiuDeCasa,
   lerSono,
   type Leitura,
   type Tom,
 } from './formatos';
+import { ResumoDaSemana } from './ResumoDaSemana';
 
 interface SemanaProps {
   semana: Dia[];
@@ -37,12 +40,15 @@ const LINHAS: Linha[] = [
       typeof dia.dor === 'number' ? Math.round(dia.dor) : undefined,
   },
   { id: 'humor', nome: 'Humor', ler: lerHumor },
+  { id: 'saiu', nome: 'Saiu', ler: lerSaiuDeCasa },
+  { id: 'conversou', nome: 'Conversou', ler: lerFalouComAlguem },
 ];
 
 const LEGENDA: { tom: Tom; texto: string }[] = [
   { tom: 'bom', texto: 'Foi bem' },
   { tom: 'atencao', texto: 'Pede atenção' },
   { tom: 'ruim', texto: 'Precisa de cuidado' },
+  { tom: 'neutro', texto: 'Ficou em casa' },
   { tom: 'vazio', texto: 'Sem resposta' },
 ];
 
@@ -87,6 +93,8 @@ export function Semana({ semana, hoje }: SemanaProps) {
       <h2 id="titulo-da-semana" className="text-xl font-semibold text-foreground">
         A semana
       </h2>
+
+      {semana.length > 0 ? <ResumoDaSemana semana={semana} /> : null}
 
       {semana.length === 0 ? (
         <p className="text-base text-muted-foreground">

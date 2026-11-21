@@ -26,7 +26,7 @@ A pessoa idosa que mora sozinha usa, e só precisa atender. O filho ou a filha q
 - **Pergunta do dia.** Sono, comida, remédio, dor e como a pessoa está se sentindo, no meio da conversa.
 - **Lembra.** O que a pessoa conta (o nome do neto, a consulta de quinta) volta nas conversas seguintes.
 - **Avisa a família na hora.** Queda, dor no peito, vontade de morrer, remédio não tomado, dor forte e pedido de dinheiro ou senha por telefone viram aviso no painel.
-- **Mostra o dia e a semana.** A família vê a ficha de hoje, a semana, os avisos e o resumo da conversa.
+- **Mostra o dia e a semana.** A família vê a ficha de hoje, a semana, os avisos e o resumo da conversa. No topo da semana aparece em quantos dos últimos 7 dias a pessoa saiu de casa e em quantos conversou com alguém.
 
 ## Os dois lados do app
 

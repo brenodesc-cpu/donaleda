@@ -34,7 +34,7 @@ A OMS chama isso de envelhecimento ativo: são três pilares (saúde, participa�
 
 ### O número do sonho
 
-A ficha anota todo dia se a pessoa saiu de casa e se falou com alguém, e o painel já mostra os dois no dia de hoje, o que dá pra mostrar na demonstração. A conta da semana (em quantos dias ela saiu e em quantos conversou) ainda não está no painel. É com ela que a gente mede se o idoso está mais ativo.
+A ficha anota todo dia se a pessoa saiu de casa e se falou com alguém. Desde 21/11 o painel da família soma a semana: mostra em quantos dos últimos 7 dias ela saiu de casa e em quantos conversou com alguém, e avisa os dias sem resposta. É assim que a gente mede se o idoso está mais ativo, e é o número que aparece na demonstração.
 
 ### Como falar disso
 
