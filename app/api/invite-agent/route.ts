@@ -1,203 +1,177 @@
+// Começa a conversa: põe a assistente na mesma sala de áudio da Agora em que o
+// idoso entrou. A fala dele vira texto (Deepgram), o modelo responde (OpenAI) e a
+// resposta vira voz, tudo com as chaves gerenciadas pela Agora. As ações da
+// assistente (anotar na ficha, avisar a família) entram pelo endereço /api/mcp.
+
 import { NextRequest, NextResponse } from 'next/server';
 import {
   AgoraClient,
   Agent,
   Area,
   DeepgramSTT,
+  ElevenLabsTTS,
   ExpiresIn,
   MiniMaxTTS,
   OpenAI,
+  OpenAITTS,
 } from 'agora-agents';
-import { ClientStartRequest, AgentResponse } from '@/types/conversation';
+import type { ClientStartRequest } from '@/types/conversation';
 import { DEFAULT_AGENT_UID } from '@/lib/agora';
+import { abrirConversa, lerBase, mudarBase } from '@/lib/dados';
+import { FERRAMENTAS } from '@/lib/ferramentas';
+import { montarInstrucoes, montarSaudacao } from '@/lib/persona';
+import { chaveDasFerramentas, exigirVariavel, urlPublica } from '@/lib/servidor';
+import type { InicioDaConversa } from '@/lib/tipos';
 
-// System prompt that defines the agent's personality and behavior.
-// Swap this out to change what the agent talks about.
-const ADA_PROMPT = `You are **Ada**, an agentic developer advocate from **Agora**. You help developers understand and build with Agora's Conversational AI platform.
+export const dynamic = 'force-dynamic';
 
-# What Agora Actually Is
-Agora is a real-time communications company. The product you represent is the **Agora Conversational AI Engine** — it lets developers add voice AI agents to any app by connecting ASR, LLM, and TTS into a real-time pipeline over Agora's SD-RTN (Software Defined Real-Time Network). Key facts:
-- The product is called the **Conversational AI Engine** (not "Chorus", not "Harmony", or any other name you might invent)
-- It runs a full ASR → LLM → TTS pipeline with sub-500ms latency
-- It supports Deepgram, Microsoft, and others for ASR; OpenAI, Anthropic, and others for LLM; ElevenLabs, Microsoft, and others for TTS
-- Agora's SD-RTN is its global real-time network infrastructure — not "SDRTN"
-- MCP in this context means **Model Context Protocol** (Anthropic's open standard for connecting AI models to tools/data), not "multi-channel processing"
-- Agora does not have a product called Chorus, Harmony, or any similar name — do not invent product names
-
-# Honesty Rule
-If you don't know a specific fact about Agora, say so plainly and suggest checking docs.agora.io. Never invent product names, feature names, or capabilities.
-
-# Persona & Tone
-- Friendly, technically credible, concise. You're a peer who builds things, not a support agent.
-- Plain English. No marketing fluff.
-
-# Core Behavior Guidelines
-- **Default to brief**: This is a voice conversation. Keep most replies to 1–2 sentences. Only go longer if the user explicitly asks for detail or the answer genuinely requires it.
-- **Never list or enumerate**: No bullet points, no numbered steps. Say the single most important thing.
-- **Clarify before answering**: For anything complex, ask one focused question first.
-- **Ask at most one question per turn**: Never stack questions.
-- **Guide, don't lecture**: Unlock the next step, not everything at once.`;
-
-// First thing the agent says when a user joins the channel.
-const GREETING = `Hi there! I'm Ada, your virtual assistant from Agora. How can I help?`;
-
-// agentUid identifies the AI in the RTC channel and shares its default with the client.
 const agentUid = String(DEFAULT_AGENT_UID);
+const SE_FALHAR = 'Só um instante, por favor.';
 
-function requireEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) throw new Error(`Missing required environment variable: ${name}`);
-  return value;
+type ModeloGerenciado = 'gpt-4o-mini' | 'gpt-4.1-mini' | 'gpt-5-nano' | 'gpt-5-mini';
+const MODELOS: ModeloGerenciado[] = ['gpt-4o-mini', 'gpt-4.1-mini', 'gpt-5-nano', 'gpt-5-mini'];
+
+function modelo(): ModeloGerenciado {
+  const pedido = process.env.LIA_MODELO as ModeloGerenciado | undefined;
+  return pedido && MODELOS.includes(pedido) ? pedido : 'gpt-4o-mini';
+}
+
+/**
+ * A voz. LIA_VOZ escolhe o fornecedor e a voz, no formato "fornecedor:voz".
+ * - openai:nova (padrão, sem chave própria, fala português do Brasil)
+ * - minimax:<id da voz> (sem chave própria)
+ * - elevenlabs:<id da voz> (precisa de LIA_ELEVENLABS_KEY)
+ */
+function voz() {
+  const [fornecedor, ...resto] = (process.env.LIA_VOZ || 'openai:nova').split(':');
+  const qual = resto.join(':').trim();
+
+  if (fornecedor === 'minimax') {
+    return new MiniMaxTTS({ model: 'speech_2_8_turbo', voiceId: qual || 'Portuguese_CalmLeader' });
+  }
+  if (fornecedor === 'elevenlabs') {
+    return new ElevenLabsTTS({
+      key: exigirVariavel('LIA_ELEVENLABS_KEY'),
+      modelId: 'eleven_flash_v2_5',
+      baseUrl: 'wss://api.elevenlabs.io/v1',
+      voiceId: qual,
+      sampleRate: 24000,
+    });
+  }
+  const velocidade = Number(process.env.LIA_VELOCIDADE_DA_VOZ);
+  return new OpenAITTS({
+    model: 'tts-1',
+    voice: qual || 'nova',
+    ...(Number.isFinite(velocidade) && velocidade > 0 ? { speed: velocidade } : {}),
+  });
 }
 
 export async function POST(request: NextRequest) {
   try {
-    // --- 1. Parse request ---
-
     const body: ClientStartRequest = await request.json();
     const { requester_id, channel_name } = body;
 
-    // Validate required env vars on first request so misconfiguration surfaces
-    // with a clear error message rather than a silent failure.
-    const appId = requireEnv('NEXT_PUBLIC_AGORA_APP_ID');
-    const appCertificate = requireEnv('NEXT_AGORA_APP_CERTIFICATE');
+    const appId = exigirVariavel('NEXT_PUBLIC_AGORA_APP_ID');
+    const appCertificate = exigirVariavel('NEXT_AGORA_APP_CERTIFICATE');
 
     if (!channel_name || !requester_id) {
       return NextResponse.json(
-        { error: 'channel_name and requester_id are required' },
+        { error: 'channel_name e requester_id são obrigatórios' },
         { status: 400 },
       );
     }
 
-    // --- 2. Build and start the agent ---
+    const agora = new Date();
+    const base = await lerBase();
+    const enderecoPublico = urlPublica();
+    const chave = chaveDasFerramentas();
+    const comFerramentas = Boolean(enderecoPublico && chave);
+    const instrucoes = montarInstrucoes(base, agora, comFerramentas);
+    const saudacao = montarSaudacao(base, agora);
 
-    // AgoraClient authenticates API calls to the Agora Conversational AI service.
-    // area: change to Area.EU or Area.AP for European or Asia-Pacific deployments.
-    const client = new AgoraClient({
-      area: Area.US,
-      appId,
-      appCertificate,
-    });
+    const client = new AgoraClient({ area: Area.US, appId, appCertificate });
 
-    // Pipeline: Deepgram (reseller) STT → OpenAI (reseller) LLM → MiniMax (reseller) TTS.
-    // Omit vendor API keys for supported models — AgentKit infers reseller presets on start (see Agora Console / billing).
     const agent = new Agent({
       client,
-      instructions: ADA_PROMPT,
-      greeting: GREETING,
-      failureMessage: 'Please wait a moment.',
+      instructions: instrucoes,
+      greeting: saudacao,
+      failureMessage: SE_FALHAR,
       maxHistory: 50,
-      // VAD controls how the agent detects the start and end of a user's turn.
+      // Quem tem mais idade faz pausas mais longas no meio da frase. A assistente
+      // espera quase um segundo de silêncio antes de responder, pra não atropelar.
       turnDetection: {
         config: {
           speech_threshold: 0.5,
           start_of_speech: {
             mode: 'vad',
-            vad_config: {
-              interrupt_duration_ms: 160, // ms of speech before interruption triggers
-              prefix_padding_ms: 300, // audio captured before speech is detected
-            },
+            vad_config: { interrupt_duration_ms: 240, prefix_padding_ms: 300 },
           },
           end_of_speech: {
             mode: 'vad',
-            vad_config: {
-              silence_duration_ms: 480, // ms of silence before turn ends
-            },
+            vad_config: { silence_duration_ms: 900 },
           },
         },
       },
-      // RTM is required for transcript events in the browser client.
-      // enable_tools is required for MCP tool invocation.
-      advancedFeatures: { enable_rtm: true, enable_tools: true },
-      // Required for browser RTM events:
-      // - data_channel: 'rtm' enables RTM delivery path for state/metrics/errors
-      // - enable_error_message emits AGENT_ERROR payloads
-      // - enable_metrics emits AGENT_METRICS latency payloads
+      // enable_rtm leva a legenda e o estado da assistente pra tela.
+      // enable_tools libera as ações em /api/mcp.
+      advancedFeatures: { enable_rtm: true, enable_tools: comFerramentas },
       parameters: {
-        // web client → ultra-low-latency chorus profile
         audio_scenario: 'chorus',
         data_channel: 'rtm',
         enable_error_message: true,
         enable_metrics: true,
       },
     })
-      .withStt(
-        new DeepgramSTT({
-          model: 'nova-3',
-          language: 'en',
-        }),
-        // BYOK: uncomment the following block and set NEXT_DEEPGRAM_API_KEY
-        // new DeepgramSTT({
-        //   apiKey: requireEnv('NEXT_DEEPGRAM_API_KEY'),
-        //   model: 'nova-3',
-        //   language: 'en',
-        // }),
-      )
+      .withStt(new DeepgramSTT({ model: 'nova-3', language: 'pt-BR' }))
       .withLlm(
         new OpenAI({
-          model: 'gpt-4o-mini',
-          greetingMessage: GREETING,
-          failureMessage: 'Please wait a moment.',
-          maxHistory: 15,
-          params: {
-            max_tokens: 1024,
-            temperature: 0.7,
-            top_p: 0.95,
-          },
+          model: modelo(),
+          greetingMessage: saudacao,
+          failureMessage: SE_FALHAR,
+          maxHistory: 30,
+          params: { max_tokens: 400, temperature: 0.6 },
+          ...(comFerramentas
+            ? {
+                mcpServers: [
+                  {
+                    name: 'lia',
+                    endpoint: `${enderecoPublico}/api/mcp?chave=${chave}`,
+                    transport: 'streamable_http',
+                    headers: { Authorization: `Bearer ${chave}` },
+                    allowed_tools: FERRAMENTAS.map((f) => f.name),
+                    timeout_ms: 10000,
+                  },
+                ],
+              }
+            : {}),
         }),
-        // BYOK: uncomment the following block and set NEXT_LLM_API_KEY and NEXT_LLM_URL
-        // new OpenAI({
-        //   apiKey: requireEnv('NEXT_LLM_API_KEY'),
-        //   url: requireEnv('NEXT_LLM_URL'),
-        //   model: 'gpt-4o-mini',
-        //   greetingMessage: GREETING,
-        //   failureMessage: 'Please wait a moment.',
-        //   maxHistory: 15,
-        //   maxTokens: 1024,
-        //   temperature: 0.7,
-        //   topP: 0.95,
-        // }),
       )
-      .withTts(
-        new MiniMaxTTS({
-          model: 'speech_2_6_turbo',
-          voiceId: 'English_captivating_female1',
-        }),
-        // BYOK — ElevenLabs (set NEXT_ELEVENLABS_API_KEY; optional NEXT_ELEVENLABS_VOICE_ID)
-        // new (await import('agora-agents')).ElevenLabsTTS({
-        //   key: requireEnv('NEXT_ELEVENLABS_API_KEY'),
-        //   modelId: 'eleven_flash_v2_5',
-        //   voiceId: process.env.NEXT_ELEVENLABS_VOICE_ID ?? 'pNInz6obpgDQGcFmaJgB',
-        //   sampleRate: 24000,
-        // }),
-      );
+      .withTts(voz());
 
-    // remoteUids restricts the agent to only process audio from this user
     const session = agent.createSession({
       channel: channel_name,
       agentUid,
       remoteUids: [requester_id],
-      idleTimeout: 30,
+      // A assistente espera dois minutos de silêncio antes de sair sozinha.
+      idleTimeout: 120,
       expiresIn: ExpiresIn.hours(1),
-      debug: false, // enable debug to show restful API calls in the console
+      debug: process.env.LIA_DEPURAR === '1',
     });
 
     const agentId = await session.start();
+    const conversa = await mudarBase((b) => abrirConversa(b, agora));
 
     return NextResponse.json({
       agent_id: agentId,
       create_ts: Math.floor(Date.now() / 1000),
       state: 'RUNNING',
-    } as AgentResponse);
+      conversa_id: conversa.id,
+      ferramentas: comFerramentas,
+    } satisfies InicioDaConversa);
   } catch (error) {
-    console.error('Error starting conversation:', error);
+    console.error('Erro ao começar a conversa:', error);
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : 'Failed to start conversation',
-      },
+      { error: error instanceof Error ? error.message : 'Não foi possível começar a conversa' },
       { status: 500 },
     );
   }

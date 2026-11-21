@@ -1,5 +1,6 @@
 import type { RTMClient } from 'agora-rtm';
 
+// Contratos do projeto-base da Agora, usados pelas rotas de token, início e fim.
 export interface AgoraTokenData {
   token: string;
   uid: string;
@@ -27,9 +28,24 @@ export interface AgoraRenewalTokens {
   rtmToken: string;
 }
 
-export interface ConversationComponentProps {
-  agoraData: AgoraTokenData;
+// Tela do idoso.
+
+/** Por que a ligação não deu certo, em termos que viram texto simples na tela. */
+export type MotivoDaFalha = 'microfone' | 'conexao';
+
+/** Tudo que a tela precisa pra entrar na conversa e avisar o servidor depois. */
+export interface DadosDaLigacao {
+  token: string;
+  uid: string;
+  channel: string;
+  agentId: string;
+  conversaId: string;
+}
+
+export interface PropsDaConversa {
+  dados: DadosDaLigacao;
   rtmClient: RTMClient;
-  onTokenWillExpire: (uid: string) => Promise<AgoraRenewalTokens>;
-  onEndConversation: () => void;
+  onRenovarTokens: (uid: string) => Promise<AgoraRenewalTokens>;
+  onEncerrar: () => void;
+  onFalha: (motivo: MotivoDaFalha) => void;
 }

@@ -1,126 +1,115 @@
 import {
-  type AgentState,
-  type AgentTranscription,
+  AgentState,
   TurnStatus,
+  type AgentTranscription,
   type TranscriptHelperItem,
   type UserTranscription,
 } from 'agora-agent-client-toolkit';
-import {
-  type AgentVisualizerState,
-  type IMessageListItem,
-} from 'agora-agent-uikit';
 
-// Fixes compacted punctuation emitted by some TTS/ASR providers where sentence-ending
-// characters run directly into the next word (e.g. "Hello.World" → "Hello. World").
-export function normalizeTranscriptSpacing(text: string): string {
-  return text
-    .replace(/([.!?])([A-Za-z])/g, '$1 $2')
-    .replace(/,([A-Za-z])/g, ', $1')
+export type ItemDoTranscript = TranscriptHelperItem<
+  Partial<UserTranscription | AgentTranscription>
+>;
+
+export type EstadoDoRosto =
+  | 'parada'
+  | 'ligando'
+  | 'ouvindo'
+  | 'pensando'
+  | 'falando';
+
+/** Volume a partir do qual a boca abre mesmo sem o aviso de "falando" ter chegado. */
+const VOLUME_DE_FALA = 0.08;
+
+/** Quantas letras da fala cabem na legenda grande do celular (umas 4 linhas). */
+const TAMANHO_DA_LEGENDA = 130;
+
+// Alguns serviços de voz mandam a pontuação grudada na palavra seguinte
+// ("Oi.Tudo bem"). Aqui o espaço volta, inclusive antes de letra com acento.
+export function arrumarEspacos(texto: string): string {
+  return texto
+    .replace(/([.!?])(\p{L})/gu, '$1 $2')
+    .replace(/,(\p{L})/gu, ', $1')
     .replace(/\s{2,}/g, ' ')
     .trim();
 }
 
-// Agora timestamps vary by source: some RTM payloads use Unix-seconds while
-// RTC events use milliseconds. Values already above 1e12 are milliseconds; others need scaling.
-export function normalizeTimestampMs(timestamp: number): number {
-  return timestamp > 1e12 ? timestamp : timestamp * 1000;
+/** Fica com o fim da fala, cortando em palavra inteira, pra legenda mostrar o que está sendo dito agora. */
+export function fimDaFala(
+  texto: string,
+  maximo: number = TAMANHO_DA_LEGENDA,
+): string {
+  if (texto.length <= maximo) return texto;
+  const corte = texto.slice(texto.length - maximo);
+  const primeiroEspaco = corte.indexOf(' ');
+  const inteiro = primeiroEspaco === -1 ? corte : corte.slice(primeiroEspaco + 1);
+  return `… ${inteiro}`;
 }
 
-// Maps the combined (agentState + RTC connection + agent presence) signal to the
-// AgentVisualizer's display states. RTC transport problems take priority over
-// agent-level state to avoid showing "listening" or "talking" during a reconnect.
-export function mapAgentVisualizerState(
-  agentState: AgentState | null,
-  isAgentConnected: boolean,
-  connectionState: string,
-): AgentVisualizerState {
-  if (
-    connectionState === 'DISCONNECTED' ||
-    connectionState === 'DISCONNECTING'
-  ) {
-    return 'disconnected';
-  }
-
-  if (
-    connectionState === 'CONNECTING' ||
-    connectionState === 'RECONNECTING'
-  ) {
-    return 'joining';
-  }
-
-  if (!isAgentConnected) {
-    return 'not-joined';
-  }
-
-  switch (agentState) {
-    case 'listening':
-      return 'listening';
-    case 'thinking':
-      return 'analyzing';
-    case 'speaking':
-      return 'talking';
-    case 'idle':
-    case 'silent':
-    default:
-      return 'ambient';
-  }
+function textoDe(item: ItemDoTranscript): string {
+  return typeof item.text === 'string' ? arrumarEspacos(item.text) : '';
 }
 
-// Adapts a toolkit TranscriptHelperItem to the shape expected by agora-agent-uikit.
-// `status` is cast via `unknown` because the two packages define structurally
-// equivalent TurnStatus enums that TypeScript won't narrow across package boundaries.
-// `_time` may arrive in seconds or milliseconds depending on the event source.
-export function toMessageListItem(
-  item: TranscriptHelperItem<Partial<UserTranscription | AgentTranscription>>,
-): IMessageListItem {
-  return {
-    turn_id: item.turn_id,
-    uid: Number(item.uid) || 0,
-    text: typeof item.text === 'string' ? item.text : '',
-    status: item.status as unknown as IMessageListItem['status'],
-    createdAt:
-      typeof item._time === 'number'
-        ? normalizeTimestampMs(item._time)
-        : undefined,
-  };
+/**
+ * A fala da assistente que vai pra legenda: a que está em andamento ou,
+ * sem nenhuma em andamento, a última que ela terminou.
+ */
+export function legendaDaAssistente(
+  transcript: ItemDoTranscript[],
+  uidDaAssistente: string,
+): string {
+  const falas = transcript.filter(
+    (item) => item.uid === uidDaAssistente && textoDe(item) !== '',
+  );
+  if (falas.length === 0) return '';
+  const emAndamento = falas.findLast(
+    (item) => item.status === TurnStatus.IN_PROGRESS,
+  );
+  const escolhida = emAndamento ?? falas[falas.length - 1];
+  return fimDaFala(textoDe(escolhida));
 }
 
-// uid="0" is the toolkit's sentinel for local-user speech. Without remapping it to
-// the actual RTC UID, the transcript panel renders the user's speech on the agent's side.
-// Also normalises punctuation spacing so all turns display consistently.
-export function normalizeTranscript(
-  transcript: TranscriptHelperItem<Partial<UserTranscription | AgentTranscription>>[],
-  localUID: string,
-) {
-  return transcript.map((item) => {
-    const remappedUID = item.uid === '0' ? localUID : item.uid;
-    const normalizedText =
-      typeof item.text === 'string'
-        ? normalizeTranscriptSpacing(item.text)
-        : item.text;
-    return { ...item, uid: remappedUID, text: normalizedText };
-  });
+export interface FalaDoIdoso {
+  /** Um por fala (o turn_id da Agora), pra cada uma ir ao servidor uma vez só. */
+  id: string;
+  texto: string;
 }
 
-// Returns completed and interrupted turns for the message history list.
-// IN_PROGRESS turns are intentionally excluded — they are rendered separately
-// as a streaming partial bubble via getCurrentInProgressMessage.
-// INTERRUPTED turns must be included: if the agent's first turn is cut off and
-// omitted, messageList stays empty and the first interrupted turn is never shown.
-export function getMessageList(
-  transcript: TranscriptHelperItem<Partial<UserTranscription | AgentTranscription>>[],
-) {
+/**
+ * As falas que o idoso já terminou. O toolkit marca a fala de quem está no
+ * aparelho com uid "0"; aqui vale tudo que não veio da assistente.
+ */
+export function falasTerminadasDoIdoso(
+  transcript: ItemDoTranscript[],
+  uidDaAssistente: string,
+): FalaDoIdoso[] {
   return transcript
-    .filter((item) => item.status !== TurnStatus.IN_PROGRESS)
-    .map(toMessageListItem);
+    .filter(
+      (item) =>
+        item.uid !== uidDaAssistente &&
+        item.status !== TurnStatus.IN_PROGRESS,
+    )
+    .map((item) => ({ id: String(item.turn_id), texto: textoDe(item) }))
+    .filter((fala) => fala.texto !== '');
 }
 
-// Returns the single active in-progress turn, or null when none exists.
-// At most one turn is in-progress at a time. The transcript panel renders this
-// as a live streaming bubble, distinct from the static message history.
-export function getCurrentInProgressMessage(
-  transcript: TranscriptHelperItem<Partial<UserTranscription | AgentTranscription>>[],
-) {
-  const item = transcript.find((entry) => entry.status === TurnStatus.IN_PROGRESS);
-  return item ? toMessageListItem(item) : null;
+/** Junta o estado que a Agora informa com o volume do áudio pra decidir a cara do rosto. */
+export function estadoDoRosto(
+  estadoDoAgente: AgentState | null,
+  assistenteNaLinha: boolean,
+  nivel: number,
+): EstadoDoRosto {
+  if (!assistenteNaLinha) return 'ligando';
+  if (estadoDoAgente === AgentState.SPEAKING || nivel > VOLUME_DE_FALA) {
+    return 'falando';
+  }
+  if (estadoDoAgente === AgentState.THINKING) return 'pensando';
+  return 'ouvindo';
 }
+
+export const TEXTO_DO_ESTADO: Record<EstadoDoRosto, string> = {
+  parada: '',
+  ligando: 'Ligando...',
+  ouvindo: 'Estou te ouvindo',
+  pensando: 'Pensando...',
+  falando: 'Falando',
+};
