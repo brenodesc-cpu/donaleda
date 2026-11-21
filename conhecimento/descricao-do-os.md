@@ -18,7 +18,7 @@ O idoso lúcido que mora sozinho, com celular ou tablet com internet, só precis
 
 A Dona Leda é a camada de cuidado de quem envelhece: uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina.
 
-No protótipo, ela liga todo dia na hora marcada, conversa em português esperando as pausas de quem tem mais idade e sempre se apresenta como assistente virtual. Pergunta do sono, da comida, do remédio e da dor, anota o dia e lembra o que a pessoa contou. A família acompanha num painel e recebe aviso de queda, dor no peito, pedido de dinheiro ou senha e ligação não atendida. Ela não dá diagnóstico e, numa urgência, orienta ligar pro 192.
+No protótipo, ela liga todo dia na hora marcada, conversa em português esperando as pausas de quem tem mais idade e sempre se apresenta como assistente virtual. Pergunta do sono, da comida, do remédio e da dor, anota o dia e lembra o que a pessoa contou. A família acompanha num painel e recebe um aviso quando a pessoa conta uma queda, uma dor no peito, um pedido de dinheiro ou senha, uma tristeza que dura ou remédio tomado a mais, e quando a ligação não é atendida. Quem age é a família. Ela não dá diagnóstico e, numa urgência, orienta ligar pro 192.
 
 A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
 
@@ -34,11 +34,11 @@ A idosa do painel de exemplo é inventada.
 
 ## Versão curta
 
-Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. A Dona Leda é a camada de cuidado de quem envelhece: uma assistente virtual que liga todo dia pro idoso, conversa em português, pergunta do sono, da comida, do remédio e da dor e avisa a família quando algo sai do normal. A conversa roda no Conversational AI Engine da Agora, com o Gemini Live (Deepgram e OpenAI na reserva), numa sala de áudio da Agora (RTC), com legenda pelo RTM e ações por MCP.
+Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. A Dona Leda é a camada de cuidado de quem envelhece: uma assistente virtual que liga todo dia pro idoso, conversa em português, pergunta do sono, da comida, do remédio e da dor e avisa a família quando a pessoa conta uma queda ou um golpe. A conversa roda no Conversational AI Engine da Agora, com o Gemini Live (Deepgram e OpenAI na reserva), numa sala de áudio da Agora (RTC), com legenda pelo RTM e ações por MCP.
 
 ## Uma frase
 
-A Dona Leda é a camada de cuidado de quem envelhece: uma assistente virtual que liga todo dia pro idoso que mora sozinho e avisa a família quando algo sai do normal.
+A Dona Leda é a camada de cuidado de quem envelhece: uma assistente virtual que liga pro idoso que mora sozinho no horário combinado e avisa a família quando ele conta uma queda, um golpe ou uma tristeza que dura.
 
 ## Notas do time, fora da plataforma: o que foi conferido no código
 

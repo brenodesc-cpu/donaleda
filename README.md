@@ -1,6 +1,6 @@
 # Dona Leda
 
-A Dona Leda é a camada de cuidado de quem envelhece: uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina. No protótipo, ela liga todo dia pro idoso que mora sozinho, conversa, anota como ele está e avisa a família quando algo sai do normal.
+A Dona Leda é a camada de cuidado de quem envelhece: uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina. No protótipo, ela liga no horário combinado, conversa, anota o que a pessoa contou e avisa a família quando a pessoa conta uma queda, um golpe, uma tristeza que dura ou remédio tomado a mais. Quem age é a família.
 
 Projeto do hackathon **UNMUTE by Agora** (NewHack e Agora), feito em 21 e 22 de novembro de 2026, na AI House Brasil, em São Paulo.
 

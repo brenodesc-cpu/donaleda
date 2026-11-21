@@ -42,7 +42,7 @@ A ficha anota todo dia se a pessoa saiu de casa e se falou com alguém. Desde 21
 
 ### Como falar disso
 
-- **"Cuida"** é o verbo da promessa. "Garante" pede uma prova que a gente ainda não tem.
+- **A promessa, desde 21/11 às 17h30:** uma ligação combinada que ajuda a família a cuidar. Veio do retorno escrito dos mentores, pra ela não soar como socorro nem como cuidado clínico. "Cuida do idoso", "detecta", "monitora", "protege" e "garante" pedem uma prova que a gente não tem. No lugar, a função dita direto: ela liga no horário combinado, conversa, anota o que a pessoa contou e avisa a família quando a pessoa conta uma queda, um golpe, uma tristeza que dura ou remédio tomado a mais. Quem age é a família.
 - **A saúde do dia a dia** é perguntar, lembrar e avisar. Diagnóstico, sinais vitais e socorro em emergência ficam fora da promessa, porque pedem médico e registro na Anvisa.
 - **"Amiga"** é a palavra do pitch. No produto ela se apresenta sempre como assistente virtual, e essa é a resposta se a banca perguntar.
 - **"Monitorar" e "prevenir"** ficam fora do discurso: puxam pra regra da Anvisa, e o idoso resiste a se sentir vigiado. No lugar, "saber como ele está".
@@ -103,6 +103,30 @@ A demonstração do hackathon continua a mesma: a ligação, a ficha e os avisos
 - **O filho pagar todo mês volta a ser a premissa mais arriscada.** Lá fora ninguém publica quantas famílias pagam, e a Amazon encerrou o Alexa Together.
 - **A indicação pode não virar família pagante.** A primeira casa se ofereceu, e falta ver quantas famílias ela indica e quantas contratam.
 - **A casa pode ver a Dona Leda como concorrente**, se ela adiar a mudança do idoso pra casa de repouso. A primeira parceira enxergou o contrário, e as próximas conversas testam isso.
+
+## Pro pitch e pro vídeo
+
+Escrito em 21/11 pra conversa do pitch ler no domingo. A promessa é uma ligação combinada que ajuda a família a cuidar, e quem age é a família.
+
+**A história que a banca quer ver**, pelo retorno escrito dos mentores: uma família inventada, um aviso, uma pessoa que assume e o desfecho no painel.
+
+1. **A família:** a dona Helena, de 78 anos, mora sozinha, e a filha Marina mora em outra cidade. As duas são inventadas e são as mesmas do exemplo do app.
+2. **A ligação:** no horário combinado a Dona Leda liga, conversa com a dona Helena e anota o que ela contou.
+3. **O aviso:** a dona Helena conta que ligaram pedindo um Pix em nome do neto. A regra fixa avisa a família na hora.
+4. **Quem assume:** a Marina vê o aviso no painel e marca que vai cuidar disso.
+5. **O desfecho:** a Marina liga pra mãe, confirma que ela não passou nada, e o painel mostra o aviso resolvido por ela.
+
+Os passos 4 e 5 estão em construção na conversa "Tela do residencial". O painel mostra o aviso entregue e o que a família fez com ele, porque os mentores separaram as duas coisas.
+
+**Como mostrar**
+- Com o painel aberto na tela. O aviso no celular da família fica pra depois da entrega.
+- Quando a filha entra na ligação, a câmera do idoso fica desligada.
+- O rastreador de localização aparece só como próximo passo.
+- Nenhuma história real de mentor entra, nem a da mentora que contou o caso da mãe.
+
+**O fecho**
+- **Quem paga:** a família, no plano Essencial (R$ 229,90 proposto), com a casa de repouso indicando.
+- **O custo por família acompanhada:** de R$ 59 a 139 por mês, com 100 a 150 minutos de conversa (conta em `tese.md`, com o dólar de 19/11).
 
 ## A camada, por dentro
 

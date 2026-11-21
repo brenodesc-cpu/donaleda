@@ -22,10 +22,10 @@ A Dona Leda liga pro idoso por chamada de vídeo. O aparelho toca na hora marcad
 1. pergunta do sono, da comida, do remédio, da dor e de como ele está se sentindo;
 2. lembra do que ele contou nos outros dias (o neto, a consulta, o joelho);
 3. anota tudo numa ficha do dia;
-4. avisa a família na hora quando algo sai do normal (queda, dor forte, remédio não tomado, pedido de dinheiro por telefone);
+4. avisa a família na hora quando a pessoa fala de queda, dor forte, golpe, tristeza que dura ou remédio tomado a mais, e quando o remédio não foi confirmado;
 5. entrega à família um resumo do dia e da semana.
 
-A saúde do dia a dia fica em perguntar, lembrar e avisar, sem diagnóstico, sem sinais vitais e sem prometer socorro. O que ela faz hoje em cada necessidade e o que vem depois está na tabela de `proposta-de-valor.md`.
+A saúde do dia a dia fica em perguntar, lembrar e avisar, sem diagnóstico, sem sinais vitais e sem prometer socorro. Quem age é a família: a promessa, desde 21/11, é uma ligação combinada que ajuda a família a cuidar. O que ela faz hoje em cada necessidade e o que vem depois está na tabela de `proposta-de-valor.md`.
 
 A Dona Leda diz que é uma assistente virtual. O time decidiu isso no brainstorm: esconder que é IA enganaria justamente a pessoa mais frágil, e voz que finge ser gente é o mecanismo do golpe do falso parente. A palavra "amiga" fica só no pitch.
 
@@ -117,7 +117,7 @@ Busca de 21/11/2026.
 - O idoso não querer conversar com uma IA. É o maior risco, e a validação do hackathon mede isso.
 - Falso positivo no remédio: ele diz que tomou e não tomou. A Dona Leda registra o que ele disse e a família vê como "disse que tomou".
 - A família achar caro pagar todo mês.
-- Promessa de saúde: software que diagnostica ou acompanha doença é dispositivo médico pra Anvisa. A Dona Leda cuida da saúde do dia a dia perguntando, lembrando e avisando, sem diagnóstico.
+- Promessa de saúde: software que diagnostica ou acompanha doença é dispositivo médico pra Anvisa. A Dona Leda pergunta como a pessoa está, lembra o que ela contou e avisa a família, sem diagnóstico.
 - Emergência: a Dona Leda orienta ligar pro 192 e avisa a família. Ela não substitui serviço de emergência.
 
 ## Pra onde isso pode crescer
