@@ -197,6 +197,7 @@ describe('o segredo não sai no aviso nem no resumo', () => {
   it.each([
     'Falou que não quer mais viver por causa do aluguel.',
     'Caiu no banheiro quando foi ver a conta do aluguel.',
+    'Bateu o joelho no banho e anda triste com o aluguel.',
   ])('risco vai inteiro, mesmo citando o segredo: %s', async (mensagem) => {
     const r = await chamar('avisar_familia', { tipo: 'humor', gravidade: 'urgente', mensagem });
     expect(r).toBe('A família foi avisada.');
