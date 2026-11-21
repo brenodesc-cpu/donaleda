@@ -133,7 +133,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await criarFicha(id, exemplo ? baseDeExemplo(new Date(), id) : baseNova(id, novo!));
+    await criarFicha(id, exemplo ? baseDeExemplo(new Date(), id, { avisoFechado: true }) : baseNova(id, novo!));
   } catch {
     await banco.from('idosos').delete().eq('id', id);
     return NextResponse.json({ ok: false, erro: 'banco' }, { status: 500 });

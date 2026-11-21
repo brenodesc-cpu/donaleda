@@ -1,6 +1,7 @@
 // A conta da tela "Todos os moradores": em que situação cada morador está hoje,
 // em que ordem eles aparecem e os números do topo. Conta pura, sem busca.
 
+import { avisoAberto } from '@/lib/avisos';
 import type { Alerta, PainelDaFamilia } from '@/lib/tipos';
 
 /** Da que mais pede a equipe pra que menos pede. */
@@ -18,7 +19,7 @@ export interface Morador {
   id: string;
   painel: PainelDaFamilia;
   situacao: Situacao;
-  /** Avisos que ninguém marcou como vistos, o mais novo primeiro. */
+  /** Avisos abertos (ninguém viu, ou quem viu ainda não contou o que fez), o mais novo primeiro. */
   avisosNovos: Alerta[];
 }
 
@@ -36,7 +37,7 @@ function maisNovoPrimeiro(a: Alerta, b: Alerta): number {
 }
 
 export function situacaoDe(painel: PainelDaFamilia): Situacao {
-  const novos = painel.alertas.filter((a) => !a.visto);
+  const novos = painel.alertas.filter(avisoAberto);
   if (novos.some((a) => a.gravidade === 'urgente')) return 'urgente';
   if (novos.length > 0) return 'atencao';
   if (painel.ultimaConversa?.emAndamento) return 'conversando';
@@ -51,7 +52,7 @@ export function ordenarMoradores(paineis: { id: string; painel: PainelDaFamilia 
       id,
       painel,
       situacao: situacaoDe(painel),
-      avisosNovos: painel.alertas.filter((a) => !a.visto).sort(maisNovoPrimeiro),
+      avisosNovos: painel.alertas.filter(avisoAberto).sort(maisNovoPrimeiro),
     }))
     .sort((a, b) => {
       const peso = PESO[a.situacao] - PESO[b.situacao];

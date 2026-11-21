@@ -11,11 +11,14 @@ import {
   Siren,
   type LucideIcon,
 } from 'lucide-react';
-import type { TipoDeAlerta } from '@/lib/tipos';
+import { avisoAberto, linhaDoAviso } from '@/lib/avisos';
+import type { RespostaDoAviso, TipoDeAlerta } from '@/lib/tipos';
+import { LinhaDoAviso, PerguntaDoDesfecho } from '../DesfechoDoAviso';
 import { enderecoCom } from '../api';
 import {
   CLASSES_DO_TOM,
   comMaiuscula,
+  dataDeBrasilia,
   lerAlimentacao,
   lerDor,
   lerHumor,
@@ -44,10 +47,11 @@ interface CartaoDoMoradorProps {
   pedido: PedidoDeLigacao;
   onJaVi: (idosoId: string, alertaIds: string[]) => void;
   onLigar: (idosoId: string) => void;
+  onResponder?: (idosoId: string, alertaId: string, resposta: RespostaDoAviso, nota: string) => Promise<boolean>;
 }
 
 /** Um morador: os avisos novos em cima, a conversa de hoje e como ele está. */
-export function CartaoDoMorador({ morador, agora, pedido, onJaVi, onLigar }: CartaoDoMoradorProps) {
+export function CartaoDoMorador({ morador, agora, pedido, onJaVi, onLigar, onResponder }: CartaoDoMoradorProps) {
   const { id, painel, avisosNovos } = morador;
   const { assistente, idoso, hoje } = painel;
   const urgente = avisosNovos.some((a) => a.gravidade === 'urgente');
@@ -66,7 +70,15 @@ export function CartaoDoMorador({ morador, agora, pedido, onJaVi, onLigar }: Car
   const ligarDeNovo = podeLigarDeNovo(painel);
   const nome = comMaiuscula(idoso.tratamento);
 
-  const handleJaVi = () => onJaVi(id, avisosNovos.map((a) => a.id));
+  const naoVistos = avisosNovos.filter((a) => !a.visto);
+  // Avisos fechados hoje continuam no cartão, com quem viu e o que fez.
+  const fechadosHoje = painel.alertas.filter(
+    (a) => !avisoAberto(a) && a.desfecho && dataDeBrasilia(a.desfecho.em) === hoje.data,
+  );
+  const handleJaVi = () => onJaVi(id, naoVistos.map((a) => a.id));
+  const responderAqui = onResponder
+    ? (alertaId: string, resposta: RespostaDoAviso, nota: string) => onResponder(id, alertaId, resposta, nota)
+    : null;
   const handleLigar = () => onLigar(id);
 
   return (
@@ -92,6 +104,12 @@ export function CartaoDoMorador({ morador, agora, pedido, onJaVi, onLigar }: Car
             <p className={`text-sm ${cheio ? 'text-destructive-foreground' : 'text-muted-foreground'}`}>
               {quandoDoAviso(alerta, hoje.data, assistente)}
             </p>
+            <LinhaDoAviso alerta={alerta} agora={agora} cheio={cheio} />
+            {responderAqui ? (
+              <div className="pt-2">
+                <PerguntaDoDesfecho alerta={alerta} cheio={cheio} onResponder={responderAqui} />
+              </div>
+            ) : null}
           </div>
         );
       })}
@@ -139,10 +157,21 @@ export function CartaoDoMorador({ morador, agora, pedido, onJaVi, onLigar }: Car
           })}
         </ul>
 
-        {avisosNovos.length > 0 || ligarDeNovo ? (
+        {fechadosHoje.length > 0 ? (
+          <ul className="flex flex-col gap-1 border-t border-border pt-3">
+            {fechadosHoje.map((alerta) => (
+              <li key={alerta.id} className="text-base text-foreground">
+                <span className="font-semibold">{rotuloDoAlerta(alerta.tipo, idoso.tratamento)}:</span>{' '}
+                {linhaDoAviso(alerta, agora)}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
+        {naoVistos.length > 0 || ligarDeNovo ? (
           <div className="flex flex-col gap-2">
             <div className="flex flex-wrap gap-2">
-              {avisosNovos.length > 0 ? (
+              {naoVistos.length > 0 ? (
                 <button
                   type="button"
                   onClick={handleJaVi}

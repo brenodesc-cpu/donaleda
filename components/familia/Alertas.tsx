@@ -8,7 +8,9 @@ import {
   Siren,
   type LucideIcon,
 } from 'lucide-react';
+import { avisoAberto } from '@/lib/avisos';
 import type { Alerta, TipoDeAlerta } from '@/lib/tipos';
+import { LinhaDoAviso, PerguntaDoDesfecho, type ResponderAviso } from './DesfechoDoAviso';
 import { quandoFoi, rotuloDoAlerta } from './formatos';
 
 interface AlertasProps {
@@ -17,6 +19,8 @@ interface AlertasProps {
   tratamento: string;
   hoje: string;
   onMarcarVisto: (alertaId: string) => void;
+  /** Sem ele, o aviso visto não pergunta o que a pessoa fez (página de exemplo). */
+  onResponder?: ResponderAviso;
 }
 
 const ICONE_DO_TIPO: Record<TipoDeAlerta, LucideIcon> = {
@@ -37,7 +41,9 @@ interface CartaoProps {
   assistente: string;
   tratamento: string;
   hoje: string;
+  agora: string;
   onMarcarVisto?: (alertaId: string) => void;
+  onResponder?: ResponderAviso;
 }
 
 function CartaoDoAlerta({
@@ -45,13 +51,17 @@ function CartaoDoAlerta({
   assistente,
   tratamento,
   hoje,
+  agora,
   onMarcarVisto,
+  onResponder,
 }: CartaoProps) {
   const Icone = ICONE_DO_TIPO[alerta.tipo] ?? HeartPulse;
   const urgente = alerta.gravidade === 'urgente';
-  const cheio = urgente && !alerta.visto;
+  // Cor de aviso enquanto ele está aberto: ninguém viu, ou quem viu ainda não contou o que fez.
+  const aberto = avisoAberto(alerta);
+  const cheio = urgente && aberto;
   // Urgente é Goiabada cheia; atenção é Manteiga com contorno Café (brand book).
-  const cores = alerta.visto
+  const cores = !aberto
     ? 'border border-border bg-card'
     : urgente
       ? 'border-2 border-destructive bg-destructive'
@@ -81,8 +91,10 @@ function CartaoDoAlerta({
           <p className={`text-base ${cheio ? 'text-destructive-foreground' : 'text-muted-foreground'}`}>
             {quandoFoi(alerta.criadoEm, hoje)}{origem ? `, ${origem}` : ''}
           </p>
+          <LinhaDoAviso alerta={alerta} agora={agora} cheio={cheio} />
         </div>
       </div>
+      {onResponder ? <PerguntaDoDesfecho alerta={alerta} cheio={cheio} onResponder={onResponder} /> : null}
       {!alerta.visto && onMarcarVisto ? (
         <button
           type="button"
@@ -103,9 +115,11 @@ export function Alertas({
   tratamento,
   hoje,
   onMarcarVisto,
+  onResponder,
 }: AlertasProps) {
-  const novos = alertas.filter((a) => !a.visto).sort(maisNovoPrimeiro);
-  const vistos = alertas.filter((a) => a.visto).sort(maisNovoPrimeiro);
+  const agora = new Date().toISOString();
+  const novos = alertas.filter(avisoAberto).sort(maisNovoPrimeiro);
+  const vistos = alertas.filter((a) => !avisoAberto(a)).sort(maisNovoPrimeiro);
 
   return (
     <section aria-label="Avisos" aria-live="polite" className="flex flex-col gap-3">
@@ -118,7 +132,9 @@ export function Alertas({
               assistente={assistente}
               tratamento={tratamento}
               hoje={hoje}
+              agora={agora}
               onMarcarVisto={onMarcarVisto}
+              onResponder={onResponder}
             />
           ))}
         </ul>
@@ -144,6 +160,7 @@ export function Alertas({
                 assistente={assistente}
                 tratamento={tratamento}
                 hoje={hoje}
+                agora={agora}
               />
             ))}
           </ul>

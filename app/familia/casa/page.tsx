@@ -9,7 +9,7 @@ import { useIdosos } from '@/components/familia/useIdosos';
 /** Todos os moradores da casa numa tela só, em três colunas pela situação de hoje. */
 export default function TodosOsMoradoresPage() {
   const { idosos, idoso, escolher, semConexao: semLista } = useIdosos();
-  const { moradores, conta, carregando, semConexao, marcarVistos, ligar, pedidos } = useCasa(idosos);
+  const { moradores, conta, carregando, semConexao, marcarVistos, responder, ligar, pedidos } = useCasa(idosos);
 
   return (
     <main className="min-h-dvh bg-background text-base text-foreground">
@@ -26,6 +26,7 @@ export default function TodosOsMoradoresPage() {
             pedidos={pedidos}
             onJaVi={marcarVistos}
             onLigar={ligar}
+            onResponder={responder}
           />
         )}
       </div>

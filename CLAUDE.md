@@ -49,6 +49,7 @@ Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da b
 - `app/api/mcp/route.ts` e `lib/ferramentas.ts`: as ações que a Dona Leda faz durante a conversa (anotar, lembrar, avisar, resumir).
 - `app/api/conversa/route.ts` e `lib/regras.ts`: as regras fixas de segurança em cima de cada fala.
 - `app/api/familia/route.ts` e `lib/dados.ts`: a ficha e o que o painel mostra.
+- `lib/avisos.ts` e `components/familia/DesfechoDoAviso.tsx`: quem viu o aviso, em quanto tempo e o que fez.
 - `lib/persona.ts`: o jeito de a Dona Leda falar e o que ela sabe antes de cada conversa.
 - `lib/tipos.ts`: o formato dos dados. Quem muda a ficha ou o painel começa por aqui.
 - `lib/exemplo.ts`: a pessoa inventada da demonstração.

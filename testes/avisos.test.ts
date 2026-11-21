@@ -83,3 +83,24 @@ describe('aviso com quem viu e como terminou', () => {
     expect(montarPainel(base, depois(40)).alertas.map((a) => a.id)).toEqual(['esperando', 'fechado']);
   });
 });
+
+describe('avisos fechados dos dados de exemplo', () => {
+  it('dona Neide, no residencial, tem um aviso de hoje fechado pela Ana e segue sem aviso aberto', async () => {
+    const { residencialDeExemplo } = await import('@/lib/exemplo');
+    const agora = new Date('2026-11-22T15:00:00.000Z');
+    const neide = residencialDeExemplo(agora).find((m) => m.nome === 'Neide')!;
+    const painel = montarPainel(neide.ficha('id-neide'), agora);
+    const fechado = painel.alertas.find((a) => a.desfecho);
+    expect(fechado && linhaDoAviso(fechado, agora.toISOString())).toBe(
+      'Ana viu em 3 min. Foi até lá: Fizemos o curativo, está bem.',
+    );
+    expect(painel.alertas.filter(avisoAberto)).toHaveLength(0);
+  });
+
+  it('a dona Helena do botão de exemplo tem o aviso de ontem fechado pela Marina; a dos testes não', async () => {
+    const { baseDeExemplo } = await import('@/lib/exemplo');
+    const comAviso = baseDeExemplo(new Date('2026-11-22T15:00:00.000Z'), 'h', { avisoFechado: true });
+    expect(comAviso.alertas[0]).toMatchObject({ vistoPor: 'Marina', desfecho: { resposta: 'liguei' } });
+    expect(baseDeExemplo(new Date('2026-11-22T15:00:00.000Z')).alertas).toHaveLength(0);
+  });
+});

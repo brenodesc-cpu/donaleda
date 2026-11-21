@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { IdosoDaFamilia, PainelDaFamilia } from '@/lib/tipos';
+import type { IdosoDaFamilia, PainelDaFamilia, RespostaDoAviso } from '@/lib/tipos';
 import { buscarPainel, deuCerto, enviarAcao } from '../api';
-import { completar, pareceUmPainel, type PedidoDeLigacao } from '../usePainel';
+import { completar, pareceUmPainel, vistoAqui, type PedidoDeLigacao } from '../usePainel';
 import { contarCasa, ordenarMoradores } from './ordem';
 
 const INTERVALO_MS = 5000;
@@ -90,6 +90,19 @@ export function useCasa(idosos: IdosoDaFamilia[] | null) {
     [router],
   );
 
+  /** Conta o que a cuidadora fez com o aviso. Devolve true quando o servidor guardou. */
+  const responder = useCallback(
+    async (idosoId: string, alertaId: string, resposta: RespostaDoAviso, nota: string) => {
+      const { status } = await enviarAcao({ acao: 'desfecho', alertaId, resposta, nota, idosoId });
+      if (status === 401) router.replace('/entrar');
+      if (status === 0) setSemConexao(true);
+      const guardou = deuCerto(status);
+      if (guardou) await buscarAgora.current();
+      return guardou;
+    },
+    [router],
+  );
+
   const ligar = useCallback(
     async (idosoId: string) => {
       setPedidos((antes) => ({ ...antes, [idosoId]: 'pedindo' }));
@@ -115,7 +128,7 @@ export function useCasa(idosos: IdosoDaFamilia[] | null) {
               ? painel
               : {
                   ...painel,
-                  alertas: painel.alertas.map((a) => (vistosAqui.has(a.id) ? { ...a, visto: true } : a)),
+                  alertas: painel.alertas.map((a) => (vistosAqui.has(a.id) ? vistoAqui(a) : a)),
                 },
         };
       });
@@ -125,5 +138,5 @@ export function useCasa(idosos: IdosoDaFamilia[] | null) {
   const carregando = ids.length > 0 && moradores.length === 0;
   const conta = useMemo(() => contarCasa(moradores), [moradores]);
 
-  return { moradores, conta, carregando, semConexao, marcarVistos, ligar, pedidos };
+  return { moradores, conta, carregando, semConexao, marcarVistos, responder, ligar, pedidos };
 }

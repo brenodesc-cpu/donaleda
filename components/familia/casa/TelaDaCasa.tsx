@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import type { RespostaDoAviso } from '@/lib/tipos';
 import type { PedidoDeLigacao } from '../usePainel';
 import { comMaiuscula, dataPorExtenso } from '../formatos';
 import { CartaoDoMorador } from './CartaoDoMorador';
@@ -40,12 +41,14 @@ interface TelaDaCasaProps {
   pedidos?: Record<string, PedidoDeLigacao>;
   onJaVi?: (idosoId: string, alertaIds: string[]) => void;
   onLigar?: (idosoId: string) => void;
+  /** Sem ele, o aviso visto não pergunta o que a cuidadora fez (página de exemplo). */
+  onResponder?: (idosoId: string, alertaId: string, resposta: RespostaDoAviso, nota: string) => Promise<boolean>;
 }
 
 const nada = () => {};
 
 /** O título e as três colunas: com aviso novo, ainda não conversou hoje e conversou sem aviso. */
-export function TelaDaCasa({ moradores, conta, agora, pedidos = {}, onJaVi = nada, onLigar = nada }: TelaDaCasaProps) {
+export function TelaDaCasa({ moradores, conta, agora, pedidos = {}, onJaVi = nada, onLigar = nada, onResponder }: TelaDaCasaProps) {
   const data = moradores[0] ? dataPorExtenso(moradores[0].painel.hoje.data) : '';
   const comAviso = moradores.filter((m) => m.situacao === 'urgente' || m.situacao === 'atencao');
   const semConversa = moradores.filter((m) => m.situacao === 'sem_conversa');
@@ -59,6 +62,7 @@ export function TelaDaCasa({ moradores, conta, agora, pedidos = {}, onJaVi = nad
       pedido={pedidos[morador.id] ?? 'parado'}
       onJaVi={onJaVi}
       onLigar={onLigar}
+      onResponder={onResponder}
     />
   );
 

@@ -18,7 +18,7 @@ export function generateStaticParams() {
 /** A dona Helena e o residencial de exemplo, montados aqui porque lib/dados.ts só roda no servidor. */
 function dadosDeExemplo(): DadosDeExemplo {
   const agora = new Date();
-  const baseDaHelena = baseDeExemplo(agora, 'helena');
+  const baseDaHelena = baseDeExemplo(agora, 'helena', { avisoFechado: true });
   const casa = residencialDeExemplo(agora).map((morador) => {
     const id = `exemplo-${morador.nome.toLowerCase()}`;
     return { id, painel: montarPainel(morador.ficha(id), agora) };

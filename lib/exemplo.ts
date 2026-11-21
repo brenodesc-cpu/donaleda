@@ -5,7 +5,32 @@ import { dataEmBrasilia, somarDias } from './assistente';
 import { dataPedida } from './memoria';
 import type { Alerta, Base, Dia, Lembranca, NovoIdoso } from './tipos';
 
-export function baseDeExemplo(agora: Date = new Date(), idosoId = 'helena'): Base {
+function avisoFechadoDeOntem(hoje: string): Alerta {
+  const criado = new Date(`${somarDias(hoje, -1)}T15:10:00-03:00`);
+  const depois = (minutos: number) => new Date(criado.getTime() + minutos * 60_000).toISOString();
+  return {
+    id: 'ex-aviso-ontem',
+    tipo: 'humor',
+    gravidade: 'atencao',
+    texto: 'Disse que estava se sentindo sozinha depois do almoço.',
+    criadoEm: criado.toISOString(),
+    origem: 'assistente',
+    visto: true,
+    vistoPor: 'Marina',
+    vistoEm: depois(4),
+    desfecho: { resposta: 'liguei', nota: 'Conversamos meia hora, ficou mais animada.', por: 'Marina', em: depois(11) },
+  };
+}
+
+/**
+ * A dona Helena da demonstração. Com `avisoFechado`, ganha um aviso de ontem que a filha
+ * viu e fechou (o botão "Ver com um exemplo" e a página /telas usam assim; os testes não).
+ */
+export function baseDeExemplo(
+  agora: Date = new Date(),
+  idosoId = 'helena',
+  opcoes: { avisoFechado?: boolean } = {},
+): Base {
   const hoje = dataEmBrasilia(agora);
   const dia = (atras: number, resto: Omit<Dia, 'data' | 'observacoes' | 'exemplo'>): Dia => ({
     data: somarDias(hoje, -atras),
@@ -69,7 +94,8 @@ export function baseDeExemplo(agora: Date = new Date(), idosoId = 'helena'): Bas
       lembranca('ex-11', 'compromisso', 'Aniversário de 10 anos do neto Pedro.', { sobre: 'Pedro', data: somarDias(hoje, 5) }),
       lembranca('ex-12', 'humor', 'Anda preocupada com o aluguel e não quer que a filha saiba.', { reservada: true }),
     ],
-    alertas: [],
+    // Um aviso de ontem que a filha viu e fechou, pra mostrar quem cuidou e como terminou.
+    alertas: opcoes.avisoFechado ? [avisoFechadoDeOntem(hoje)] : [],
     conversas: [],
     chamadas: [],
   };
@@ -111,6 +137,16 @@ interface MoradorDeExemplo {
   conversaDeHoje?: { hora: string; minutos: number; resumo: string };
   hoje?: DiaDeExemplo;
   aviso?: { tipo: Alerta['tipo']; gravidade: Alerta['gravidade']; texto: string };
+  /** Aviso de hoje que a equipe já viu e fechou, pra mostrar quem cuidou e como terminou. */
+  avisoFechado?: {
+    tipo: Alerta['tipo'];
+    gravidade: Alerta['gravidade'];
+    texto: string;
+    minutosAteVer: number;
+    por: string;
+    resposta: NonNullable<Alerta['desfecho']>['resposta'];
+    nota?: string;
+  };
   /** Sem conversa hoje: as duas ligações das 9h tocaram e ninguém atendeu. */
   naoAtendeu?: boolean;
   /** Ligação marcada pra daqui a pouco, ainda sem conversa. */
@@ -192,6 +228,10 @@ const MORADORES: MoradorDeExemplo[] = [
     familiar: { nome: 'Rafael', parentesco: 'neto' },
     remedios: [{ nome: 'remédio da pressão', horario: '8h' }],
     conversaDeHoje: { hora: '09:15', minutos: 8, resumo: 'Dona Neide passou bem a noite, foi à feira e o joelho dói pouco.' },
+    avisoFechado: {
+      tipo: 'saude', gravidade: 'atencao', texto: 'Disse que tropeçou no corredor e ralou o joelho.',
+      minutosAteVer: 3, por: 'Ana', resposta: 'fui_la', nota: 'Fizemos o curativo, está bem.',
+    },
     hoje: { sono: 'bem', dor: 3, ondeDoi: 'no joelho', humor: 'bem', alimentacao: 'comeu_bem', remedio: 'tomou', saiuDeCasa: true, falouComAlguem: true },
     semana: [
       { sono: 'bem', dor: 3, humor: 'bem', alimentacao: 'comeu_bem', remedio: 'tomou', saiuDeCasa: true, falouComAlguem: true },
@@ -317,6 +357,19 @@ function baseDoMorador(m: MoradorDeExemplo, idosoId: string, agora: Date, ordem:
   }
   if (m.aviso) {
     base.alertas.push({ id: 'ex-aviso', ...m.aviso, criadoEm: quandoDoAviso.toISOString(), origem: 'assistente', visto: false });
+  }
+  if (m.avisoFechado) {
+    const { minutosAteVer, por, resposta, nota, ...aviso } = m.avisoFechado;
+    base.alertas.push({
+      id: 'ex-aviso-fechado',
+      ...aviso,
+      criadoEm: quandoDoAviso.toISOString(),
+      origem: 'assistente',
+      visto: true,
+      vistoPor: por,
+      vistoEm: maisMinutos(quandoDoAviso, minutosAteVer),
+      desfecho: { resposta, nota, por, em: maisMinutos(quandoDoAviso, minutosAteVer + 6) },
+    });
   }
   return base;
 }

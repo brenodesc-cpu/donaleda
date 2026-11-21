@@ -17,6 +17,7 @@ export default function PainelDaFamiliaPage() {
     painel,
     semConexao,
     marcarVisto,
+    responderAviso,
     pedidoDeLigacao,
     ligar,
     ensinarLembranca,
@@ -43,6 +44,7 @@ export default function PainelDaFamiliaPage() {
             tratamento={painel.idoso.tratamento}
             hoje={painel.hoje.data}
             onMarcarVisto={marcarVisto}
+            onResponder={responderAviso}
           />
           <DiaDeHoje hoje={painel.hoje} />
           {resumo ? <ResumoDaConversa resumo={resumo} /> : null}

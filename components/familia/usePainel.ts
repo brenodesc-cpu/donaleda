@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { CategoriaDeLembranca, PainelDaFamilia } from '@/lib/tipos';
+import type { Alerta, CategoriaDeLembranca, PainelDaFamilia, RespostaDoAviso } from '@/lib/tipos';
 import { arrumarHorarios } from './formatos';
 import {
   buscarPainel,
@@ -34,6 +34,12 @@ function motivoDa(dado: unknown): string | null {
 
 /** Como está o pedido de "Ligar agora" feito neste painel. */
 export type PedidoDeLigacao = 'parado' | 'pedindo' | 'falhou';
+
+/** O aviso marcado agora neste painel, enquanto o servidor não devolve quem viu. */
+export function vistoAqui(alerta: Alerta): Alerta {
+  if (alerta.visto && alerta.vistoEm) return alerta;
+  return { ...alerta, visto: true, vistoEm: alerta.vistoEm ?? new Date().toISOString(), vistoPor: alerta.vistoPor ?? 'Você' };
+}
 
 export function pareceUmPainel(dado: unknown): dado is PainelDaFamilia {
   if (!dado || typeof dado !== 'object') return false;
@@ -141,6 +147,17 @@ export function usePainel(idosoId: string | null) {
     [idosoId, mandar],
   );
 
+  /** Conta o que a pessoa fez com o aviso. Devolve true quando o servidor guardou. */
+  const responderAviso = useCallback(
+    async (alertaId: string, resposta: RespostaDoAviso, nota: string): Promise<boolean> => {
+      if (!idosoId) return false;
+      const guardou = deuCerto(await mandar({ acao: 'desfecho', alertaId, resposta, nota, idosoId }));
+      if (guardou) await buscarAgora.current();
+      return guardou;
+    },
+    [idosoId, mandar],
+  );
+
   const ligar = useCallback(async () => {
     if (!idosoId) return;
     setPedidoDeLigacao('pedindo');
@@ -244,7 +261,7 @@ export function usePainel(idosoId: string | null) {
         vistosAqui.size === 0
           ? bruto.alertas
           : bruto.alertas.map((alerta) =>
-              vistosAqui.has(alerta.id) ? { ...alerta, visto: true } : alerta,
+              vistosAqui.has(alerta.id) ? vistoAqui(alerta) : alerta,
             ),
     };
   }, [bruto, vistosAqui, horariosAqui, atenderSozinhoAqui]);
@@ -253,6 +270,7 @@ export function usePainel(idosoId: string | null) {
     painel,
     semConexao,
     marcarVisto,
+    responderAviso,
     pedidoDeLigacao,
     ligar,
     trocarHorarios,
