@@ -132,6 +132,7 @@ describe('segundo cérebro: o que vai na instrução', () => {
     const instrucoes = montarInstrucoes(baseDeExemplo(AGORA, 'id'), AGORA, true);
     expect(instrucoes).toContain('Queda, machucado, emergência, golpe, senha, Pix e vontade de morrer vão pra família mesmo assim');
     expect(instrucoes).toContain('Segredo nunca cobre risco');
+    expect(instrucoes).toContain('Nunca prometa segredo geral');
     expect(instrucoes).toContain('nunca diga "fica entre nós"');
     expect(instrucoes).toContain('buscar_lembranca');
     expect(instrucoes).toContain('Nunca invente nome, data nem remédio');
