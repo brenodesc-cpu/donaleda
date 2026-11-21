@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 120">
+  <g>
+    <path d="M 16 104 C 10 52 44 14 104 14 C 110 70 76 108 16 104 Z" fill="#1E5A3E"/>
+    <circle cx="52" cy="62" r="5.5" fill="#FFFFFF"/>
+    <circle cx="74" cy="52" r="5.5" fill="#FFFFFF"/>
+    <path d="M 50 80 Q 68 86 82 68" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="98" cy="22" r="10" fill="#E8836A"/></g>
+  <text x="140" y="80" font-family="'Nunito', sans-serif" font-weight="800" font-size="58" fill="#13281C">dona leda</text>
+</svg>

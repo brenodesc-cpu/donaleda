@@ -56,6 +56,13 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--warning) / <alpha-value>)',
   				soft: 'hsl(var(--warning-soft) / <alpha-value>)'
   			},
+  			// Cores do desenho da Dona Leda (pele, cabelo, roupa e traço), uma por direção.
+  			leda: {
+  				pele: 'hsl(var(--leda-pele) / <alpha-value>)',
+  				cabelo: 'hsl(var(--leda-cabelo) / <alpha-value>)',
+  				roupa: 'hsl(var(--leda-roupa) / <alpha-value>)',
+  				traco: 'hsl(var(--leda-traco) / <alpha-value>)'
+  			},
   			danger: {
   				soft: 'hsl(var(--danger-soft) / <alpha-value>)'
   			},

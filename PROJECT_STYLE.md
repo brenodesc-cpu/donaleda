@@ -1,8 +1,8 @@
 # PROJECT_STYLE.md
-# Guia visual da Lia. Escrito em 21/11/2026 com escolhas pensadas pra quem enxerga e ouve menos. O time edita à vontade.
+# Guia visual da Dona Leda. Escrito em 21/11/2026 com escolhas pensadas pra quem enxerga e ouve menos. O time edita à vontade.
 
 ## Projeto
-name: Lia
+name: Dona Leda
 description: Assistente de voz que conversa todo dia com o idoso que mora sozinho e avisa a família.
 tone: acolhedor, calmo, claro e respeitoso. Nada infantil.
 
@@ -14,24 +14,28 @@ icons: Lucide
 animations: CSS e SVG
 
 ## Cores
-As cores moram em `app/globals.css` como variáveis e são usadas pelas classes do Tailwind. Nada de cor escrita direto no componente.
+As cores moram em `app/globals.css`, num bloco de variáveis por direção da marca, e são usadas pelas classes do Tailwind. Nada de cor escrita direto no componente. A direção ativa é `MARCA_ATIVA` em `components/marca/direcoes.ts` (hoje, Varanda). O livro da marca está em `conhecimento/marca.md`, e as três direções, em `/marca`.
 
-primary: verde-azulado escuro (`bg-primary`, texto branco em cima)
-background: branco quente (`bg-background`)
+primary: terracota (`bg-primary`, texto branco em cima)
+background: creme (`bg-background`)
 surface: branco (`bg-card`)
 border: `border-border`
-text_primary: `text-foreground`
+text_primary: `text-foreground` (marrom quase preto)
 text_secondary: `text-muted-foreground`
-success: `text-success` e `bg-success-soft`
+accent: mostarda (`bg-accent`, texto escuro em cima)
+success: `bg-success` (botão Atender, texto branco), `text-success` e `bg-success-soft`
 warning: `text-warning` e `bg-warning-soft`
 error: `text-destructive`, `bg-destructive` e `bg-danger-soft`
+desenho da Dona Leda: `fill-leda-pele`, `fill-leda-cabelo`, `fill-leda-roupa`, `stroke-leda-traco`
+
+Contraste conferido por `python3 recursos/marca/paletas.py`: 7 pra 1 no texto principal e 4,5 pra 1 no resto.
 
 ## Dark Mode
 dark_mode: light_only
 
 ## Tipografia
-font_heading: fonte do sistema
-font_body: fonte do sistema
+font_heading: Atkinson Hyperlegible Next, Google Fonts (classe `font-sans`)
+font_body: Atkinson Hyperlegible Next, Google Fonts
 
 ## Layout & Tokens
 border_radius: rounded

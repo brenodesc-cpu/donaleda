@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 120">
+  <g>
+    <rect x="4" y="4" width="112" height="112" rx="14" fill="#FFC72C" stroke="#121212" stroke-width="6"/>
+    <path d="M 28 66 A 32 32 0 0 1 92 66" fill="none" stroke="#121212" stroke-width="8"/>
+    <rect x="20" y="58" width="14" height="24" rx="2" fill="#121212"/>
+    <rect x="86" y="58" width="14" height="24" rx="2" fill="#121212"/>
+    <circle cx="60" cy="70" r="22" fill="#FFFFFF" stroke="#121212" stroke-width="6"/>
+    <rect x="50" y="63" width="6" height="6" fill="#121212"/>
+    <rect x="64" y="63" width="6" height="6" fill="#121212"/>
+    <path d="M 51 77 L 69 77" stroke="#121212" stroke-width="5" stroke-linecap="square"/></g>
+  <text x="140" y="80" font-family="'Lexend', sans-serif" font-weight="900" font-size="58" fill="#121212">DONA LEDA</text>
+</svg>

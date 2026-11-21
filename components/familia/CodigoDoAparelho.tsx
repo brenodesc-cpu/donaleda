@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Link2 } from 'lucide-react';
 import type { CodigoDoAparelho as Codigo, IdosoDaFamilia } from '@/lib/tipos';
 import { deuCerto, gerarCodigo } from './api';
 import { CLASSE_DO_BOTAO_PRINCIPAL, CLASSE_DO_BOTAO_SECUNDARIO, Erro } from './campos';
@@ -30,6 +30,7 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
   const [erro, setErro] = useState<string | null>(null);
   const [restam, setRestam] = useState(0);
   const [aparelhosAntes, setAparelhosAntes] = useState(idoso.aparelhos);
+  const [copiado, setCopiado] = useState(false);
   const ligouAgora = codigo !== null && idoso.aparelhos > aparelhosAntes;
 
   useEffect(() => {
@@ -55,6 +56,19 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
       setRestam(Math.max(0, Math.round((new Date(dado.expiraEm).getTime() - Date.now()) / 1000)));
       setCodigo(dado);
     } else setErro('Não deu pra gerar o código agora. Tente de novo.');
+  };
+
+  const handleCopiarLink = async () => {
+    if (!codigo) return;
+    const link = `${window.location.origin}/parear?codigo=${codigo.codigo}`;
+    const texto = `Abra este link no seu celular pra ligar a Dona Leda: ${link}`;
+    try {
+      if (navigator.share) await navigator.share({ text: texto });
+      else await navigator.clipboard.writeText(texto);
+      setCopiado(true);
+    } catch {
+      setCopiado(false);
+    }
   };
 
   if (ligouAgora) {
@@ -92,6 +106,13 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
       </p>
       <p className="text-base text-muted-foreground" aria-live="off">
         Vale por mais {relogio(restam)}
+      </p>
+      <button type="button" onClick={handleCopiarLink} className={CLASSE_DO_BOTAO_PRINCIPAL}>
+        <Link2 aria-hidden="true" className="h-5 w-5" />
+        {copiado ? 'Link pronto pra mandar' : `Mandar o link pra ${idoso.tratamento}`}
+      </button>
+      <p className="text-center text-sm text-muted-foreground">
+        Quem abre o link no celular de {idoso.tratamento} liga o aparelho sem digitar nada.
       </p>
       <button type="button" onClick={handleGerar} disabled={gerando} className={`${CLASSE_DO_BOTAO_SECUNDARIO} sm:w-auto`}>
         Gerar outro código
