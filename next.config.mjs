@@ -6,6 +6,8 @@ const rootDir = dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  // Deixa abrir o servidor de desenvolvimento por um endereço público de túnel (celular, Agora).
+  allowedDevOrigins: ['*.lhr.life', '*.localhost.run', '*.ngrok-free.dev', '*.trycloudflare.com'],
   images: {
     unoptimized: true,
   },
