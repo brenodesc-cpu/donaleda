@@ -22,65 +22,15 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
 
 ### 2. Quanto cobrar
 
-- **O custo por idoso, por mês,** separado entre a Agora e o Google (conta de 21/11, com o dólar de 19/11, detalhada na seção do preço abaixo):
-
-  | Conversa por dia | Agora | Google, só no Gemini | Total no Gemini | Total no modo de três peças |
-  |---|---:|---:|---:|---:|
-  | 3 minutos e 20 segundos (100 por mês) | R$ 59 | R$ 25 | R$ 84 | R$ 59 |
-  | 5 minutos (150 por mês) | R$ 89 | R$ 50 | R$ 139 | R$ 89 |
-
-  A parte da Agora é o motor de conversa, a US$ 0,10 por minuto, mais a sala de áudio, que dá menos de R$ 1 por mês. A página de preço da Agora diz que o motor custa o mesmo com chave própria e não cita o caminho do Gemini Live. No modo de três peças a escuta, o modelo e a voz já vêm dentro do preço da Agora, então o Google não entra. O Google cobra de novo a conversa inteira a cada fala (guia do Live API, lido em 21/11), e por isso a ligação longa custa mais por minuto. Se cada minuto fosse contado uma vez só, custaria US$ 0,005 do áudio que entra e US$ 0,018 do que sai.
-
-  **Onde o custo cai:** na resposta da Agora sobre o preço do motor no caminho do Gemini e por volume, na compressão ligada, que corta a conversa recontada pelo Google, e na primeira fatura de verdade do Google depois das ligações de hoje com a chave paga.
+- **O custo, em cinco linhas** (a conta inteira, com as fontes, está em [custos.md](custos.md)):
+  - Na operação, o aparelho do idoso conversa direto com o Gemini, e a sala da Agora mantém a chamada e deixa a família entrar.
+  - Cada idoso custa uns R$ 16 por mês: R$ 15 de Gemini e R$ 1 de sala da Agora.
+  - Dos R$ 129,90 saem R$ 24,50 de imposto e cartão, e sobram R$ 89 por família.
+  - Os custos fixos, site e banco, somam R$ 265 por mês e se pagam com 3 famílias.
+  - O modo direto ainda está em construção. O protótipo roda hoje no motor de conversa da Agora, que custa R$ 59 a mais por idoso.
 - **O que a família já paga por algo parecido:** o botão de emergência custa de R$ 189 a 249 por mês (Tecnosenior, conferido em 21/11). Nos EUA, a ligação diária da CheckWellCall custa US$ 29,99, uns R$ 177. O cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 (Cidesp, maio de 2026).
 - **As respostas de preço que temos:** uma só. Uma mentora com os pais morando longe disse "eu investiria até R$ 500" por mês (21/11, `entrevistas.md`). As ligações das 20h trazem mais.
 - **O preço decidido:** R$ 129,90 por mês, com 100 minutos de conversa, uns 3 minutos e 20 segundos por dia. O Breno decidiu em 21/11, às 17h50, porque achou R$ 229,90 caro pra um produto que acabou de surgir. Fica abaixo do botão de emergência e é menos de 5% do preço do cuidador de 12 horas.
-- **A conta do preço:** depois do imposto (15,5%) e do cartão (R$ 0,49 mais 2,99%) sobram R$ 105,40. Os 100 minutos custam R$ 84 com a Agora e o Gemini, e sobram R$ 21 por família. O plano inclui 100 minutos porque, com 150, faltariam R$ 34. No modo de três peças sobram R$ 46. Se a conversa fosse direto no Google, sem o motor da Agora, sobrariam R$ 80.
-- **A margem é apertada enquanto a Agora cobrar US$ 0,10 por minuto.** A pergunta à Agora sobre o preço no caminho do Gemini e por volume segue aberta.
-- **A conta que prova a operação,** com o preço de R$ 129,90, os R$ 105,40 que sobram depois do imposto e do cartão e 100 minutos por família por mês:
-
-  | Cenário | Como funciona | Custo por família por mês | Sobra |
-  |---|---|---:|---:|
-  | 1. Como o protótipo roda hoje | Motor de conversa da Agora, a US$ 0,10 por minuto pelo preço de tabela, com o Gemini | R$ 84: R$ 59 da Agora e R$ 25 do Google | R$ 21 (16%) |
-  | 2. O da operação, **ainda não construído** | Só a sala de áudio da Agora, e a ligação ao Gemini feita pelo nosso servidor | De R$ 14 a 26: Google de R$ 13 a 16 pelo medido no Virte, ou R$ 25 pela estimativa conservadora, mais uns R$ 1 de sala | De R$ 79 (61%) a R$ 91 (70%) |
-
-  - **A sala de áudio:** US$ 0,99 por mil minutos por participante, com 10 mil minutos grátis por mês (página de preço da Agora). Com o aparelho do idoso e o nosso servidor na sala, os minutos grátis cobrem umas 50 famílias por mês.
-  - **O Google medido com gente de verdade:** a voz do Virte, o outro app do Breno, usa o Gemini ao vivo direto. Em outubro de 2026 foram 24 pessoas, 117 conversas e 160 minutos por US$ 3,53, ou US$ 0,022 por minuto. Em novembro, até o dia 21, foram 18 pessoas, 78 conversas e 126 minutos por US$ 3,45, ou US$ 0,027 por minuto. A fonte é o banco do Virte, lido em 21/11 às 18h10, com os tokens que o Google devolve em cada conversa, os minutos de voz de cada dia e o preço publicado do modelo.
-  - **Por que o número conservador fica:** as conversas do Virte duram menos de 2 minutos, e o Google cobra de novo a conversa inteira a cada fala, então a ligação de 3 minutos e 20 segundos custa mais por minuto. A estimativa de US$ 0,042 por minuto continua sendo o pior caso.
-  - **O que a medida do Virte prova:** que o Gemini direto é barato. Ela vem de conversas de menos de 2 minutos, com instruções de uns 23 mil tokens, e na ligação da Dona Leda pesa o áudio que se acumula ao longo da conversa. Pra prever a ligação da Dona Leda, ela serve só de referência.
-  - **O que falta:** o cenário 2 ainda não foi construído, e o custo do nosso servidor ainda não foi medido.
-  - **A Agora no hackathon:** o regulamento pede que a Agora funcione na demonstração e não diz qual serviço usar. Até a entrega, o protótipo fica no motor de conversa da Agora.
-- **Quanto custa cada família por mês,** linha por linha, com o preço de R$ 129,90 e 100 minutos (dólar de 19/11):
-
-  | Linha | Hoje, com o motor de conversa da Agora | No modo direto, ainda não construído | De onde vem |
-  |---|---:|---:|---|
-  | Preço | R$ 129,90 | R$ 129,90 | Decisão do Breno, 21/11 |
-  | Imposto do Simples Nacional (15,5%) | R$ 20,13 | R$ 20,13 | Anexo V do Simples |
-  | Cartão pelo Asaas (R$ 0,49 mais 2,99%) | R$ 4,37 | R$ 4,37 | Página de taxas do Asaas |
-  | Google, Gemini ao vivo | R$ 25 (estimativa conservadora) | De R$ 13 a 16 pelo medido no Virte, R$ 25 no pior caso | Preço publicado do Gemini e o banco do Virte |
-  | Google, resumo depois da ligação | Centavos, sem medida | Centavos, sem medida | A extração em `lib/posConversa.ts`, com o modelo leve do Gemini |
-  | Sala de áudio da Agora | R$ 0,58 (só o aparelho do idoso) | R$ 1,17 (o aparelho e o nosso servidor) | US$ 0,99 por mil minutos por participante |
-  | Motor de conversa da Agora | R$ 59 | Zero | US$ 0,10 por minuto |
-  | **Sobra por família** | **R$ 21** | **De R$ 79 a 91** | |
-
-  - **Só a sala da Agora sai de graça pras primeiras famílias:** os 10 mil minutos grátis por mês cobrem umas 100 famílias com um participante na sala, ou umas 50 com dois. O Google cobra desde a primeira família.
-  - **O modo direto** está sendo construído num ramo separado, na conversa "Voz direta no Gemini".
-
-- **Depois dos dois ajustes que o Breno aprovou em 21/11, ainda fora do ar:** ligar a compressão da conversa do Gemini, com a conversa do servidor, e encurtar as instruções da Dona Leda em uns 40%, com a conversa de segurança.
-  - Contando cada trecho uma vez só, uma ligação de 3 minutos e 20 segundos custa uns US$ 0,064 no Google: US$ 0,015 do áudio que entra, US$ 0,027 do áudio que sai (uns 90 segundos de fala dela), US$ 0,020 das instruções cobradas a cada fala (uns 2 mil tokens, em umas 13 falas) e US$ 0,002 da legenda. Nas 30 ligações do mês, R$ 11.
-  - Sem compressão, a estimativa da tese é US$ 0,14 por ligação, ou R$ 25 por mês. Com a compressão ligada o custo fica entre os dois, e a estimativa até a medida é de uns R$ 15 por mês de Gemini.
-  - Com isso, cada família custa uns R$ 74 por mês do jeito de hoje (R$ 15 de Gemini e R$ 59 da Agora), e sobram R$ 31. No modo direto custa uns R$ 16 (R$ 15 de Gemini e R$ 1 de sala), e sobram R$ 89.
-
-- **Os custos fixos,** que não mudam com o número de famílias. Hoje estão em zero, porque o projeto usa os planos grátis:
-
-  | Serviço | O primeiro plano pago | Em reais | De onde vem |
-  |---|---|---:|---|
-  | Site (Vercel) | Pro, US$ 20 por mês por pessoa que publica | R$ 118 | Página de preço da Vercel, lida em 21/11 |
-  | Banco (Supabase) | Pro, US$ 25 por mês, com o primeiro projeto e US$ 10 de crédito de servidor do banco | R$ 147 | Página de preço do Supabase, lida em 21/11 |
-
-  - Com os dois pagos, o custo fixo fica em uns R$ 265 por mês. Ele se paga com 13 famílias do jeito de hoje, ou com 4 no modo direto.
-  - As páginas de preço e de uso justo da Vercel, lidas em 21/11, não proíbem uso comercial no plano grátis. Os termos de uso não foram lidos.
-  - No plano grátis do Supabase, o projeto pausa depois de uma semana sem uso.
 - **O preço pra testar hoje à noite:** depois de a família dizer quanto pagaria, perguntar se pagaria R$ 129,90 por mês por uma ligação por dia com os avisos no painel. Anotar o primeiro valor que ela disse e o sim ou o não.
 
 ### 3. Quem já faz parecido
@@ -168,65 +118,11 @@ Em aberto. Hipóteses do brainstorm de 21/11:
 
 Desde 21/11/2026, às 17h, a família paga e a casa de repouso indica. Das 15h às 17h a proposta começava pela venda ao residencial, por morador, e voltou depois da conversa com a primeira casa parceira. Teleassistência, plano de saúde e prefeitura vêm depois. O raciocínio está em `proposta-de-valor.md`, na seção "Quem paga e quem indica".
 
-### Quanto custa a conversa e quanto cobrar (conta de 21/11/2026, à tarde)
+### O preço e o custo
 
-Proposta pra Stephanie e Breno decidirem. A conta usa o dólar oficial de 19/11 (R$ 5,8889), o mesmo da verificação, e os preços publicados lidos em 21/11. A conta da Agora está no plano grátis, com 300 minutos do motor de conversa por mês, sem sinal de crédito do hackathon (visto pela conversa do servidor em 21/11), e o Breno vai perguntar à Agora.
+O plano da família custa R$ 129,90 por mês, com uma ligação por dia de 3 minutos e 20 segundos, decidido pelo Breno em 21/11. A conta de custo, com a operação no modo direto e as fontes, está em [custos.md](custos.md). Os planos Companhia e Casa, calculados antes do preço novo, saíram da tese e voltam quando houver medida de uso.
 
-**O que cada ligação paga**
-- **O motor de conversa da Agora:** US$ 0,10 por minuto. Já inclui a escuta, o modelo e a voz das peças que a Agora gerencia (o modo reserva inteiro). Com chave própria o preço é o mesmo, diz a página de preços. A Agora não escreve com todas as letras que isso vale pro Gemini Live, e é a leitura mais provável, porque não existe outra tarifa.
-- **A sala de áudio:** US$ 0,99 por mil minutos, por participante. Quem paga é o aparelho do idoso.
-- **O Google, só no modo Gemini:** US$ 3 por milhão de tokens de áudio que entra, US$ 12 por milhão de áudio que sai, US$ 0,75 por milhão de texto que entra (onde ficam as instruções) e US$ 4,50 por milhão de texto que sai (a legenda). São uns 25 tokens por segundo de áudio. A cada fala, o Google cobra de novo a conversa inteira até ali, então a ligação longa custa mais por minuto. Pela conta da pesquisa: US$ 0,14 numa ligação de 3 minutos e 20 segundos, US$ 0,28 em 5 minutos, US$ 0,97 em 10 e US$ 2,06 em 15. As premissas são 4 falas por minuto e instruções de uns 2.500 tokens.
-
-**Custo por idoso por mês, com uma ligação por dia**
-
-| Conversa por dia | Minutos no mês | Modo reserva (três peças) | Modo Gemini |
-|---|---:|---:|---:|
-| 3 min e 20 s (uso típico) | 100 | R$ 59 | R$ 84 |
-| 5 minutos | 150 | R$ 89 | R$ 139 |
-| 10 minutos | 300 | R$ 178 | R$ 350 (R$ 297 com compressão) |
-| 15 minutos | 450 | R$ 268 | R$ 632 (R$ 451 com compressão) |
-
-- O uso típico é a média da NANA, de Singapura, que liga pra mais de mil idosos: 3 minutos e 20 segundos por conversa. A Hermet, da Espanha, informa média de 23 minutos, então tem idoso que gasta o teto inteiro, e todo plano precisa dar lucro no teto.
-- A verificação estimou R$ 88 nas três peças e de R$ 100 a 110 no Gemini, com 5 minutos por dia. Os R$ 88 viram R$ 89 porque ela deixou a sala de áudio de fora. No Gemini, ela pôs o Google em R$ 12 a 22 por mês (US$ 0,07 a 0,12 por ligação), como se cada trecho da conversa fosse cobrado uma vez só. O Google cobra de novo a conversa inteira a cada fala, o que a página dele descreve, e por isso a ligação de 5 minutos sai a US$ 0,28. Os R$ 139 são a conta mais segura, até a primeira fatura de verdade.
-- Compressão é o ajuste que descarta as falas mais antigas quando a conversa cresce. Ela está desligada no código. Sem ela, uma sessão só de áudio do Gemini dura no máximo 15 minutos.
-- O produto liga duas vezes por dia por padrão (9h e 19h). Por isso o plano conta minutos por mês. Duas ligações de 2 minutos e meio custam menos no Google que uma de 5.
-
-**Opções de plano**
-
-Premissas: a família paga no cartão pelo Asaas (R$ 0,49 + 2,99% por cobrança); a casa paga um Pix por mês (R$ 1,99); imposto do Simples Nacional no Anexo V, 15,5% (com folha de pagamento alta a empresa cai no Anexo III, 6%, e a margem sobe). A margem é sobre o preço.
-
-| Plano | Minutos incluídos | Preço por mês | Margem no teto, Gemini | Margem no teto, reserva | Margem no uso típico, Gemini | Quem compra |
-|---|---|---:|---:|---:|---:|---|
-| **Essencial** | 100 por mês (3 min e 20 s por dia) | R$ 129,90 | R$ 21 (16%) | R$ 46 (36%) | R$ 21 (16%) | Filho ou filha que mora longe |
-| **Companhia** | 300 por mês (10 por dia) | R$ 449,90 | R$ 16 (4%), ou R$ 69 (15%) com compressão | R$ 188 (42%) | R$ 282 (63%) | Família que quer conversa mais longa |
-| **Casa** | 200 por mês, num saldo da casa | R$ 229,90 por casa | R$ 7 (3%), com conversas de 5 minutos | R$ 73 (32%) | R$ 24 (11%) | Casa de repouso que quer a Dona Leda pros próprios moradores lúcidos |
-
-O Essencial fica abaixo do botão de emergência que a família já compra (Tecnosenior, de R$ 189 a 249 por mês) e da ligação diária da CheckWellCall nos EUA (US$ 29,99, uns R$ 177). O Companhia e o Casa não mudaram em 21/11 e precisam ser revistos com o preço novo.
-
-**A frase do décimo**
-
-| Cuidador | Preço por mês | Um décimo | Planos que cumprem |
-|---|---:|---:|---|
-| 12 horas por dia (Cidesp, maio de 2026) | R$ 2.800 a 4.500 | R$ 280 a 450 | Essencial. O Companhia só contra o de R$ 4.500 |
-| Com carteira: média do Caged (R$ 1.863,66) com 13º, férias e 20% de encargos | perto de R$ 2.485 | R$ 248 | Essencial |
-
-A primeira metade da frase foi ajustada pelo Breno em 21/11. A aposentadoria média, de R$ 2.697 (IBGE 2025), paga o cuidador com carteira e só não paga o de 12 horas. A frase passou a ser "A aposentadoria da maioria dos brasileiros não paga um cuidador": 62,5% dos beneficiários do INSS recebem um salário mínimo (R$ 1.621), menos que o piso do cuidador no Caged (R$ 1.760,44).
-
-**Recomendação**
-
-O Essencial a R$ 129,90 pra família, com 100 minutos por mês, decidido pelo Breno em 21/11 às 17h50. Ele cumpre a frase do décimo com folga (menos de 5% do cuidador de 12 horas) e dá lucro no teto no Gemini, de R$ 21 por família, apertado enquanto a Agora cobrar US$ 0,10 por minuto. O plano Casa fica pra casa de repouso que quiser a Dona Leda pros próprios moradores. O Companhia espera a medida do uso real e a compressão ligada.
-
-O plano Casa entrou em 21/11 no lugar do Residencial, que cobrava R$ 179,90 por morador. A primeira casa parceira paga uns R$ 230 por mês, por casa, pelo sistema de gestão que usa hoje, e com cinco moradores o preço por morador daria R$ 900, quase quatro vezes isso. O plano Casa fica perto desse valor e cobre uns dois moradores conversando 3 minutos por dia. No Gemini a margem dele é a mais apertada da tabela, e com conversas de 5 minutos quase some. A casa parceira que só indica famílias e acompanha os idosos que indicou não paga.
-
-**Antes de falar disso pra banca**
-- Os 100 minutos do Essencial pedem um teto por mês no código, e hoje ela liga duas vezes por dia por padrão (9h e 19h). Com 100 minutos, cada ligação teria 1 minuto e 40 segundos. Ou o padrão vira uma ligação por dia, ou o plano conta ligações.
-- O teto de minutos ainda não existe no código: a ligação só termina sozinha 2 minutos depois de todo mundo sair da sala.
-- Perguntar à Agora, no evento, se o Gemini com chave própria paga os US$ 0,10 por minuto e se os 300 minutos grátis do motor renovam todo mês. Se o motor sair de graça no Gemini, ele vira o modo mais barato.
-- Vender pelo app custa comissão: no Brasil a Apple cobra de 10% a 15% mesmo quando o app manda pagar no site. Vendendo só pelo site, sem link no app, a comissão não entra.
-
-A conta muda com o preço por volume que a Agora negociar (a tabela só publica desconto da sala, que é 1% do custo), com o câmbio e com a primeira fatura do Google.
-
-Fontes: [preço da Agora](https://docs.agora.io/en/ai/reference/pricing.md), [sala de áudio](https://docs.agora.io/en/realtime-media/rtc/reference/pricing.md), [preço do Gemini Live](https://aistudio.google.com/docs/pricing#gemini-3.8-live), [cobrança por fala no Live](https://aistudio.google.com/docs/live-api/best-practices), [Asaas](https://www.asaas.com/precos-e-taxas), [Simples Nacional](https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm), [salário mínimo](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12797.htm), [cuidador no Caged](https://www.salario.com.br/profissao/cuidador-de-idosos-cbo-516210), [cuidador de 12 horas](https://cidesp.com.br/conteudo/tabela-de-preco-de-cuidador-de-idoso-2026-guia-completo), [Tecnosenior](https://tecnosenior.com/solucoes/vidafone-fixo/), [CheckWellCall](https://checkwellcall.com/pricing), [Apple no Brasil](https://www.apple.com/br/newsroom/2026/06/apple-announces-changes-to-ios-in-brazil/), [aposentadoria média](https://agenciadenoticias.ibge.gov.br/agencia-sala-de-imprensa/2012-agencia-de-noticias/noticias/46579-rendimento-medio-da-populacao-brasileira-atinge-r-3-367-em-2025.html), [INSS](https://www.opovo.com.br/trends/teto-do-inss-chega-a-r-8-475-em-2026-mas-a-maioria-dos-aposentados-esta-muito-longe-desse-valor/).
+**A frase do décimo** vale com folga: R$ 129,90 é menos de 5% do cuidador de 12 horas por dia, que custa de R$ 2.800 a 4.500 (Cidesp, maio de 2026). A primeira metade da frase foi ajustada pelo Breno em 21/11: "A aposentadoria da maioria dos brasileiros não paga um cuidador", porque 62,5% dos beneficiários do INSS recebem um salário mínimo (R$ 1.621), menos que o piso do cuidador no Caged (R$ 1.760,44). A aposentadoria média, de R$ 2.697 (IBGE 2025), paga um cuidador com carteira.
 
 ## Quem já faz parecido
 

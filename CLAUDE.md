@@ -14,6 +14,7 @@ Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta
 | [conhecimento/hackathon.md](conhecimento/hackathon.md) | Regras, entregas, prazo e como a banca dá nota | Ao priorizar: o que não conta ponto fica pra depois |
 | [conhecimento/decisoes.md](conhecimento/decisoes.md) | O que o time já decidiu, com data | Antes de reabrir um assunto |
 | [conhecimento/infraestrutura.md](conhecimento/infraestrutura.md) | O que está de pé, o que falta pra virar aplicativo e a ordem | Antes de mexer em servidor, banco, login ou app |
+| [conhecimento/custos.md](conhecimento/custos.md) | A página única de custo: quanto cada família custa por mês no modo direto, os custos fixos, o mês com 10, 50 e 100 famílias e de onde vem cada número | Antes de falar de custo, margem ou preço |
 | [conhecimento/proposta-de-valor.md](conhecimento/proposta-de-valor.md) | A narrativa aprovada (o sonho, o que a Dona Leda é, o dinheiro e a assinatura), a camada de cuidado por dentro, quem usa, quem compra e por onde vende, as premissas, os formatos e as frases já reprovadas | Antes de escrever pitch, slide, tela ou texto de venda |
 | [conhecimento/descricao-do-os.md](conhecimento/descricao-do-os.md) | O texto pronto pra colar na plataforma da organização (problema, público, solução e uso da Agora) | Ao cadastrar a entrega ou responder o que é o projeto |
 | [conhecimento/concorrentes.md](conhecimento/concorrentes.md) | Quem faz parecido no mundo e no Brasil, como cada um se vende, quem paga e o que a ciência diz | Ao comparar com outro produto ou responder a banca |
