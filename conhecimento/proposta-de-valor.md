@@ -2,7 +2,30 @@
 
 Proposta de 21/11/2026, pro time decidir. Nasceu da pesquisa em `concorrentes.md`. O que virar decisão passa pra `decisoes.md`.
 
-## A proposta
+## Em revisão desde a tarde de 21/11: a assistente vai pra frente
+
+O Breno reprovou a frase abaixo ("te conta como foi, e te dá um motivo pra ligar"). Motivo: ela vende uma ligação de conferência pro filho, igual à de 13 empresas lá fora, e esconde a assistente. A pesquisa aponta pro mesmo lado: Meela e Callie Care só cresceram quando a IA passou a resolver coisas pro idoso.
+
+Nenhuma frase está aprovada. As opções em discussão:
+
+| Ângulo | Frase | Aposta | Risco |
+|---|---|---|---|
+| 1. A assistente de quem não usa aplicativo | "A Dona Leda é a assistente pessoal de quem nunca vai usar um aplicativo. Ela liga, a pessoa fala e a coisa fica resolvida." | Remédio, consulta, banco e transporte foram pro aplicativo, e o idoso pede tudo pro filho. Pelo menos 8 milhões de pessoas com mais de 60 anos nem usam internet | Hoje ela ainda não resolve nada disso |
+| 2. A assistente que liga primeiro | "A Dona Leda é a assistente que liga primeiro: pergunta como a pessoa está, lembra do que importa e resolve o que ela pedir." | Toda assistente de IA espera ser chamada, e idoso não chama. É o que o protótipo já faz de diferente | Sem as tarefas, volta a ser ligação de conferência |
+| 3. Continuar morando na própria casa | "Entre ligar uma vez por semana e pagar R$ 3 mil por um cuidador, existe a Dona Leda." | Cada mês a mais em casa vale milhares de reais pra família | Encosta em promessa de saúde |
+| 4. O canal de voz pros serviços | "Farmácia, médico, banco e transporte foram pro aplicativo. A Dona Leda leva tudo isso pro idoso por uma ligação." | Farmácia, plano e banco pagam pra alcançar o idoso que não usa o aplicativo deles | É visão, e depende de parceria que não existe |
+| 5. Cuidar de longe, com a assistente no centro | "Você mora longe. A Dona Leda liga pra sua mãe todo dia, resolve o que ela precisa e te conta como ela está." | Mantém o comprador que a pesquisa confirmou | É a menos nova |
+
+**Recomendação de 21/11:** abrir com a 1 ou a 2 e fechar com a 4. A notícia pra família vira uma das coisas que ela faz.
+
+**O que isso pede da demonstração:** a banca precisa ver a Dona Leda resolvendo duas ou três coisas na ligação. As que cabem em um dia:
+
+1. "Liga pra minha filha": a filha entra na mesma chamada de vídeo, pela Agora.
+2. "Me lembra do remédio às três": ela liga às três.
+3. "Acabou meu remédio": o pedido chega no celular da filha, que aprova. Dinheiro só sai com o sim da família.
+4. "Avisa a Marina que eu vou no médico quinta": o recado chega no painel.
+
+## A proposta de antes (reprovada em 21/11)
 
 > **A Dona Leda liga pra sua mãe todo dia, conversa com ela e te conta como foi. E te dá um motivo pra ligar.**
 
