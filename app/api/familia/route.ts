@@ -9,6 +9,7 @@ import { marcarAvisoVisto, registrarDesfecho, respostaValida } from '@/lib/aviso
 import { arrumarHorarios, avancarChamadas, pedirChamadaDaFamilia } from '@/lib/chamadas';
 import { montarPainel, mudarBase, mudarBaseQuando } from '@/lib/dados';
 import { dataPedida, GAVETAS, guardar, horaPedida, mudar } from '@/lib/memoria';
+import { dispararConviteDeChamada } from '@/lib/sinalizacaoChamada';
 import { exigirIdosoDaFamilia } from '@/lib/sessao';
 import { clienteDoServidor } from '@/lib/supabase/servidor';
 import type { AcaoDaFamilia, CodigoDoAparelho } from '@/lib/tipos';
@@ -124,10 +125,14 @@ export async function POST(request: Request) {
   }
 
   if (acao.acao === 'ligar') {
-    const chamada = await mudarBase(idosoId, (base) => pedirChamadaDaFamilia(base));
+    const resultado = await mudarBase(idosoId, (base) => {
+      const chamada = pedirChamadaDaFamilia(base);
+      return chamada ? { chamada, aparelhosPush: base.aparelhosPush } : null;
+    });
     // 409: já está tocando ou os dois já estão conversando.
-    if (!chamada) return NextResponse.json({ ok: false, erro: 'ocupado' }, { status: 409 });
-    return NextResponse.json({ ok: true, chamada });
+    if (!resultado) return NextResponse.json({ ok: false, erro: 'ocupado' }, { status: 409 });
+    await dispararConviteDeChamada(idosoId, resultado.aparelhosPush, resultado.chamada);
+    return NextResponse.json({ ok: true, chamada: resultado.chamada });
   }
 
   if (acao.acao === 'horarios') {

@@ -142,3 +142,9 @@ dist
 
 # Script de envio ao TestFlight: aponta pra chaves da conta da Apple do Breno. Fica só no Mac dele.
 /recursos/testflight.sh
+
+# Credenciais Firebase/APNs/Agora (nunca sobem pro GitHub público)
+android/app/google-services.json
+*-firebase-adminsdk-*.json
+agora-restful-key-*.txt
+*.p8

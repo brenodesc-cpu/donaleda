@@ -1,11 +1,12 @@
 'use client';
 
-import { useCallback, type ReactNode } from 'react';
+import { useCallback, useEffect, type ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import { useAparelhoPronto } from '@/hooks/useAparelhoPronto';
 import { useChamada } from '@/hooks/useChamada';
 import { useLigacao } from '@/hooks/useLigacao';
 import { useTelaAcesa } from '@/hooks/useTelaAcesa';
+import { iniciarPushDeChamadaNativa } from '@/lib/pushNativo';
 import { ChamadaTocando } from './ChamadaTocando';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Rosto } from './Rosto';
@@ -53,6 +54,18 @@ export default function TelaDoIdoso() {
   const recusar = useCallback(() => {
     if (chamadaId) responder('recusar', chamadaId);
   }, [chamadaId, responder]);
+
+  // No app Android/iOS, registra o token de push (Agora Signaling + FCM / APNs VoIP)
+  // e atende/recusa automaticamente quando o idoso toca na tela nativa de chamada.
+  useEffect(() => {
+    if (!pronto) return;
+    return iniciarPushDeChamadaNativa(({ acao, chamadaId: id }) => {
+      responder(acao, id);
+      if (acao === 'atender') {
+        void ligar(id);
+      }
+    });
+  }, [pronto, responder, ligar]);
 
   const ligarEu = useCallback(() => void ligar(), [ligar]);
 

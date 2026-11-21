@@ -8,6 +8,7 @@ import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
 import type {
   Alerta,
   Alimentacao,
+  AparelhoPush,
   Base,
   CategoriaDeLembranca,
   Conversa,
@@ -343,9 +344,29 @@ function armazem(): Armazem {
   return process.env.LIA_DADOS === 'memoria' ? armazemNaMemoria : armazemNoSupabase;
 }
 
+/** Registra ou atualiza o token de push de um aparelho pareado (mantém até 5 mais recentes). */
+export function registrarAparelhoPush(
+  base: Base,
+  entrada: { plataforma: 'android' | 'ios'; token: string; agoraRtmUserId?: string },
+  agora: Date = new Date(),
+): AparelhoPush {
+  const token = entrada.token.trim();
+  const atual = (base.aparelhosPush ?? []).filter((a) => a.token !== token);
+  const registro: AparelhoPush = {
+    plataforma: entrada.plataforma,
+    token,
+    atualizadoEm: agora.toISOString(),
+    ...(entrada.agoraRtmUserId ? { agoraRtmUserId: entrada.agoraRtmUserId } : {}),
+  };
+  atual.push(registro);
+  base.aparelhosPush = atual.slice(-5);
+  return registro;
+}
+
 /** Completa uma ficha gravada por versão mais antiga, que não tinha as ligações. */
 function completar(base: Base, idosoId: string): Base {
   base.chamadas ??= [];
+  base.aparelhosPush ??= [];
   normalizarLembrancas(base);
   base.idoso.id = idosoId;
   base.idoso.horariosDeLigacao ??= ['09:00', '19:00'];

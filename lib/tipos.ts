@@ -130,6 +130,15 @@ export interface Chamada {
   resolvidaEm?: string;
 }
 
+/** Token de push de um aparelho pareado pra acordar a tela mesmo com o app fechado. */
+export interface AparelhoPush {
+  plataforma: 'android' | 'ios';
+  token: string;
+  atualizadoEm: string;
+  /** Identificador deste aparelho no Agora Signaling (RTM). */
+  agoraRtmUserId?: string;
+}
+
 export interface Base {
   idoso: Idoso;
   dias: Dia[];
@@ -137,6 +146,8 @@ export interface Base {
   alertas: Alerta[];
   conversas: Conversa[];
   chamadas: Chamada[];
+  /** Aparelhos registrados pra receber convite de chamada via Agora Signaling / Push. */
+  aparelhosPush?: AparelhoPush[];
 }
 
 /** Resposta de GET /api/familia. O painel da família lê só isto. */
