@@ -13,6 +13,7 @@ Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta
 | [conhecimento/recursos.md](conhecimento/recursos.md) | O que temos na mão: contas, ferramentas, contatos, exemplos da Agora | Antes de propor algo que dependa de recurso novo |
 | [conhecimento/hackathon.md](conhecimento/hackathon.md) | Regras, entregas, prazo e como a banca dá nota | Ao priorizar: o que não conta ponto fica pra depois |
 | [conhecimento/decisoes.md](conhecimento/decisoes.md) | O que o time já decidiu, com data | Antes de reabrir um assunto |
+| [conhecimento/ideias.md](conhecimento/ideias.md) | Ideias e conselhos de mentores que ainda não viraram decisão | Ao pensar no que vem depois ou montar o pitch |
 
 Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da base no mesmo envio do código. Escreva o que vale hoje, com a data.
 
