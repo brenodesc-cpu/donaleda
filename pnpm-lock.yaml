@@ -38,6 +38,9 @@ importers:
       agora-agents:
         specifier: ^2.9.0
         version: 2.9.0
+      agora-extension-ai-denoiser:
+        specifier: 2.0.2
+        version: 2.0.2(agora-rtc-sdk-ng@4.24.3)
       agora-rtc-react:
         specifier: ^2.5.1
         version: 2.5.1(react@19.2.4)
@@ -1636,6 +1639,11 @@ packages:
   agora-agents@2.9.0:
     resolution: {integrity: sha512-ZjP82k8Yz+DIRmzfujN6Zk97VqoQY6RIXMogiO3u7gCPNGWF+lD4ANRvis1pDE/BlFAFpFHv4bE2IlAVLP6BSw==}
     engines: {node: '>=18.0.0'}
+
+  agora-extension-ai-denoiser@2.0.2:
+    resolution: {integrity: sha512-dm71tgSZajQ2Ha7AN7oRfsvxFnB2JNAUKYD/jc5pfiKrrnwctqowNNv0MqXsmJl98MFbo8M80x9Zg8h1No7VFA==}
+    peerDependencies:
+      agora-rtc-sdk-ng: '>=4.15.1'
 
   agora-rtc-react@2.5.1:
     resolution: {integrity: sha512-ORPbV02p8dZ2GhQxo5kTarc0BYjObc2IeqRPv9mi5/fxDI5nMY6kg54R5fUvLQU05H3Q5Kecq7M2kuZzHfNo5Q==}
@@ -5018,6 +5026,10 @@ snapshots:
   agora-agents@2.9.0:
     dependencies:
       agora-token: 2.0.5
+
+  agora-extension-ai-denoiser@2.0.2(agora-rtc-sdk-ng@4.24.3):
+    dependencies:
+      agora-rtc-sdk-ng: 4.24.3
 
   agora-rtc-react@2.5.1(react@19.2.4):
     dependencies:

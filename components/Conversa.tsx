@@ -20,6 +20,7 @@ import {
   TEXTO_DO_ESTADO,
 } from '@/lib/conversation';
 import { useEnviarFalas } from '@/hooks/useEnviarFalas';
+import { useFiltroDeRuido } from '@/hooks/useFiltroDeRuido';
 import { useNivelDoAudio } from '@/hooks/useNivelDoAudio';
 import { usePresencaDaAssistente } from '@/hooks/usePresencaDaAssistente';
 import { useSomPreso } from '@/hooks/useSomPreso';
@@ -71,6 +72,8 @@ export default function Conversa({
   const { localMicrophoneTrack, error: erroDoMicrofone } =
     useLocalMicrophoneTrack(pronto);
   usePublish([localMicrophoneTrack]);
+  // Filtro de barulho da Agora: tira TV e conversa de fundo antes do áudio sair.
+  useFiltroDeRuido(localMicrophoneTrack);
 
   // Marca o tempo do áudio pra legenda acompanhar a fala. É um parâmetro do
   // módulo da Agora e precisa valer antes de o microfone ser publicado.

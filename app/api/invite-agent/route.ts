@@ -130,6 +130,12 @@ class GeminiLiveComAcoes extends GeminiLive {
   }
 }
 
+/** Segundos de silêncio do idoso até ela perguntar se ele ainda está aí. 9 por padrão. */
+function esperaDoLembrete(): number {
+  const pedido = Number(process.env.LIA_LEMBRETE_MS);
+  return Number.isFinite(pedido) && pedido >= 4000 && pedido <= 60000 ? pedido : 9000;
+}
+
 /** A voz do Gemini. LIA_VOZ_GEMINI troca; Leda é o padrão, e Aoede e Kore são as outras pra testar. */
 function vozDoGemini(): string {
   return process.env.LIA_VOZ_GEMINI?.trim() || 'Leda';
@@ -183,10 +189,15 @@ export async function POST(request: NextRequest) {
         ]
       : undefined;
 
+    // A Agora recusa o foco na voz junto com o Gemini Live (testado em 21/11: erro 400).
+    const focoNaVoz = modo === 'tres' && process.env.LIA_FOCO_NA_VOZ !== '0';
     const comum = {
       // enable_rtm leva a legenda e o estado da assistente pra tela.
       // enable_tools libera as ações em /api/mcp.
-      advancedFeatures: { enable_rtm: true, enable_tools: comFerramentas },
+      // enable_sal liga o foco na voz de quem fala com a assistente: a Agora trava
+      // na voz do idoso e bloqueia a TV, outras pessoas e o barulho da sala.
+      advancedFeatures: { enable_rtm: true, enable_tools: comFerramentas, enable_sal: focoNaVoz },
+      ...(focoNaVoz ? { sal: { sal_mode: 'locking' as const } } : {}),
       parameters: {
         audio_scenario: 'chorus' as const,
         data_channel: 'rtm' as const,
@@ -250,6 +261,16 @@ export async function POST(request: NextRequest) {
         },
       },
       ...comum,
+      parameters: {
+        ...comum.parameters,
+        // Se o idoso ficar calado, ela pergunta com calma se ele ainda está aí.
+        // A Agora só tem esse lembrete no modo de três peças; no Gemini ele vai nas instruções.
+        silence_config: {
+          timeout_ms: esperaDoLembrete(),
+          action: 'think' as const,
+          content: `${base.idoso.tratamento} ficou em silêncio alguns segundos. Pergunte com calma, numa frase curta, se a pessoa ainda está aí, sem repetir a pergunta anterior.`,
+        },
+      },
     })
       .withStt(new DeepgramSTT({ model: 'nova-3', language: 'pt-BR' }))
       .withLlm(
