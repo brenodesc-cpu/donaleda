@@ -12,7 +12,7 @@ Desde o fim da tarde de 21/11/2026 a página voltou a falar primeiro com a famí
 
 O botão principal é "Criar a conta da família", que leva pra `/entrar`. O "Fale conosco" fica ao lado, como segunda opção, e abre o WhatsApp.
 
-Ficam de fora da página: nome de casa ou de pessoa, preço em reais e promessa do que o app ainda não faz. O convite pra família liberar a casa a acompanhar o idoso ainda não existe no código, então aparece como parte da fase de teste.
+Ficam de fora da página: nome de casa ou de pessoa e promessa do que o app ainda não faz. O preço da família aparece só na pergunta "Quanto custa?" (decisão do Breno em 21/11/2026, "Mostra o preço"). O convite pra família liberar a casa a acompanhar o idoso ainda não existe no código, então aparece como parte da fase de teste.
 
 ## O que a página diz
 
@@ -33,7 +33,7 @@ A parte "A camada de cuidado", com uma aba por necessidade, saiu em 21/11/2026: 
 
 - A página só afirma o que o produto faz hoje. `proposta-de-valor.md` separa o que existe do que vem depois, e na dúvida o código decide.
 - Todo número leva a fonte e vem dos arquivos da base. `verificacao.md` tem os números corrigidos.
-- Os planos de `tese.md` são proposta e ainda esperam a decisão do time. A página fica sem preço em reais e usa "menos de um décimo do preço de um cuidador".
+- O preço da família é R$ 129,90 por mês (decisão do Breno em 21/11/2026, em `decisoes.md`). Ele aparece na pergunta "Quanto custa?", com uma ligação por dia de uns 3 minutos e sete dias de teste grátis antes. A cobrança e o teste grátis ainda não existem no código, então a resposta diz que a cobrança ainda não começou. O resto da página continua com "menos de um décimo do preço de um cuidador", e o preço das casas de repouso fica de fora.
 - Depoimento inventado, foto de pessoa real sem autorização e logo de empresa que não é cliente ficam de fora. Nome de gente da rede de residenciais também.
 - Texto em português simples, com frase inteira e sem travessão. A marca fala com carinho e sem infantilizar (ver `marca.md`).
 
