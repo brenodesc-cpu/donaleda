@@ -38,13 +38,27 @@ export default function PainelDaFamiliaPage() {
         <>
           <Cabecalho painel={painel} />
           <Ligacoes painel={painel} idosoId={idoso.id} pedido={pedidoDeLigacao} onLigar={ligar} />
+          {painel.convite?.motivo === 'pedido' ? (
+            <a
+              href={enderecoCom('/familia/ligacao', idoso.id)}
+              className="flex flex-col gap-3 rounded-2xl border-2 border-foreground bg-warning-soft p-5"
+            >
+              <span className="text-lg font-semibold">
+                {painel.idoso.tratamento[0].toUpperCase()}
+                {painel.idoso.tratamento.slice(1)} pediu pra falar com você agora
+              </span>
+              <span className="inline-flex min-h-14 items-center justify-center rounded-xl bg-success px-6 text-xl font-semibold text-white">
+                Entrar na ligação
+              </span>
+            </a>
+          ) : null}
           <Alertas
             alertas={painel.alertas}
             assistente={painel.assistente}
             tratamento={painel.idoso.tratamento}
             hoje={painel.hoje.data}
             onMarcarVisto={marcarVisto}
-            entrarNaLigacao={painel.ligacaoAoVivo ? enderecoCom('/familia/ligacao', idoso.id) : null}
+            entrarNaLigacao={painel.convite ? enderecoCom('/familia/ligacao', idoso.id) : null}
           />
           <DiaDeHoje hoje={painel.hoje} />
           {resumo ? <ResumoDaConversa resumo={resumo} /> : null}

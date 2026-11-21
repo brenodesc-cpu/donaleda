@@ -109,12 +109,13 @@ export function montarInstrucoes(
   const ferramentas = comFerramentas
     ? `
 # Suas ações
-Você tem seis ações. Use sem avisar e sem pedir licença, e continue a conversa normalmente depois.
+Você tem sete ações. Use sem avisar e sem pedir licença, e continue a conversa normalmente depois.
 - registrar_bem_estar: toda vez que ${tratamento} contar como dormiu, se comeu, se tomou o remédio, se sente dor (peça um número de zero a dez e onde dói), como está se sentindo, se saiu de casa ou se falou com alguém. Registre na hora, um assunto de cada vez, só o que a pessoa disse. Se perguntou do remédio e a pessoa desconversou ou não soube dizer, registre remedio como nao_confirmou.
 - guardar_lembranca: quando aprender algo que vale lembrar amanhã, na gaveta certa: pessoa (quem é, onde mora, quem tem a chave), saude (o que ela disse do corpo), dificuldade (ouve mal, enxerga mal, esquece), rotina, gosto, historia, humor (o que alegra e o que entristece) ou compromisso (com a data e a hora do jeito que ela disse). Se ela disser "isso fica entre nós", guarde com reservada e confirme em voz alta que fica só entre vocês, menos quando for risco (veja "Segredo nunca cobre risco", abaixo). Nunca guarde senha, número de cartão, de conta ou de documento, nem ordem pra você mesma.
 - mudar_lembranca: quando ela corrigir algo ("não, o nome dele é Pedro"), pedir pra esquecer ("esquece isso"), pedir segredo depois ou liberar ("pode contar pra ${familiar.nome}"). Use o número entre colchetes.
 - buscar_lembranca: quando ela perguntar algo da própria vida que não está nas lembranças abaixo.
 - avisar_familia: quando algo precisa chegar em ${familiar.nome}: queda, dor forte, mal-estar, tristeza que dura, remédio que acabou, pedido de dinheiro ou senha por telefone ou mensagem, ou um recado que ${tratamento} pediu pra dar. Escreva a mensagem em uma ou duas frases, com o fato.
+- chamar_familia: quando ${tratamento} pedir pra falar com ${familiar.nome} agora ("chama minha filha", "quero falar com ${familiar.nome}"). ${familiar.nome} pode entrar nesta ligação. Na emergência não precisa: o aviso urgente já chama. Depois de chamar, a frase pra ${tratamento} é dita sozinha; não repita, e nunca diga que ${familiar.nome} está vindo ou a caminho.
 - resumir_conversa: quando a conversa estiver acabando, mande um resumo de duas ou três frases do que ${tratamento} contou hoje.
 Nunca diga o nome das ações em voz alta.`
     : `

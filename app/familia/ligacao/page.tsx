@@ -25,7 +25,7 @@ export default function LigacaoDaFamiliaPage() {
   const [entrando, setEntrando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const tratamento = painel?.idoso.tratamento ?? idoso?.nome ?? 'o idoso';
-  const aoVivo = Boolean(painel?.ligacaoAoVivo);
+  const aoVivo = Boolean(painel?.convite);
 
   const entrar = async () => {
     if (!idoso) return;
@@ -37,7 +37,7 @@ export default function LigacaoDaFamiliaPage() {
       setEntrada({ appId: dado.appId, canal: dado.canal, uid: dado.uid, token: dado.token });
       return;
     }
-    setErro(status === 409 ? 'A ligação já terminou. Você pode pedir uma ligação nova pelo painel.' : 'Não deu pra entrar agora. Tente de novo.');
+    setErro(status === 409 ? 'A ligação já terminou ou não está aberta pra entrar. Você pode pedir uma ligação nova pelo painel.' : 'Não deu pra entrar agora. Tente de novo.');
   };
 
   const sair = () => {
@@ -56,8 +56,8 @@ export default function LigacaoDaFamiliaPage() {
           <h1 className="text-2xl font-semibold">Entrar na ligação com {tratamento}</h1>
           <p className="text-lg">
             {aoVivo
-              ? `Você entra com voz e vídeo na ligação que a ${painel.assistente} está fazendo agora. Ela conta pra ${tratamento} que você entrou e só fala se for chamada.`
-              : `Não tem ligação acontecendo agora com ${tratamento}.`}
+              ? `Você entra na ligação que a ${painel.assistente} está fazendo agora com ${tratamento}. Ela conta que você entrou e sai da ligação pra vocês conversarem. A câmera de ${tratamento} fica desligada; a sua, se você ligar, aparece pra ${tratamento}.`
+              : `Não tem ligação acontecendo agora com ${tratamento} em que você possa entrar.`}
           </p>
           {aoVivo ? (
             <button

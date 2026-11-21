@@ -58,7 +58,7 @@ describe('ações da assistente (/api/mcp)', () => {
     expect(resposta.status).toBe(200);
   });
 
-  it('responde à abertura e lista as seis ações', async () => {
+  it('responde à abertura e lista as sete ações', async () => {
     const abertura = await (
       await POST(pedido({ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-03-26' } }))
     ).json();
@@ -75,6 +75,7 @@ describe('ações da assistente (/api/mcp)', () => {
       'mudar_lembranca',
       'buscar_lembranca',
       'avisar_familia',
+      'chamar_familia',
       'resumir_conversa',
     ]);
   });
@@ -242,5 +243,36 @@ describe('o segredo não sai pela anotação do dia', () => {
       (await (await POST(pedido({ jsonrpc: '2.0', id: 14, method: 'tools/call', params: { name, arguments: args } }))).json()).result.content[0].text as string;
     await chamar('registrar_bem_estar', { observacao: 'Regou as orquídeas de manhã.' });
     expect((await base()).dias.at(-1)!.observacoes).toContain('Regou as orquídeas de manhã.');
+  });
+});
+
+describe('convite da família pelas ações da assistente', () => {
+  const chamar = async (name: string, args: Record<string, unknown>) =>
+    (await (await POST(pedido({ jsonrpc: '2.0', id: 15, method: 'tools/call', params: { name, arguments: args } }))).json()).result.content[0].text as string;
+  const abrirLigacao = async () => {
+    const dados = await import('@/lib/dados');
+    await dados.mudarBase(IDOSO, (b) => dados.abrirConversa(b, new Date(), undefined, { canal: 'sala-teste', agenteId: 'agente-teste', modo: 'tres' }));
+  };
+  const convite = async () => (await base()).conversas.at(-1)?.convite;
+
+  it('aviso de atenção não abre o convite', async () => {
+    await abrirLigacao();
+    await chamar('avisar_familia', { tipo: 'saude', gravidade: 'atencao', mensagem: 'Está com o joelho doendo um pouco.' });
+    expect(await convite()).toBeUndefined();
+  });
+
+  it('aviso urgente abre o convite', async () => {
+    await abrirLigacao();
+    const r = await chamar('avisar_familia', { tipo: 'emergencia', gravidade: 'urgente', mensagem: 'Caiu no banheiro e não consegue levantar.' });
+    expect(r).toContain('pode entrar na ligação');
+    expect(await convite()).toMatchObject({ motivo: 'urgente', tipo: 'emergencia' });
+  });
+
+  it('o pedido da pessoa abre o convite e deixa um aviso pra família', async () => {
+    await abrirLigacao();
+    expect(await chamar('chamar_familia', {})).toContain('Chamei Marina');
+    expect(await convite()).toMatchObject({ motivo: 'pedido' });
+    expect((await base()).alertas.at(-1)?.texto).toContain('Pediu pra falar com você agora');
+    expect(await chamar('chamar_familia', {})).toContain('já foi chamada');
   });
 });

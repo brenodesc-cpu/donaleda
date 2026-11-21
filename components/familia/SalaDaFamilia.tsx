@@ -16,7 +16,7 @@ import {
   useRemoteUserTrack,
   type IAgoraRTCRemoteUser,
 } from 'agora-rtc-react';
-import { PhoneOff } from 'lucide-react';
+import { Mic, MicOff, PhoneOff, Video, VideoOff } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { DEFAULT_AGENT_UID, ehDaFamilia } from '@/lib/agora';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
@@ -52,9 +52,17 @@ export default function SalaDaFamilia({ entrada, tratamento, onSair }: Props) {
     { appid: entrada.appId, channel: entrada.canal, token: entrada.token, uid: Number(entrada.uid) },
     pronto,
   );
+  const [microfoneLigado, setMicrofoneLigado] = useState(true);
+  const [cameraLigada, setCameraLigada] = useState(true);
   const { localMicrophoneTrack, error: erroDoMicrofone } = useLocalMicrophoneTrack(pronto);
   const { localCameraTrack, error: erroDaCamera } = useLocalCameraTrack(pronto);
   usePublish([localMicrophoneTrack, localCameraTrack]);
+  useEffect(() => {
+    void localMicrophoneTrack?.setEnabled(microfoneLigado);
+  }, [localMicrophoneTrack, microfoneLigado]);
+  useEffect(() => {
+    void localCameraTrack?.setEnabled(cameraLigada);
+  }, [localCameraTrack, cameraLigada]);
 
   const remotos = useRemoteUsers();
   const idoso = remotos.find((u) => String(u.uid) !== String(DEFAULT_AGENT_UID) && !ehDaFamilia(u.uid));
@@ -67,15 +75,15 @@ export default function SalaDaFamilia({ entrada, tratamento, onSair }: Props) {
         {idoso?.hasVideo ? (
           <VideoDoIdoso usuario={idoso} nome={tratamento} />
         ) : (
-          <p className="px-6 text-center text-xl text-background">
+          <p className="px-6 text-center text-2xl font-semibold text-background">
             {!isConnected
               ? 'Entrando na ligação...'
               : idoso
-                ? `Você está ouvindo ${tratamento}. A câmera do aparelho ainda não abriu.`
+                ? `Você está falando com ${tratamento}`
                 : `${tratamento[0].toUpperCase()}${tratamento.slice(1)} saiu da ligação.`}
           </p>
         )}
-        {localCameraTrack ? (
+        {localCameraTrack && cameraLigada ? (
           <div className="absolute bottom-3 right-3 h-32 w-24 overflow-hidden rounded-xl border-2 border-background">
             <LocalVideoTrack track={localCameraTrack} play className="h-full w-full" />
           </div>
@@ -85,10 +93,31 @@ export default function SalaDaFamilia({ entrada, tratamento, onSair }: Props) {
       <p role="status" className="text-center text-lg text-muted-foreground">
         {isConnected
           ? assistenteNaLinha
-            ? `A ${NOME_DA_ASSISTENTE} contou que você entrou e só fala se for chamada.`
+            ? `A ${NOME_DA_ASSISTENTE} está contando que você entrou e já sai da ligação.`
             : `Só você e ${tratamento} na ligação.`
           : 'Conectando...'}
       </p>
+
+      <div className="flex w-full max-w-xl gap-3">
+        <button
+          type="button"
+          onClick={() => setMicrofoneLigado((v) => !v)}
+          aria-pressed={!microfoneLigado}
+          className="inline-flex min-h-14 flex-1 items-center justify-center gap-2 rounded-2xl border-2 border-foreground bg-card px-4 text-lg font-medium"
+        >
+          {microfoneLigado ? <Mic aria-hidden="true" className="h-6 w-6" /> : <MicOff aria-hidden="true" className="h-6 w-6" />}
+          {microfoneLigado ? 'Silenciar' : 'Voltar a falar'}
+        </button>
+        <button
+          type="button"
+          onClick={() => setCameraLigada((v) => !v)}
+          aria-pressed={!cameraLigada}
+          className="inline-flex min-h-14 flex-1 items-center justify-center gap-2 rounded-2xl border-2 border-foreground bg-card px-4 text-lg font-medium"
+        >
+          {cameraLigada ? <Video aria-hidden="true" className="h-6 w-6" /> : <VideoOff aria-hidden="true" className="h-6 w-6" />}
+          {cameraLigada ? 'Desligar câmera' : 'Ligar câmera'}
+        </button>
+      </div>
       {erroDoMicrofone || erroDaCamera ? (
         <p className="text-center text-base text-destructive">
           {erroDoMicrofone ? 'O navegador não liberou o microfone. ' : ''}

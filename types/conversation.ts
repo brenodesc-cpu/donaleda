@@ -46,6 +46,8 @@ export interface DadosDaLigacao {
   avatar: boolean;
   /** Qual jeito de voz o servidor ligou: Gemini Live ou as três peças. */
   modo?: 'gemini' | 'tres';
+  /** Quem da família pode entrar na ligação, pro aparelho mostrar o nome quando entrar. */
+  nomeDaFamilia?: string;
 }
 
 export interface PropsDaConversa {

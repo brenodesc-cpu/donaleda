@@ -5,8 +5,6 @@ import AgoraRTC, {
   RemoteAudioTrack,
   useClientEvent,
   useJoin,
-  LocalVideoTrack,
-  useLocalCameraTrack,
   useLocalMicrophoneTrack,
   usePublish,
   useRemoteUsers,
@@ -23,6 +21,7 @@ import {
 } from '@/lib/conversation';
 import { avisarServidor } from '@/lib/avisarServidor';
 import { linhaDaMedicao, medidorLigado, resumirMedicao } from '@/lib/medicao';
+import { useConviteDaFamilia } from '@/hooks/useConviteDaFamilia';
 import { useEnviarFalas } from '@/hooks/useEnviarFalas';
 import { useFiltroDeRuido } from '@/hooks/useFiltroDeRuido';
 import { useNivelDoAudio } from '@/hooks/useNivelDoAudio';
@@ -97,6 +96,7 @@ export default function Conversa({
     pronto: pronto && entrou,
   });
   useEnviarFalas(transcript, dados.conversaId, uidDaAssistente);
+  useConviteDaFamilia(dados.conversaId, pronto && entrou);
 
   // O tempo de resposta medido pela Agora vai pro servidor uma vez, quando a
   // ligação acaba, e fica junto da conversa. Com ?medir=1 aparece também na tela.
@@ -127,8 +127,8 @@ export default function Conversa({
   // assistente em si. Por isso a tela toca o som de todos e mostra o vídeo de
   // quem tiver vídeo.
   const alguemNaLinha = usuariosRemotos.length > 0;
-  // Alguém da família entrou pelo aviso urgente: o vídeo dela vai pro palco e a
-  // câmera do aparelho liga só enquanto ela estiver na ligação.
+  // Alguém da família entrou pelo convite (aviso urgente ou pedido do idoso). Se ela
+  // ligar a câmera, o vídeo dela vai pro palco. A câmera do aparelho fica desligada.
   const familiaNaLinha = usuariosRemotos.some((usuario) => ehDaFamilia(usuario.uid));
   const comVideo =
     usuariosRemotos.find((usuario) => ehDaFamilia(usuario.uid) && usuario.hasVideo) ??
@@ -197,7 +197,7 @@ export default function Conversa({
       <div className="flex w-full flex-col items-center gap-2">
         <p role="status" className="text-xl font-medium text-muted-foreground">
           {familiaNaLinha
-            ? 'Sua família está na ligação'
+            ? `${dados.nomeDaFamilia ?? 'Sua família'} está na ligação`
             : estado === 'ligando'
               ? 'Só um instante...'
               : TEXTO_DO_ESTADO[estado]}
@@ -228,28 +228,11 @@ export default function Conversa({
         </p>
       ) : null}
 
-      {familiaNaLinha && pronto ? <CameraParaAFamilia /> : null}
-
       {/* O som da ligação toca por aqui; nada disso aparece na tela. */}
       <RemoteAudioTrack track={faixaDaVoz} play />
       {outrosComSom.map((usuario) => (
         <SomDoRemoto key={usuario.uid} usuario={usuario} />
       ))}
     </section>
-  );
-}
-
-/**
- * A câmera do aparelho, ligada só enquanto alguém da família está na ligação.
- * Sai da tela junto com a família, e aí a câmera desliga e para de ser enviada.
- */
-function CameraParaAFamilia() {
-  const { localCameraTrack } = useLocalCameraTrack(true);
-  usePublish([localCameraTrack]);
-  if (!localCameraTrack) return null;
-  return (
-    <div className="fixed bottom-4 right-4 h-28 w-20 overflow-hidden rounded-xl border-2 border-background shadow-lg">
-      <LocalVideoTrack track={localCameraTrack} play className="h-full w-full" aria-label="A sua câmera" />
-    </div>
   );
 }

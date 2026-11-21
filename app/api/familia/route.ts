@@ -6,8 +6,9 @@
 import { randomInt } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { arrumarHorarios, avancarChamadas, pedirChamadaDaFamilia } from '@/lib/chamadas';
-import { conversaAoVivo, montarPainel, mudarBase, mudarBaseQuando } from '@/lib/dados';
-import { avisarAssistente, entradaDaFamilia } from '@/lib/familiaNaLigacao';
+import { fraseDaEntrada, registrarEntrada } from '@/lib/convite';
+import { montarPainel, mudarBase, mudarBaseQuando } from '@/lib/dados';
+import { depois, entradaDaFamilia, falar, tirarAssistente } from '@/lib/familiaNaLigacao';
 import { dataPedida, GAVETAS, guardar, horaPedida, mudar } from '@/lib/memoria';
 import { exigirIdosoDaFamilia } from '@/lib/sessao';
 import { clienteDoServidor } from '@/lib/supabase/servidor';
@@ -154,17 +155,22 @@ export async function POST(request: Request) {
   }
 
   if (acao.acao === 'entrar_na_ligacao') {
-    // A primeira entrada avisa a assistente; quem entra de novo (aba recarregada) só pega outro token.
+    // Só entra com convite aberto (aviso urgente ou pedido do idoso) e a ligação ainda aberta.
+    // A primeira entrada faz a Dona Leda anunciar e sair; quem recarrega a página só pega outra chave.
     const achada = await mudarBase(idosoId, (base) => {
-      const conversa = conversaAoVivo(base, new Date());
-      if (!conversa) return null;
-      const primeira = !conversa.familiaEntrouEm;
-      if (primeira) conversa.familiaEntrouEm = new Date().toISOString();
-      return { conversa: { ...conversa }, primeira, base: structuredClone(base) };
+      const entrada = registrarEntrada(base, new Date());
+      return entrada ? { conversa: { ...entrada.conversa }, primeira: entrada.primeira, frase: fraseDaEntrada(base) } : null;
     });
-    if (!achada) return NextResponse.json({ ok: false, erro: 'sem_ligacao' }, { status: 409 });
+    if (!achada) return NextResponse.json({ ok: false, erro: 'sem_convite' }, { status: 409 });
     const entrada = entradaDaFamilia(achada.conversa.canal!);
-    if (achada.primeira) await avisarAssistente(achada.conversa, achada.base);
+    if (achada.primeira) {
+      depois(async () => {
+        await falar(achada.conversa, achada.frase, 'INTERRUPT');
+        // Uns 6 segundos pra frase terminar antes de a Dona Leda sair da sala.
+        await new Promise((r) => setTimeout(r, 6500));
+        await tirarAssistente(achada.conversa);
+      });
+    }
     return NextResponse.json({ ok: true, ...entrada });
   }
 

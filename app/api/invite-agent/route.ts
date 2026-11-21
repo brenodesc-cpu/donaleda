@@ -315,6 +315,7 @@ export async function POST(request: NextRequest) {
       ferramentas: comFerramentas,
       avatar: Boolean(video),
       modo,
+      nomeDaFamilia: base.idoso.familiar.nome,
     } satisfies InicioDaConversa);
   } catch (error) {
     console.error('Erro ao começar a conversa:', error);

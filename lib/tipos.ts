@@ -93,8 +93,19 @@ export interface Conversa {
   agenteId?: string;
   /** O jeito de voz da ligação: as ligações do Gemini respondem por outro endereço da Agora. */
   modo?: 'gemini' | 'tres';
-  /** Quando alguém da família entrou na ligação. */
-  familiaEntrouEm?: string;
+  /** O convite pra família entrar, aberto por aviso urgente ou pedido da pessoa. */
+  convite?: ConviteDaFamilia;
+}
+
+/** O convite pra família entrar na ligação. Só existe com a ligação aberta. */
+export interface ConviteDaFamilia {
+  abertoEm: string;
+  motivo: 'urgente' | 'pedido';
+  /** O tipo do aviso que abriu, pra frase de quando ninguém entra (golpe muda a frase). */
+  tipo?: TipoDeAlerta;
+  entrouEm?: string;
+  /** Quando a frase de "não conseguiu entrar" tocou. Toca uma vez só. */
+  semEntradaEm?: string;
 }
 
 export interface Idoso {
@@ -154,8 +165,8 @@ export interface PainelDaFamilia {
     resumo?: string;
     emAndamento: boolean;
   } | null;
-  /** Ligação acontecendo agora, em que a família pode entrar. null quando não há. */
-  ligacaoAoVivo: { conversaId: string; inicio: string } | null;
+  /** Convite aberto pra família entrar na ligação que está acontecendo agora. null quando não há. */
+  convite: { conversaId: string; abertoEm: string; motivo: ConviteDaFamilia['motivo']; entrou: boolean } | null;
   /** Não vistos primeiro, depois os mais novos. */
   alertas: Alerta[];
   /** Sete dias, do mais antigo até hoje. Dia sem dado vem com os campos vazios. */
@@ -225,12 +236,16 @@ export type RespostaDaChamada =
 export type EventoDaConversa =
   | { tipo: 'fala'; conversaId: string; texto: string }
   | { tipo: 'fim'; conversaId: string }
+  /** O aparelho pergunta a cada 5 s, durante a ligação, se alguém da família entrou. */
+  | { tipo: 'convite'; conversaId: string }
   | { tipo: 'tempos'; conversaId: string; tempos: TemposDaConversa };
 
 export interface RespostaDoEvento {
   ok: boolean;
   /** Vem quando a fala disparou uma regra de segurança (queda, golpe). */
   alerta?: Alerta;
+  /** Resposta do evento 'convite': se alguém da família já entrou. */
+  familiaEntrou?: boolean;
 }
 
 /** O que POST /api/invite-agent devolve além dos campos do projeto-base. */
@@ -245,6 +260,8 @@ export interface InicioDaConversa {
   avatar: boolean;
   /** Como a conversa rodou: Gemini Live (um modelo só) ou as três peças. */
   modo?: 'gemini' | 'tres';
+  /** O nome de quem da família pode entrar na ligação, pra tela do idoso mostrar. */
+  nomeDaFamilia?: string;
 }
 
 // ---------- Contas, idosos e aparelhos (21/11, contrato entre servidor, painel e app) ----------

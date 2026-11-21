@@ -2,6 +2,7 @@
 // as de baixo leem e gravam a ficha no banco (Supabase), uma mudança de cada vez.
 
 import { randomUUID } from 'node:crypto';
+import { conviteAberto } from './convite';
 import { citaSegredo, guardar, normalizarLembrancas, paraOPainel } from './memoria';
 import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
 import type {
@@ -188,13 +189,6 @@ export function abrirConversa(
   return conversa;
 }
 
-/** A conversa acontecendo agora numa sala em que a família pode entrar, ou null. */
-export function conversaAoVivo(base: Base, agora: Date = new Date()): Conversa | null {
-  const ultima = base.conversas[base.conversas.length - 1];
-  if (!ultima || ultima.fim || !ultima.canal || !ultima.agenteId) return null;
-  return agora.getTime() - new Date(ultima.inicio).getTime() < DUAS_HORAS ? ultima : null;
-}
-
 export function fecharConversa(
   base: Base,
   conversaId: string,
@@ -242,7 +236,7 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     };
   }
 
-  const aoVivo = conversaAoVivo(base, agora);
+  const aberto = conviteAberto(base, agora);
 
   const alertas = [...base.alertas]
     .sort((a, b) => {
@@ -260,7 +254,9 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
       (c) => dataEmBrasilia(new Date(c.inicio)) === hojeData && (c.falasDoIdoso > 0 || !c.fim),
     ),
     ultimaConversa,
-    ligacaoAoVivo: aoVivo ? { conversaId: aoVivo.id, inicio: aoVivo.inicio } : null,
+    convite: aberto
+      ? { conversaId: aberto.conversa.id, abertoEm: aberto.convite.abertoEm, motivo: aberto.convite.motivo, entrou: Boolean(aberto.convite.entrouEm) }
+      : null,
     alertas,
     semana,
     ...paraOPainel(base),
