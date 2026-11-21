@@ -56,7 +56,7 @@ export const SONHO = [
 ] as const;
 
 export const DEFINICAO =
-  'A Dona Leda é a camada de cuidado de quem envelhece: uma amiga que traz companhia e apoia com necessidades do dia a dia, como segurança, saúde, comunicação e rotina.';
+  'A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, saúde, comunicação e rotina.';
 
 export const DINHEIRO = [
   'A aposentadoria da maioria dos brasileiros não paga um cuidador.',
