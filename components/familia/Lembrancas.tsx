@@ -71,6 +71,27 @@ export function Lembrancas({
         O que a {assistente} sabe de {tratamento}
       </h2>
 
+      {onEnsinar ? (
+        ensinando ? (
+          <FormularioDaLembranca
+            inicial={{ texto: '', categoria: 'pessoa', data: '', hora: '' }}
+            escolheGaveta
+            rotuloDoBotao="Guardar"
+            onSalvar={async (campos) => {
+              const resultado = await onEnsinar(campos);
+              if (resultado.ok) setEnsinando(false);
+              return resultado;
+            }}
+            onCancelar={() => setEnsinando(false)}
+          />
+        ) : (
+          <button type="button" onClick={() => setEnsinando(true)} className={`${CLASSE_DO_BOTAO_SECUNDARIO} sm:w-auto`}>
+            <Plus aria-hidden="true" className="h-5 w-5" />
+            Ensinar algo
+          </button>
+        )
+      ) : null}
+
       {vazio ? (
         <p className="flex items-center gap-3 text-base text-muted-foreground">
           <BookHeart aria-hidden="true" className="h-6 w-6 shrink-0" />
@@ -106,27 +127,6 @@ export function Lembrancas({
           {comMaiuscula(tratamento)} pediu pra guardar {reservadas}{' '}
           {reservadas === 1 ? 'assunto' : 'assuntos'} só com a {assistente}.
         </p>
-      ) : null}
-
-      {onEnsinar ? (
-        ensinando ? (
-          <FormularioDaLembranca
-            inicial={{ texto: '', categoria: 'pessoa', data: '', hora: '' }}
-            escolheGaveta
-            rotuloDoBotao="Guardar"
-            onSalvar={async (campos) => {
-              const resultado = await onEnsinar(campos);
-              if (resultado.ok) setEnsinando(false);
-              return resultado;
-            }}
-            onCancelar={() => setEnsinando(false)}
-          />
-        ) : (
-          <button type="button" onClick={() => setEnsinando(true)} className={`${CLASSE_DO_BOTAO_SECUNDARIO} sm:w-auto`}>
-            <Plus aria-hidden="true" className="h-5 w-5" />
-            Ensinar algo
-          </button>
-        )
       ) : null}
 
       {temExemplo ? (

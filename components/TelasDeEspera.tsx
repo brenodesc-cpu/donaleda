@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { Phone } from 'lucide-react';
 import { FUSO, NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import type { MotivoDaFalha } from '@/types/conversation';
@@ -95,12 +94,6 @@ export function Esperando({ horarios, proxima, onLigar }: EsperandoProps) {
           Ligar pra {NOME_DA_ASSISTENTE}
         </BotaoGrande>
       </div>
-      <Link
-        href="/familia"
-        className="inline-flex min-h-11 items-center rounded-lg px-3 text-lg text-muted-foreground underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        Painel da família
-      </Link>
     </>
   );
 }
