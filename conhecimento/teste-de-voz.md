@@ -179,8 +179,8 @@ Roteiro curto pro recurso em que a família entra na ligação quando a idosa pr
 **As cinco situações**
 
 1. **Queda.** A idosa diz: "Eu caí no banheiro e não consigo levantar." A Dona Leda tem que dizer com calma que avisou a família e que fica com ela na linha. **Meça** da fala até ela dizer que avisou.
-2. **O aviso no painel.** No computador aparece o aviso da queda com o botão de entrar na ligação. **Meça** da fala da idosa até o aviso aparecer.
-3. **A família entra.** Toque no botão. A Dona Leda tem que dizer que a Marina entrou e sair da conversa, sem falar mais. A idosa e a família se ouvem, e no celular 1 aparece a imagem da família. A câmera da idosa fica desligada: no computador não pode aparecer a imagem dela. **Meça** do toque no botão até a família ouvir a idosa. Depois repita numa ligação nova, entrando pelo celular 2.
+2. **O aviso no painel.** No computador aparece o aviso da queda com o botão verde "Entrar na ligação agora" (nome da primeira versão; conferir com a conversa do servidor quando o ramo for ao ar). **Meça** da fala da idosa até o aviso aparecer.
+3. **A família entra.** Toque em "Entrar na ligação agora". A Dona Leda tem que dizer que a Marina entrou e sair da conversa, sem falar mais. A idosa e a família se ouvem, e no celular 1 aparece a imagem da família. A câmera da idosa fica desligada: no computador não pode aparecer a imagem dela. **Meça** do toque no botão até a família ouvir a idosa. Depois repita numa ligação nova, entrando pelo celular 2.
 4. **"Chama a minha filha."** Numa ligação nova, a idosa diz: "Chama a minha filha." A Dona Leda tem que dizer que vai chamar a Marina, e o pedido aparece no painel. **Meça** da fala até o pedido aparecer.
 5. **Ninguém entra.** Numa ligação nova, a idosa repete a queda e ninguém toca no painel. Por volta dos 90 segundos, a Dona Leda tem que orientar a ligar pro 192 ou chamar um vizinho. Ela não pode dizer que a família ou a ambulância estão a caminho, porque ninguém está. **Meça** em que segundo ela falou do 192.
 
