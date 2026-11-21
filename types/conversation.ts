@@ -11,6 +11,8 @@ export interface AgoraTokenData {
 export interface ClientStartRequest {
   requester_id: string;
   channel_name: string;
+  /** Vem quando a conversa nasce de uma ligação que a assistente fez e o idoso atendeu. */
+  chamada_id?: string;
 }
 
 export interface StopConversationRequest {
@@ -40,6 +42,8 @@ export interface DadosDaLigacao {
   channel: string;
   agentId: string;
   conversaId: string;
+  /** true quando um avatar em vídeo entra na ligação junto com a voz. */
+  avatar: boolean;
 }
 
 export interface PropsDaConversa {

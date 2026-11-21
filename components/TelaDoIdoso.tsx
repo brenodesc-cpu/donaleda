@@ -1,110 +1,126 @@
 'use client';
 
+import { useCallback, type ReactNode } from 'react';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
+import { useAparelhoPronto } from '@/hooks/useAparelhoPronto';
+import { useChamada } from '@/hooks/useChamada';
 import { useLigacao } from '@/hooks/useLigacao';
-import type { MotivoDaFalha } from '@/types/conversation';
-import { BotaoGrande } from './BotaoGrande';
+import { useTelaAcesa } from '@/hooks/useTelaAcesa';
+import { ChamadaTocando } from './ChamadaTocando';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Rosto } from './Rosto';
+import {
+  AvisoDeFalha,
+  Esperando,
+  Ligando,
+  PrepararAparelho,
+} from './TelasDeEspera';
 
-// A conversa e a ligação da Agora só existem no navegador.
+// A ligação da Agora só existe no navegador.
 const Conversa = dynamic(() => import('./Conversa'), { ssr: false });
 const ProvedorDaAgora = dynamic(() => import('./ProvedorDaAgora'), {
   ssr: false,
 });
 
-const AVISO_DE_FALHA: Record<MotivoDaFalha, string> = {
-  microfone:
-    'Preciso do microfone pra te ouvir. Toque em Permitir quando o celular perguntar.',
-  conexao: 'Não consegui ligar agora.',
-};
-
 function recarregar() {
   window.location.reload();
 }
 
-/** Aparece se a conversa quebrar por dentro: mesma cara dos outros avisos. */
-function ConversaQuebrou() {
-  return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-8">
-      <Rosto estado="parada" nivel={0} />
-      <p role="alert" className="max-w-md text-center text-2xl font-medium">
-        {AVISO_DE_FALHA.conexao}
-      </p>
-      <BotaoGrande onClick={recarregar}>Tentar de novo</BotaoGrande>
-    </div>
-  );
-}
-
-interface AntesDaConversaProps {
-  ligando: boolean;
-  falha: MotivoDaFalha | null;
-  onLigar: () => void;
-}
-
-/** A tela parada, a tela ligando e a tela de aviso: rosto, uma frase e um botão. */
-function AntesDaConversa({ ligando, falha, onLigar }: AntesDaConversaProps) {
-  const rotulo = ligando
-    ? 'Ligando...'
-    : falha
-      ? 'Tentar de novo'
-      : `Conversar com a ${NOME_DA_ASSISTENTE}`;
-
-  return (
-    <div className="flex w-full flex-1 flex-col items-center justify-center gap-8">
-      <Rosto estado={ligando ? 'ligando' : 'parada'} nivel={0} />
-      {falha ? (
-        <p role="alert" className="max-w-md text-center text-2xl font-medium">
-          {AVISO_DE_FALHA[falha]}
-        </p>
-      ) : (
-        <h1 className="max-w-md text-balance text-center text-3xl font-semibold sm:text-4xl">
-          Oi! Eu sou a {NOME_DA_ASSISTENTE}, sua assistente virtual.
-        </h1>
-      )}
-      <BotaoGrande onClick={onLigar} disabled={ligando} aria-busy={ligando}>
-        {rotulo}
-      </BotaoGrande>
-    </div>
-  );
-}
-
+/**
+ * A tela do aparelho do idoso. Quem começa a conversa é a assistente: o
+ * aparelho fica esperando, toca quando ela liga, e a ligação tem cara de
+ * chamada de vídeo. As telas, na ordem em que a pessoa vê:
+ * preparar o aparelho, esperando, tocando, ligando e em ligação.
+ */
 export default function TelaDoIdoso() {
-  const { fase, motivo, dados, rtm, ligar, encerrar, falhar, renovarTokens } =
-    useLigacao();
-  const conversando = fase === 'conversando' && dados !== null && rtm !== null;
+  const aparelho = useAparelhoPronto();
+  const ligacao = useLigacao();
+  const { fase, dados, rtm, ligar } = ligacao;
+
+  const pronto = aparelho.estado === 'pronto';
+  // Fora de uma ligação, o aparelho pergunta ao servidor se a assistente está ligando.
+  const livre = fase === 'parada' || fase === 'erro';
+  const { situacao, chamada, responder } = useChamada(pronto && livre);
+  useTelaAcesa(pronto);
+
+  const chamadaId = chamada?.id;
+  const atender = useCallback(() => {
+    if (!chamadaId) return;
+    responder('atender', chamadaId);
+    void ligar(chamadaId);
+  }, [chamadaId, responder, ligar]);
+
+  const recusar = useCallback(() => {
+    if (chamadaId) responder('recusar', chamadaId);
+  }, [chamadaId, responder]);
+
+  const ligarEu = useCallback(() => void ligar(), [ligar]);
+
+  const emLigacao = fase === 'conversando' && dados !== null && rtm !== null;
+
+  let conteudo: ReactNode;
+  if (emLigacao) {
+    conteudo = (
+      <ErrorBoundary
+        fallback={<AvisoDeFalha motivo="conexao" onTentar={recarregar} />}
+      >
+        <ProvedorDaAgora>
+          <Conversa
+            dados={dados}
+            rtmClient={rtm}
+            onRenovarTokens={ligacao.renovarTokens}
+            onEncerrar={ligacao.encerrar}
+            onFalha={ligacao.falhar}
+          />
+        </ProvedorDaAgora>
+      </ErrorBoundary>
+    );
+  } else if (fase === 'ligando') {
+    conteudo = <Ligando />;
+  } else if (aparelho.estado === 'conferindo') {
+    // Um instante só, enquanto o navegador responde se o microfone já foi liberado.
+    conteudo = (
+      <div className="flex flex-1 items-center justify-center">
+        <Rosto estado="parada" nivel={0} />
+      </div>
+    );
+  } else if (aparelho.estado === 'precisa') {
+    conteudo = (
+      <PrepararAparelho
+        negado={aparelho.negado}
+        onPreparar={aparelho.preparar}
+      />
+    );
+  } else if (chamada) {
+    conteudo = (
+      <ChamadaTocando
+        key={chamada.id}
+        atenderSozinhoEm={situacao?.atenderSozinhoEm ?? null}
+        onAtender={atender}
+        onRecusar={recusar}
+      />
+    );
+  } else if (fase === 'erro' && ligacao.motivo) {
+    conteudo = (
+      <AvisoDeFalha
+        motivo={ligacao.motivo}
+        onTentar={ligacao.tentarDeNovo}
+        onVoltar={ligacao.voltar}
+      />
+    );
+  } else {
+    conteudo = (
+      <Esperando
+        horarios={situacao?.horariosDeLigacao ?? []}
+        proxima={situacao?.proximaLigacao ?? null}
+        onLigar={ligarEu}
+      />
+    );
+  }
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col items-center gap-6 px-6 py-8">
-      {conversando ? (
-        <ErrorBoundary fallback={<ConversaQuebrou />}>
-          <ProvedorDaAgora>
-            <Conversa
-              dados={dados}
-              rtmClient={rtm}
-              onRenovarTokens={renovarTokens}
-              onEncerrar={encerrar}
-              onFalha={falhar}
-            />
-          </ProvedorDaAgora>
-        </ErrorBoundary>
-      ) : (
-        <>
-          <AntesDaConversa
-            ligando={fase === 'ligando'}
-            falha={fase === 'erro' ? motivo : null}
-            onLigar={ligar}
-          />
-          <Link
-            href="/familia"
-            className="inline-flex min-h-11 items-center rounded-lg px-3 text-base text-muted-foreground underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            Painel da família
-          </Link>
-        </>
-      )}
+      {conteudo}
     </main>
   );
 }

@@ -2,87 +2,26 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { RTMClient } from 'agora-rtm';
-import { avisarServidor } from '@/lib/avisarServidor';
-import type { InicioDaConversa } from '@/lib/tipos';
 import type {
   AgoraRenewalTokens,
-  ClientStartRequest,
   DadosDaLigacao,
   MotivoDaFalha,
-  StopConversationRequest,
 } from '@/types/conversation';
+import {
+  chamarAssistente,
+  conseguirMicrofone,
+  fecharNoServidor,
+  ligarRtm,
+  pedirToken,
+} from './pedidosDaLigacao';
 
 export type FaseDaLigacao = 'parada' | 'ligando' | 'conversando' | 'erro';
 
-interface TokenDaAgora {
-  token: string;
-  uid: string;
-  channel: string;
-}
-
-/** Pede o microfone antes de chamar a assistente, pra não gastar a ligação se a pessoa negar. */
-async function conseguirMicrofone(): Promise<boolean> {
-  if (!navigator.mediaDevices?.getUserMedia) return false;
-  try {
-    const som = await navigator.mediaDevices.getUserMedia({ audio: true });
-    som.getTracks().forEach((faixa) => faixa.stop());
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-async function pedirToken(parametros = ''): Promise<TokenDaAgora> {
-  const resposta = await fetch(`/api/generate-agora-token${parametros}`);
-  if (!resposta.ok) throw new Error('o token da Agora não veio');
-  return (await resposta.json()) as TokenDaAgora;
-}
-
-async function chamarAssistente(token: TokenDaAgora): Promise<InicioDaConversa> {
-  const pedido: ClientStartRequest = {
-    requester_id: token.uid,
-    channel_name: token.channel,
-  };
-  const resposta = await fetch('/api/invite-agent', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(pedido),
-  });
-  if (!resposta.ok) throw new Error('a assistente não entrou');
-  return (await resposta.json()) as InicioDaConversa;
-}
-
-async function ligarRtm(token: TokenDaAgora): Promise<RTMClient> {
-  const { default: AgoraRTM } = await import('agora-rtm');
-  const rtm: RTMClient = new AgoraRTM.RTM(
-    process.env.NEXT_PUBLIC_AGORA_APP_ID!,
-    token.uid,
-  );
-  await rtm.login({ token: token.token });
-  await rtm.subscribe(token.channel);
-  return rtm;
-}
-
-function pararAssistente(agentId: string): Promise<void> {
-  const pedido: StopConversationRequest = { agent_id: agentId };
-  return fetch('/api/stop-conversation', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(pedido),
-    // keepalive deixa o pedido sair mesmo se a pessoa fechar a aba.
-    keepalive: true,
-  })
-    .then(() => undefined)
-    .catch(() => undefined);
-}
-
-/** Avisa o fim ao servidor e depois manda a assistente sair da ligação. */
-async function fecharNoServidor(conversaId: string, agentId: string) {
-  await avisarServidor({ tipo: 'fim', conversaId });
-  await pararAssistente(agentId);
-}
-
-/** Cuida de ligar e desligar a conversa: token, assistente, canal de mensagens e avisos ao servidor. */
+/**
+ * Cuida de ligar e desligar a conversa: token, assistente, canal de mensagens e
+ * avisos ao servidor. `ligar(chamadaId)` serve pra ligação que a assistente fez
+ * e o idoso atendeu; `ligar()` sem nada, pra quando é o idoso que chama.
+ */
 export function useLigacao() {
   const [fase, setFase] = useState<FaseDaLigacao>('parada');
   const [motivo, setMotivo] = useState<MotivoDaFalha | null>(null);
@@ -90,6 +29,10 @@ export function useLigacao() {
   const [rtm, setRtm] = useState<RTMClient | null>(null);
   // Evita mandar o fim da conversa duas vezes (botão, falha e fechar a aba).
   const fimAvisado = useRef(false);
+  // Trava contra duas conversas ao mesmo tempo (toque em Atender junto com o atender sozinho).
+  const ocupado = useRef(false);
+  // A ligação da última tentativa, pra "Tentar de novo" repetir a mesma.
+  const ultimaChamada = useRef<string | undefined>(undefined);
 
   // Os módulos da Agora são pesados: carregar antes deixa o toque no botão mais rápido.
   useEffect(() => {
@@ -106,17 +49,22 @@ export function useLigacao() {
       setFase(proximaFase);
       setDados(null);
       setRtm(null);
+      ocupado.current = false;
       if (dados) void fecharNoServidor(dados.conversaId, dados.agentId);
       rtm?.logout().catch(() => {});
     },
     [dados, rtm],
   );
 
-  const ligar = useCallback(async () => {
+  const ligar = useCallback(async (chamadaId?: string) => {
+    if (ocupado.current) return;
+    ocupado.current = true;
+    ultimaChamada.current = chamadaId;
     setFase('ligando');
     setMotivo(null);
     try {
       if (!(await conseguirMicrofone())) {
+        ocupado.current = false;
         setMotivo('microfone');
         setFase('erro');
         return;
@@ -124,7 +72,7 @@ export function useLigacao() {
       const token = await pedirToken();
       // O canal de mensagens precisa estar pronto antes de a conversa aparecer na tela.
       const [inicio, mensagens] = await Promise.allSettled([
-        chamarAssistente(token),
+        chamarAssistente(token, chamadaId),
         ligarRtm(token),
       ]);
       if (inicio.status !== 'fulfilled' || mensagens.status !== 'fulfilled') {
@@ -143,13 +91,27 @@ export function useLigacao() {
         ...token,
         agentId: inicio.value.agent_id,
         conversaId: inicio.value.conversa_id,
+        avatar: Boolean(inicio.value.avatar),
       });
       setFase('conversando');
     } catch (erro) {
       console.error('Não consegui ligar:', erro);
+      ocupado.current = false;
       setMotivo('conexao');
       setFase('erro');
     }
+  }, []);
+
+  /** Repete a última tentativa: a mesma ligação atendida, ou a chamada que o idoso fez. */
+  const tentarDeNovo = useCallback(
+    () => ligar(ultimaChamada.current),
+    [ligar],
+  );
+
+  /** Sai do aviso de falha e volta a esperar a próxima ligação. */
+  const voltar = useCallback(() => {
+    setMotivo(null);
+    setFase((atual) => (atual === 'erro' ? 'parada' : atual));
   }, []);
 
   const encerrar = useCallback(() => desligar('parada', null), [desligar]);
@@ -183,5 +145,16 @@ export function useLigacao() {
     return () => window.removeEventListener('pagehide', aoSair);
   }, [fase, dados]);
 
-  return { fase, motivo, dados, rtm, ligar, encerrar, falhar, renovarTokens };
+  return {
+    fase,
+    motivo,
+    dados,
+    rtm,
+    ligar,
+    tentarDeNovo,
+    voltar,
+    encerrar,
+    falhar,
+    renovarTokens,
+  };
 }

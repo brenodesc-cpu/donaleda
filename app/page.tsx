@@ -1,6 +1,7 @@
 import TelaDoIdoso from '@/components/TelaDoIdoso';
 
-// A tela que o idoso abre: um rosto, uma frase e um botão.
+// A tela do aparelho do idoso: ele espera, toca quando a assistente liga e
+// vira uma chamada de vídeo quando alguém atende.
 export default function Inicio() {
   return <TelaDoIdoso />;
 }
