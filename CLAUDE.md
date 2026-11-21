@@ -22,7 +22,7 @@ Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta
 | [conhecimento/validacao.md](conhecimento/validacao.md) | O kit das ligações com idosos de verdade e os resultados sem nome | Ao montar a validação ou o pitch |
 | [conhecimento/segundo-cerebro.md](conhecimento/segundo-cerebro.md) | O desenho do que a Dona Leda aprende da vida do idoso, como a conversa lê e grava, o que a família vê e o que o idoso controla por voz, como ficou construído e a conferência de 21/11 com os defeitos abertos | Antes de mexer nas lembranças, na instrução da conversa ou no painel da família |
 | [conhecimento/verificacao.md](conhecimento/verificacao.md) | A Dona Leda conferida contra o regulamento: regras que eliminam, nota provável por critério, as ações que mais sobem a nota e a análise do Gemini Live | Ao priorizar o que falta até a entrega |
-| [conhecimento/landing.md](conhecimento/landing.md) | O briefing da página de apresentação: quem lê, os blocos, as regras do conteúdo, as três direções e como publicar | Ao montar ou mexer na landing page |
+| [conhecimento/landing.md](conhecimento/landing.md) | O briefing da página de apresentação: quem lê, os blocos, as regras do conteúdo, a direção escolhida e como publicar | Ao montar ou mexer na landing page |
 
 Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da base no mesmo envio do código. Escreva o que vale hoje, com a data.
 
@@ -40,6 +40,7 @@ Quando uma decisão for tomada ou um fato novo aparecer, atualize o arquivo da b
 - `app/page.tsx`, `components/` e `hooks/`: o aparelho do idoso, que espera a ligação, toca, atende e mostra a chamada de vídeo.
 - `app/api/chamada/route.ts`, `lib/chamadas.ts` e `lib/relogio.ts`: as ligações que a assistente faz (hora marcada, pedido da família, segunda tentativa e aviso de não atendida).
 - `app/familia/` e `components/familia/`: o painel da família.
+- `app/landing/` e `components/landing/`: a landing page, em `/landing`. O briefing está em `conhecimento/landing.md`.
 - `app/api/invite-agent/route.ts`: começa a conversa na Agora (escuta, modelo, voz e ações).
 - `app/api/mcp/route.ts` e `lib/ferramentas.ts`: as ações que a Dona Leda faz durante a conversa (anotar, lembrar, avisar, resumir).
 - `app/api/conversa/route.ts` e `lib/regras.ts`: as regras fixas de segurança em cima de cada fala.

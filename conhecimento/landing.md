@@ -1,6 +1,6 @@
 # A landing page da Dona Leda
 
-Pedido do Breno em 21/11/2026: uma página de apresentação da Dona Leda em três direções de famílias diferentes, pra ele escolher uma, com o link pronto no fim. Este arquivo é o briefing de quem monta a página.
+Atualizado em 21/11/2026. A página mora em `/landing`. O Breno pediu três direções de famílias diferentes e escolheu a segunda, "Produto em cena", no mesmo dia. Este arquivo é o briefing de quem mexe na página.
 
 ## Quem lê e o que a página pede
 
@@ -32,24 +32,28 @@ Blocos que a página precisa ter, na ordem que cada direção achar melhor:
 - Depoimento inventado, foto de pessoa real sem autorização e logo de empresa que não é cliente ficam de fora. Nome de gente da rede de residenciais também.
 - Texto em português simples, com frase inteira e sem travessão. A marca fala com carinho e sem infantilizar (ver `marca.md`).
 
-## As três direções
+## A direção escolhida: Produto em cena
 
-As três usam a marca Gema de `marca.md`: Café e Casca, o amarelo só em área grande, Gabarito nos títulos, Atkinson Hyperlegible Next no texto e o disco de telefone como símbolo. A família de cada uma muda de verdade: estrutura, ritmo e imagem. O Breno reprova variação do mesmo esqueleto.
+A página usa a marca Gema de `marca.md`: Café e Casca, o amarelo só em área grande, Gabarito nos títulos, Atkinson Hyperlegible Next no texto e o disco de telefone como símbolo.
 
-Pontos de partida, que podem mudar depois da pesquisa nas skills:
+- **Topo, em fundo Café:** o sonho, a definição, o botão e um celular desenhado com a tela da ligação tocando. O botão Atender do desenho funciona e leva pra tela da conversa.
+- **Como funciona:** cinco passos (ela liga, a pessoa atende, o dia, os avisos, a semana). Na tela larga o celular fica parado e troca de tela conforme a pessoa rola. No celular de quem lê, cada passo traz a sua tela.
+- **A camada de cuidado:** uma aba por necessidade, com o que ela faz hoje.
+- **O dinheiro, em fundo amarelo:** a frase aprovada e duas barras, a do cuidador de 12 horas e a da Dona Leda.
+- **Depois:** confiança, residenciais, perguntas frequentes e o botão de novo.
 
-1. **Carta:** página de leitura, com letra grande, que conta uma ligação da Dona Leda de cima a baixo.
-2. **Produto em cena:** a ligação tocando na tela, com o disco girando, o botão Atender e o painel da família aparecendo conforme a pessoa rola.
-3. **Conta e prova:** os números do cuidador e do mercado na frente, com a camada em blocos, pra quem decide com planilha.
+As telas do celular desenhado repetem os textos das telas reais (`components/ChamadaTocando.tsx`, `components/familia/formatos.ts` e `lib/regras.ts`) e usam a pessoa de exemplo de `lib/exemplo.ts`, com a marca "Exemplo". Quando uma tela real mudar de texto, o desenho em `components/landing/Aparelho.tsx` muda junto.
 
-Skills de design instaladas em `~/.claude/skills/`, todas pra usar: `ui-ux-pro-max` (começar pelo `search.py --design-system`), `impeccable`, `frontend-design`, `brand`, `design-system`, `theme-factory`, `web-design-guidelines`, `apple-design` e `frontend-project-style`.
+As outras duas direções ficaram no histórico do repositório, na gravação "Landing page: três direções pra escolha". A Carta era uma página de leitura que contava uma ligação de cima a baixo, e a Conta e prova punha os números do cuidador e do país na frente, com a camada em tabela.
+
+**Em aberto, com o Breno:** a página inicial `/` continua sendo o aparelho do idoso, porque o aplicativo e os celulares já ligados a um idoso abrem nesse endereço. Falta decidir se quem chega em `/` sem aparelho ligado passa a ver a landing.
+
+Skills de design instaladas em `~/.claude/skills/`: `ui-ux-pro-max`, `impeccable`, `frontend-design`, `brand`, `design-system`, `theme-factory`, `web-design-guidelines`, `apple-design` e `frontend-project-style`.
 
 ## Onde gravar e como publicar
 
-- **Rotas:** `/landing/1`, `/landing/2` e `/landing/3`, e `/landing` com as três lado a lado pra escolher. A página inicial `/` é o aparelho do idoso e fica como está até o Breno escolher uma direção.
-- **Arquivos:** `app/landing/` e `components/landing/`. As telas do idoso, o painel da família e as rotas de API pertencem a outras conversas.
+- **Rotas:** `/landing`. Os endereços antigos `/landing/1`, `/landing/2` e `/landing/3` levam pra ela. A página inicial `/` é o aparelho do idoso.
+- **Arquivos:** `app/landing/` e `components/landing/`. O texto fica todo em `components/landing/conteudo.ts`. As telas do idoso, o painel da família e as rotas de API pertencem a outras conversas.
 - **Cópia de trabalho:** uma pasta separada (`git worktree add ~/dev/lia-landing`), com o `node_modules` como link pro de `~/dev/lia`. O envio é `git push origin HEAD:main`, logo depois de buscar o `origin/main` e refazer a base.
 - **Conferência:** `next build --webpack` e `next start`, porque o `next dev` na cópia sai sem estilo. Olhar no celular (375 de largura) e no computador.
 - **Publicação (regra de 21/11, 14h20):** quem publica na Vercel é só a conversa "Servidor, voz e banco". A conversa da landing grava no GitHub e pede a publicação a ela por mensagem, sem rodar `vercel deploy`. Publicação feita de outra cópia pode tirar do ar o trabalho de outra conversa.
-
-A entrega está pronta com as três direções gravadas no `main`, cada uma inteira e funcionando no celular, a publicação pedida à conversa do servidor e o link de `/landing` mandado ao Breno depois de aberto e conferido, com uma linha sobre cada direção e a recomendação de qual seguir.
