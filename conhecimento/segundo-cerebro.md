@@ -1,12 +1,32 @@
 # O segundo cérebro do idoso
 
-Desenho de 21/11/2026, pra aprovação do Breno. Nada disto foi construído ainda. A meta dele é a Dona Leda ser o Jarvis do idoso: saber da vida da pessoa, responder quando ela pergunta e lembrar por ela.
+Desenho de 21/11/2026, aprovado pelo Breno e construído no mesmo dia pela conversa "Servidor, voz e banco" (gravações b07a998 e dceb999, no ar). A meta dele é a Dona Leda ser o Jarvis do idoso: saber da vida da pessoa, responder quando ela pergunta e lembrar por ela.
 
-## Resumo pra decidir
+## Como ficou construído
+
+Duas mudanças em relação ao desenho, feitas na construção:
+- A parte fixa do bloco traz os compromissos de ontem até 14 dias à frente (até 6), pra "quando é a minha consulta?" ter resposta sem busca.
+- A recusa de ordem e de número longo ficou em `lib/memoria.ts` (`motivoDeRecusa`), fora de `lib/regras.ts`, pra não esbarrar no trabalho da conversa de segurança.
+
+### Conferência de 21/11, 14h20
+
+Feita com a versão publicada, a dona Helena de exemplo e o Gemini Live do modo Gemini (`gemini-3.8-live`) por texto, com as ações rodando de verdade numa ficha de teste, fora do banco.
+
+- **As cinco perguntas: cinco certas, nenhuma invenção.** Consulta (quinta, 26/11, às 14h, com o doutor Renato, e disse que foi a Marina quem contou), neto (Pedro), remédio de hoje (disse que não sabe, porque a idosa ainda não tinha contado), chave da casa (a vizinha Zefa) e "o que você sabe de mim" (quatro frases, sem ler lista e sem o segredo).
+- **"Esquece aquilo da hidroginástica":** ela buscou, achou a lembrança 6 e apagou da ficha.
+- **Segredo no resumo:** em duas rodadas com o aluguel na conversa, o resumo não falou dele; numa delas ela não fez resumo nenhum. Essa proteção depende só da instrução.
+- **Painel:** a lembrança reservada não aparece, e a conta mostra 1. Com 212 lembranças na ficha, o bloco ficou em 44 linhas.
+- **Sem teste:** o modo de três peças (gpt-4o-mini pela Agora), porque falta uma chave da OpenAI fora da Agora.
+
+**Defeitos abertos**, que mexem em dado da pessoa e pedem uma prova de máquina no conserto:
+1. Lembrança recusada por engano: "Casou em 12/06/1965" (a data completa conta como número longo) e "Sempre que alguém da família visita, ela faz bolo" (lida como ordem pra assistente).
+2. Data dita de outro jeito se perde: "dia 26" e "26 de novembro" ficam sem data, e "sábado que vem" dito num sábado vira o próprio dia.
+
+## Resumo do desenho
 
 A Dona Leda já guarda lembranças soltas e põe as 25 mais novas na instrução de cada ligação. O desenho organiza isso em oito gavetas (pessoas, saúde, dificuldades, rotina, gostos, histórias, humor e compromissos com data), deixa o idoso perguntar sobre a própria vida, corrigir, mandar esquecer e pedir segredo, tudo por voz, e mostra à família o que ela sabe, separado por gaveta.
 
-**Recomendação:** construir no hackathon só a parte que cabe dentro da ficha que já existe, sem tabela nova, em umas 3 horas e meia da conversa "Servidor, voz e banco", depois das ações 1 e 2 da `verificacao.md`. O resto fica pra depois da entrega.
+**Decisão de 21/11:** o Breno aprovou construir no hackathon só a parte que cabe dentro da ficha que já existe, sem tabela nova. O resto fica pra depois da entrega.
 
 ## Antes de desenhar: vale a pena?
 
