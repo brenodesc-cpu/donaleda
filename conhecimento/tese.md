@@ -24,9 +24,9 @@ Primeira versão em 21/11/2026, antes das ligações das 20h. Todo número tem f
 
 - **O custo, em cinco linhas** (a conta inteira, com as fontes, está em [custos.md](custos.md)):
   - Na operação, o aparelho do idoso conversa direto com o Gemini, e a sala da Agora mantém a chamada e deixa a família entrar.
-  - No uso médio de 3 minutos e 20 segundos por dia, cada idoso custa uns R$ 26 por mês: R$ 25 de Gemini e R$ 1 de sala da Agora.
-  - Dos R$ 129,90 saem R$ 24,50 de imposto e cartão, e sobram R$ 79 por família. Se a compressão e as instruções curtas renderem o esperado, sobram R$ 89, ainda sem medida.
-  - Os custos fixos, site e banco, somam R$ 265 por mês e se pagam com 4 famílias. A família que usa os 10 minutos todo dia dá uns R$ 16 de prejuízo, e uma família no uso médio cobre até 5 dessas.
+  - No uso médio de 3 minutos e 20 segundos por dia, cada idoso custa uns R$ 38 por mês, medido numa ligação de teste no modo direto: R$ 37 de Gemini e R$ 1 de sala da Agora.
+  - Dos R$ 129,90 saem R$ 24,50 de imposto e cartão, e sobram R$ 67 por família. Tirando da ligação duas ações que podem ficar pra depois, o Gemini cairia pra uns R$ 25, ainda sem medida.
+  - Os custos fixos, site e banco, somam R$ 265 por mês e se pagam com 4 famílias. A família que usa os 10 minutos todo dia dá uns R$ 13 de prejuízo, e uma família no uso médio cobre até 5 dessas.
   - O modo direto ainda está em construção. O protótipo roda hoje no motor de conversa da Agora, que custa R$ 59 a mais por idoso.
 - **O que a família já paga por algo parecido:** o botão de emergência custa de R$ 189 a 249 por mês (Tecnosenior, conferido em 21/11). Nos EUA, a ligação diária da CheckWellCall custa US$ 29,99, uns R$ 177. O cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 (Cidesp, maio de 2026).
 - **As respostas de preço que temos:** uma só. Uma mentora com os pais morando longe disse "eu investiria até R$ 500" por mês (21/11, `entrevistas.md`). As ligações das 20h trazem mais.
