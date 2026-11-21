@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowDown, ArrowRight, Bell, CalendarClock, ClipboardList, Phone, ShieldCheck } from 'lucide-react';
+import { ArrowDown, ArrowRight, Bell, CalendarClock, ChevronDown, ClipboardList, Phone, ShieldCheck } from 'lucide-react';
 import { Logo } from '@/components/marca/Logo';
 import { Rosto } from '@/components/Rosto';
 import { Comparacao } from './Comparacao';
@@ -16,6 +16,7 @@ const secoes = [
   { id: 'concorrencia', nome: 'Concorrência' },
   { id: 'diferenciais', nome: 'Diferenciais' },
   { id: 'validacao', nome: 'Validação' },
+  { id: 'faq', nome: 'Perguntas frequentes' },
 ];
 
 const diferenciais = [
@@ -40,6 +41,25 @@ const metricas = [
   ['Chamadas entregues e atendidas', 'Medir quantas chamadas tocam no aparelho e quantas viram conversa.'],
   ['Adesão ao longo do tempo', 'Observar se a pessoa quer continuar recebendo ligações depois da primeira semana.'],
   ['Valor para a família', 'Entender se a ficha ou um aviso motivou contato e quanto a família pagaria pelo acompanhamento.'],
+];
+
+const perguntasFrequentes = [
+  {
+    pergunta: 'Por que uma família pagaria pela Dona Leda?',
+    resposta: 'Quem mora longe costuma se perguntar se a mãe almoçou, dormiu bem ou passou o dia sem conversar com alguém. E nem sempre dá para ligar na hora certa. A Dona Leda liga no horário combinado e reúne o que a pessoa contou em uma ficha no painel. Assim, a família tem assunto para puxar na próxima conversa e consegue perceber quando vale ligar mais cedo.',
+  },
+  {
+    pergunta: 'Por que uma ILPI teria interesse em contratar ou indicar a Dona Leda?',
+    resposta: 'Uma instituição de longa permanência para pessoas idosas (ILPI) recebe famílias que ainda estão decidindo como cuidar de alguém que mora em casa. Ao indicar a Dona Leda, a instituição oferece a essas famílias uma forma de acompanhar a rotina enquanto decidem os próximos passos. Para uma ILPI que queira usar o produto com moradores, a hipótese é reunir relatos do dia em um painel para orientar o acompanhamento da equipe. Hoje, o foco comercial é a assinatura familiar, com a ILPI como parceira de indicação. A contratação pela instituição ainda é uma hipótese a testar.',
+  },
+  {
+    pergunta: 'O que acontece se a pessoa não atender?',
+    resposta: 'A Dona Leda tenta ligar novamente depois de três minutos. Se a segunda chamada também ficar sem resposta, o painel registra um aviso para a família decidir se deve ligar ou pedir a alguém que passe por lá. Em uma emergência, acione o serviço de emergência.',
+  },
+  {
+    pergunta: 'Quem usa e o que é preciso para começar?',
+    resposta: 'Nesta versão, o foco é a pessoa idosa que mora sozinha, quer receber as ligações e consegue conversar com a assistente. Ela precisa de um celular ou tablet compatível com internet. A família prepara o aparelho, combina o horário com a pessoa e consulta os relatos no painel.',
+  },
 ];
 
 export default function PaginaDeInvestidores() {
@@ -139,6 +159,28 @@ export default function PaginaDeInvestidores() {
                 </li>
               ))}
             </ul>
+          </div>
+        </section>
+
+        <section id="faq" aria-labelledby="titulo-faq" className="scroll-mt-4 border-t border-border bg-card">
+          <div className="mx-auto grid max-w-7xl gap-6 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[1fr_2fr] lg:gap-12">
+            <div>
+              <h2 id="titulo-faq" className="text-3xl font-bold tracking-tight sm:text-5xl">Perguntas frequentes</h2>
+              <Link href="/telas" className="mt-4 inline-flex items-center gap-2 py-2 text-base font-bold text-primary underline underline-offset-4">
+                Ver demonstração <ArrowRight aria-hidden size={18} />
+              </Link>
+            </div>
+            <div className="divide-y divide-border rounded-2xl border border-border bg-background">
+              {perguntasFrequentes.map(({ pergunta, resposta }) => (
+                <details key={pergunta} className="group rounded-2xl">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 rounded-2xl px-4 py-4 font-bold hover:text-primary focus-visible:outline focus-visible:outline-ring [&::-webkit-details-marker]:hidden sm:px-6">
+                    {pergunta}
+                    <ChevronDown aria-hidden size={20} className="shrink-0 text-primary group-open:rotate-180" />
+                  </summary>
+                  <p className="px-4 pb-5 text-base leading-relaxed text-muted-foreground sm:px-6">{resposta}</p>
+                </details>
+              ))}
+            </div>
           </div>
         </section>
       </main>
