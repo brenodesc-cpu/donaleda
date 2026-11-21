@@ -27,6 +27,22 @@ O que define quem compra é a frequência com que a pessoa vê os pais (ajuste d
 
 Isso vem de uma entrevista com uma família, da conversa com a primeira casa parceira e do retorno dos mentores. A idade de 75 a 90 anos e o susto como o que faz comprar são hipóteses, ainda sem dado. As ligações de hoje à noite confirmam ou derrubam o perfil, principalmente o susto recente.
 
+### Por que agora
+
+**O Brasil envelhece rápido.**
+- Em 2022 o país tinha 32,1 milhões de pessoas com 60 anos ou mais, 15,6% da população. Em 2010 eram 20,6 milhões, 10,8%: uma alta de 56% em 12 anos (IBGE, Censo 2022, divulgado em 1/11/2023).
+- Em 2070, 37,8% dos brasileiros terão 60 anos ou mais, 75,3 milhões de pessoas (IBGE, Projeções da População, 22/8/2024).
+- O ano em que os idosos passam o número de crianças de até 14 anos aparece como 2029 em matérias sobre a projeção, e a tabela do IBGE com esse ano não foi conferida. Fica fora do slide até ser conferida.
+- 5,66 milhões de pessoas de 60 anos ou mais moram sozinhas (IBGE, Censo 2022).
+
+**O cuidado custa caro.**
+- Cuidador de 12 horas por dia: de R$ 2.800 a 4.500 por mês como autônomo, e de R$ 2.260 a 3.200 de custo total com carteira (Cidesp, artigo de 18/5/2026). O próprio artigo diz que adaptou os valores de outras fontes, sem pesquisa própria.
+- Casa de repouso: a faixa de R$ 6 mil a 11 mil por mês que a base usava não teve fonte encontrada em 21/11. O número com fonte é o de Belo Horizonte e região: mensalidade média de R$ 5.955, entre R$ 3,5 mil e 13,5 mil, numa pesquisa do site Mercado Mineiro com 36 casas em agosto de 2026 (Diário do Comércio, 17/8/2026). É um número regional.
+
+**O que não achamos:** um número oficial de quantos idosos que moram sozinhos têm filhos morando em outra casa. O IBGE liga o aumento de idosos sozinhos à saída dos filhos de casa e à viuvez, sem dar a proporção. Pra medir, os microdados do ELSI-Brasil, o estudo da Fiocruz sobre envelhecimento, ou da PNAD Contínua.
+
+Fontes: [Censo 2022, pessoas de 60 anos ou mais](https://www.ibge.gov.br/novo-portal-destaques/38244-ibge-divulga-hoje-em-1-de-novembro-o-texto-censo-demografico-2022-populacao-por-idade-e-sexo-pessoas-de-60-anos-ou-mais-de-idade.html), [Projeções da População 2024](https://agenciagov.ebc.com.br/noticias/202408/populacao-do-pais-vai-parar-de-crescer-em-2041), [Cidesp](https://cidesp.com.br/conteudo/tabela-de-preco-de-cuidador-de-idoso-2026-guia-completo), [casas de repouso em BH](https://diariodocomercio.com.br/?p=619105).
+
 ### 1. O tamanho do mercado, em degraus
 
 | Degrau | Pessoas | Por ano, a R$ 129,90 por mês | De onde vem |
