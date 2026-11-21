@@ -50,6 +50,48 @@ Falta decidir quem atende:
 
 Hoje a assistente avisa a família pelo painel e manda ligar pro 192. O passo seguinte é pôr o familiar dentro da mesma chamada da Agora, com voz e vídeo.
 
+Virou decisão em 21/11, à tarde: quem entra é a família, pelo painel (ver `decisoes.md`). O desenho foi passado à conversa "Servidor, voz e banco", que constrói. Em uma frase: num aviso urgente durante a ligação, ou quando a pessoa pede, o painel ganha o botão "Entrar na ligação"; a Dona Leda diz à pessoa, com frase fixa, que avisou a filha e que ela entra se puder; quando a filha entra, a Dona Leda anuncia e sai da sala; se ninguém entra em 90 segundos, ela diz que o aviso ficou com a filha e lembra do 192. Nenhuma frase promete que alguém está a caminho.
+
+## Conversa com mentores da tarde (21/11/2026)
+
+Uns 15 minutos com mentores do evento. A transcrição não traz os nomes. Um deles tentou fazer, oito anos atrás, um relógio de ajuda com o Pebble.
+
+O que eles levantaram:
+
+- Muito idoso não gosta de celular nem de computador e atende ligação sem problema ("meu pai é engenheiro e não gosta de celular, mas ligação pra ele é tranquilo").
+- A banca vai perguntar de hardware e vai olhar como o time usa a Agora de um jeito diferente. O conselho foi focar no principal e em como escala.
+- Outro time ouviu a tese e decidiu fazer a mesma coisa. Falta um diferencial claro.
+- Alguém pode se passar pela Dona Leda. Pensar numa verificação na primeira conversa.
+
+Seis opções foram comparadas pelo que mudam pro idoso, pelo peso na nota e pelo prazo de 12h de domingo. O Breno escolheu mostrar a família entrando na ligação (item 4). As três abaixo ficam como próximos passos no pitch.
+
+### 5. Ligar pro telefone comum, com a palavra da família
+
+- **O que é:** a Dona Leda liga pro telefone fixo ou celular comum do idoso, sem app, e fala no começo de toda ligação uma palavra que a família escolheu no cadastro. Assim ele sabe que é ela antes de conversar.
+- **A Agora faz isso:** o endpoint de ligação dela (`POST /api/conversational-ai-agent/v2/projects/{appid}/call`) disca um número e aceita a mesma configuração da assistente que o app já manda. O número sai de uma linha de telefone pela internet (tronco SIP) da Twilio, o único provedor que a página da Agora cita, e o Brasil (+55) está entre os países atendidos. Fontes: docs.agora.io, páginas de telefonia e de SIP trunk, lidas em 21/11.
+- **Por que escala:** os maiores números lá fora estão no telefone que o idoso já tem (CareCall, 30 mil idosos na Coreia) e no botão simples (Medical Guardian, 600 mil famílias). Aparelho próprio de conversa fica em 14 mil (Komp e Hyodol). Ver `concorrentes.md`.
+- **Por que a palavra:** 16% das vítimas de golpe digital em 2024 tinham 60 anos ou mais (DataSenado), e uma ligação de número desconhecido é o caminho do golpista.
+- **O que falta:** conta paga na Twilio (preço do número e do minuto pro Brasil não conferido); número brasileiro, que pede documento da empresa; e levar as regras fixas de segurança pro servidor, porque pelo telefone não tem navegador mandando as falas. O Gemini Live pelo telefone não foi confirmado. Umas 3 a 4 horas de código.
+
+### 6. Pulseira de queda
+
+- O mentor citou um acelerômetro de uns R$ 20 que percebe a queda e avisa. Montar em 24h é difícil, nas palavras dele.
+- Na Dona Leda, a pulseira só dispara a ligação: percebe o tombo, e a Dona Leda liga na hora pra perguntar como a pessoa está.
+- No Brasil já vendem pulseira de queda com central: TeleHelp, Tecnosenior, VitalisTec (R$ 99,90 por mês) e Helpbox. Ver `concorrentes.md`.
+- O acelerômetro do próprio celular faz a mesma cena sem peça, declarando que ele faz o papel da pulseira. Só funciona com o app aberto, a tela ligada e o celular no corpo, e o idoso que não gosta de celular não anda com ele. No iPhone, o sensor pede um toque pra liberar.
+- Relógio no estilo do Pebble, que o mentor citou, fica no mesmo lugar da pulseira.
+
+### 7. Caixinha de voz com ESP32
+
+- A Agora publica um exemplo oficial de conversa por voz em ESP32 (a placa barata com Wi-Fi que o mentor citou): `github.com/AgoraIO-Conversational-AI/esp32-client`, licença MIT, pras placas Seeed ReSpeaker XVF3800 com XIAO ESP32-S3 e Espressif ESP32-S3-Korvo-2 V3. O guia da Seeed foi atualizado em 04/02/2026.
+- No exemplo, a conversa começa quando a pessoa aperta um botão da placa. Na Dona Leda, ela teria que começar sozinha, na hora marcada.
+- A placa da Seeed custa US$ 54,50 lá fora, sem frete nem imposto. Em 21/11 nenhuma loja no Brasil apareceu vendendo. O kit de aparelho da própria Agora (placa R1, chip BK7258) não diz onde comprar.
+- Jibo, Moxie, Anki e Mabu fecharam. Pela pesquisa em `concorrentes.md`, fabricar aparelho antes de provar seis meses de uso é o erro a evitar.
+
+### Hardware, na hora das perguntas da banca
+
+A Dona Leda começa pelo aparelho que o idoso ou o residencial já tem, e o telefone comum vem logo depois. A pulseira e a caixinha entram quando o residencial pedir, e só disparam a ligação, porque a conversa, a ficha e o aviso já existem. A caixinha roda no exemplo de ESP32 que a própria Agora publica.
+
 ## Como usar isso no pitch
 
 Na parte de limites e próximos passos, que vale 10% da nota: o toque no botão é o limite de hoje, e o aparelho próprio é a segunda fase.
