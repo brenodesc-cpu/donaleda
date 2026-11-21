@@ -44,7 +44,7 @@ Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 ## 2. Roteiro de quem acompanha
 
 **Antes (10 minutos)**
-1. No painel da família, cadastre o idoso do jeito que ele é chamado ("Dona Maria", "Seu João") e quem contratou ("a neta Ana"). A Dona Leda usa isso na primeira frase.
+1. No painel da família, que você abre no seu celular ou computador (donaleda.vercel.app, "Sou da família"), cadastre o idoso do jeito que ele é chamado ("Dona Maria", "Seu João") e quem contratou ("a neta Ana"). A Dona Leda usa isso na primeira frase.
 2. Deixe "atender sozinho" desligado: na primeira ligação o celular pode bloquear som e microfone sem um toque na tela.
 3. Faça uma ligação de teste com você mesmo.
 4. Faça o pedido de permissão.

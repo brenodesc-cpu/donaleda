@@ -25,6 +25,13 @@ Roteiro de 21/11/2026, pra rodar até as 17h. Ele acha, antes do vídeo e do pit
 - **Minutos:** cada ligação gasta minutos da Agora (300 grátis por conta).
 - **Limite de uso do Gemini:** se a conversa no Gemini cair ou travar por limite de uso do Google, a dupla anota "limite de uso" e o horário na linha da situação e liga de novo. Na dúvida, anote "limite de uso?" com o horário, e quem cuida do servidor confere depois no registro da ligação.
 
+## Conferência das telas (2 minutos, antes da situação 1)
+
+Ninguém olhou estas duas telas com a conta entrada depois da revisão de 15h05. Cada dupla confere as duas e anota o que estiver errado (foto serve).
+
+- **Celular, tela de espera do idoso:** só o disco, o horário e o botão "Ligar pra Dona Leda". Não pode ter o link "Painel da família", nem texto cortado, nem letra pequena.
+- **Notebook, painel da família:** nas lembranças, o "Ensinar algo" fica logo abaixo do título.
+
 ## As doze situações
 
 ### 1. O que ela sabe da dona Helena (rode primeiro)
