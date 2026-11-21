@@ -76,7 +76,8 @@ Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 - Pra família: "Quanto você pagaria por mês por isso?" Anote o número que a pessoa disser, sem falar número nenhum antes.
 - Pra família, logo depois: "Pagaria R$ 129,90 por mês por uma ligação por dia, de até 10 minutos, com os avisos no painel?" Anote o sim ou o não.
 - Pra família: "Quem decide uma compra dessas na família?"
-- Pros dois: "Posso pedir pra Dona Leda ligar de novo amanhã, domingo, às 9h?" Só marque com o sim dos dois.
+- Pros dois: "Posso pedir pra Dona Leda ligar de novo amanhã, domingo, às 9h?" Anote o sim ou o não, e só marque a ligação com o sim dos dois.
+- Pra família, por último: "Quer começar o teste grátis, com a Dona Leda ligando todo dia?" Anote o que a família fez: aceitou começar o teste grátis, deixou o contato ou só elogiou.
 
 **Domingo às 9h (a segunda ligação)**
 - A ligação das 9h já vem marcada no app (é o horário padrão; confira em `/familia/ajustes`).
@@ -92,21 +93,23 @@ A Stephanie preenche uma linha por idoso. Os combinados pra contar igual:
 - **Chegou aos 10 min?:** "sim" quando a ligação bateu o limite de 10 minutos e foi cortada.
 - **Precisou de ajuda:** em que passo (abrir, código, microfone, atender, durante a conversa).
 
-| Código | Idade | Mora sozinho? | Atendeu? | Minutos conversados | Chegou aos 10 min? | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | O que usam hoje | Horas por semana checando | Pagaria por mês, sem ouvir número (R$) | Pagaria R$ 129,90? | Quem decide a compra | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| A1 | | | | | | | | | | | | | | | | | | | |
-| A2 | | | | | | | | | | | | | | | | | | | |
-| A3 | | | | | | | | | | | | | | | | | | | |
-| A4 | | | | | | | | | | | | | | | | | | | |
-| A5 | | | | | | | | | | | | | | | | | | | |
+| Código | Idade | Mora sozinho? | Atendeu? | Minutos conversados | Chegou aos 10 min? | Precisou de ajuda? Onde | Atenderia amanhã? | O que confundiu | O que gostou | Família usaria? | O que usam hoje | Horas por semana checando | Pagaria por mês, sem ouvir número (R$) | Pagaria R$ 129,90? | Quem decide a compra | Topou a ligação das 9h? | O que a família fez | Domingo 9h: atendeu? | Domingo: minutos | Domingo: ela lembrou? | Falha técnica |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| A1 | | | | | | | | | | | | | | | | | | | | | |
+| A2 | | | | | | | | | | | | | | | | | | | | | |
+| A3 | | | | | | | | | | | | | | | | | | | | | |
+| A4 | | | | | | | | | | | | | | | | | | | | | |
+| A5 | | | | | | | | | | | | | | | | | | | | | |
 
 Pra colar numa planilha:
 
 ```
-Código,Idade,Mora sozinho?,Atendeu?,Minutos conversados,Chegou aos 10 min?,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,O que usam hoje,Horas por semana checando,Pagaria por mês sem ouvir número (R$),"Pagaria R$ 129,90?",Quem decide a compra,Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
+Código,Idade,Mora sozinho?,Atendeu?,Minutos conversados,Chegou aos 10 min?,Precisou de ajuda? Onde,Atenderia amanhã?,O que confundiu,O que gostou,Família usaria?,O que usam hoje,Horas por semana checando,Pagaria por mês sem ouvir número (R$),"Pagaria R$ 129,90?",Quem decide a compra,Topou a ligação das 9h?,O que a família fez,Domingo 9h: atendeu?,Domingo: minutos,Domingo: ela lembrou?,Falha técnica
 ```
 
 ## 4. O que vai pro pitch
+
+O número que conta é quem atendeu de novo no domingo às 9h e quantas famílias aceitaram começar o teste grátis. Elogio entra separado, contado à parte.
 
 - Quantos idosos participaram e a faixa de idade.
 - Quantos atenderam, de quantas ligações que chegaram.
@@ -160,6 +163,10 @@ Os mentores mandaram por escrito, depois da rodada de 21/11, o que falta provar.
 - **Voz não serve de senha.** Alguém pode imitar a voz ou usar o celular desbloqueado, então a identidade e as permissões do familiar são conferidas fora da conversa.
 - **Dado de saúde pede um cuidado próprio na LGPD** (artigos 7, 11 e 46) antes de um piloto de verdade: finalidade, base legal, por quanto tempo guarda, quem acessa e quais fornecedores. O sim da família sozinho não resolve.
 
+- **Do segundo retorno escrito (Terron, à noite):**
+  - Frequência de contato e utilidade do contato se medem separado: falar todo dia só vale se a conversa ajuda alguém.
+  - Elogio, disposição pra testar e uso repetido são três sinais diferentes, e cada um vai numa coluna da planilha.
+  - Facilidade de uso se testa com a pessoa: a idade sozinha não diz se ela consegue usar.
 - **Da segunda conversa com um mentor, à noite:** os jurados podem testar por um QR Code que faz a Dona Leda ligar pra pessoa (hoje isso exige cadastrar um idoso antes). Sobre a Agora no pitch, na dúvida se pega mal dizer que a operação sai dela ao crescer, a orientação foi mudar o jeito de apresentar.
 
 O texto inteiro está com o Breno, fora do GitHub.
