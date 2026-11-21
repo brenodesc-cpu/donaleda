@@ -97,3 +97,63 @@ describe('pós-processamento automático da conversa', () => {
     expect(conversa2.resumo).toContain('Conversou sobre o dia');
   });
 });
+
+describe('pós-conversa: ajustes de 21/11', () => {
+  it('não repete o aviso da regra que já saiu nesta conversa', async () => {
+    const { baseDeExemplo } = await import('@/lib/exemplo');
+    const { abrirConversa, criarAlerta } = await import('@/lib/dados');
+    const { avaliarFala } = await import('@/lib/regras');
+    const { aplicarExtracaoNaBase } = await import('@/lib/posConversa');
+    const agora = new Date('2026-11-21T18:00:00.000Z');
+    const base = baseDeExemplo(agora, 'id');
+    const conversa = abrirConversa(base, agora);
+    const regra = avaliarFala('Eu caí no banheiro')!;
+    criarAlerta(base, { ...regra, origem: 'regra' }, new Date(agora.getTime() + 60_000));
+    aplicarExtracaoNaBase(base, conversa.id, [{ quem: 'idoso', texto: 'Eu caí no banheiro hoje cedo e o joelho dói' }], {}, new Date(agora.getTime() + 8 * 60_000));
+    expect(base.alertas.filter((a) => a.tipo === 'emergencia')).toHaveLength(1);
+  });
+
+  it('lembrança extraída que cita o segredo da pessoa fica reservada', async () => {
+    const { baseDeExemplo } = await import('@/lib/exemplo');
+    const { abrirConversa } = await import('@/lib/dados');
+    const { aplicarExtracaoNaBase } = await import('@/lib/posConversa');
+    const agora = new Date('2026-11-21T18:00:00.000Z');
+    const base = baseDeExemplo(agora, 'id');
+    const conversa = abrirConversa(base, agora);
+    aplicarExtracaoNaBase(base, conversa.id, [{ quem: 'idoso', texto: 'O aluguel atrasou de novo' }], {
+      lembrancas: [{ texto: 'O aluguel atrasou de novo este mês.', categoria: 'humor' }],
+    }, agora);
+    expect(base.lembrancas.find((l) => /aluguel atrasou/.test(l.texto))?.reservada).toBe(true);
+  });
+});
+
+describe('pós-conversa: dor inventada e segredo pedido', () => {
+  it('dor sem número dito pelo idoso não entra; com número, entra', async () => {
+    const { baseDeExemplo } = await import('@/lib/exemplo');
+    const { abrirConversa } = await import('@/lib/dados');
+    const { aplicarExtracaoNaBase } = await import('@/lib/posConversa');
+    const agora = new Date('2026-11-21T18:00:00.000Z');
+    const semNumero = baseDeExemplo(agora, 'a');
+    const c1 = abrirConversa(semNumero, agora);
+    aplicarExtracaoNaBase(semNumero, c1.id, [{ quem: 'idoso', texto: 'O joelho doeu a noite toda.' }], { bemEstar: { dor: 10, sono: 'mal' } }, agora);
+    expect(semNumero.dias.at(-1)?.dor).toBeUndefined();
+    expect(semNumero.dias.at(-1)?.sono).toBe('mal');
+    const comNumero = baseDeExemplo(agora, 'b');
+    const c2 = abrirConversa(comNumero, agora);
+    aplicarExtracaoNaBase(comNumero, c2.id, [{ quem: 'idoso', texto: 'A dor tá uns 6 hoje.' }], { bemEstar: { dor: 6 } }, agora);
+    expect(comNumero.dias.at(-1)?.dor).toBe(6);
+  });
+
+  it('conversa com pedido de segredo deixa tudo o que foi extraído reservado', async () => {
+    const { baseDeExemplo } = await import('@/lib/exemplo');
+    const { abrirConversa } = await import('@/lib/dados');
+    const { aplicarExtracaoNaBase } = await import('@/lib/posConversa');
+    const agora = new Date('2026-11-21T18:00:00.000Z');
+    const base = baseDeExemplo(agora, 'id');
+    const conversa = abrirConversa(base, agora);
+    aplicarExtracaoNaBase(base, conversa.id, [{ quem: 'idoso', texto: 'Não conta pra Marina, mas tô namorando o seu Joaquim.' }], {
+      lembrancas: [{ texto: 'Está namorando o seu Joaquim.', categoria: 'pessoa', sobre: 'seu Joaquim' }],
+    }, agora);
+    expect(base.lembrancas.find((l) => /Joaquim/.test(l.texto))?.reservada).toBe(true);
+  });
+});

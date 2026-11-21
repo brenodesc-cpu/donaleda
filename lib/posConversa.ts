@@ -5,8 +5,8 @@
 // e NUNCA são gravadas no banco; qualquer segredo é filtrado por resumoSemSegredo/motivoDeRecusa.
 
 import { aplicarBemEstar, criarAlerta, type BemEstar } from './dados';
-import { dataPedida, GAVETAS, guardar, horaPedida, resumoSemSegredo } from './memoria';
-import { avaliarFala } from './regras';
+import { citaSegredo, dataPedida, GAVETAS, guardar, horaPedida, resumoSemSegredo } from './memoria';
+import { avaliarFala, semAcento } from './regras';
 import type {
   Alimentacao,
   Base,
@@ -16,6 +16,12 @@ import type {
   Remedio,
   Sono,
 } from './tipos';
+
+// "não conta pra Marina", "fica entre nós", "é segredo", "não quero que ela saiba".
+const PEDIU_SEGREDO =
+  /\b(nao (conta|conte|fala|fale|diz|diga|comenta|comente) (isso |nada )?(pra|para|a|com) |fica (so )?entre (nos|a gente)|e segredo|segredo nosso|nao (quero|queria) que (ela|ele|eles|elas|a \w+|o \w+) saiba)/;
+// Um número de 0 a 10 dito pelo idoso, em algarismo ou por extenso.
+const DISSE_UM_NUMERO = /\b(10|[0-9]|zero|um|uma|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez)\b/;
 
 const SONO: readonly Sono[] = ['bem', 'mais_ou_menos', 'mal'];
 const ALIMENTACAO: readonly Alimentacao[] = ['comeu_bem', 'comeu_pouco', 'nao_comeu'];
@@ -137,19 +143,35 @@ export function aplicarExtracaoNaBase(
     conversa.falasDoIdoso = falasDoIdoso.length;
     aplicouAlgo = true;
   }
+  // A fala já passou pela regra durante a ligação, em pedaços. Aqui ela só avisa o que
+  // ainda não tinha avisado nesta conversa, pra família não receber a mesma queda duas vezes.
+  const desde = conversa?.inicio ?? agora.toISOString();
+  const jaAvisado = (tipo: string) =>
+    base.alertas.some((a) => a.origem === 'regra' && a.tipo === tipo && a.criadoEm >= desde);
   for (const fala of falasDoIdoso) {
     const alerta = avaliarFala(fala.texto);
-    if (alerta) {
+    if (alerta && !jaAvisado(alerta.tipo)) {
       criarAlerta(base, { ...alerta, origem: 'regra' }, agora);
       aplicouAlgo = true;
     }
   }
 
   // 2. Aplica campos de bem-estar extraídos (sem sobrescrever dados já gravados hoje).
+  // A nota da dor só vale se o idoso disse um número; o modelo inventava "dor 10".
   if (extracao.bemEstar) {
-    aplicarBemEstar(base, extracao.bemEstar, agora);
-    aplicouAlgo = true;
+    const bemEstar = { ...extracao.bemEstar };
+    if (bemEstar.dor !== undefined && !falasDoIdoso.some((f) => DISSE_UM_NUMERO.test(semAcento(f.texto)))) {
+      delete bemEstar.dor;
+    }
+    if (Object.values(bemEstar).some((v) => v !== undefined)) {
+      aplicarBemEstar(base, bemEstar, agora);
+      aplicouAlgo = true;
+    }
   }
+
+  // Se o idoso pediu segredo em algum momento da conversa, tudo o que foi extraído dela
+  // fica reservado: o modelo nem sempre marca qual lembrança era o segredo.
+  const pediuSegredo = falasDoIdoso.some((f) => PEDIU_SEGREDO.test(semAcento(f.texto)));
 
   // 3. Guarda novas lembranças relevantes (passando por motivoDeRecusa e deduplicação).
   for (const item of extracao.lembrancas ?? []) {
@@ -161,7 +183,8 @@ export function aplicarExtracaoNaBase(
         sobre: item.sobre,
         data: dataPedida(item.data, agora),
         hora: horaPedida(item.hora),
-        reservada: item.reservada,
+        // O que cita um assunto que a pessoa já pediu segredo fica reservado também.
+        reservada: item.reservada || pediuSegredo || citaSegredo(base, item.texto) || undefined,
         origem: 'conversa',
       },
       agora,
@@ -178,6 +201,9 @@ export function aplicarExtracaoNaBase(
 
   return { aplicouAlgo };
 }
+
+// O gemini-2.5-flash foi desligado pelo Google (404 em 21/11); o leve responde em uns 2 segundos.
+const MODELO_DA_EXTRACAO = () => process.env.LIA_MODELO_EXTRACAO?.trim() || 'gemini-3.5-flash-lite';
 
 /**
  * Chama o Gemini Flash em texto (REST API oficial, sem nova dependência) pra extrair
@@ -205,7 +231,7 @@ export async function extrairConhecimentoComIA(
     '    "sono": "bem" | "mais_ou_menos" | "mal",',
     '    "alimentacao": "comeu_bem" | "comeu_pouco" | "nao_comeu",',
     '    "remedio": "tomou" | "nao_tomou" | "nao_confirmou",',
-    '    "dor": 0..10,',
+    '    "dor": "só o número de 0 a 10 que o idoso disse; se ele não disse número, omita",',
     '    "ondeDoi": "string",',
     '    "humor": "bem" | "triste" | "ansioso" | "sozinho" | "irritado",',
     '    "saiuDeCasa": true | false,',
@@ -213,7 +239,8 @@ export async function extrairConhecimentoComIA(
     '    "observacao": "frase curta com sintoma/fato importante do dia (ex.: relatou hipoglicemia)"',
     '  },',
     '  "lembrancas": [',
-    '    { "texto": "frase em 3ª pessoa", "categoria": "pessoa|saude|dificuldade|rotina|gosto|historia|humor|compromisso", "sobre": "opcional", "data": "como dito", "hora": "como dito", "reservada": false }',
+    '    { "texto": "frase em 3ª pessoa, sem dizer quando (o dia e a hora vão em data e hora)", "categoria": "pessoa|saude|dificuldade|rotina|gosto|historia|humor|compromisso", "sobre": "opcional", "data": "como dito", "hora": "como dito", "reservada": true | false }',
+    'Se o idoso pediu pra não contar algo à família ("não conta pra...", "fica entre nós"), a lembrança daquilo leva "reservada": true.',
     '  ],',
     '  "resumo": "resumo acolhedor de 2 frases em português do Brasil para a família, omitindo qualquer assunto que o idoso pediu segredo (exceto risco/emergência)."',
     '}',
@@ -227,7 +254,7 @@ export async function extrairConhecimentoComIA(
   const timeout = setTimeout(() => controller.abort(), 8000);
   try {
     const resposta = await fetchImpl(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODELO_DA_EXTRACAO()}:generateContent`,
       {
         method: 'POST',
         headers: {
