@@ -75,7 +75,7 @@ Pesquisa de 21/11/2026, feita abrindo o site de cada empresa. Número marcado co
 | **AI Care** (SK Telecom, Coreia) | Caixa de som. O idoso começa, e pede socorro por voz | Prefeituras | 17 mil idosos e 500 resgates até maio de 2023. Numa pesquisa de 2020, 73,6% usavam todo dia, a maioria pra música |
 | **Hyodol** (Coreia) | Boneca de pano com IA. Fala primeiro, lembra remédio e avisa a equipe se não há movimento em 24 horas | Prefeituras, cerca de US$ 1.150 por boneca | 14.500 em uso em junho de 2026. Num estudo independente com 180 idosos, a depressão caiu em três meses e o efeito sumiu aos seis. Uma idosa com demência saiu de casa seguindo uma fala da boneca |
 | **ElliQ** (EUA) | Robô de mesa com tela. Fala primeiro e sugere atividade | Na prática, órgão público. Pra família, US$ 249 de taxa e mensalidade a partir de US$ 40 | 800 idosos no piloto de Nova York, 48 interações por dia. Os "95% menos solidão" saíram sem método publicado |
-| **Komp** (Noruega) | Tela com um botão. A chamada da família toca 10 segundos e abre sozinha | Família, cerca de R$ 4 mil pelo aparelho mais mensalidade | 14 mil famílias |
+| **Komp** (Noruega) | Tela com um botão. A chamada da família toca 10 segundos e abre sozinha | Família, NOK 7.995 pelo aparelho mais NOK 249 por mês | 14 mil famílias |
 | **ViewClix** (EUA) | Porta-retrato que atende sozinho os contatos aprovados | Família, US$ 179 a 269 mais US$ 9,95 por mês | Sem número |
 | **GrandPad** (EUA) | Tablet simplificado, com uma IA de conversa. O idoso começa | Família, US$ 299 mais US$ 40 por mês | Sem número |
 | **Alexa Together** (Amazon) | Socorro por voz, aviso de atividade e ajuste remoto pela Alexa | US$ 19,99 por mês | Saiu do ar. A Amazon nunca divulgou usuários nem motivo |

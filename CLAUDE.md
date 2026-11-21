@@ -14,6 +14,8 @@ Antes de começar qualquer tarefa, leia a base de conhecimento do time, na pasta
 | [conhecimento/hackathon.md](conhecimento/hackathon.md) | Regras, entregas, prazo e como a banca dá nota | Ao priorizar: o que não conta ponto fica pra depois |
 | [conhecimento/decisoes.md](conhecimento/decisoes.md) | O que o time já decidiu, com data | Antes de reabrir um assunto |
 | [conhecimento/infraestrutura.md](conhecimento/infraestrutura.md) | O que está de pé, o que falta pra virar aplicativo e a ordem | Antes de mexer em servidor, banco, login ou app |
+| [conhecimento/proposta-de-valor.md](conhecimento/proposta-de-valor.md) | A frase que a gente vende, pra quem, as camadas do problema, as premissas, os formatos e o que cortar | Antes de escrever pitch, slide, tela ou texto de venda |
+| [conhecimento/concorrentes.md](conhecimento/concorrentes.md) | Quem faz parecido no mundo e no Brasil, como cada um se vende, quem paga e o que a ciência diz | Ao comparar com outro produto ou responder a banca |
 | [conhecimento/ideias.md](conhecimento/ideias.md) | Ideias e conselhos de mentores que ainda não viraram decisão | Ao pensar no que vem depois ou montar o pitch |
 | [conhecimento/teste-de-voz.md](conhecimento/teste-de-voz.md) | O roteiro de teste da conversa por voz e as falhas achadas | Antes de mexer na voz, na escuta ou no tempo de resposta |
 | [conhecimento/validacao.md](conhecimento/validacao.md) | O kit das ligações com idosos de verdade e os resultados sem nome | Ao montar a validação ou o pitch |
