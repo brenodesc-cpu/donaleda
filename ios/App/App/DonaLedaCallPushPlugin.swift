@@ -11,7 +11,6 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
 
     private var registry: PKPushRegistry?
     private let provider: CXProvider
-    private let callController = CXCallController()
     private var activeCalls: [UUID: String] = [:]
 
     private(set) var lastVoipToken: String?
@@ -20,6 +19,7 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
 
     private static let keyAparelhoToken = "donaleda_aparelho_token"
     private static let keyServerUrl = "donaleda_server_url"
+    private static let keyCapacitorAparelho = "CapacitorStorage.donaleda:aparelho"
     private static let defaultServerUrl = "https://donaleda.vercel.app"
 
     func saveCredentials(aparelhoToken: String?, serverUrl: String?) {
@@ -33,9 +33,25 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
         }
     }
 
+    private func resolveAparelhoToken() -> String? {
+        let defaults = UserDefaults.standard
+        if let token = defaults.string(forKey: Self.keyAparelhoToken)?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !token.isEmpty {
+            return token
+        }
+        if let raw = defaults.string(forKey: Self.keyCapacitorAparelho),
+           let data = raw.data(using: .utf8),
+           let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let token = (obj["token"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !token.isEmpty {
+            return token
+        }
+        return nil
+    }
+
     func sendCallResponseInBackground(acao: String, chamadaId: String) {
         let defaults = UserDefaults.standard
-        guard let token = defaults.string(forKey: Self.keyAparelhoToken), !token.isEmpty else { return }
+        guard let token = resolveAparelhoToken() else { return }
         let baseUrl = defaults.string(forKey: Self.keyServerUrl) ?? Self.defaultServerUrl
         guard let url = URL(string: "\(baseUrl)/api/chamada") else { return }
 
@@ -50,7 +66,7 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
     }
 
     private override init() {
-        let config = CXProviderConfiguration(localizedName: "Dona Leda")
+        let config = CXProviderConfiguration()
         config.supportsVideo = false
         config.maximumCallsPerCallGroup = 1
         config.maximumCallGroups = 1
