@@ -1,13 +1,16 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import type { Base, InicioDaConversa } from '@/lib/tipos';
 import {
+  aberturaDaRetomada,
   avancarFala,
   base64ParaSom,
   calcularCompressao,
   criarReamostrador,
   custoEmDolar,
   custoPorMinuto,
+  decidirNaMudez,
   estimarTokens,
+  falaAberta,
   FALA_EM_ANDAMENTO,
   FALA_INTERROMPIDA,
   FALA_TERMINADA,
@@ -307,6 +310,93 @@ describe('o aviso de que a fala acabou', () => {
   it('espera mais quando o silêncio combinado é maior', () => {
     expect(rodar([...voz(10), ...silencio(20)], 1200)).toEqual([]);
     expect(rodar([...voz(10), ...silencio(40)], 1200)).toHaveLength(1);
+  });
+});
+
+describe('a ligação que fica muda', () => {
+  const caso = (mudou: Partial<Parameters<typeof decidirNaMudez>[0]>) =>
+    decidirNaMudez({ esperandoHaMs: 5000, servidorOuviu: true, falasSemReacao: 0, religadas: 0, podeReligar: true, ...mudou });
+
+  it('espera 4,5 segundos antes de fazer qualquer coisa', () => {
+    expect(caso({ esperandoHaMs: 4000 })).toBe('nada');
+    expect(caso({ esperandoHaMs: 4500 })).toBe('religar');
+  });
+
+  it('religa quando o Google marcou a voz e calou, que é o defeito medido em 21/11', () => {
+    expect(caso({})).toBe('religar');
+    expect(caso({ religadas: 1 })).toBe('religar');
+  });
+
+  it('não religa por um barulho só: a primeira fala sem reação nenhuma é esquecida, a segunda religa', () => {
+    expect(caso({ servidorOuviu: false })).toBe('esquecer');
+    expect(caso({ servidorOuviu: false, falasSemReacao: 1 })).toBe('religar');
+  });
+
+  it('desiste depois de religar três vezes na mesma ligação', () => {
+    expect(caso({ religadas: 2 })).toBe('religar');
+    expect(caso({ religadas: 3 })).toBe('desistir');
+  });
+
+  it('sem rota de passe novo (demonstração pública) nunca religa nem derruba a ligação', () => {
+    expect(caso({ podeReligar: false })).toBe('esquecer');
+    expect(caso({ podeReligar: false, religadas: 2 })).toBe('esquecer');
+  });
+
+  it('a conversa religada leva o que já foi dito e a ordem de não cumprimentar de novo', () => {
+    const abertura = montarAbertura({ modelo: 'm', voz: 'Leda', instrucoes: 'instruções', ferramentas: FERRAMENTAS, silencioMs: 500 });
+    const falas = [
+      { tipo: 'assistente', texto: 'Boa noite, dona Helena!' },
+      { tipo: 'idoso', texto: 'Dormi bem.' },
+    ].reduce((estado, evento) => juntarLegenda(estado, evento as EventoDaLegenda, ASSISTENTE, 0), LEGENDA_VAZIA).falas;
+    const retomada = aberturaDaRetomada(abertura, falas, ASSISTENTE) as unknown as { setup: Setup };
+    const partes = retomada.setup.systemInstruction.parts;
+    expect(partes).toHaveLength(2);
+    expect(partes[0].text).toBe('instruções');
+    expect(partes[1].text).toContain('não cumprimente de novo');
+    expect(partes[1].text).toContain('Você: Boa noite, dona Helena!');
+    expect(partes[1].text).toContain('A pessoa: Dormi bem.');
+    // A abertura original não muda: a próxima ligação começa limpa.
+    expect((abertura as unknown as { setup: Setup }).setup.systemInstruction.parts).toHaveLength(1);
+  });
+
+  it('a fala que o Google escreveu e não respondeu volta por escrito, sem aparecer duas vezes', () => {
+    const abertura = montarAbertura({ modelo: 'm', voz: 'Leda', instrucoes: 'instruções', ferramentas: FERRAMENTAS, silencioMs: 500 });
+    const { falas } = [
+      { tipo: 'assistente', texto: 'Boa noite, dona Helena!' },
+      { tipo: 'fim' },
+      { tipo: 'idoso', texto: 'Eu caí' },
+      { tipo: 'idoso', texto: ' no banheiro.' },
+    ].reduce((estado, evento) => juntarLegenda(estado, evento as EventoDaLegenda, ASSISTENTE, 0), LEGENDA_VAZIA);
+    // A fala dela ainda está aberta, porque a resposta não veio.
+    expect(falaAberta(falas, ASSISTENTE)).toBe('Eu caí no banheiro.');
+    const retomada = aberturaDaRetomada(abertura, falas, ASSISTENTE, true) as unknown as { setup: Setup };
+    const contexto = retomada.setup.systemInstruction.parts[1].text;
+    expect(contexto).toContain('Você: Boa noite, dona Helena!');
+    expect(contexto).not.toContain('Eu caí no banheiro');
+  });
+
+  it('depois que ela responde, não sobra fala aberta pra mandar de novo', () => {
+    const { falas } = [
+      { tipo: 'idoso', texto: 'Dormi bem.' },
+      { tipo: 'assistente', texto: 'Que bom!' },
+      { tipo: 'fim' },
+    ].reduce((estado, evento) => juntarLegenda(estado, evento as EventoDaLegenda, ASSISTENTE, 0), LEGENDA_VAZIA);
+    expect(falaAberta(falas, ASSISTENTE)).toBe('');
+  });
+
+  it('o passe novo vale só pra conversa aberta deste idoso, e não abre outra (/api/direto)', async () => {
+    const inicio = (await (await abrir(pedido('', {}) as never)).json()) as InicioDaConversa;
+    const antes = (await lerBase(IDOSO)).conversas.length;
+    const religada = await abrir(pedido('', { conversa_id: inicio.conversa_id }) as never);
+    expect(religada.status).toBe(200);
+    const corpo = (await religada.json()) as InicioDaConversa;
+    expect(corpo.conversa_id).toBe(inicio.conversa_id);
+    expect(corpo.direto?.passe).toBe('auth_tokens/passe-de-teste');
+    expect((await lerBase(IDOSO)).conversas.length).toBe(antes);
+
+    const inventada = await abrir(pedido('', { conversa_id: 'conversa-que-nao-existe' }) as never);
+    expect(inventada.status).toBe(409);
+    expect((await lerBase(IDOSO)).conversas.length).toBe(antes);
   });
 });
 

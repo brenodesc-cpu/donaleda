@@ -1,6 +1,6 @@
 # O modo direto da voz
 
-Atualizado em 21/11/2026, às 19h50.
+Atualizado em 22/11/2026, à 0h15.
 
 O modo direto é o caminho barato da voz: o aparelho do idoso conversa com o Gemini ao vivo sem o motor de conversa da Agora, e a Agora fica com a sala de áudio. Ele está no ar desde 21/11, às 19h, liga só com `?modo=direto` no endereço e não é o padrão. A demonstração de 22/11 continua no Gemini pelo motor da Agora.
 
@@ -17,11 +17,14 @@ O motor de conversa da Agora custa US$ 0,10 por minuto, R$ 59 dos R$ 84 que cada
 5. A legenda das duas falas segue pro mesmo lugar de antes: a fala do idoso passa pelas regras fixas (`lib/regras.ts`) em `/api/conversa`, e as duas vão pro resumo do fim da ligação (`lib/posConversa.ts`).
 6. O aparelho soma os tokens que o Google devolve a cada resposta e manda a conta pro servidor no fim, em `/api/direto/uso`. Ela fica guardada com a conversa, no campo `uso`, com o custo em dólares e o custo por minuto.
 
-Três ajustes saíram dos testes de 21/11:
+Quatro ajustes saíram dos testes de 21/11:
 
 - **O aparelho avisa o Gemini quando a fala acabou**, depois de 650 ms de silêncio (o mesmo `LIA_SILENCIO_MS` do modo da Agora). Só com a detecção do Google, numa ligação de teste ele juntou quatro falas e respondeu 55 segundos depois. O Virte faz o mesmo aviso em produção.
 - **A legenda da fala do idoso fica fixa em português.** Sem isso, numa ligação ela veio em espanhol, e as regras de queda e de golpe leem português.
 - **A compressão da conversa fica ligada desde o começo** (pedido do Breno em 21/11). Depois de uns 4 minutos de conversa o Gemini descarta as falas mais antigas e deixa os 2 minutos mais novos, pra não cobrar de novo a ligação inteira a cada resposta. As instruções nunca são descartadas. `LIA_COMPRESSAO_MIN` troca os minutos, e 0 desliga.
+
+- **O aparelho religa a conversa quando o Gemini fica mudo.** O Google tem um defeito conhecido, que o Virte mede em 1 a cada 6 conversas: ele ouve a fala e não responde, sem dar erro e sem fechar a conexão. Aqui apareceu de dois jeitos: marca o começo da fala e para, ou escreve a fala na legenda e não fala nada. Agora, se ela não fala nem pede uma ação 4,5 segundos depois do fim da fala, o aparelho pede um passe novo pra mesma conversa, abre outra conversa com o Gemini levando o que já foi dito, e manda a fala de novo (em som, ou por escrito quando ela já estava na legenda). A pessoa espera uns 6 segundos a mais e não precisa repetir. O mesmo vale quando a conexão cai, quando a saudação não vem e quando ela anota algo e cala. Depois de religar três vezes na mesma ligação, ela acaba. A demonstração pública (`/experimente`) não religa.
+- **Quanto o defeito aparece (madrugada de 22/11, ligações curtas de teste):** com o silêncio perfeito do microfone de teste, de 2 a 4 em cada 6 ligações ficaram mudas na primeira fala. Com um chiado baixo no fundo, como num microfone de verdade, 2 de 9. Nas ligações em que a religada já existia, ela resolveu 6 das 8 mudas, e os dois jeitos do defeito, fingidos de propósito, se recuperaram no teste. Falta medir num celular com gente.
 
 **O preço da compressão é a memória.** Na ligação de 8 minutos, perguntada aos 7 minutos sobre o café da manhã e o joelho de que a pessoa tinha falado no começo, ela respondeu só "a senhora comeu bem" e perguntou do joelho de novo. O resumo do fim também ficou sem o sono, o café, o remédio e o joelho, ditos no começo. A ficha do dia guardou tudo, porque é anotada na hora. Com 4 minutos, a ligação média de 3 minutos e 20 segundos nunca é cortada.
 
@@ -76,14 +79,14 @@ Ligações feitas no computador, num Chrome sem janela, com uma voz gravada do M
 1. **Teste com gente, num celular.** Com alto-falante e microfone juntos, a voz dela pode voltar pelo microfone e ela se interromper. No modo direto quem tira esse eco é o navegador. Não foi testado.
 2. **O app do iPhone e do Android.** O teste foi no Chrome do computador. Falta rodar dentro do app.
 3. **Barulho de fundo.** O aviso de fim de fala olha o volume do microfone. Com TV ligada o tempo todo o aparelho não avisa, e sobra a detecção do Google, que falhou no teste.
-4. **Queda no meio da ligação.** Se a conversa com o Google cai, a ligação acaba e o resumo é gravado. Falta religar sozinha. O Google reinicia a conexão perto dos 10 minutos, que é o teto da ligação.
+4. **Queda no meio da ligação.** O aparelho religa sozinho, até três vezes. Foi provado com o defeito fingido da ligação muda. A queda de conexão de verdade usa o mesmo caminho e não foi provocada em teste.
 5. **Idoso calado.** Ela não pergunta sozinha se a pessoa ainda está aí. Falta um relógio no aparelho pra isso.
 6. **A família entrar na ligação.** A sala já leva as duas vozes e o aparelho do idoso toca quem entrar. As frases fixas e a saída da Dona Leda do desenho usam a fala forçada do motor da Agora, que aqui não existe.
 7. **Instruções presas no passe.** Hoje o servidor entrega as instruções ao aparelho, que as manda ao Google. Um aparelho adulterado poderia trocar o texto. O Google aceita travar a configuração dentro do passe, e isso não foi testado.
 8. **Teto de minutos do plano.** O servidor ainda não conta os minutos de cada família.
 9. **Tempo de resposta.** A medição vinha do motor da Agora. Neste modo falta medir no aparelho.
 10. **Sem reserva.** Se o Google recusar o passe ou a conversa, nada troca sozinho pro modo de três peças.
-11. **Ligação que fica muda.** Às 19h17 de 21/11 uma ligação de teste de 8 minutos ficou muda do começo ao fim: o Google marcou o começo da fala e nunca respondeu, sem fechar a conexão. Na mesma hora a bateria de ataque rodava na mesma chave. A causa não foi provada. Falta o aparelho perceber que ela não respondeu e religar sozinho, e falta não rodar bateria na chave das ligações.
+11. **Chave do Gemini dividida.** Bateria de testes, demonstração pública e ligações usam a mesma chave. A ligação muda apareceu com e sem bateria rodando, então a chave dividida não é a causa provada, e mesmo assim vale não rodar bateria durante ligação de verdade.
 
 ## Onde o custo ainda cai
 
