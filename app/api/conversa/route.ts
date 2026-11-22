@@ -14,6 +14,7 @@ import {
 import { avaliarFala } from '@/lib/regras';
 import { exigirAparelho } from '@/lib/sessao';
 import type { Alerta, EventoDaConversa, RespostaDoEvento } from '@/lib/tipos';
+import { ehAvisoInterno } from '@/lib/saudacaoGemini';
 
 export const dynamic = 'force-dynamic';
 
@@ -75,6 +76,8 @@ export async function POST(request: Request) {
 
   if (evento.tipo === 'fala') {
     const fala = typeof evento.texto === 'string' ? evento.texto.slice(0, 2000) : '';
+    // O aviso interno que pede a saudação no Gemini não é fala do idoso.
+    if (ehAvisoInterno(fala)) return NextResponse.json({ ok: true } satisfies RespostaDoEvento);
     const regra = avaliarFala(fala);
     const resultado = await mudarBase(idosoId, (base) => {
       const conversa = base.conversas.find((c) => c.id === evento.conversaId);

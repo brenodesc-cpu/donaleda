@@ -8,7 +8,7 @@
 // um modo pelo cabeçalho x-donaleda-modo, pra comparar os dois na mesma hora.
 // As ações da assistente (anotar na ficha, avisar a família) entram por /api/mcp.
 
-import { NextRequest, NextResponse } from 'next/server';
+import { after, NextRequest, NextResponse } from 'next/server';
 import {
   AgoraClient,
   Agent,
@@ -30,6 +30,7 @@ import { abrirConversa, lerBase, mudarBase } from '@/lib/dados';
 import { FERRAMENTAS } from '@/lib/ferramentas';
 import { montarInstrucoes, montarSaudacao, type OrigemDaLigacao } from '@/lib/persona';
 import { chaveDasFerramentas, exigirVariavel, urlPublica } from '@/lib/servidor';
+import { cumprimentarAoEntrar } from '@/lib/saudacaoGemini';
 import { exigirAparelho } from '@/lib/sessao';
 import type { InicioDaConversa } from '@/lib/tipos';
 
@@ -327,7 +328,6 @@ export async function POST(request: NextRequest) {
       channel: channel_name,
       agentUid,
       remoteUids: [requester_id],
-      // A assistente espera dois minutos de silêncio antes de sair sozinha.
       // Sozinha na sala por 30 s (o aparelho fechou sem desligar), ela sai e para de gastar minuto.
       idleTimeout: 30,
       expiresIn: ExpiresIn.hours(1),
@@ -335,6 +335,13 @@ export async function POST(request: NextRequest) {
     });
 
     const agentId = await session.start();
+    // A Dona Leda do Gemini não fala sozinha ao entrar: o servidor pede a saudação.
+    if (modo === 'gemini') {
+      after(async () => {
+        const resultado = await cumprimentarAoEntrar(appId, appCertificate, agentId, channel_name).catch(() => 'falhou');
+        console.log('saudação do Gemini:', resultado);
+      });
+    }
     const conversa = await mudarBase(idosoId, (b) => abrirConversa(b, agora, chamada?.id));
 
     return NextResponse.json({

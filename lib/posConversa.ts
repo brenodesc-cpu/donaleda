@@ -16,6 +16,7 @@ import type {
   Remedio,
   Sono,
 } from './tipos';
+import { ehAvisoInterno } from './saudacaoGemini';
 
 // "não conta pra Marina", "fica entre nós", "é segredo", "não quero que ela saiba".
 const PEDIU_SEGREDO =
@@ -63,6 +64,7 @@ export function limparFalasDaSessao(entrada: unknown): FalaDaSessao[] {
     if (quem !== 'idoso' && quem !== 'assistente') continue;
     const t = textoLimpo(texto, 400);
     if (!t) continue;
+    if (quem === 'idoso' && ehAvisoInterno(t)) continue;
     limpas.push({ quem, texto: t });
   }
   return limpas;
