@@ -59,46 +59,57 @@ em{font-style:normal;color:var(--gema)}
 .s4 .necs div{display:flex;flex-direction:column;align-items:center;gap:1.2cqw}
 .s4 .necs svg{width:6cqw;height:6cqw;stroke:var(--gema);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .s4 .necs p{font-size:2.4cqw;font-weight:700}
-/* 5 como funciona */
-.s5 .tel{position:absolute;left:8cqw;top:5cqw;width:19.5cqw;border-radius:2.4cqw;overflow:hidden;border:.5cqw solid #120b05;background:#120b05}
-.s5 .tel img{width:100%;display:block}
-.s5 .passos{position:absolute;left:36cqw;right:6cqw;top:7.5cqw;display:flex;flex-direction:column;gap:3.6cqw}
-.s5 .passo{display:grid;grid-template-columns:7cqw 1fr;align-items:start}
-.s5 .passo i{font-style:normal;font-family:Gabarito,sans-serif;font-weight:900;font-size:7cqw;line-height:.9;color:var(--gema)}
-.s5 .passo b{display:block;font-family:Gabarito,sans-serif;font-weight:900;font-size:3.4cqw;line-height:1.1}
-.s5 .passo span{display:block;font-size:2.2cqw;color:var(--apoio);margin-top:.6cqw;line-height:1.25}
 /* 6 ao vivo */
 .s6 .aovivo{position:absolute;left:6cqw;top:12cqw;font-size:15cqw}
 .s6 .ponto{display:inline-block;width:5cqw;height:5cqw;border-radius:50%;background:var(--verde);margin-right:3cqw;vertical-align:middle;position:relative;top:-1cqw;box-shadow:0 0 0 1.4cqw rgba(27,122,61,.28)}
 .s6 .itens{position:absolute;left:6cqw;right:6cqw;top:36cqw;display:flex;gap:1.6cqw}
 .s6 .itens p{border:.25cqw solid var(--gema);border-radius:99cqw;padding:1cqw 1.9cqw;font-size:2cqw;font-weight:700;white-space:nowrap}
-/* 7 lá fora e 8 o nosso teste */
-.s7 .grade,.s8 .grade{top:14cqw}
-.s7 .fim,.s8 .fim{top:46.4cqw}
-.s8 .fim{font-size:2cqw;font-weight:400;color:var(--apoio)}
-.s8 .grade b.txt{font-size:3.6cqw;color:var(--casca);white-space:normal;line-height:1.08}
-/* 9 quem paga */
-.s9 .tres{position:absolute;left:6cqw;right:6cqw;top:9cqw;display:grid;grid-template-columns:repeat(3,1fr);gap:3.4cqw}
-.s9 .tres div{border-top:.35cqw solid var(--gema);padding-top:1.2cqw}
-.s9 .tres i{display:block;font-style:normal;font-size:1.5cqw;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--legenda)}
-.s9 .tres h3{font-family:Gabarito,sans-serif;font-weight:900;font-size:3cqw;line-height:1.1;margin-top:.6cqw;min-height:6.8cqw}
-.s9 .tres b{display:block;font-family:Gabarito,sans-serif;font-weight:900;font-size:4.6cqw;line-height:1.05;color:var(--gema);margin-top:1cqw;white-space:nowrap}
-.s9 .tres span{display:block;font-size:2.1cqw;font-weight:700;margin-top:.7cqw;line-height:1.25}
-.s9 .tres small{display:block;font-size:1.7cqw;color:var(--apoio);margin-top:1.4cqw;line-height:1.3}
-/* 10 próximos passos */
-.s10 .t{position:absolute;left:6cqw;top:5cqw;font-size:4.4cqw;max-width:84cqw}
-.s10 .passos{position:absolute;left:6cqw;right:6cqw;top:14cqw}
-.s10 .passos p{display:grid;grid-template-columns:23cqw 1fr;font-size:2.8cqw;font-weight:700;line-height:1.2;padding:1.3cqw 0;border-top:.2cqw solid var(--linha)}
-.s10 .passos p i{font-style:normal;color:var(--gema);font-family:Gabarito,sans-serif;font-weight:900}
-.s10 .visao{position:absolute;left:6cqw;top:36.5cqw;font-size:2.8cqw;font-weight:700}
-.s10 .visao small{display:block;font-size:2cqw;font-weight:400;color:var(--apoio);margin-top:.5cqw}
-.s10 h3{font-family:Gabarito,sans-serif;font-weight:900;font-size:2.6cqw;padding-bottom:.8cqw;border-bottom:.35cqw solid var(--gema);margin-bottom:1.2cqw}
-.s10 .col p{font-size:2.2cqw;font-weight:700;margin-bottom:1cqw;line-height:1.2}
-.s10 .col p i{font-style:normal;color:var(--gema);font-family:Gabarito,sans-serif;font-weight:900;margin-right:.9cqw}
-.s10 .visao h3{border-bottom-style:dashed;color:var(--apoio)}
-.s10 .visao p{color:var(--apoio)}
-.s10 .pedido{position:absolute;left:6cqw;top:46.5cqw;font-size:2.8cqw;font-weight:700}
-.s10 .assin{position:absolute;left:6cqw;top:45.5cqw;font-size:3cqw}
+/* 5 como funciona, com o painel */
+.s5 .tel{position:absolute;top:5cqw;width:15.5cqw;border-radius:2.2cqw;overflow:hidden;border:.45cqw solid #120b05;background:#120b05}
+.s5 .tel img{width:100%;display:block}
+.s5 .t1{left:6cqw}.s5 .t2{left:78.5cqw}
+.s5 .cap{position:absolute;top:40.3cqw;width:15.5cqw;text-align:center;font-size:2cqw;font-weight:700}
+.s5 .c1{left:6cqw}.s5 .c2{left:78.5cqw}
+.s5 .passos{position:absolute;left:27cqw;width:47cqw;top:7cqw;display:flex;flex-direction:column;gap:3.2cqw}
+.s5 .passo{display:grid;grid-template-columns:5.6cqw 1fr;align-items:start}
+.s5 .passo i{font-style:normal;font-family:Gabarito,sans-serif;font-weight:900;font-size:5.8cqw;line-height:.9;color:var(--gema)}
+.s5 .passo b{display:block;font-family:Gabarito,sans-serif;font-weight:900;font-size:2.9cqw;line-height:1.1}
+.s5 .passo span{display:block;font-size:1.9cqw;color:var(--apoio);margin-top:.5cqw;line-height:1.25}
+/* 7 a prova: lá fora e aqui */
+.s7 .rot{position:absolute;left:6cqw;font-size:1.5cqw;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--legenda)}
+.s7 .fila b{font-size:5cqw;color:var(--gema)}
+.s7 .fila span{font-size:2.1cqw}
+.s7 .fila small{display:block;font-size:1.5cqw;color:var(--apoio);margin-top:.3cqw}
+.s7 .tit{font-size:4.4cqw;max-width:88cqw}
+.s7 .r1{top:11.6cqw}.s7 .f1{top:14cqw}.s7 .r2{top:30cqw}.s7 .f2{top:32.4cqw}
+.s7 .fim{top:46.9cqw;font-size:2cqw;font-weight:400;color:var(--apoio)}
+/* 8 o modelo, com as setas */
+.s8 svg.setas{position:absolute;inset:0;width:100%;height:100%}
+.s8 .no{position:absolute;left:6cqw;width:29cqw;border:.3cqw solid var(--linha);border-radius:1.4cqw;padding:1.2cqw 1.6cqw}
+.s8 .no i{display:block;font-style:normal;font-size:1.3cqw;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gema)}
+.s8 .no b{display:block;font-family:Gabarito,sans-serif;font-weight:900;font-size:2.6cqw;line-height:1.1;margin-top:.3cqw}
+.s8 .no span{display:block;font-size:1.6cqw;color:var(--apoio);margin-top:.4cqw;line-height:1.25}
+.s8 .n1{top:12cqw}.s8 .n2{top:25.2cqw}.s8 .n3{top:38.4cqw}
+.s8 .fam{left:43cqw;top:16.5cqw;width:23cqw;border-color:var(--gema);background:rgba(247,185,15,.1)}
+.s8 .dl{position:absolute;left:76.5cqw;top:17cqw;width:15cqw;height:auto;aspect-ratio:1}
+.s8 .dln{position:absolute;left:73cqw;width:22cqw;top:33.4cqw;text-align:center;font-size:3.2cqw}
+.s8 .dls{position:absolute;left:73cqw;width:22cqw;top:37.6cqw;text-align:center;font-size:1.7cqw;color:var(--apoio)}
+.s8 .et{position:absolute;font-size:1.5cqw;font-weight:700;color:var(--apoio)}
+/* 9 a evolução */
+.s9 .etapas{position:absolute;left:6cqw;right:6cqw;top:14.5cqw;display:grid;grid-template-columns:repeat(3,1fr);gap:4.6cqw}
+.s9 .etapa{position:relative;border-top:.35cqw solid var(--gema);padding-top:1.2cqw}
+.s9 .etapa i{display:block;font-style:normal;font-size:1.5cqw;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--legenda)}
+.s9 .etapa h3{font-family:Gabarito,sans-serif;font-weight:900;font-size:3cqw;line-height:1.1;margin:.5cqw 0 1.4cqw}
+.s9 .etapa p{font-size:2.1cqw;font-weight:700;line-height:1.2;margin-bottom:1.1cqw}
+.s9 .etapa p small{display:block;font-size:1.6cqw;font-weight:400;color:var(--apoio);margin-top:.2cqw}
+.s9 .etapa+.etapa::before{content:"→";position:absolute;left:-3.6cqw;top:1.6cqw;font-family:Gabarito,sans-serif;font-weight:900;font-size:3cqw;color:var(--gema)}
+/* 10 o time */
+.s10 .time{position:absolute;left:6cqw;right:6cqw;top:14.5cqw;display:grid;grid-template-columns:repeat(4,1fr);gap:3cqw}
+.s10 .time div{border-top:.35cqw solid var(--gema);padding-top:1.2cqw}
+.s10 .time b{display:block;font-family:Gabarito,sans-serif;font-weight:900;font-size:3.6cqw;line-height:1}
+.s10 .time span{display:block;font-size:1.9cqw;font-weight:700;margin-top:1cqw;line-height:1.25}
+.s10 .time small{display:block;font-size:1.6cqw;color:var(--apoio);margin-top:.6cqw;line-height:1.3}
+.s10 .pedido{position:absolute;left:6cqw;top:43.5cqw;font-size:2.8cqw;font-weight:700}
 .dica{position:fixed;left:50%;top:10px;transform:translateX(-50%);background:var(--gema);color:var(--cafe);font-size:13px;padding:6px 12px;border-radius:999px;opacity:.9;transition:opacity .6s}
 .notas{position:fixed;left:0;right:0;bottom:0;max-height:38vh;overflow:auto;background:rgba(20,12,5,.96);color:var(--casca);font-size:20px;line-height:1.45;padding:16px 24px 20px;display:none;border-top:3px solid var(--gema)}
 .notas b{color:var(--gema);font-family:Gabarito,sans-serif;margin-right:10px}
@@ -159,13 +170,14 @@ body.com-notas .notas{display:block}
   </section>
 
   <section class="s s5">
-    <div class="tel"><img src="telas/tocando.png" alt=""></div>
+    <div class="tel t1"><img src="telas/tocando.png" alt=""></div><p class="cap c1">O idoso</p>
     <div class="passos">
       <div class="passo"><i>1</i><div><b>O celular toca e o idoso atende</b><span>A família configura uma vez, e ele toca na hora combinada</span></div></div>
       <div class="passo"><i>2</i><div><b>A <em>Agora</em> leva a voz pro Gemini ao vivo</b><span>Sala de áudio, motor de conversa, mensagens em tempo real e filtro de ruído da Agora</span></div></div>
-      <div class="passo"><i>3</i><div><b>A família fica sabendo na hora</b><span>A ficha do dia, o resumo e o aviso</span></div></div>
+      <div class="passo"><i>3</i><div><b>A família vê tudo no painel</b><span>A ficha do dia, a semana e o aviso na hora</span></div></div>
     </div>
-    <p class="legenda">Tela de verdade do app, com uma pessoa de exemplo.</p>
+    <div class="tel t2"><img src="telas/painel-com-aviso.png" alt=""></div><p class="cap c2">A família</p>
+    <p class="legenda">Telas de verdade do app, com pessoas de exemplo.</p>
   </section>
 
   <section class="s s6">
@@ -175,53 +187,69 @@ body.com-notas .notas{display:block}
   </section>
 
   <section class="s s7">
-    <p class="ttl tit">Lá fora, isso <em>já funciona</em></p>
-    <div class="grade">
-      <div><b>89%</b><span>dos idosos atenderam a IA em três meses</span><small>CareCall, Coreia · estudo com 2.990 idosos</small></div>
-      <div><b>85%</b><span>pediram pra continuar a conversa com a IA</span><small>Callie Care, EUA · dado da empresa</small></div>
-      <div><b>US$ 1,4 bi</b><span>valia a Papa, paga por planos</span><small>companhia pra idosos, EUA · 2021</small></div>
-      <div><b>600 mil</b><span>famílias pagam botão de emergência</span><small>Medical Guardian, EUA</small></div>
+    <p class="ttl tit">Lá fora funciona, e a gente <em>testou</em></p>
+    <p class="rot r1">Lá fora</p>
+    <div class="fila f1">
+      <div><b>89%</b><span>dos idosos atenderam a IA em três meses</span><small>CareCall, Coreia · 2.990 idosos</small></div>
+      <div><b>85%</b><span>pediram pra continuar a conversa</span><small>Callie Care, EUA · dado da empresa</small></div>
+      <div><b>US$ 1,4 bi</b><span>valia a Papa, paga por planos de saúde</span><small>companhia pra idosos, EUA · 2021</small></div>
     </div>
-    <p class="fim">Em português, com aviso pra família, a gente não achou ninguém.</p>
-    <p class="legenda">CareCall (Naver): atenderam pelo menos uma vez. Callie Care: 8 mil pessoas testaram. Papa: avaliação de 2021. Medical Guardian: de US$ 32 a 90 por mês. Lidos em 21/11/2026.</p>
-  </section>
-
-  <section class="s s8">
-    <p class="ttl tit">Testado com <em>avós de verdade</em></p>
-    <div class="grade">
+    <p class="rot r2">Aqui</p>
+    <div class="fila f2">
       <div><b>[N] de [N]</b><span>avós atenderam no sábado</span></div>
       <div><b>[N]</b><span>atenderam de novo no domingo</span></div>
       <div><b>1</b><span>casa de repouso parceira, que indica as famílias</span></div>
-      <div><b class="txt">Quem precisa ainda mora em casa</b><span>foi o que a casa parceira ensinou</span></div>
     </div>
-    <p class="fim">Limites: uma noite e uma manhã, poucos avós, alguém da família do lado.</p>
-    <p class="legenda">Avós de 65 anos ou mais, de gente do time, com o sim deles e da família, em 21 e 22/11/2026. A casa parceira entrou em 21/11, na fase de teste.</p>
+    <p class="fim">Limites do nosso teste: uma noite e uma manhã, poucos avós, alguém da família do lado.</p>
+    <p class="legenda">CareCall (Naver): atenderam pelo menos uma vez. Callie Care: 8 mil pessoas testaram. Lidos em 21/11/2026. Avós de 65 anos ou mais, de gente do time, com o sim deles e da família, em 21 e 22/11/2026.</p>
+  </section>
+
+  <section class="s s8">
+    <p class="ttl tit">Um produto, <em>três caminhos</em> até o idoso</p>
+    <svg class="setas" viewBox="0 0 100 56.25" preserveAspectRatio="none" aria-hidden="true">
+      <defs><marker id="ponta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#F7B90F"/></marker></defs>
+      <g fill="none" stroke="#F7B90F" stroke-width=".4" marker-end="url(#ponta)">
+        <path d="M35.6 17 C39 17 39.5 20 42.4 20.6"/>
+        <path d="M35.6 30.2 C39.5 30.2 39.5 25.4 42.4 24.6"/>
+        <path d="M66.6 22.6 C70.5 22.6 72 24 75.8 24.6"/>
+        <path d="M35.6 43.6 C56 43.6 68 40 76.6 31.2"/>
+      </g>
+    </svg>
+    <div class="no n1"><i>B2C · direto</i><b>Marketing direto</b><span>Pro filho de 40 a 60 anos que vê os pais pouco</span></div>
+    <div class="no n2"><i>B2B · parceria</i><b>Casas de repouso</b><span>Indicam as famílias: 1 parceira e uma rede de 100+ em conversa</span></div>
+    <div class="no n3"><i>B2B · contrato</i><b>Planos e seguros</b><span>Contratam por beneficiário: teto de R$ 13,6 bi por ano</span></div>
+    <div class="no fam"><i>Quem paga hoje</i><b>A família</b><span>R$ 129,90 por mês, e sobram R$ 67 por idoso</span></div>
+    <svg class="dl"><use href="#disco"/></svg>
+    <p class="ttl dln">Dona Leda</p>
+    <p class="dls">liga todo dia pro idoso</p>
+    <p class="legenda">Custo de R$ 38 por idoso, medido em 21/11/2026. Teto dos planos: 8,7 milhões de beneficiários com 60+ (IESS, 2026) × R$ 129,90 × 12.</p>
   </section>
 
   <section class="s s9">
-    <div class="tres">
-      <div><i>Hoje</i><h3>A família paga</h3><b>R$ 129,90</b><span>por mês, e sobram R$ 67 por idoso</span></div>
-      <div><i>O canal</i><h3>A casa de repouso indica</h3><b>1 parceira</b><span>e uma rede de 100+ casas em conversa</span></div>
-      <div><i>Depois</i><h3>O plano de saúde contrata</h3><b>R$ 13,6 bi</b><span>é o teto por ano, com 8,7 milhões de idosos com plano</span><small>Ela ouve todo dia o que o plano só vê na consulta: até 2.555 respostas por idoso por ano</small></div>
+    <p class="ttl tit">Da ligação diária ao <em>segundo cérebro</em></p>
+    <div class="etapas">
+      <div class="etapa"><i>Próximos 30 dias</i><h3>Provar o uso</h3><p>A casa parceira indica as famílias<small>a partir de 23/11</small></p><p>Ligação todo dia, medindo quantas ele atende<small>até 21/12</small></p><p>O sim do idoso e a LGPD com advogado<small>antes de cobrar</small></p></div>
+      <div class="etapa"><i>Em seguida</i><h3>Chegar em mais gente</h3><p>Ligação pro telefone comum<small>pra quem não usa internet</small></p><p>Aparelho próprio<small>caixinha de voz e pulseira</small></p><p>Planos de saúde e seguros</p></div>
+      <div class="etapa"><i>Depois</i><h3>Fazer mais por ele</h3><p>Outros públicos<small>como o pós-operatório</small></p><p>Pede o remédio e as compras</p><p>Marca a consulta</p></div>
     </div>
-    <p class="legenda">Custo de R$ 38 por idoso, medido em 21/11/2026, mais imposto e cartão. Planos: 8,7 milhões de beneficiários com 60 anos ou mais (IESS, fevereiro de 2026) × R$ 129,90 × 12 meses. Respostas: 7 por ligação × 365 dias.</p>
+    <p class="legenda">O que já está no ar: a ligação diária, a memória, o aviso, a filha entrando na ligação, a agenda e a leitura de exames. O telefone comum está no código e desligado. O resto é plano.</p>
   </section>
 
   <section class="s s10">
-    <p class="ttl t">Próximos <em>30 dias</em></p>
-    <div class="passos">
-      <p><i>a partir de 23/11</i>A casa parceira indica as famílias</p>
-      <p><i>até 21/12</i>Ligação todo dia, medindo quantas ele atende</p>
-      <p><i>antes de cobrar</i>O sim do idoso e a LGPD com advogado</p>
+    <p class="ttl tit">Quem constrói a <em>Dona Leda</em></p>
+    <div class="time">
+      <div><b>Breno</b><span>Empreendedor e criador de conteúdo</span><small>Mais de 300 mil seguidores · Administração no Insper</small></div>
+      <div><b>Vitor</b><span>Trabalha com a Terça da Serra</span><small>A maior rede de casas de idosos do Brasil, investida pelo Semenzato</small></div>
+      <div><b>Gustavo</b><span>Desenvolvedor e fundador de uma healthtech</span><small>Mackenzie</small></div>
+      <div><b>Stephanie</b><span>Especialista em dados e precificação</span><small>Passou pela Microsoft e pela Livelo</small></div>
     </div>
-    <p class="visao">Depois: o <em>segundo cérebro</em> de quem envelhece<small>Com o que guardou, ela resolve coisas por ele, como pedir o remédio</small></p>
     <p class="pedido">[o pedido à banca]</p>
   </section>
 
 </div>
 <div class="dica" id="dica">← → pra passar · F pra tela cheia · N pra ver a fala</div>
 <div class="notas" id="notas"></div>
-<script id="notas-dados" type="application/json">{"1": {"seg": "25 s", "txt": "Quantas vezes você ainda vai ver a sua mãe? Pelo IBGE, quem chega aos 80 vive, em média, mais nove anos. No caso da minha avó, eu vejo ela quatro vezes por ano: são umas 36 visitas. Entre uma visita e outra, a família não sabe como está o dia a dia dela."}, "2": {"seg": "17 s", "txt": "Mais de um terço dos brasileiros com 50 anos ou mais que têm filhos não veem nenhum deles toda semana. E 18% dos idosos moram sozinhos: sem supervisão, com solidão e com riscos à saúde."}, "3": {"seg": "11 s", "txt": "Resolver isso hoje é caro: um cuidador ou uma casa de repouso. E mesmo pagando, é tudo manual e nada do dia a dia fica registrado."}, "4": {"seg": "20 s", "txt": "Por isso a gente construiu a Dona Leda, com o nome da minha avó. Ela é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, prevenção, comunicação e rotina, por menos de um décimo do preço de um cuidador."}, "5": {"seg": "15 s", "txt": "Pro idoso, basta atender uma ligação. A chamada é uma sala da Agora, e o motor de conversa leva a voz pro Gemini, guarda o que ele contou e avisa a família na hora."}, "6": {"seg": "2 minutos", "txt": "A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel. (Cmd+2 pro painel, toca em Ligar agora e fica calado. A dona Helena atende e espera a Dona Leda cumprimentar.)"}, "7": {"seg": "13 s", "txt": "Na Coreia, num estudo com 3 mil idosos, 89% atenderam a ligação de uma IA. Em português, com aviso pra família, a gente não achou ninguém."}, "8": {"seg": "25 s", "txt": "Ontem a Dona Leda ligou pra [N] avós do time, e hoje [N] atenderam de novo. Já fechamos uma parceria com uma casa de repouso em Pernambuco, que vai indicar a Dona Leda pras famílias que não conseguem pagar os 6 mil por mês de uma casa, e estamos conversando com uma rede de mais de cem casas."}, "9": {"seg": "26 s", "txt": "Quem paga é a família: 129,90 por mês, e sobram 67 por idoso. A casa de repouso indica as famílias. Depois vem o plano de saúde, que só vê o idoso na consulta, e a Dona Leda ouve o dia a dia dele: são até 13,6 bilhões por ano."}, "10": {"seg": "29 s", "txt": "A partir de amanhã, a casa parceira indica as famílias pro teste de 30 dias. Com o que guardou, ela vira o segundo cérebro de quem envelhece e passa a resolver coisas por ele, como pedir o remédio. [O pedido à banca, em uma frase.] Entre as visitas que me restam, a minha avó vai ter com quem conversar todo dia."}}</script>
+<script id="notas-dados" type="application/json">{"1": {"seg": "16 s", "txt": "Quantas vezes você ainda vai ver a sua mãe? Pelo IBGE, quem chega aos 80 vive, em média, mais nove anos. No caso da minha avó, eu vejo ela quatro vezes por ano: são umas 36 visitas. Entre uma visita e outra, a família não sabe como está o dia a dia dela."}, "2": {"seg": "12 s", "txt": "No Brasil, mais de um terço das pessoas com 50 anos ou mais que têm filhos não veem os filhos toda semana. Temos uma população envelhecendo, e 18% dos idosos moram sozinhos: sem supervisão, com solidão e com riscos à saúde."}, "3": {"seg": "16 s", "txt": "Eu queria saber como a minha avó está no dia a dia, mas resolver isso é muito caro. Você pode pagar um cuidador ou levar o idoso pra uma casa de repouso, e mesmo assim esses processos são muito manuais: os dados não ficam guardados, e o idoso fica sem o acompanhamento que a qualidade de vida dele merece."}, "4": {"seg": "13 s", "txt": "Por isso a gente construiu a Dona Leda, com o nome da minha avó. Ela é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, prevenção, comunicação e rotina, por menos de um décimo do preço de um cuidador."}, "5": {"seg": "14 s", "txt": "É simples o bastante pro idoso só ter que atender uma ligação. A chamada é uma sala da Agora, e o motor de conversa leva a voz pro Gemini e guarda os dados em tempo real. A família vê no painel a ficha do dia, a semana e o aviso na hora."}, "6": {"seg": "2 minutos", "txt": "A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel. (Cmd+2 pro painel, toca em Ligar agora e fica calado. A dona Helena atende e espera a Dona Leda cumprimentar.)"}, "7": {"seg": "22 s", "txt": "Isso já funciona lá fora. Na Coreia, 89% dos idosos atenderam a ligação de uma IA em três meses. Nos Estados Unidos, 85% dos que conversaram com uma assistente dessas pediram pra continuar, e uma empresa que faz companhia pra idosos, paga por planos de saúde, chegou a valer 1,4 bilhão de dólares. Aqui, ontem a Dona Leda ligou pra [N] avós do time, e hoje [N] atenderam de novo."}, "8": {"seg": "29 s", "txt": "O nosso modelo é B2C e B2B. A família paga 129,90 por mês, e sobram 67 por idoso. Quem traz as famílias são as casas de repouso: já fechamos uma parceria com uma casa em Petrolina, que vai levar a Dona Leda pra quem não tem condição de pagar os 6 mil por mês deles, e estamos conversando com a maior rede de casas de idosos do Brasil. E os planos de saúde e as seguradoras podem contratar a Dona Leda pros clientes deles: são até 13,6 bilhões por ano."}, "9": {"seg": "20 s", "txt": "Nos próximos 30 dias, a casa parceira indica as famílias, e a gente mede quantas ligações o idoso atende. Em seguida vêm a ligação pro telefone comum e um aparelho próprio, pra quem não usa celular. Depois, a mesma ligação diária serve pra outros públicos, como o pós-operatório. Com o que guardou, ela vira o segundo cérebro de quem envelhece e passa a resolver coisas por ele, como pedir o remédio."}, "10": {"seg": "26 s", "txt": "No time, o Vitor trabalha com a Terça da Serra, a maior rede de casas de idosos do Brasil. O Gustavo é desenvolvedor pelo Mackenzie e fundador de uma healthtech. A Stephanie é especialista em dados e precificação e já passou pela Microsoft e pela Livelo. E eu sou empreendedor e criador de conteúdo, com mais de 300 mil seguidores, formado em administração pelo Insper. [O pedido à banca, em uma frase.] Entre as visitas que me restam, a minha avó vai ter com quem conversar todo dia."}}</script>
 <script>
 (function(){
   var s=[].slice.call(document.querySelectorAll('.s'));
