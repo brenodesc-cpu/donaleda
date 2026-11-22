@@ -170,9 +170,15 @@ export default function Conversa({
   }, [erroDoMicrofone, onFalha]);
 
   // Assistente que não entra vira aviso simples. Assistente que esteve e saiu
-  // quer dizer que a ligação acabou — salvo durante convite/transição pra família entrar.
+  // quer dizer que a ligação acabou — salvo durante a transição antes de a família entrar no RTC.
   const naoEntrou = useCallback(() => onFalha('conexao'), [onFalha]);
-  usePresencaDaAssistente(alguemNaLinha, encerrarComFalas, naoEntrou, conviteAberto || familiaEntrou);
+  usePresencaDaAssistente(
+    alguemNaLinha,
+    encerrarComFalas,
+    naoEntrou,
+    conviteAberto || familiaEntrou,
+    familiaNaLinha,
+  );
 
   useClientEvent(client, 'connection-state-change', (atual, _anterior, razao) => {
     if (atual === 'DISCONNECTED' && String(razao) !== 'LEAVE') onFalha('conexao');

@@ -1,9 +1,29 @@
 import UIKit
 import Capacitor
+import WebKit
 
 final class DonaLedaBridgeViewController: CAPBridgeViewController {
     override open func capacitorDidLoad() {
         bridge?.registerPluginInstance(DonaLedaCallPushPlugin())
+    }
+
+    override open func webViewConfiguration(for instanceConfiguration: InstanceConfiguration) -> WKWebViewConfiguration {
+        let config = super.webViewConfiguration(for: instanceConfiguration)
+        // Garante vídeo inline e áudio WebRTC sem bloqueio de autoplay no WKWebView do iPhone.
+        config.allowsInlineMediaPlayback = true
+        config.mediaTypesRequiringUserActionForPlayback = []
+        return config
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Evita que a tela do iPhone apague no meio da ligação de voz/vídeo.
+        UIApplication.shared.isIdleTimerDisabled = true
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIApplication.shared.isIdleTimerDisabled = false
     }
 }
 

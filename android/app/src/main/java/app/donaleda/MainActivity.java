@@ -2,6 +2,7 @@ package app.donaleda;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowManager;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
@@ -11,6 +12,8 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(DonaLedaCallPushPlugin.class);
         super.onCreate(savedInstanceState);
+        // Mantém a tela acesa enquanto o app está em primeiro plano pra não suspender WebRTC no meio da ligação.
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         handleFamilyIntent(getIntent());
     }
 

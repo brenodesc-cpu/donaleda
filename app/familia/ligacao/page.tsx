@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { Video } from 'lucide-react';
 import { useState } from 'react';
+import { destravarSom } from '@/hooks/somDoAparelho';
 import { Esqueleto } from '@/components/familia/Apoio';
 import { deuCerto, enderecoCom, entrarNaLigacao } from '@/components/familia/api';
 import { Moldura } from '@/components/familia/Moldura';
@@ -29,6 +30,8 @@ export default function LigacaoDaFamiliaPage() {
 
   const entrar = async () => {
     if (!idoso) return;
+    // Destrava AudioContext dentro do gesto do toque (crítico no iOS Safari/WKWebView).
+    void destravarSom();
     setEntrando(true);
     setErro(null);
     const { status, dado } = await entrarNaLigacao(idoso.id);

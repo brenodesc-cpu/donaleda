@@ -19,18 +19,22 @@ export function usePresencaDaAssistente(
   aoAcabar: () => void,
   aoNaoEntrar: () => void,
   esperandoFamilia = false,
+  familiaNaLinha = false,
 ): void {
   const jaEntrou = useRef(false);
+  const familiaJaEntrou = useRef(false);
 
   useEffect(() => {
+    if (familiaNaLinha) familiaJaEntrou.current = true;
     if (naLinha) {
       jaEntrou.current = true;
       return;
     }
-    const folga = esperandoFamilia ? FOLGA_COM_FAMILIA_MS : FOLGA_NA_SAIDA_MS;
+    const folga =
+      esperandoFamilia && !familiaJaEntrou.current ? FOLGA_COM_FAMILIA_MS : FOLGA_NA_SAIDA_MS;
     const relogio = jaEntrou.current
       ? setTimeout(aoAcabar, folga)
       : setTimeout(aoNaoEntrar, ESPERA_PELA_ASSISTENTE_MS);
     return () => clearTimeout(relogio);
-  }, [naLinha, aoAcabar, aoNaoEntrar, esperandoFamilia]);
+  }, [naLinha, aoAcabar, aoNaoEntrar, esperandoFamilia, familiaNaLinha]);
 }
