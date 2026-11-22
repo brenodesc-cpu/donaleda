@@ -24,6 +24,8 @@ import type { Alerta, EventoDaConversa, RespostaDoEvento } from '@/lib/tipos';
 import { ehAvisoInterno } from '@/lib/saudacaoGemini';
 
 export const dynamic = 'force-dynamic';
+export const preferredRegion = 'iad1';
+export const maxDuration = 30;
 
 export async function POST(request: Request) {
   const aparelho = await exigirAparelho(request);
@@ -112,13 +114,17 @@ export async function POST(request: Request) {
       const conversa = base.conversas.find((c) => c.id === evento.conversaId);
       if (!conversa) return null;
       conversa.falasDoIdoso += 1;
+      const avisosAntes = base.alertas.length;
       const alerta: Alerta | undefined = regra
         ? criarAlerta(base, { ...regra, origem: 'regra' })
         : undefined;
       // Aviso urgente com a ligação aberta abre o convite pra família entrar.
       const convidada = regra?.gravidade === 'urgente' ? abrirConvite(base, 'urgente', regra.tipo) : null;
+      // Só notifica quando o aviso nasceu agora: aviso repetido na mesma ligação não toca de novo.
+      const nasceuAgora = base.alertas.length > avisosAntes;
       const precisaNotificar =
         Boolean(alerta) &&
+        nasceuAgora &&
         ((base.aparelhosFamiliaPush?.length ?? 0) > 0 ||
           (alerta?.gravidade === 'urgente' && (base.redeDeApoio?.length ?? 0) > 0));
       return {
@@ -135,7 +141,7 @@ export async function POST(request: Request) {
       const baseSnap = resultado.pushSnapshot;
       const entrarAoVivo = Boolean(convite || alerta.gravidade === 'urgente');
       const urlDestino = entrarAoVivo
-        ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}`
+        ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}&auto=1`
         : `/familia?idoso=${encodeURIComponent(idosoId)}`;
       depois(async () => {
         await Promise.allSettled([
@@ -167,6 +173,7 @@ export async function POST(request: Request) {
       if (!conversa) return null;
       const vencida = vencerConvite(base, evento.conversaId);
       return {
+        conviteAberto: Boolean(conversa.convite),
         familiaEntrou: Boolean(conversa.convite?.entrouEm),
         aviso: vencida ? { conversa: { ...vencida }, frase: fraseSemEntrada(base, vencida.convite?.tipo) } : null,
       };
@@ -174,7 +181,11 @@ export async function POST(request: Request) {
     if (!resultado) return NextResponse.json({ ok: false }, { status: 404 });
     const aviso = resultado.aviso;
     if (aviso) depois(() => falar(aviso.conversa, aviso.frase, 'APPEND'));
-    return NextResponse.json({ ok: true, familiaEntrou: resultado.familiaEntrou } satisfies RespostaDoEvento);
+    return NextResponse.json({
+      ok: true,
+      conviteAberto: resultado.conviteAberto,
+      familiaEntrou: resultado.familiaEntrou,
+    } satisfies RespostaDoEvento);
   }
 
   return NextResponse.json({ ok: false }, { status: 400 });

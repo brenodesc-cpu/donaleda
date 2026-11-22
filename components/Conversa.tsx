@@ -2,16 +2,18 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AgoraRTC, {
+  LocalVideoTrack,
   RemoteAudioTrack,
   useClientEvent,
   useJoin,
+  useLocalCameraTrack,
   useLocalMicrophoneTrack,
   usePublish,
   useRemoteUsers,
   useRemoteUserTrack,
   useRTCClient,
 } from 'agora-rtc-react';
-import { PhoneOff } from 'lucide-react';
+import { PhoneOff, Video, VideoOff } from 'lucide-react';
 import { DEFAULT_AGENT_UID, ehDaFamilia } from '@/lib/agora';
 import { fetchDoAparelho } from '@/lib/aparelho';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
@@ -82,11 +84,19 @@ export default function Conversa({
     pronto,
   );
 
+  // Alguém da família entrou pelo convite (aviso urgente ou pedido do idoso).
+  // Por privacidade, a câmera do idoso começa desligada e só liga se ele tocar em "Autorizar vídeo".
+  const familiaNaLinha = usuariosRemotos.some((usuario) => ehDaFamilia(usuario.uid));
+  const [cameraAutorizada, setCameraAutorizada] = useState(false);
+
   // O microfone nasce depois de `pronto` pelo mesmo motivo do canal: duas
   // faixas no StrictMode deixariam uns 3 segundos de silêncio no começo.
   const { localMicrophoneTrack, error: erroDoMicrofone } =
     useLocalMicrophoneTrack(pronto, CONFIG_DO_MICROFONE);
-  usePublish([localMicrophoneTrack]);
+  const { localCameraTrack, error: erroDaCamera } = useLocalCameraTrack(
+    pronto && familiaNaLinha && cameraAutorizada,
+  );
+  usePublish([localMicrophoneTrack, localCameraTrack]);
   // Filtro de barulho da Agora: tira TV e conversa de fundo antes do áudio sair.
   useFiltroDeRuido(localMicrophoneTrack);
 
@@ -107,7 +117,7 @@ export default function Conversa({
     pronto: pronto && entrou,
   });
   useEnviarFalas(transcript, dados.conversaId, uidDaAssistente);
-  useConviteDaFamilia(dados.conversaId, pronto && entrou);
+  const { conviteAberto, familiaEntrou } = useConviteDaFamilia(dados.conversaId, pronto && entrou);
 
   // Mantém a cópia efêmera das falas pra consolidar resumo/ficha no encerramento.
   useEffect(() => {
@@ -148,9 +158,6 @@ export default function Conversa({
   // assistente em si. Por isso a tela toca o som de todos e mostra o vídeo de
   // quem tiver vídeo.
   const alguemNaLinha = usuariosRemotos.length > 0;
-  // Alguém da família entrou pelo convite (aviso urgente ou pedido do idoso). Se ela
-  // ligar a câmera, o vídeo dela vai pro palco. A câmera do aparelho fica desligada.
-  const familiaNaLinha = usuariosRemotos.some((usuario) => ehDaFamilia(usuario.uid));
   const comVideo =
     usuariosRemotos.find((usuario) => ehDaFamilia(usuario.uid) && usuario.hasVideo) ??
     usuariosRemotos.find((usuario) => usuario.hasVideo);
@@ -170,9 +177,15 @@ export default function Conversa({
   }, [erroDoMicrofone, onFalha]);
 
   // Assistente que não entra vira aviso simples. Assistente que esteve e saiu
-  // quer dizer que a ligação acabou, e a tela volta a esperar a próxima.
+  // quer dizer que a ligação acabou — salvo durante a transição antes de a família entrar no RTC.
   const naoEntrou = useCallback(() => onFalha('conexao'), [onFalha]);
-  usePresencaDaAssistente(alguemNaLinha, onEncerrar, naoEntrou);
+  usePresencaDaAssistente(
+    alguemNaLinha,
+    encerrarComFalas,
+    naoEntrou,
+    conviteAberto || familiaEntrou,
+    familiaNaLinha,
+  );
 
   useClientEvent(client, 'connection-state-change', (atual, _anterior, razao) => {
     if (atual === 'DISCONNECTED' && String(razao) !== 'LEAVE') onFalha('conexao');
@@ -208,11 +221,12 @@ export default function Conversa({
   // Teto de 10 minutos por ligação (com sinal suave pra IA encaminhar a despedida aos 8m30s)
   // e 2 minutos sem o idoso falar. O microfone entra junto da legenda, pra ligação não cair
   // se a legenda falhar.
-  // Com a família na ligação, o teto de tempo e o corte por silêncio ficam parados.
+  // Com a família na ligação (ou com convite de urgência/família aberto esperando ela entrar),
+  // o teto de tempo e o corte por silêncio ficam parados pra nunca derrubar uma emergência.
   useTetoDaLigacao(
     transcript,
     uidDaAssistente,
-    alguemNaLinha && !familiaNaLinha,
+    alguemNaLinha && !familiaNaLinha && !conviteAberto && !familiaEntrou,
     estado === 'falando',
     localMicrophoneTrack,
     encerrarComFalas,
@@ -229,7 +243,19 @@ export default function Conversa({
       aria-label={`Ligação com a ${NOME_DA_ASSISTENTE}`}
       className="flex w-full flex-1 flex-col items-center justify-between gap-4"
     >
-      <PalcoDaAssistente comVideo={comVideo} estado={estado} nivel={nivel} />
+      <div className="relative flex w-full flex-1 flex-col items-center justify-center">
+        <PalcoDaAssistente
+          comVideo={comVideo}
+          estado={estado}
+          nivel={nivel}
+          etiqueta={familiaNaLinha ? `${dados.nomeDaFamilia ?? 'Sua família'} na ligação` : undefined}
+        />
+        {familiaNaLinha && cameraAutorizada && localCameraTrack ? (
+          <div className="absolute bottom-3 right-3 h-32 w-24 overflow-hidden rounded-xl border-2 border-background shadow-md">
+            <LocalVideoTrack track={localCameraTrack} play className="h-full w-full" />
+          </div>
+        ) : null}
+      </div>
 
       <div className="flex w-full flex-col items-center gap-2">
         <p role="status" className="text-xl font-medium text-muted-foreground">
@@ -246,6 +272,37 @@ export default function Conversa({
           {legenda}
         </p>
       </div>
+
+      {familiaNaLinha ? (
+        <div className="flex w-full max-w-md flex-col items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setCameraAutorizada((v) => !v)}
+            className={`inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl px-6 text-2xl font-semibold shadow-sm transition-colors ${
+              cameraAutorizada
+                ? 'border-2 border-foreground bg-card text-foreground hover:bg-muted'
+                : 'bg-success text-white hover:bg-success/90'
+            }`}
+          >
+            {cameraAutorizada ? (
+              <>
+                <VideoOff aria-hidden className="h-7 w-7 shrink-0" />
+                Desligar meu vídeo
+              </>
+            ) : (
+              <>
+                <Video aria-hidden className="h-7 w-7 shrink-0" />
+                Autorizar vídeo
+              </>
+            )}
+          </button>
+          {erroDaCamera ? (
+            <p role="alert" className="text-center text-base text-destructive">
+              Não consegui ligar a câmera. Confira a permissão de câmera no aparelho.
+            </p>
+          ) : null}
+        </div>
+      ) : null}
 
       {somPreso ? (
         <BotaoGrande onClick={soltarSom}>

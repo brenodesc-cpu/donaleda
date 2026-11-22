@@ -16,11 +16,20 @@ import {
   useRemoteUserTrack,
   type IAgoraRTCRemoteUser,
 } from 'agora-rtc-react';
-import { Mic, MicOff, PhoneOff, Video, VideoOff } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Mic, MicOff, PhoneOff, Volume2, Video, VideoOff } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useSomPreso } from '@/hooks/useSomPreso';
 import { DEFAULT_AGENT_UID, ehDaFamilia } from '@/lib/agora';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import type { EntradaNaLigacao } from '@/lib/tipos';
+import { confirmarFamiliaConectada } from './api';
+
+const CONFIG_MIC_FAMILIA = {
+  AEC: true,
+  ANS: true,
+  AGC: true,
+  encoderConfig: 'speech_standard' as const,
+};
 
 function Som({ usuario }: { usuario: IAgoraRTCRemoteUser }) {
   const { track } = useRemoteUserTrack(usuario, 'audio');
@@ -33,13 +42,15 @@ function VideoDoIdoso({ usuario, nome }: { usuario: IAgoraRTCRemoteUser; nome: s
 }
 
 interface Props {
+  idosoId: string;
   entrada: EntradaNaLigacao;
   tratamento: string;
   onSair: () => void;
 }
 
-export default function SalaDaFamilia({ entrada, tratamento, onSair }: Props) {
+export default function SalaDaFamilia({ idosoId, entrada, tratamento, onSair }: Props) {
   const [pronto, setPronto] = useState(false);
+  const confirmou = useRef(false);
   useEffect(() => {
     const relogio = setTimeout(() => setPronto(true), 0);
     return () => {
@@ -48,13 +59,24 @@ export default function SalaDaFamilia({ entrada, tratamento, onSair }: Props) {
     };
   }, []);
 
-  const { isConnected } = useJoin(
+  const { isConnected, error: erroDeConexao } = useJoin(
     { appid: entrada.appId, channel: entrada.canal, token: entrada.token, uid: Number(entrada.uid) },
     pronto,
   );
+  // Só avisa o servidor pra anunciar e retirar a Dona Leda DEPOIS que o familiar já
+  // está fisicamente conectado na sala Agora RTC — evita derrubar a ligação do idoso.
+  useEffect(() => {
+    if (!isConnected || confirmou.current) return;
+    confirmou.current = true;
+    void confirmarFamiliaConectada(idosoId);
+  }, [isConnected, idosoId]);
   const [microfoneLigado, setMicrofoneLigado] = useState(true);
   const [cameraLigada, setCameraLigada] = useState(true);
-  const { localMicrophoneTrack, error: erroDoMicrofone } = useLocalMicrophoneTrack(pronto);
+  const [somPreso, soltarSom] = useSomPreso();
+  const { localMicrophoneTrack, error: erroDoMicrofone } = useLocalMicrophoneTrack(
+    pronto,
+    CONFIG_MIC_FAMILIA,
+  );
   const { localCameraTrack, error: erroDaCamera } = useLocalCameraTrack(pronto);
   usePublish([localMicrophoneTrack, localCameraTrack]);
   useEffect(() => {
@@ -118,11 +140,23 @@ export default function SalaDaFamilia({ entrada, tratamento, onSair }: Props) {
           {cameraLigada ? 'Desligar câmera' : 'Ligar câmera'}
         </button>
       </div>
-      {erroDoMicrofone || erroDaCamera ? (
+      {erroDeConexao || erroDoMicrofone || erroDaCamera ? (
         <p className="text-center text-base text-destructive">
+          {erroDeConexao ? 'Não consegui conectar na sala de vídeo. Tente sair e entrar de novo. ' : ''}
           {erroDoMicrofone ? 'O navegador não liberou o microfone. ' : ''}
           {erroDaCamera ? 'O navegador não liberou a câmera.' : ''}
         </p>
+      ) : null}
+
+      {somPreso ? (
+        <button
+          type="button"
+          onClick={soltarSom}
+          className="inline-flex min-h-14 w-full max-w-xl items-center justify-center gap-2 rounded-2xl bg-success px-6 text-lg font-semibold text-white"
+        >
+          <Volume2 aria-hidden="true" className="h-6 w-6" />
+          Toque aqui pra ouvir {tratamento}
+        </button>
       ) : null}
 
       <button

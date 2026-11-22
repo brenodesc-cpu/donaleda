@@ -26,11 +26,14 @@ import androidx.appcompat.app.AppCompatActivity;
 public class IncomingCallActivity extends AppCompatActivity {
     public static final String EXTRA_CHAMADA_ID = "chamadaId";
     public static final String EXTRA_ASSISTENTE = "assistente";
+    public static final String EXTRA_SUBTITLE = "subtitle";
+    public static final String EXTRA_FAMILY_ROUTE = "familyRoute";
     public static final String EXTRA_AUTO_ACTION = "autoAction";
 
     private static final long TIMEOUT_MS = 45_000L;
 
     private String chamadaId = "";
+    private String familyRoute = "";
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable timeoutTask = this::finishCallScreen;
 
@@ -42,8 +45,16 @@ public class IncomingCallActivity extends AppCompatActivity {
 
         chamadaId = getIntent().getStringExtra(EXTRA_CHAMADA_ID);
         if (chamadaId == null) chamadaId = "";
+        familyRoute = getIntent().getStringExtra(EXTRA_FAMILY_ROUTE);
+        if (familyRoute == null) familyRoute = "";
         String assistente = getIntent().getStringExtra(EXTRA_ASSISTENTE);
         if (assistente == null || assistente.trim().isEmpty()) assistente = "Dona Leda";
+        String subtitulo = getIntent().getStringExtra(EXTRA_SUBTITLE);
+        if (subtitulo == null || subtitulo.trim().isEmpty()) {
+            subtitulo = !familyRoute.isEmpty()
+                ? "Emergência ao vivo — toque em Atender"
+                : "Ligação da assistente virtual";
+        }
 
         String autoAction = getIntent().getStringExtra(EXTRA_AUTO_ACTION);
         if ("atender".equals(autoAction)) {
@@ -55,7 +66,7 @@ public class IncomingCallActivity extends AppCompatActivity {
             return;
         }
 
-        setContentView(buildCallScreenLayout(assistente));
+        setContentView(buildCallScreenLayout(assistente, subtitulo));
         handler.postDelayed(timeoutTask, TIMEOUT_MS);
     }
 
@@ -73,7 +84,7 @@ public class IncomingCallActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    private LinearLayout buildCallScreenLayout(String assistente) {
+    private LinearLayout buildCallScreenLayout(String assistente, String subtitulo) {
         // Paleta Gema escura/quente de alto contraste para tela bloqueada:
         // Fundo Café #33200F, texto Casca #FFF8E8, destaque Gema #F7B90F,
         // Atender #1B7A3D, Recusar #C92A2A.
@@ -86,13 +97,13 @@ public class IncomingCallActivity extends AppCompatActivity {
         TextView title = new TextView(this);
         title.setText(assistente);
         title.setTextColor(Color.parseColor("#FFF8E8"));
-        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 34);
+        title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
         title.setTypeface(Typeface.DEFAULT_BOLD);
         title.setGravity(Gravity.CENTER);
         root.addView(title);
 
         TextView subtitle = new TextView(this);
-        subtitle.setText("Ligação da assistente virtual");
+        subtitle.setText(subtitulo);
         subtitle.setTextColor(Color.parseColor("#FDEBB5"));
         subtitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         subtitle.setGravity(Gravity.CENTER);
@@ -211,7 +222,9 @@ public class IncomingCallActivity extends AppCompatActivity {
     private void onAnswerClicked() {
         handler.removeCallbacks(timeoutTask);
         DonaLedaConnectionService.endIncomingCall(getApplicationContext(), true);
-        if (!chamadaId.isEmpty()) {
+        if (!familyRoute.isEmpty() && familyRoute.startsWith("/familia")) {
+            DonaLedaCallPushPlugin.dispatchFamilyRoute(getApplicationContext(), familyRoute);
+        } else if (!chamadaId.isEmpty()) {
             DonaLedaCallPushPlugin.sendCallResponseAsync(getApplicationContext(), "atender", chamadaId);
             DonaLedaCallPushPlugin.dispatchCallAction(getApplicationContext(), "atender", chamadaId);
         }
@@ -222,6 +235,9 @@ public class IncomingCallActivity extends AppCompatActivity {
             }
         }
         Intent openMain = new Intent(this, MainActivity.class);
+        if (!familyRoute.isEmpty() && familyRoute.startsWith("/familia")) {
+            openMain.putExtra(MainActivity.EXTRA_FAMILY_ROUTE, familyRoute);
+        }
         openMain.addFlags(
             Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -234,7 +250,7 @@ public class IncomingCallActivity extends AppCompatActivity {
     private void onDeclineClicked() {
         handler.removeCallbacks(timeoutTask);
         DonaLedaConnectionService.endIncomingCall(getApplicationContext(), false);
-        if (!chamadaId.isEmpty()) {
+        if (familyRoute.isEmpty() && !chamadaId.isEmpty()) {
             DonaLedaCallPushPlugin.sendCallResponseAsync(getApplicationContext(), "recusar", chamadaId);
             DonaLedaCallPushPlugin.notifyIfActive(getApplicationContext(), "recusar", chamadaId);
         }

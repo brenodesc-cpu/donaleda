@@ -315,13 +315,16 @@ export async function executarFerramenta(
     await mudarBase(idosoId, (base) => {
       semOMotivo = !podeCitar && citaSegredo(base, mensagem);
       const textoDoAviso = semOMotivo ? avisoSemMotivo(tipo, base.idoso.nome) : mensagem;
+      const avisosAntes = base.alertas.length;
       const alerta = criarAlerta(base, { tipo, gravidade, texto: textoDoAviso, origem: 'assistente' }, agora);
+      const nasceuAgora = base.alertas.length > avisosAntes;
       // Aviso urgente com a ligação aberta abre o convite pra família entrar.
       const convidada = gravidade === 'urgente' ? abrirConvite(base, 'urgente', tipo, agora) : null;
       if (convidada) convite = { conversa: { ...convidada }, frase: fraseDoConvite(base, tipo) };
       if (
-        (base.aparelhosFamiliaPush?.length ?? 0) > 0 ||
-        (gravidade === 'urgente' && (base.redeDeApoio?.length ?? 0) > 0)
+        nasceuAgora &&
+        ((base.aparelhosFamiliaPush?.length ?? 0) > 0 ||
+          (gravidade === 'urgente' && (base.redeDeApoio?.length ?? 0) > 0))
       ) {
         pushInfo = { base: structuredClone(base), alerta };
       }
@@ -333,7 +336,7 @@ export async function executarFerramenta(
     if (p) {
       const entrarAoVivo = Boolean(aberto);
       const urlDestino = entrarAoVivo
-        ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}`
+        ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}&auto=1`
         : `/familia?idoso=${encodeURIComponent(idosoId)}`;
       depois(async () => {
         await Promise.allSettled([
@@ -392,7 +395,7 @@ export async function executarFerramenta(
           mensagem: p.alerta.texto,
           gravidade: 'urgente',
           tipo: 'ligacao',
-          urlDestino: `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}`,
+          urlDestino: `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}&auto=1`,
           entrarAoVivo: true,
         }),
       );

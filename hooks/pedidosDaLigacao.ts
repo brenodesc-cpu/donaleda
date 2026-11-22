@@ -153,12 +153,16 @@ export async function fecharNoServidor(
   conversaId: string,
   agentId: string,
   falas?: FalaDaSessao[],
+  aoSairDaPagina = false,
 ) {
-  await avisarServidor({
-    tipo: 'fim',
-    conversaId,
-    ...(falas && falas.length > 0 ? { falas } : {}),
-  });
+  await avisarServidor(
+    {
+      tipo: 'fim',
+      conversaId,
+      ...(falas && falas.length > 0 ? { falas } : {}),
+    },
+    { aoSairDaPagina },
+  );
   // No modo direto não tem assistente da Agora na sala pra mandar embora.
   if (agentId) await pararAssistente(agentId);
 }

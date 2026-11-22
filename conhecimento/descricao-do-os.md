@@ -1,46 +1,61 @@
 # Descrição pra plataforma da organização
 
-Texto pra colar no OS, com o que o regulamento pede: problema, público-alvo, solução e uso da Agora. Escrito em 21/11/2026 a partir da narrativa aprovada em `proposta-de-valor.md`. As notas do fim são do time e não vão pra plataforma.
+Texto pra colar no OS, com o que o regulamento pede: problema, público, solução e como a Agora entra. Reescrito em 22/11/2026, às 11h30, com a narrativa aprovada pelo Breno, os números do deck de hoje, `agora-o-que-roda.md` e `privacidade-e-dados.md`. As notas do fim são do time e não vão pra plataforma.
 
 ## Versão completa
 
 ### O problema
 
-Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim.
+Quantas vezes você ainda vai ver os seus pais? No Brasil, 37% das pessoas com 50 anos ou mais que têm filhos não veem nenhum deles toda semana (ELSI-Brasil). Entre uma visita e outra, a família não sabe como foi o dia.
 
-Cerca de 6 milhões de brasileiros com 60 anos ou mais moram sozinhos (IBGE, PNAD Contínua 2025). A filha que passa a semana sem ver a mãe não sabe se ela comeu, tomou o remédio ou caiu. Um cuidador de 12 horas por dia custa de R$ 2.800 a 4.500 por mês (Cidesp, 2026). A aposentadoria da maioria dos brasileiros não paga um cuidador: 62,5% de quem recebe do INSS ganha um salário mínimo (R$ 1.621), menos que o piso do cuidador com carteira (R$ 1.760,44 no Caged).
+O país tem 35,2 milhões de pessoas com 60 anos ou mais, e 6,4 milhões delas moram sozinhas (IBGE, PNAD Contínua 2025). Em 2070 serão 75 milhões de idosos (IBGE, projeção).
+
+Acompanhar o dia a dia de perto hoje custa caro. Um cuidador custa a partir de R$ 2.800 por mês (Cidesp, 2026), e uma casa de repouso, uns R$ 6 mil (Mercado Mineiro, 2026). Os dois dependem de uma pessoa do lado, e o dia a dia do idoso não fica registrado.
 
 ### Pra quem
 
-O idoso lúcido que mora sozinho, com celular ou tablet com internet, só precisa atender. A filha ou o filho que passa a semana sem ver o pai ou a mãe contrata e acompanha pelo painel. As casas de repouso parceiras indicam a Dona Leda às famílias que as procuram e acompanham os idosos que indicaram.
+- **Quem atende:** o idoso lúcido que mora sozinho e tem celular ou tablet com internet.
+- **Quem paga:** a filha ou o filho que passa a semana sem ver o pai ou a mãe. O plano custa R$ 129,90 por mês.
+- **Quem leva até as famílias:** as casas de repouso. A primeira casa parceira entrou em 21/11, na fase de teste.
+- **O passo seguinte:** planos de saúde e seguros, que podem contratar por beneficiário, com o sim do idoso.
 
 ### A solução
 
-A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, saúde, comunicação e rotina.
+A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, prevenção, comunicação e rotina.
 
-No protótipo, ela liga todo dia na hora marcada, conversa em português esperando as pausas de quem tem mais idade e sempre se apresenta como assistente virtual. Pergunta do sono, da comida, do remédio e da dor, anota o dia e lembra o que a pessoa contou. A família acompanha num painel e recebe um aviso quando a pessoa conta uma queda, uma dor no peito, um pedido de dinheiro ou senha, uma tristeza que dura ou remédio tomado a mais, e quando a ligação não é atendida. Quem age é a família. Ela não dá diagnóstico e, numa urgência, orienta ligar pro 192.
+Ela liga todo dia na hora combinada, e o idoso só precisa atender, sem ler nem digitar. Conversa em português, sempre se apresenta como assistente virtual, pergunta do sono, da comida, do remédio e da dor e lembra do que ele contou nas outras ligações. A família acompanha num painel o dia de hoje e a semana e recebe um aviso na hora quando ele conta uma queda, um pedido de dinheiro ou de senha ou uma tristeza que dura. Num aviso urgente, a filha entra na mesma ligação. Quem age é a família: a Dona Leda não dá diagnóstico, não é serviço de emergência e, numa urgência, orienta ligar pro 192.
 
-A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
-
-A idosa do painel de exemplo é inventada.
+Ninguém grava a ligação. Ficam a ficha do dia, as lembranças, os avisos e um resumo, sem áudio e sem a conversa inteira, e quem cadastrou apaga tudo pelo painel. A gente não vende dado e não usa pra propaganda.
 
 ### Como a Agora entra
 
-1. O aparelho do idoso entra numa sala de áudio da Agora (RTC) e publica só o microfone.
-2. O Conversational AI Engine da Agora põe a assistente na sala. No modo principal, ele roda o Gemini Live, com a voz Leda e a chave do time no Google AI Studio.
-3. No modo reserva, ele junta três peças com chaves gerenciadas pela Agora: o Deepgram escuta, e a OpenAI responde (gpt-4o-mini) e fala (tts-1).
-4. A legenda e o estado da assistente chegam pelo canal de mensagens da Agora (RTM), e na tela um rosto desenhado mexe a boca pelo volume da voz.
-5. Quando o modelo decide agir, a Agora chama por MCP as ações dela: anotar o dia, guardar uma lembrança, avisar a família e resumir a conversa.
+1. O aparelho do idoso entra numa sala de áudio da Agora (RTC), com chave temporária, e publica só o microfone.
+2. No site, o filtro de ruído da Agora (AI Denoiser) limpa o microfone.
+3. O Conversational AI Engine da Agora põe a assistente na sala com o Gemini Live, que ouve e fala em português e aceita interrupção.
+4. A legenda e o estado da assistente (ouvindo, pensando, falando) chegam à tela pelas mensagens em tempo real da Agora (RTM).
+5. A Agora chama as ações da Dona Leda no nosso servidor: anotar a ficha, guardar a lembrança, avisar a família e resumir a conversa.
+6. Num aviso urgente, a família entra na mesma sala com voz e vídeo. A Dona Leda anuncia a entrada e sai da sala.
+7. Aos 8 minutos e 30 segundos, o servidor pede pela Agora que ela se despeça.
+
+### O que foi testado e o que é simulação
+
+- **Tempo de resposta:** 2,8 segundos em média, medido pelo time em 21/11 com voz gravada.
+- **Segurança:** 40 de 55 conversas simuladas de golpe, queda, segredo e remédio resolvidas certo na bateria do time, que roda por texto.
+- **Com gente:** uma casa de repouso e os mentores do evento, em 21/11. A casa ensinou que quem mais precisa ainda mora em casa, e por isso a família paga e a casa indica.
+- **Simulação:** a dona Helena e a Marina, da demonstração e do vídeo, são pessoas de exemplo, e os dias anteriores do painel delas são inventados.
+- **Limites:** ninguém pagou ainda, e o teste com famílias indicadas pela casa parceira começa depois do evento.
 
 ## Versão curta
 
-Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. A Dona Leda é a assistente de cuidado de quem envelhece. Ela liga todo dia pro idoso, conversa em português, pergunta do sono, da comida, do remédio e da dor e avisa a família quando a pessoa conta uma queda ou um golpe. A conversa roda no Conversational AI Engine da Agora, com o Gemini Live (Deepgram e OpenAI na reserva), numa sala de áudio da Agora (RTC), com legenda pelo RTM e ações por MCP.
+A Dona Leda é a assistente de cuidado de quem envelhece. No Brasil, 6,4 milhões de idosos moram sozinhos, e a família passa a semana sem saber como foi o dia. Ela liga todo dia, o idoso só atende, e a família vê no painel o dia, a semana e o aviso na hora de uma queda ou de um golpe. A conversa roda no Conversational AI Engine da Agora com o Gemini Live, numa sala de áudio da Agora (RTC), com legenda pelo RTM, filtro de ruído e a família entrando na mesma sala num aviso urgente. A família paga R$ 129,90 por mês.
 
 ## Uma frase
 
-A Dona Leda é a assistente de cuidado de quem envelhece: ela liga pro idoso que mora sozinho no horário combinado e avisa a família quando ele conta uma queda, um golpe ou uma tristeza que dura.
+A Dona Leda é a assistente de cuidado de quem envelhece: liga todo dia pro idoso que mora sozinho, conversa, lembra e avisa a família na hora de uma queda ou de um golpe.
 
 ## Notas do time, fora da plataforma: o que foi conferido no código
+
+Estas notas são de 21/11 e parte delas ficou velha. O que vale sobre a Agora está em `agora-o-que-roda.md`, e sobre dados, em `privacidade-e-dados.md`.
 
 - **Quem contrata, desde 21/11 às 17h:** a família, com as casas de repouso indicando. Das 15h às 17h o "Pra quem" dizia que o residencial contratava por morador.
 - **Sala de áudio só com o microfone:** `components/Conversa.tsx` publica apenas a faixa do microfone (`useLocalMicrophoneTrack` e `usePublish`).

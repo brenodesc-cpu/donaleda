@@ -295,63 +295,25 @@ export function montarRoteiroDoMomento(base: Base, agora: Date = new Date()): st
     }
   }
 
-  // 3. Acompanhamento longitudinal de episódios e pontos de atenção (hoje e últimos 7 dias).
-  const seteDiasAtras = somarDias(hojeData, -7);
-  const alertasDaSemana = base.alertas
-    .filter((a) => {
-      const dataAlerta = dataEmBrasilia(new Date(a.criadoEm));
-      return (
-        dataAlerta >= seteDiasAtras &&
-        dataAlerta <= hojeData &&
-        (a.tipo === 'saude' || a.tipo === 'remedio' || a.tipo === 'humor' || a.tipo === 'emergencia')
-      );
-    })
-    .slice(-4);
-
-  const diasComAlerta = new Set<string>();
-  for (const a of alertasDaSemana) {
-    const dataAlerta = dataEmBrasilia(new Date(a.criadoEm));
-    diasComAlerta.add(dataAlerta);
+  // 3. Pontos de atenção registrados mais cedo hoje (alertas ou dor). Só os de hoje, como
+  // na 51b0a7a: aviso de outro dia (até os ensaios de queda) não vira assunto da ligação, e
+  // a anotação livre do dia não entra, porque pode trazer fala de terceiro inteira (22/11).
+  const alertasDeHoje = base.alertas
+    .filter(
+      (a) =>
+        dataEmBrasilia(new Date(a.criadoEm)) === hojeData &&
+        (a.tipo === 'saude' || a.tipo === 'remedio' || a.tipo === 'humor' || a.tipo === 'emergencia'),
+    )
+    .slice(-2);
+  for (const a of alertasDeHoje) {
     // As palavras da pessoa entre aspas ficam de fora: fala citada não vira instrução na ligação seguinte.
     const semCitacao = a.texto.replace(/"[^"]*"/g, '').replace(/\s+/g, ' ').trim();
-    if (dataAlerta === hojeData) {
-      linhas.push(
-        `- Ponto de atenção mais cedo hoje (${horaCurtaDeIso(a.criadoEm)}): ${semCitacao} — retome esse assunto pra saber como está agora.`,
-      );
-    } else {
-      linhas.push(
-        `- Acompanhamento de episódio recente (${dataBrDeIso(dataAlerta)}): ${semCitacao} — pergunte com carinho como evoluiu e se ainda sente algo.`,
-      );
-    }
+    linhas.push(`- Ponto de atenção mais cedo hoje (${horaCurtaDeIso(a.criadoEm)}): ${semCitacao} — retome esse assunto pra saber como está agora.`);
   }
-
-  if (typeof hoje.dor === 'number' && hoje.dor >= 4 && !diasComAlerta.has(hojeData)) {
+  if (typeof hoje.dor === 'number' && hoje.dor >= 4 && alertasDeHoje.length === 0) {
     linhas.push(
       `- Mais cedo hoje relatou dor ${hoje.dor} de 10${hoje.ondeDoi ? ` ${hoje.ondeDoi}` : ''} — pergunte se melhorou.`,
     );
-  }
-
-  // Dias anteriores da semana (até 7 dias) que tiveram dor, mal-estar, sono ruim, falta de comida/remédio ou humor difícil.
-  const diasComPontoNaSemana = base.dias
-    .filter((d) => d.data >= seteDiasAtras && d.data < hojeData && !diasComAlerta.has(d.data))
-    .sort((a, b) => b.data.localeCompare(a.data));
-  let adicionadosDaSemana = 0;
-  for (const d of diasComPontoNaSemana) {
-    if (adicionadosDaSemana >= 3) break;
-    const pontos: string[] = [];
-    if (typeof d.dor === 'number' && d.dor >= 4) {
-      pontos.push(`dor ${d.dor}/10${d.ondeDoi ? ` (${d.ondeDoi})` : ''}`);
-    }
-    if (d.sono === 'mal') pontos.push('dormiu mal');
-    if (d.alimentacao === 'nao_comeu') pontos.push('não comeu');
-    if (d.remedio === 'nao_tomou') pontos.push('não tomou remédio');
-    if (d.humor && d.humor !== 'bem') pontos.push(`estava ${d.humor}`);
-    if (d.observacoes?.length) pontos.push(d.observacoes.slice(-1)[0].trim().slice(0, 100));
-    if (pontos.length === 0) continue;
-    linhas.push(
-      `- Ponto de atenção da semana (${dataBrDeIso(d.data)}): ${pontos.join(', ')} — acompanhe se já passou ou se precisa de alguma ajuda.`,
-    );
-    adicionadosDaSemana += 1;
   }
 
   // 4. Continuidade episódica das últimas 3 conversas recentes (mesmo dia e últimos 3 dias).

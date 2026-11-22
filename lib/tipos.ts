@@ -208,6 +208,8 @@ export interface Chamada {
 export interface AparelhoPush {
   plataforma: 'android' | 'ios';
   token: string;
+  /** No iOS da família, token PushKit VoIP opcional pra abrir tela cheia CallKit em emergência. */
+  voipToken?: string;
   atualizadoEm: string;
   /** Identificador deste aparelho no Agora Signaling (RTM). */
   agoraRtmUserId?: string;
@@ -342,6 +344,8 @@ export type AcaoDaFamilia = (
   | { acao: 'gerar_codigo' }
   /** Entra na ligação que está acontecendo, com voz e vídeo. Responde `{ ok, ...EntradaNaLigacao }`, ou 409 sem ligação. */
   | { acao: 'entrar_na_ligacao' }
+  /** Confirmado pelo aparelho da família após conectar no canal Agora RTC: anuncia e retira a assistente. */
+  | { acao: 'familia_conectada' }
   /** A família ensina uma lembrança. Responde `{ ok, lembranca }` ou 422 `{ ok:false, erro:'recusada', motivo }`. */
   | { acao: 'ensinar'; texto: string; categoria: CategoriaDeLembranca; sobre?: string; data?: string; hora?: string }
   /** A família corrige uma lembrança que vê. Só os campos que vierem. Responde `{ ok, lembranca }`. */
@@ -355,8 +359,8 @@ export type AcaoDaFamilia = (
       acao: 'salvar_rede_de_apoio';
       contatos: { id?: string; nome: string; parentesco: string; telefone: string }[];
     }
-  /** Registra o token FCM (Android) ou APNs Alert (iOS) do celular do familiar responsável. */
-  | { acao: 'registrar_push_familia'; plataforma: 'android' | 'ios'; token: string }
+  /** Registra o token FCM (Android) ou APNs Alert + PushKit VoIP (iOS) do celular do familiar responsável. */
+  | { acao: 'registrar_push_familia'; plataforma: 'android' | 'ios'; token: string; voipToken?: string }
   /** Muda o perfil. Só os campos que vierem. Responde `{ ok, idoso }`. */
   | {
       acao: 'perfil';
@@ -408,6 +412,8 @@ export interface RespostaDoEvento {
   ok: boolean;
   /** Vem quando a fala disparou uma regra de segurança (queda, golpe). */
   alerta?: Alerta;
+  /** Resposta do evento 'convite': se há convite aberto nesta conversa. */
+  conviteAberto?: boolean;
   /** Resposta do evento 'convite': se alguém da família já entrou. */
   familiaEntrou?: boolean;
 }

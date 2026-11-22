@@ -62,6 +62,17 @@ public class DonaLedaFirebaseMessagingService extends FirebaseMessagingService {
             }
             String alertaId = data.get("alertaId");
             String urlDestino = data.get("urlDestino");
+            if (entrarAoVivo && urlDestino != null && urlDestino.startsWith("/familia")) {
+                // Emergência ao vivo: abre tela cheia de chamada tocando igual WhatsApp, mesmo bloqueado!
+                DonaLedaConnectionService.reportEmergencyFamilyCall(
+                    getApplicationContext(),
+                    alertaId != null ? alertaId.trim() : "",
+                    titulo.trim(),
+                    mensagem.trim(),
+                    urlDestino.trim()
+                );
+                return;
+            }
             mostrarNotificacaoFamilia(
                 getApplicationContext(),
                 titulo.trim(),

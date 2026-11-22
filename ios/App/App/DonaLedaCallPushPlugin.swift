@@ -14,6 +14,7 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
     private var registry: PKPushRegistry?
     private let provider: CXProvider
     private var activeCalls: [UUID: String] = [:]
+    private var activeFamilyRoutes: [UUID: String] = [:]
 
     private(set) var lastVoipToken: String?
     private var pendingAction: (acao: String, chamadaId: String)?
@@ -69,7 +70,7 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
 
     private override init() {
         let config = CXProviderConfiguration()
-        config.supportsVideo = false
+        config.supportsVideo = true
         config.maximumCallsPerCallGroup = 1
         config.maximumCallGroups = 1
         config.supportedHandleTypes = [.generic]
@@ -117,16 +118,25 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
             return
         }
         let dict = payload.dictionaryPayload
+        let entrarAoVivo = (dict["entrarAoVivo"] as? String) == "1"
+        let urlDestino = (dict["urlDestino"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
         let chamadaId = (dict["chamadaId"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? UUID().uuidString
+        let tituloEmergencia = (dict["titulo"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
         let assistente = (dict["assistente"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Dona Leda"
 
         let callUUID = UUID()
-        activeCalls[callUUID] = chamadaId
+        let isFamilyEmergency = entrarAoVivo && (urlDestino?.hasPrefix("/familia") == true)
+        if isFamilyEmergency, let rota = urlDestino {
+            activeFamilyRoutes[callUUID] = rota
+        } else {
+            activeCalls[callUUID] = chamadaId
+        }
 
+        let nomeExibido = isFamilyEmergency ? (tituloEmergencia ?? "Emergência — \(assistente)") : assistente
         let update = CXCallUpdate()
-        update.remoteHandle = CXHandle(type: .generic, value: assistente)
-        update.localizedCallerName = assistente
-        update.hasVideo = false
+        update.remoteHandle = CXHandle(type: .generic, value: nomeExibido)
+        update.localizedCallerName = nomeExibido
+        update.hasVideo = isFamilyEmergency
         update.supportsHolding = false
         update.supportsGrouping = false
         update.supportsUngrouping = false
@@ -142,11 +152,21 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
 
     func providerDidReset(_ provider: CXProvider) {
         activeCalls.removeAll()
+        activeFamilyRoutes.removeAll()
     }
 
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
-        let chamadaId = activeCalls[action.callUUID]
         configureAudioSessionForVoice()
+        if let rota = activeFamilyRoutes.removeValue(forKey: action.callUUID) {
+            DonaLedaFamilyPushCoordinator.shared.dispatchRoute(rota)
+            action.fulfill()
+            // Encerra a sessão CallKit logo após abrir o WebView pra não disputar áudio com a Agora RTC.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self.provider.reportCall(with: action.callUUID, endedAt: Date(), reason: .remoteEnded)
+            }
+            return
+        }
+        let chamadaId = activeCalls[action.callUUID]
         if let id = chamadaId {
             sendCallResponseInBackground(acao: "atender", chamadaId: id)
             dispatchAction(acao: "atender", chamadaId: id)
@@ -155,6 +175,10 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
     }
 
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
+        if activeFamilyRoutes.removeValue(forKey: action.callUUID) != nil {
+            action.fulfill()
+            return
+        }
         if let id = activeCalls.removeValue(forKey: action.callUUID) {
             sendCallResponseInBackground(acao: "recusar", chamadaId: id)
             dispatchAction(acao: "recusar", chamadaId: id)
@@ -201,6 +225,17 @@ final class DonaLedaFamilyPushCoordinator: NSObject, UNUserNotificationCenterDel
         return rota
     }
 
+    func dispatchRoute(_ rota: String) {
+        guard rota.hasPrefix("/familia") else { return }
+        DispatchQueue.main.async {
+            if let plugin = self.activePlugin {
+                plugin.emitFamilyDeepLink(rota)
+            } else {
+                self.pendingRoute = rota
+            }
+        }
+    }
+
     func requestAndRegister(completion: @escaping (String?) -> Void) {
         configureCenter()
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
@@ -215,6 +250,13 @@ final class DonaLedaFamilyPushCoordinator: NSObject, UNUserNotificationCenterDel
                 }
                 self.pendingCallbacks.append(completion)
                 UIApplication.shared.registerForRemoteNotifications()
+                // Timeout de segurança (ex.: conta Apple gratuita ou simulador sem APNs) pra UI nunca travar.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
+                    guard !self.pendingCallbacks.isEmpty else { return }
+                    let callbacks = self.pendingCallbacks
+                    self.pendingCallbacks.removeAll()
+                    callbacks.forEach { $0(self.lastApnsToken) }
+                }
             }
         }
     }
@@ -306,11 +348,14 @@ public class DonaLedaCallPushPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func registerFamilyAlerts(_ call: CAPPluginCall) {
+        DonaLedaVoipCoordinator.shared.start()
         DonaLedaFamilyPushCoordinator.shared.requestAndRegister { token in
-            var result: [String: Any] = [:]
+            var result: [String: Any] = ["plataforma": "ios"]
             if let token = token, !token.isEmpty {
                 result["token"] = token
-                result["plataforma"] = "ios"
+            }
+            if let voip = DonaLedaVoipCoordinator.shared.lastVoipToken, !voip.isEmpty {
+                result["voipToken"] = voip
             }
             call.resolve(result)
         }

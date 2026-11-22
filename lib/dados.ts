@@ -526,12 +526,24 @@ export function registrarAparelhoFamiliaPush(
   plataforma: 'android' | 'ios',
   token: string,
   agora: Date = new Date(),
+  voipToken?: string,
 ): boolean {
   const limpo = token.trim();
-  if (limpo.length < 16 || limpo.length > 512) return false;
+  const voipLimpo = voipToken?.trim();
+  const temToken = limpo.length >= 16 && limpo.length <= 512;
+  const temVoip = Boolean(voipLimpo && voipLimpo.length >= 16 && voipLimpo.length <= 512);
+  if (!temToken && !temVoip) return false;
+  const chave = temToken ? limpo : voipLimpo!;
   base.aparelhosFamiliaPush ??= [];
-  const semAntigo = base.aparelhosFamiliaPush.filter((a) => a.token !== limpo);
-  semAntigo.push({ plataforma, token: limpo, atualizadoEm: agora.toISOString() });
+  const semAntigo = base.aparelhosFamiliaPush.filter(
+    (a) => a.token !== chave && (!temVoip || a.voipToken !== voipLimpo),
+  );
+  semAntigo.push({
+    plataforma,
+    token: chave,
+    ...(temVoip ? { voipToken: voipLimpo } : {}),
+    atualizadoEm: agora.toISOString(),
+  });
   base.aparelhosFamiliaPush = semAntigo.slice(-10);
   return true;
 }

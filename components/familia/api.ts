@@ -76,6 +76,9 @@ export const enviarAcao = (acao: AcaoComIdoso) => pedir<unknown>('/api/familia',
 export const entrarNaLigacao = (idosoId: string) =>
   pedir<{ ok: boolean } & EntradaNaLigacao>('/api/familia', postar({ acao: 'entrar_na_ligacao', idosoId }));
 
+export const confirmarFamiliaConectada = (idosoId: string) =>
+  pedir<{ ok: boolean }>('/api/familia', postar({ acao: 'familia_conectada', idosoId }));
+
 export const gerarCodigo = (idosoId: string) =>
   pedir<CodigoDoAparelho>('/api/familia', postar({ acao: 'gerar_codigo', idosoId }));
 

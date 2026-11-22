@@ -354,8 +354,10 @@ export async function notificarFamiliaPorPush(
     categoria: aviso.tipo,
     alertaId: aviso.alertaId ?? '',
     assistente: NOME_DA_ASSISTENTE,
-    titulo: aviso.titulo.slice(0, 120),
-    mensagem: aviso.mensagem.slice(0, 240),
+    // Texto fixo: a notificação aparece na tela bloqueada e passa pelo Google e pela Apple,
+    // então não leva o nome do idoso, o aviso nem a fala dele (revisão de 22/11).
+    titulo: urgente ? 'Aviso urgente da Dona Leda' : 'Aviso da Dona Leda',
+    mensagem: aviso.entrarAoVivo ? 'Abra o app pra entrar na ligação.' : 'Abra o app.',
     urlDestino: aviso.urlDestino ?? '/familia',
     entrarAoVivo: aviso.entrarAoVivo ? '1' : '0',
   };
@@ -384,9 +386,14 @@ export async function notificarFamiliaPorPush(
   const tarefaIos = (async () => {
     if (ioss.length === 0) return;
     const envios = await Promise.all(
-      ioss.map((a) =>
-        enviarApnsAlerta(a.token, payload.titulo, payload.mensagem, urgente, payload).catch(() => false),
-      ),
+      ioss.map((a) => {
+        // Em emergência ao vivo com token PushKit VoIP cadastrado, aciona CallKit em tela cheia
+        // tocando igual ligação de WhatsApp no iPhone, mesmo bloqueado ou fechado.
+        if (aviso.entrarAoVivo && a.voipToken) {
+          return enviarApnsVoip(a.voipToken, payload).catch(() => false);
+        }
+        return enviarApnsAlerta(a.token, payload.titulo, payload.mensagem, urgente, payload).catch(() => false);
+      }),
     );
     apnsEnviados = envios.filter(Boolean).length;
   })();
