@@ -16,6 +16,7 @@ import type {
   Remedio,
   Sono,
 } from './tipos';
+import { ehAvisoInterno } from './saudacaoGemini';
 
 // "não conta pra Marina", "fica entre nós", "é segredo", "não quero que ela saiba".
 const PEDIU_SEGREDO =
@@ -63,6 +64,7 @@ export function limparFalasDaSessao(entrada: unknown): FalaDaSessao[] {
     if (quem !== 'idoso' && quem !== 'assistente') continue;
     const t = textoLimpo(texto, 400);
     if (!t) continue;
+    if (quem === 'idoso' && ehAvisoInterno(t)) continue;
     limpas.push({ quem, texto: t });
   }
   return limpas;
@@ -156,6 +158,9 @@ export function aplicarExtracaoNaBase(
     }
   }
 
+  // Outra pessoa atendeu: a regra de segurança acima vale, e o resto não entra na ficha.
+  if (conversa?.outraPessoa) return { aplicouAlgo };
+
   // 2. Aplica campos de bem-estar extraídos (sem sobrescrever dados já gravados hoje).
   // A nota da dor só vale se o idoso disse um número; o modelo inventava "dor 10".
   if (extracao.bemEstar) {
@@ -185,7 +190,9 @@ export function aplicarExtracaoNaBase(
         hora: horaPedida(item.hora),
         // O que cita um assunto que a pessoa já pediu segredo fica reservado também.
         reservada: item.reservada || pediuSegredo || citaSegredo(base, item.texto) || undefined,
-        origem: 'conversa',
+        // Quem tirou isto da conversa foi uma segunda IA, depois do fim: é dedução,
+        // não o que a pessoa contou com essas palavras. Só vira fato quando alguém confirma.
+        origem: 'deduzida',
       },
       agora,
     );

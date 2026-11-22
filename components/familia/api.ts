@@ -4,6 +4,7 @@
 import type {
   AcaoDaFamilia,
   CodigoDoAparelho,
+  EntradaNaLigacao,
   Idoso,
   IdosoDaFamilia,
   NovoIdoso,
@@ -72,8 +73,24 @@ export const buscarPainel = (idosoId: string) =>
 
 export const enviarAcao = (acao: AcaoComIdoso) => pedir<unknown>('/api/familia', postar(acao));
 
+export const entrarNaLigacao = (idosoId: string) =>
+  pedir<{ ok: boolean } & EntradaNaLigacao>('/api/familia', postar({ acao: 'entrar_na_ligacao', idosoId }));
+
 export const gerarCodigo = (idosoId: string) =>
   pedir<CodigoDoAparelho>('/api/familia', postar({ acao: 'gerar_codigo', idosoId }));
+
+/** Envia foto ou PDF de exame/consulta/receita pra leitura segura em memória. */
+export async function enviarDocumento(
+  idosoId: string,
+  arquivo: File,
+  nota?: string,
+): Promise<Resultado<{ ok: boolean; compromissosCriados?: number; detalhe?: string }>> {
+  const form = new FormData();
+  form.append('idosoId', idosoId);
+  form.append('arquivo', arquivo);
+  if (nota?.trim()) form.append('nota', nota.trim());
+  return pedir('/api/familia/documento', { method: 'POST', body: form });
+}
 
 /** Endereço de uma tela da família mantendo o idoso escolhido. */
 export function enderecoCom(caminho: string, idosoId: string | null | undefined): string {

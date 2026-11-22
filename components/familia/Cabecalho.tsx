@@ -1,3 +1,8 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { Bell, BellRing } from 'lucide-react';
+import { ehAppNativo, registrarPushDaFamiliaNativo } from '@/lib/pushNativo';
 import type { PainelDaFamilia } from '@/lib/tipos';
 import {
   comMaiuscula,
@@ -10,6 +15,7 @@ import {
 
 interface CabecalhoProps {
   painel: PainelDaFamilia;
+  onRegistrarPushFamilia?: (plataforma: 'android' | 'ios', token: string) => Promise<boolean>;
 }
 
 function Situacao({ painel }: CabecalhoProps) {
@@ -63,18 +69,80 @@ function Situacao({ painel }: CabecalhoProps) {
   );
 }
 
-export function Cabecalho({ painel }: CabecalhoProps) {
+export function Cabecalho({ painel, onRegistrarPushFamilia }: CabecalhoProps) {
   const data = dataPorExtenso(painel.hoje.data);
+  const [estadoNotif, setEstadoNotif] = useState<'idle' | 'ativando' | 'ativo' | 'negado'>('idle');
+
+  useEffect(() => {
+    if (ehAppNativo()) {
+      if (painel.notificacoesFamiliaAtivas) setEstadoNotif('ativo');
+      return;
+    }
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      if (Notification.permission === 'granted') setEstadoNotif('ativo');
+      else if (Notification.permission === 'denied') setEstadoNotif('negado');
+    }
+  }, [painel.notificacoesFamiliaAtivas]);
+
+  const ativarNotificacoes = async () => {
+    setEstadoNotif('ativando');
+    if (ehAppNativo()) {
+      const reg = await registrarPushDaFamiliaNativo();
+      if (reg && onRegistrarPushFamilia) {
+        const ok = await onRegistrarPushFamilia(reg.plataforma, reg.token);
+        setEstadoNotif(ok ? 'ativo' : 'negado');
+        return;
+      }
+      setEstadoNotif('negado');
+      return;
+    }
+    if (typeof window === 'undefined' || !('Notification' in window)) {
+      setEstadoNotif('negado');
+      return;
+    }
+    try {
+      const perm = await Notification.requestPermission();
+      setEstadoNotif(perm === 'granted' ? 'ativo' : 'negado');
+    } catch {
+      setEstadoNotif('negado');
+    }
+  };
 
   return (
-    <header className="flex flex-col gap-1">
+    <header className="flex flex-col gap-2">
       {data ? (
         <p className="text-base text-muted-foreground">{comMaiuscula(data)}</p>
       ) : null}
-      <h1 className="text-2xl font-semibold text-foreground md:text-3xl">
-        {comMaiuscula(painel.idoso.tratamento)} hoje
-      </h1>
-      <Situacao painel={painel} />
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-semibold text-foreground md:text-3xl">
+            {comMaiuscula(painel.idoso.tratamento)} hoje
+          </h1>
+          <Situacao painel={painel} />
+        </div>
+        {onRegistrarPushFamilia ? (
+          estadoNotif === 'ativo' ? (
+            <span className="inline-flex items-center gap-2 rounded-xl border border-success/40 bg-success/10 px-3 py-2 text-sm font-medium text-success">
+              <BellRing aria-hidden="true" className="h-4 w-4" />
+              Notificações ativas
+            </span>
+          ) : (
+            <button
+              type="button"
+              disabled={estadoNotif === 'ativando'}
+              onClick={() => void ativarNotificacoes()}
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-muted disabled:opacity-60"
+            >
+              <Bell aria-hidden="true" className="h-4 w-4" />
+              {estadoNotif === 'ativando'
+                ? 'Ativando...'
+                : estadoNotif === 'negado'
+                  ? 'Permissão negada no aparelho'
+                  : 'Ativar notificações neste aparelho'}
+            </button>
+          )
+        ) : null}
+      </div>
     </header>
   );
 }

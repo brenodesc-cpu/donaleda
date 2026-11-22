@@ -9,11 +9,13 @@ import type {
   MotivoDaFalha,
 } from '@/types/conversation';
 import {
+  aquecerServidorDaLigacao,
   chamarAssistente,
   conseguirMicrofone,
   fecharNoServidor,
   ligarRtm,
   pedirToken,
+  LimiteDoDiaAcabou,
   type TokenDaAgora,
 } from './pedidosDaLigacao';
 
@@ -42,25 +44,33 @@ export function useLigacao() {
   const ultimasFalas = useRef<FalaDaSessao[]>([]);
   // Token pré-aquecido em segundo plano: zera a espera de ~450 ms ao tocar em Ligar/Atender.
   const tokenPreaquecido = useRef<{ valor: TokenDaAgora; criadoEm: number } | null>(null);
+  const tokenEmVoo = useRef<Promise<TokenDaAgora> | null>(null);
 
   const preaquecerToken = useCallback(() => {
-    void pedirToken()
+    if (tokenEmVoo.current) return;
+    const promessa = pedirToken()
       .then((valor) => {
         tokenPreaquecido.current = { valor, criadoEm: Date.now() };
+        return valor;
       })
-      .catch(() => undefined);
+      .finally(() => {
+        if (tokenEmVoo.current === promessa) tokenEmVoo.current = null;
+      });
+    tokenEmVoo.current = promessa;
+    void promessa.catch(() => undefined);
   }, []);
 
   const atualizarFalas = useCallback((falas: FalaDaSessao[]) => {
     ultimasFalas.current = falas;
   }, []);
 
-  // Os módulos da Agora e a tela da conversa são pesados: pré-carrega tudo + 1 token pronto.
+  // Os módulos da Agora e a tela da conversa são pesados: pré-carrega tudo + aquece rotas + 1 token pronto.
   useEffect(() => {
     import('agora-rtc-react').catch(() => {});
     import('agora-rtm').catch(() => {});
     import('@/components/Conversa').catch(() => {});
     import('@/components/ProvedorDaAgora').catch(() => {});
+    aquecerServidorDaLigacao();
     preaquecerToken();
   }, [preaquecerToken]);
 
@@ -91,15 +101,21 @@ export function useLigacao() {
     setFase('ligando');
     setMotivo(null);
     try {
-      // Consome o token pré-aquecido se ainda estiver fresco (< 40 min); senão busca em paralelo.
+      // Consome o token pré-aquecido (ou a promessa já em voo) para evitar 2 pedidos concorrentes.
       const cache = tokenPreaquecido.current;
       tokenPreaquecido.current = null;
       const tokenFresco =
         cache && Date.now() - cache.criadoEm < VALIDADE_TOKEN_PREAQUECIDO_MS ? cache.valor : null;
+      const emVoo = tokenEmVoo.current;
+      tokenEmVoo.current = null;
 
       const [temMicrofone, token] = await Promise.all([
         conseguirMicrofone(),
-        tokenFresco ? Promise.resolve(tokenFresco) : pedirToken(),
+        tokenFresco
+          ? Promise.resolve(tokenFresco)
+          : emVoo
+            ? emVoo.catch(() => pedirToken())
+            : pedirToken(),
       ]);
       if (!temMicrofone) {
         ocupado.current = false;
@@ -120,6 +136,9 @@ export function useLigacao() {
         if (inicio.status === 'fulfilled') {
           void fecharNoServidor(inicio.value.conversa_id, inicio.value.agent_id);
         }
+        if (inicio.status === 'rejected' && inicio.reason instanceof LimiteDoDiaAcabou) {
+          throw inicio.reason;
+        }
         throw new Error('a ligação não completou');
       }
       fimAvisado.current = false;
@@ -131,12 +150,14 @@ export function useLigacao() {
         avatar: Boolean(inicio.value.avatar),
         modo: inicio.value.modo,
         direto: inicio.value.direto,
+        tetoMs: inicio.value.teto_ms,
+        nomeDaFamilia: inicio.value.nomeDaFamilia,
       });
       setFase('conversando');
     } catch (erro) {
       console.error('Não consegui ligar:', erro);
       ocupado.current = false;
-      setMotivo('conexao');
+      setMotivo(erro instanceof LimiteDoDiaAcabou ? 'limite' : 'conexao');
       setFase('erro');
     }
   }, []);

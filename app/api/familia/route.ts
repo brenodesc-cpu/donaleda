@@ -6,10 +6,24 @@
 import { randomInt } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { marcarAvisoVisto, registrarDesfecho, respostaValida } from '@/lib/avisos';
-import { arrumarHorarios, avancarChamadas, pedirChamadaDaFamilia } from '@/lib/chamadas';
-import { montarPainel, mudarBase, mudarBaseQuando } from '@/lib/dados';
+import { arrumarHorarios, avancarChamadas, chamadaTocando, pedirChamadaDaFamilia } from '@/lib/chamadas';
+import { fraseDaEntrada, registrarEntrada } from '@/lib/convite';
+import {
+  apagarDocumento,
+  definirRedeDeApoio,
+  montarPainel,
+  mudarBase,
+  mudarBaseQuando,
+  registrarAparelhoFamiliaPush,
+  registrarEscalonamento,
+} from '@/lib/dados';
+import { depois, entradaDaFamilia, falar, tirarAssistente } from '@/lib/familiaNaLigacao';
+import { apagarAnexosDeDocumento } from '@/lib/documentos';
 import { dataPedida, GAVETAS, guardar, horaPedida, mudar } from '@/lib/memoria';
-import { dispararConviteDeChamada } from '@/lib/sinalizacaoChamada';
+import {
+  dispararConviteDeChamada,
+  dispararEscalonamentoEmMassa,
+} from '@/lib/sinalizacaoChamada';
 import { exigirIdosoDaFamilia } from '@/lib/sessao';
 import { clienteDoServidor } from '@/lib/supabase/servidor';
 import type { AcaoDaFamilia, CodigoDoAparelho } from '@/lib/tipos';
@@ -25,10 +39,22 @@ export async function GET(request: Request) {
   if (!conferido.ok) return conferido.resposta;
 
   const agora = new Date();
-  const [painel, aparelhosRes] = await Promise.all([
+  const [painelRes, aparelhosRes] = await Promise.all([
     mudarBaseQuando(conferido.valor.idosoId, (base) => {
-      const { mudou } = avancarChamadas(base, agora);
-      return { gravar: mudou, resultado: montarPainel(base, agora) };
+      const antesId = chamadaTocando(base)?.id ?? null;
+      const { mudou, escalarChamada } = avancarChamadas(base, agora);
+      const depoisChamada = chamadaTocando(base);
+      const novaChamada = depoisChamada && depoisChamada.id !== antesId ? depoisChamada : null;
+      return {
+        gravar: mudou,
+        resultado: {
+          painel: montarPainel(base, agora),
+          novaChamada,
+          aparelhosPush: novaChamada ? base.aparelhosPush : undefined,
+          escalarChamada,
+          baseSnapshot: escalarChamada ? structuredClone(base) : null,
+        },
+      };
     }),
     clienteDoServidor()
       .from('aparelhos')
@@ -37,6 +63,26 @@ export async function GET(request: Request) {
       .order('visto_em', { ascending: false })
       .limit(1),
   ]);
+
+  if (painelRes.novaChamada) {
+    const nova = painelRes.novaChamada;
+    const aparelhos = painelRes.aparelhosPush;
+    depois(() => dispararConviteDeChamada(conferido.valor.idosoId, aparelhos, nova));
+  }
+
+  let painel = painelRes.painel;
+  if (painelRes.escalarChamada && painelRes.baseSnapshot) {
+    const esc = await dispararEscalonamentoEmMassa(
+      conferido.valor.idosoId,
+      painelRes.baseSnapshot,
+      painelRes.escalarChamada,
+      agora,
+    );
+    painel = await mudarBase(conferido.valor.idosoId, (base) => {
+      registrarEscalonamento(base, esc);
+      return montarPainel(base, agora);
+    });
+  }
 
   const vistoEm = (aparelhosRes.data?.[0]?.visto_em as string | null | undefined) ?? null;
   const aparelhoOnline =
@@ -183,10 +229,60 @@ export async function POST(request: Request) {
             sobre: typeof acao.sobre === 'string' ? acao.sobre : undefined,
             data: typeof acao.data === 'string' ? (dataPedida(acao.data) ?? '') : undefined,
             hora: typeof acao.hora === 'string' ? (horaPedida(acao.hora) ?? '') : undefined,
+            // A família corrigiu ou tocou em "Está certo": o que era dedução vira fato.
+            por: 'familia',
           });
     });
     if (!r.ok) return NextResponse.json({ ok: false, erro: r.motivo.startsWith('não achei') ? 'nao_achada' : 'recusada', motivo: r.motivo }, { status: r.motivo.startsWith('não achei') ? 404 : 422 });
     return NextResponse.json({ ok: true, lembranca: r.lembranca });
+  }
+
+  if (acao.acao === 'entrar_na_ligacao') {
+    // Só entra com convite aberto (aviso urgente ou pedido do idoso) e a ligação ainda aberta.
+    // A primeira entrada faz a Dona Leda anunciar e sair; quem recarrega a página só pega outra chave.
+    const achada = await mudarBase(idosoId, (base) => {
+      const entrada = registrarEntrada(base, new Date());
+      return entrada ? { conversa: { ...entrada.conversa }, primeira: entrada.primeira, frase: fraseDaEntrada(base) } : null;
+    });
+    if (!achada) return NextResponse.json({ ok: false, erro: 'sem_convite' }, { status: 409 });
+    const entrada = entradaDaFamilia(achada.conversa.canal!);
+    if (achada.primeira) {
+      depois(async () => {
+        await falar(achada.conversa, achada.frase, 'INTERRUPT');
+        // Uns 6 segundos pra frase terminar antes de a Dona Leda sair da sala.
+        await new Promise((r) => setTimeout(r, 6500));
+        await tirarAssistente(achada.conversa);
+      });
+    }
+    return NextResponse.json({ ok: true, ...entrada });
+  }
+
+  if (acao.acao === 'apagar_documento' && typeof acao.documentoId === 'string') {
+    const res = await mudarBase(idosoId, (base) => {
+      const caminho = (base.documentos ?? []).find((d) => d.id === acao.documentoId)?.arquivoCaminho;
+      const apagou = apagarDocumento(base, acao.documentoId);
+      return { apagou, caminho };
+    });
+    if (res.apagou && res.caminho) {
+      await apagarAnexosDeDocumento([res.caminho]);
+    }
+    return NextResponse.json({ ok: res.apagou }, { status: res.apagou ? 200 : 404 });
+  }
+
+  if (acao.acao === 'salvar_rede_de_apoio' && Array.isArray(acao.contatos)) {
+    const redeDeApoio = await mudarBase(idosoId, (base) => definirRedeDeApoio(base, acao.contatos));
+    return NextResponse.json({ ok: true, redeDeApoio });
+  }
+
+  if (
+    acao.acao === 'registrar_push_familia' &&
+    (acao.plataforma === 'android' || acao.plataforma === 'ios') &&
+    typeof acao.token === 'string'
+  ) {
+    const salvou = await mudarBase(idosoId, (base) =>
+      registrarAparelhoFamiliaPush(base, acao.plataforma, acao.token),
+    );
+    return NextResponse.json({ ok: salvou }, { status: salvou ? 200 : 400 });
   }
 
   if (acao.acao === 'gerar_codigo') {

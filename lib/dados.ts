@@ -3,16 +3,22 @@
 
 import { avisoAberto } from './avisos';
 import { randomUUID } from 'node:crypto';
+import { conviteAberto } from './convite';
 import { citaSegredo, guardar, normalizarLembrancas, paraOPainel } from './memoria';
 import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
+import { limiteDoDia } from './limiteDoDia';
+import { VERSAO_DO_AVISO_DE_PRIVACIDADE } from './privacidade';
 import type {
   Alerta,
   Alimentacao,
   AparelhoPush,
   Base,
   CategoriaDeLembranca,
+  ContatoDeEmergencia,
   Conversa,
   Dia,
+  DocumentoClinico,
+  Escalonamento,
   Gravidade,
   Humor,
   Lembranca,
@@ -169,19 +175,94 @@ export function guardarLembranca(
   return r.ok ? r.lembranca : null;
 }
 
-export function abrirConversa(base: Base, agora: Date = new Date(), chamadaId?: string): Conversa {
+export function abrirConversa(
+  base: Base,
+  agora: Date = new Date(),
+  chamadaId?: string,
+  sala?: { canal: string; agenteId: string; modo?: 'gemini' | 'tres' },
+): Conversa {
   // Conversa que ficou aberta (aba fechada, queda de conexão) é encerrada aqui.
   for (const c of base.conversas) {
     if (!c.fim) c.fim = agora.toISOString();
   }
+  const diaDeHoje = base.dias.find((d) => d.data === dataEmBrasilia(agora));
   const conversa: Conversa = {
     id: randomUUID(),
     inicio: agora.toISOString(),
     falasDoIdoso: 0,
+    diaNoInicio: diaDeHoje ? structuredClone(diaDeHoje) : null,
+    lembrancasNoInicio: base.lembrancas.map((l) => l.id),
+    alertasNoInicio: base.alertas.length,
     ...(chamadaId ? { chamadaId } : {}),
+    ...(sala ? { canal: sala.canal, agenteId: sala.agenteId, ...(sala.modo ? { modo: sala.modo } : {}) } : {}),
   };
   base.conversas.push(conversa);
   return conversa;
+}
+
+/** A conversa que está acontecendo agora (a última, sem fim). */
+export function conversaAberta(base: Base): Conversa | undefined {
+  const ultima = base.conversas[base.conversas.length - 1];
+  return ultima && !ultima.fim ? ultima : undefined;
+}
+
+/**
+ * Outra pessoa atendeu a ligação: marca a conversa e avisa a família uma vez, com a hora.
+ * Não guarda a voz nem nada do que a pessoa disse. Devolve false se não há conversa aberta.
+ */
+export function marcarOutraPessoa(base: Base, agora: Date = new Date()): boolean {
+  const conversa = conversaAberta(base);
+  if (!conversa) return false;
+  if (conversa.outraPessoa) return true;
+  conversa.outraPessoa = true;
+  desfazerOQueALigacaoAnotou(base, conversa);
+  const hora = new Intl.DateTimeFormat('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(conversa.inicio));
+  const { tratamento } = base.idoso;
+  criarAlerta(
+    base,
+    {
+      tipo: 'ligacao',
+      gravidade: 'atencao',
+      texto: `Outra pessoa atendeu a ligação das ${hora}. Nada do que ela disse entrou na ficha de ${tratamento}. Vale ligar pra saber como está.`,
+      origem: 'assistente',
+    },
+    agora,
+  );
+  return true;
+}
+
+/**
+ * Quem atendeu pode ter respondido como se fosse o idoso antes de dizer quem era.
+ * A ficha do dia volta a como estava no começo da ligação, e saem as lembranças
+ * guardadas nela e os avisos de rotina dela: remédio e saúde de atenção, da regra
+ * ou da assistente. Os avisos de risco (emergência, golpe, tristeza e saúde urgente)
+ * ficam com a família, por segurança.
+ */
+function desfazerOQueALigacaoAnotou(base: Base, conversa: Conversa): void {
+  if (conversa.diaNoInicio !== undefined) {
+    const data = conversa.diaNoInicio?.data ?? dataEmBrasilia(new Date(conversa.inicio));
+    const i = base.dias.findIndex((d) => d.data === data);
+    if (conversa.diaNoInicio === null) {
+      if (i >= 0) base.dias.splice(i, 1);
+    } else if (i >= 0) {
+      base.dias[i] = structuredClone(conversa.diaNoInicio);
+    }
+  }
+  if (conversa.lembrancasNoInicio) {
+    const existiam = new Set(conversa.lembrancasNoInicio);
+    base.lembrancas = base.lembrancas.filter((l) => existiam.has(l.id) || l.origem !== 'conversa');
+  }
+  if (typeof conversa.alertasNoInicio === 'number') {
+    const inicio = conversa.alertasNoInicio;
+    // Os avisos só crescem no fim da lista: os de depois do início são desta ligação.
+    const deRotina = (a: Alerta) => a.tipo === 'remedio' || (a.tipo === 'saude' && a.gravidade === 'atencao');
+    base.alertas = base.alertas.filter((a, i) => i < inicio || !deRotina(a));
+  }
 }
 
 export function fecharConversa(
@@ -192,7 +273,17 @@ export function fecharConversa(
   const conversa = base.conversas.find((c) => c.id === conversaId);
   if (!conversa) return null;
   if (!conversa.fim) conversa.fim = agora.toISOString();
-  if (conversa.falasDoIdoso > 0) base.idoso.primeiraConversaFeita = true;
+  delete conversa.diaNoInicio;
+  delete conversa.lembrancasNoInicio;
+  delete conversa.alertasNoInicio;
+  if (conversa.falasDoIdoso > 0 && !conversa.outraPessoa) {
+    // A saudação desta conversa levou o aviso de privacidade: fica a data na ficha.
+    // Quando outra pessoa atendeu, quem ouviu o aviso não foi o idoso.
+    if (!base.idoso.primeiraConversaFeita) {
+      base.idoso.avisoDePrivacidade ??= { dadoEm: conversa.inicio, versao: VERSAO_DO_AVISO_DE_PRIVACIDADE };
+    }
+    base.idoso.primeiraConversaFeita = true;
+  }
   return conversa;
 }
 
@@ -214,7 +305,8 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     semana.push(porData.get(data) ?? diaVazio(data));
   }
 
-  const ultima = base.conversas[base.conversas.length - 1];
+  // Ligação em que outra pessoa atendeu não aparece como a última conversa do idoso.
+  const ultima = [...base.conversas].reverse().find((c) => !c.outraPessoa);
   let ultimaConversa: PainelDaFamilia['ultimaConversa'] = null;
   if (ultima) {
     const inicio = new Date(ultima.inicio).getTime();
@@ -231,6 +323,8 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     };
   }
 
+  const aberto = conviteAberto(base, agora);
+
   const alertas = [...base.alertas]
     .sort((a, b) => {
       // Aberto primeiro: ninguém viu, ou quem viu ainda não contou o que fez.
@@ -246,15 +340,24 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     hoje: porData.get(hojeData) ?? diaVazio(hojeData),
     // Ligação que atendeu sozinha e terminou sem o idoso falar não conta como conversa.
     conversouHoje: base.conversas.some(
-      (c) => dataEmBrasilia(new Date(c.inicio)) === hojeData && (c.falasDoIdoso > 0 || !c.fim),
+      (c) =>
+        dataEmBrasilia(new Date(c.inicio)) === hojeData && !c.outraPessoa && (c.falasDoIdoso > 0 || !c.fim),
     ),
     ultimaConversa,
+    convite: aberto
+      ? { conversaId: aberto.conversa.id, abertoEm: aberto.convite.abertoEm, motivo: aberto.convite.motivo, entrou: Boolean(aberto.convite.entrouEm) }
+      : null,
     alertas,
     semana,
     ...paraOPainel(base),
     chamadaTocando: base.chamadas.find((c) => c.estado === 'tocando') ?? null,
     chamadas: [...base.chamadas].reverse().slice(0, 10),
     aparelhoPushAtivo: (base.aparelhosPush?.length ?? 0) > 0,
+    notificacoesFamiliaAtivas: (base.aparelhosFamiliaPush?.length ?? 0) > 0,
+    limiteDoDia: limiteDoDia(base, agora),
+    documentos: [...(base.documentos ?? [])].reverse().slice(0, 30),
+    redeDeApoio: base.redeDeApoio ?? [],
+    escalonamentos: [...(base.escalonamentos ?? [])].reverse().slice(0, 10),
     atualizadoEm: agora.toISOString(),
   };
 }
@@ -364,10 +467,94 @@ export function registrarAparelhoPush(
   return registro;
 }
 
+/** Normaliza telefone brasileiro/internacional pra E.164 (+55...) mantendo segurança. */
+export function normalizarTelefone(bruto: string): string {
+  const digitos = bruto.replace(/\D/g, '');
+  if (digitos.length < 10 || digitos.length > 15) return '';
+  if (bruto.trim().startsWith('+')) return `+${digitos}`;
+  if (digitos.length === 10 || digitos.length === 11) return `+55${digitos}`;
+  return `+${digitos}`;
+}
+
+export function adicionarDocumento(
+  base: Base,
+  entrada: Omit<DocumentoClinico, 'id' | 'criadoEm'> & { id?: string },
+  agora: Date = new Date(),
+): DocumentoClinico {
+  base.documentos ??= [];
+  const doc: DocumentoClinico = {
+    ...entrada,
+    id: entrada.id?.trim() || randomUUID(),
+    criadoEm: agora.toISOString(),
+  };
+  base.documentos.push(doc);
+  if (base.documentos.length > 40) base.documentos.splice(0, base.documentos.length - 40);
+  return doc;
+}
+
+export function apagarDocumento(base: Base, documentoId: string): boolean {
+  base.documentos ??= [];
+  const i = base.documentos.findIndex((d) => d.id === documentoId);
+  if (i < 0) return false;
+  base.documentos.splice(i, 1);
+  return true;
+}
+
+export function definirRedeDeApoio(
+  base: Base,
+  contatos: { id?: string; nome: string; parentesco: string; telefone: string }[],
+): ContatoDeEmergencia[] {
+  const limpos: ContatoDeEmergencia[] = [];
+  for (const c of contatos.slice(0, 10)) {
+    const nome = String(c.nome ?? '').trim().slice(0, 60);
+    const parentesco = String(c.parentesco ?? '').trim().slice(0, 40) || 'familiar';
+    const telefone = normalizarTelefone(String(c.telefone ?? ''));
+    if (!nome || !telefone) continue;
+    limpos.push({
+      id: typeof c.id === 'string' && c.id.trim() ? c.id.trim() : randomUUID(),
+      nome,
+      parentesco,
+      telefone,
+    });
+  }
+  base.redeDeApoio = limpos;
+  return limpos;
+}
+
+export function registrarAparelhoFamiliaPush(
+  base: Base,
+  plataforma: 'android' | 'ios',
+  token: string,
+  agora: Date = new Date(),
+): boolean {
+  const limpo = token.trim();
+  if (limpo.length < 16 || limpo.length > 512) return false;
+  base.aparelhosFamiliaPush ??= [];
+  const semAntigo = base.aparelhosFamiliaPush.filter((a) => a.token !== limpo);
+  semAntigo.push({ plataforma, token: limpo, atualizadoEm: agora.toISOString() });
+  base.aparelhosFamiliaPush = semAntigo.slice(-10);
+  return true;
+}
+
+export function registrarEscalonamento(base: Base, escalonamento: Escalonamento): Escalonamento {
+  base.escalonamentos ??= [];
+  const existente = base.escalonamentos.find((e) => e.chamadaId === escalonamento.chamadaId);
+  if (existente) return existente;
+  base.escalonamentos.push(escalonamento);
+  if (base.escalonamentos.length > 20) {
+    base.escalonamentos.splice(0, base.escalonamentos.length - 20);
+  }
+  return escalonamento;
+}
+
 /** Completa uma ficha gravada por versão mais antiga, que não tinha as ligações. */
 function completar(base: Base, idosoId: string): Base {
   base.chamadas ??= [];
   base.aparelhosPush ??= [];
+  base.aparelhosFamiliaPush ??= [];
+  base.documentos ??= [];
+  base.redeDeApoio ??= [];
+  base.escalonamentos ??= [];
   normalizarLembrancas(base);
   base.idoso.id = idosoId;
   base.idoso.horariosDeLigacao ??= ['09:00', '19:00'];

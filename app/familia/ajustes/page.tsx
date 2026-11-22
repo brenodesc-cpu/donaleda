@@ -9,9 +9,14 @@ import { usePainel } from '@/components/familia/usePainel';
 
 export default function AjustesPage() {
   const { idosos, idoso, escolher, semConexao: semLista } = useIdosos();
-  const { painel, semConexao, trocarHorarios, trocarAtenderSozinho, salvarPerfil } = usePainel(
-    idoso?.id ?? null,
-  );
+  const {
+    painel,
+    semConexao,
+    trocarHorarios,
+    trocarAtenderSozinho,
+    salvarPerfil,
+    salvarRedeDeApoio,
+  } = usePainel(idoso?.id ?? null);
 
   return (
     <Moldura
@@ -29,9 +34,11 @@ export default function AjustesPage() {
           <AjustesDoIdoso
             key={painel.idoso.id}
             idoso={painel.idoso}
+            redeDeApoio={painel.redeDeApoio ?? []}
             onTrocarHorarios={trocarHorarios}
             onTrocarAtenderSozinho={trocarAtenderSozinho}
             onSalvarPerfil={salvarPerfil}
+            onSalvarRedeDeApoio={salvarRedeDeApoio}
           />
           {idoso?.papel === 'responsavel' ? (
             <ApagarIdoso idosoId={painel.idoso.id} tratamento={painel.idoso.tratamento} />

@@ -176,6 +176,8 @@ export default function ConversaDireta({
       microfone: microfone.faixa,
       pronto,
       aoCair,
+      // Se o Gemini ficar mudo ou a conexão cair, o aparelho pede um passe novo aqui e religa.
+      rotaDoPasse: '/api/direto',
     });
 
   // O aparelho entra na sala da Agora com o microfone do idoso e com a voz dela,
@@ -230,6 +232,7 @@ export default function ConversaDireta({
     microfoneNaSala as IMicrophoneAudioTrack | null,
     encerrarComFalas,
     avisarEncerramento,
+    dados.tetoMs,
   );
 
   const legenda = useMemo(

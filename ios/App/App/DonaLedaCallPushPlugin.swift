@@ -3,6 +3,8 @@ import CallKit
 import Capacitor
 import Foundation
 import PushKit
+import UIKit
+import UserNotifications
 
 /// Coordena PushKit (VoIP) + CallKit nativo do iOS para acordar o iPhone
 /// com a tela nativa de ligação mesmo com o app fechado ou bloqueado.
@@ -179,19 +181,114 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
     }
 }
 
+/// Coordena APNs Alert Push (UNUserNotificationCenter) para o iPhone do familiar responsável
+/// receber alertas urgentes e status do idoso mesmo com o app fechado.
+final class DonaLedaFamilyPushCoordinator: NSObject, UNUserNotificationCenterDelegate {
+    static let shared = DonaLedaFamilyPushCoordinator()
+
+    private(set) var lastApnsToken: String?
+    private var pendingCallbacks: [(String?) -> Void] = []
+    private var pendingRoute: String?
+    weak var activePlugin: DonaLedaCallPushPlugin?
+
+    func configureCenter() {
+        UNUserNotificationCenter.current().delegate = self
+    }
+
+    func consumePendingRoute() -> String? {
+        let rota = pendingRoute
+        pendingRoute = nil
+        return rota
+    }
+
+    func requestAndRegister(completion: @escaping (String?) -> Void) {
+        configureCenter()
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
+            guard granted else {
+                DispatchQueue.main.async { completion(nil) }
+                return
+            }
+            DispatchQueue.main.async {
+                if let existing = self.lastApnsToken, !existing.isEmpty {
+                    completion(existing)
+                    return
+                }
+                self.pendingCallbacks.append(completion)
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+        }
+    }
+
+    func didRegisterToken(_ deviceToken: Data) {
+        let token = deviceToken.map { String(format: "%02x", $0) }.joined()
+        guard !token.isEmpty else { return }
+        DispatchQueue.main.async {
+            self.lastApnsToken = token
+            self.activePlugin?.emitFamilyToken(token)
+            let callbacks = self.pendingCallbacks
+            self.pendingCallbacks.removeAll()
+            callbacks.forEach { $0(token) }
+        }
+    }
+
+    func didFailToRegister(_ error: Error) {
+        DispatchQueue.main.async {
+            let callbacks = self.pendingCallbacks
+            self.pendingCallbacks.removeAll()
+            callbacks.forEach { $0(nil) }
+        }
+    }
+
+    // Exibe banner e som mesmo quando o familiar já está com o app aberto.
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        if #available(iOS 14.0, *) {
+            completionHandler([.banner, .list, .sound, .badge])
+        } else {
+            completionHandler([.alert, .sound, .badge])
+        }
+    }
+
+    // Quando o familiar toca na notificação urgente no iPhone, abre direto na sala da ligação ao vivo.
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        let userInfo = response.notification.request.content.userInfo
+        if let rota = userInfo["urlDestino"] as? String, rota.hasPrefix("/familia") {
+            DispatchQueue.main.async {
+                if let plugin = self.activePlugin {
+                    plugin.emitFamilyDeepLink(rota)
+                } else {
+                    self.pendingRoute = rota
+                }
+            }
+        }
+        completionHandler()
+    }
+}
+
 @objc(DonaLedaCallPushPlugin)
 public class DonaLedaCallPushPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "DonaLedaCallPushPlugin"
     public let jsName = "DonaLedaCallPush"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "register", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "registerFamilyAlerts", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getPendingCall", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getPendingFamilyRoute", returnType: CAPPluginReturnPromise),
     ]
 
     public override func load() {
         super.load()
         DonaLedaVoipCoordinator.shared.activePlugin = self
+        DonaLedaFamilyPushCoordinator.shared.activePlugin = self
         DonaLedaVoipCoordinator.shared.start()
+        DonaLedaFamilyPushCoordinator.shared.configureCenter()
     }
 
     @objc func register(_ call: CAPPluginCall) {
@@ -208,6 +305,17 @@ public class DonaLedaCallPushPlugin: CAPPlugin, CAPBridgedPlugin {
         call.resolve(result)
     }
 
+    @objc func registerFamilyAlerts(_ call: CAPPluginCall) {
+        DonaLedaFamilyPushCoordinator.shared.requestAndRegister { token in
+            var result: [String: Any] = [:]
+            if let token = token, !token.isEmpty {
+                result["token"] = token
+                result["plataforma"] = "ios"
+            }
+            call.resolve(result)
+        }
+    }
+
     @objc func getPendingCall(_ call: CAPPluginCall) {
         var result: [String: Any] = [:]
         if let pending = DonaLedaVoipCoordinator.shared.consumePendingAction() {
@@ -217,8 +325,29 @@ public class DonaLedaCallPushPlugin: CAPPlugin, CAPBridgedPlugin {
         call.resolve(result)
     }
 
+    @objc func getPendingFamilyRoute(_ call: CAPPluginCall) {
+        var result: [String: Any] = [:]
+        if let rota = DonaLedaFamilyPushCoordinator.shared.consumePendingRoute() {
+            result["rota"] = rota
+        }
+        call.resolve(result)
+    }
+
+    func emitFamilyDeepLink(_ rota: String) {
+        notifyListeners("familyDeepLink", data: [
+            "rota": rota,
+        ])
+    }
+
     func emitToken(_ token: String) {
         notifyListeners("tokenReceived", data: [
+            "token": token,
+            "plataforma": "ios",
+        ])
+    }
+
+    func emitFamilyToken(_ token: String) {
+        notifyListeners("familyTokenReceived", data: [
             "token": token,
             "plataforma": "ios",
         ])

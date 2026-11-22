@@ -5,7 +5,7 @@
 import { randomUUID } from 'node:crypto';
 import { FUSO, dataEmBrasilia, somarDias } from './assistente';
 import { semAcento } from './regras';
-import type { Base, CategoriaDeLembranca, Lembranca } from './tipos';
+import type { Base, CategoriaDeLembranca, Lembranca, OrigemDaLembranca } from './tipos';
 
 export const GAVETAS: CategoriaDeLembranca[] = [
   'pessoa',
@@ -218,7 +218,7 @@ export interface NovaLembranca {
   data?: string;
   hora?: string;
   reservada?: boolean;
-  origem: 'conversa' | 'familia';
+  origem: OrigemDaLembranca;
 }
 
 export type ResultadoDeGuardar =
@@ -239,6 +239,11 @@ export function guardar(base: Base, nova: NovaLembranca, agora: Date = new Date(
   const repetida = base.lembrancas.find((l) => igual(l.texto, texto));
   if (repetida) {
     if (nova.reservada !== undefined) repetida.reservada = nova.reservada;
+    // O que a Dona Leda só tinha deduzido vira fato quando a pessoa ou a família diz.
+    if (repetida.origem === 'deduzida' && nova.origem !== 'deduzida') {
+      repetida.origem = nova.origem;
+      repetida.atualizadaEm = agora.toISOString();
+    }
     if (nova.data) repetida.data = nova.data;
     if (nova.hora) repetida.hora = nova.hora;
     return { ok: true, lembranca: repetida, jaExistia: true };
@@ -261,7 +266,16 @@ export function guardar(base: Base, nova: NovaLembranca, agora: Date = new Date(
 }
 
 export type Mudanca =
-  | { acao: 'corrigir'; texto?: string; categoria?: CategoriaDeLembranca; sobre?: string; data?: string; hora?: string }
+  | {
+      acao: 'corrigir';
+      texto?: string;
+      categoria?: CategoriaDeLembranca;
+      sobre?: string;
+      data?: string;
+      hora?: string;
+      /** Quem corrigiu. Corrigir ou confirmar uma dedução faz dela um fato contado. */
+      por?: 'conversa' | 'familia';
+    }
   | { acao: 'esquecer' }
   | { acao: 'reservar' }
   | { acao: 'liberar' };
@@ -300,6 +314,7 @@ export function mudar(
     if (mudanca.sobre !== undefined) l.sobre = mudanca.sobre.trim() || undefined;
     if (mudanca.data !== undefined) l.data = mudanca.data || undefined;
     if (mudanca.hora !== undefined) l.hora = mudanca.hora || undefined;
+    if (mudanca.por && l.origem === 'deduzida') l.origem = mudanca.por;
   }
   l.atualizadaEm = agora.toISOString();
   delete l.exemplo;
@@ -350,11 +365,21 @@ function criadaEmCurto(iso: string): string {
   );
 }
 
+/** De onde veio a lembrança, do jeito que vai na instrução. Dedução nunca sai como fato. */
+function deOndeVeio(l: Lembranca, familiar: string): string {
+  if (l.origem === 'familia') return `${familiar} contou`;
+  if (l.origem === 'documento') return `lido de um documento que ${familiar} anexou, pode ter erro de leitura: confirme antes de dar como certo`;
+  if (l.origem === 'deduzida') {
+    return `você deduziu da conversa de ${criadaEmCurto(l.criadaEm)} e ninguém confirmou: pergunte antes de dar como certo`;
+  }
+  return `contou em ${criadaEmCurto(l.criadaEm)}`;
+}
+
 /** Uma linha da lembrança na instrução: número, texto, data e quem contou. */
 export function linha(l: Lembranca, familiar: string): string {
   const extras = [
     l.data ? quando(l.data, l.hora) : null,
-    l.origem === 'familia' ? `${familiar} contou` : `contou em ${criadaEmCurto(l.criadaEm)}`,
+    deOndeVeio(l, familiar),
     l.reservada ? 'só entre vocês' : null,
   ].filter(Boolean);
   return `- [${l.numero}] ${l.texto} (${extras.join('; ')})`;

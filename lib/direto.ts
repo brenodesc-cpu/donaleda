@@ -216,6 +216,136 @@ export function picoDoSom(amostras: Float32Array): number {
   return pico;
 }
 
+// ---------- A ligação muda ----------
+
+/**
+ * Quanto o aparelho espera o Gemini reagir depois de avisar que a fala acabou.
+ * A reação normal chega em 1 a 2 segundos. Medido em 21/11: em 2 de umas 14
+ * ligações o Google marcou o começo da fala e nunca mais respondeu, sem fechar a
+ * conexão. O Virte mede o mesmo defeito em 1 a cada 6 e resolve religando.
+ */
+export const ESPERA_DA_RESPOSTA_MS = 4_500;
+/** Com a pessoa repetindo "alô" sem parar, o relógio de cima não fecha: este é o teto desde a primeira fala sem resposta. */
+export const TETO_SEM_RESPOSTA_MS = 12_000;
+/** Quanto o aparelho espera ela voltar a falar depois de uma ação (anotar, avisar a família). */
+export const ESPERA_DEPOIS_DA_ACAO_MS = 9_000;
+/** Quanto o aparelho espera a saudação começar depois de a conversa abrir. */
+export const ESPERA_DA_SAUDACAO_MS = 7_000;
+/**
+ * Antes de religar, o aparelho repete o aviso de fim de fala nestes instantes
+ * (milissegundos depois do primeiro). Às vezes o primeiro aviso chega antes de o
+ * Google marcar o começo da fala e se perde; repetir é de graça e pode destravar.
+ */
+export const REAVISOS_DO_FIM_MS = [2_200] as const;
+/**
+ * Depois de avisar que a fala acabou, o aparelho segura o silêncio por este tempo
+ * em vez de continuar mandando som. Som que chega logo depois do aviso reabre a
+ * escuta do Google e pode anular o aviso: em 21/11, às 23h50, 4 de 6 ligações
+ * ficaram mudas na primeira fala desse jeito. Voz nova passa na hora.
+ */
+export const SEGURA_DEPOIS_DO_FIM_MS = 2_000;
+/** Depois de religar três vezes na mesma ligação, o defeito é do lado do Google e a ligação acaba. */
+export const MAXIMO_DE_RELIGADAS = 3;
+/** Folga a mais depois de mandar a fala de novo: o Google precisa de uns segundos pra ouvir a fala inteira. */
+export const FOLGA_DEPOIS_DE_REENVIAR_MS = 2_500;
+
+export type DecisaoNaMudez = 'nada' | 'esquecer' | 'religar' | 'desistir';
+
+/**
+ * O que fazer com uma fala que ficou sem resposta. Quando o Google não marcou voz
+ * nenhuma, pode ter sido barulho da sala, e a primeira vez é só esquecida: religar
+ * a cada tosse seria pior que o defeito. Na segunda fala seguida sem reação, ou
+ * quando ele marcou a voz e calou, a conversa é religada.
+ */
+export function decidirNaMudez(e: {
+  esperandoHaMs: number;
+  servidorOuviu: boolean;
+  falasSemReacao: number;
+  religadas: number;
+  podeReligar: boolean;
+}): DecisaoNaMudez {
+  if (e.esperandoHaMs < ESPERA_DA_RESPOSTA_MS) return 'nada';
+  if (!e.podeReligar) return 'esquecer';
+  if (!e.servidorOuviu && e.falasSemReacao < 1) return 'esquecer';
+  return e.religadas >= MAXIMO_DE_RELIGADAS ? 'desistir' : 'religar';
+}
+
+/**
+ * A abertura da conversa religada: a mesma, com o que já foi dito na ligação
+ * acrescentado às instruções, pra ela continuar de onde parou sem se apresentar
+ * de novo. A conversa nova do Gemini não lembra da anterior.
+ */
+export function aberturaDaRetomada(
+  abertura: Record<string, unknown>,
+  falas: FalaDireta[],
+  uidDaAssistente: string,
+  /** A fala aberta do idoso fica de fora quando ela vai ser mandada de novo logo em seguida. */
+  semAFalaAberta = false,
+): Record<string, unknown> {
+  const copia = JSON.parse(JSON.stringify(abertura)) as {
+    setup?: { systemInstruction?: { parts?: { text: string }[] } };
+  };
+  const ultima = falas.length - 1;
+  const linhas = falas
+    .filter(
+      (f, i) =>
+        f.text.trim() !== '' &&
+        !(semAFalaAberta && i === ultima && f.uid !== uidDaAssistente && f.status === FALA_EM_ANDAMENTO),
+    )
+    .slice(-40)
+    .map((f) => `${f.uid === uidDaAssistente ? 'Você' : 'A pessoa'}: ${f.text.replace(/\s+/g, ' ').trim().slice(0, 300)}`);
+  const texto = [
+    'ATENÇÃO: esta ligação já estava em andamento e a conexão falhou por um instante. Você já cumprimentou e já se apresentou: não cumprimente de novo e não se apresente de novo. Continue a conversa de onde parou, respondendo ao que a pessoa disser agora.',
+    linhas.length > 0 ? `O que já foi dito nesta ligação:\n${linhas.join('\n')}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+  const partes = copia.setup?.systemInstruction?.parts;
+  if (partes) partes.push({ text: texto });
+  return copia as Record<string, unknown>;
+}
+
+/**
+ * A fala que o Gemini ouviu, escreveu na legenda e não respondeu. Na conversa
+ * religada ela vai por escrito, pra não aparecer duas vezes na legenda.
+ */
+export function pedidoDaFalaPorEscrito(texto: string): Record<string, unknown> {
+  return {
+    clientContent: {
+      turns: [{ role: 'user', parts: [{ text: texto }] }],
+      turnComplete: true,
+    },
+  };
+}
+
+/** O texto da fala do idoso que ainda está aberta na legenda (sem resposta terminada), ou vazio. */
+export function falaAberta(falas: FalaDireta[], uidDaAssistente: string): string {
+  for (let i = falas.length - 1; i >= 0; i -= 1) {
+    if (falas[i].uid === uidDaAssistente) continue;
+    return falas[i].status === FALA_EM_ANDAMENTO ? falas[i].text.replace(/\s+/g, ' ').trim() : '';
+  }
+  return '';
+}
+
+/** Quando a conexão caiu sem fala pendente, ela pede desculpa numa frase e devolve a palavra. */
+export function pedidoDeDesculpa(): Record<string, unknown> {
+  return {
+    clientContent: {
+      turns: [
+        {
+          role: 'user',
+          parts: [
+            {
+              text: 'A conexão falhou um instante e voltou. Diga só esta frase, sem acrescentar nada: "Desculpa, a ligação falhou um instante. Pode repetir o que estava dizendo?"',
+            },
+          ],
+        },
+      ],
+      turnComplete: true,
+    },
+  };
+}
+
 // ---------- A legenda das duas falas ----------
 
 // Os mesmos números que a Agora usa em TurnStatus, pra tela reaproveitar a

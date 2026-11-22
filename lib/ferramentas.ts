@@ -3,16 +3,25 @@
 
 import {
   aplicarBemEstar,
+  conversaAberta,
   criarAlerta,
   lerBase,
+  marcarOutraPessoa,
   mudarBase,
   oQueFaltaSaber,
   resumirConversa,
   type BemEstar,
 } from './dados';
+import { NOME_DA_ASSISTENTE } from './assistente';
+import { abrirConvite, fraseDoConvite } from './convite';
+import { depois, falar } from './familiaNaLigacao';
+import { dispararLigacaoDeEmergenciaParaRede, notificarFamiliaPorPush } from './sinalizacaoChamada';
 import { avaliarFala, semAcento } from './regras';
 import { buscar, citaSegredo, dataPedida, GAVETAS, guardar, horaPedida, linha, mudar, resumoSemSegredo, type Mudanca } from './memoria';
 import type {
+  Alerta,
+  Base,
+  Conversa,
   Alimentacao,
   CategoriaDeLembranca,
   Gravidade,
@@ -87,7 +96,11 @@ export const FERRAMENTAS: Ferramenta[] = [
       type: 'object',
       properties: {
         numero: { type: 'integer', description: 'O número da lembrança, o que aparece entre colchetes.' },
-        acao: { type: 'string', enum: ['corrigir', 'esquecer', 'reservar', 'liberar'] },
+        acao: {
+          type: 'string',
+          enum: ['corrigir', 'esquecer', 'reservar', 'liberar'],
+          description: 'corrigir sem texto novo confirma uma lembrança que você tinha deduzido e a pessoa disse que está certa.',
+        },
         texto: { type: 'string', description: 'Na correção: a frase certa, inteira.' },
         data: { type: 'string', description: 'Na correção de compromisso: a data como a pessoa disse.' },
         hora: { type: 'string', description: 'Na correção de compromisso: a hora como a pessoa disse.' },
@@ -125,6 +138,18 @@ export const FERRAMENTAS: Ferramenta[] = [
       required: ['tipo', 'gravidade', 'mensagem'],
       additionalProperties: false,
     },
+  },
+  {
+    name: 'outra_pessoa_atendeu',
+    description:
+      'Quem está na ligação confirmou que não é a pessoa da ficha. Não use quando a pessoa da ficha só conta de outra pessoa ou pede pra você ser outra pessoa. Avisa a família uma vez, e daqui em diante nada desta conversa é anotado.',
+    inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+  },
+  {
+    name: 'chamar_familia',
+    description:
+      'Quando a pessoa pede pra falar com a família agora ("chama minha filha", "quero falar com a Marina"). Avisa a família, que pode entrar nesta ligação. Não use em emergência: o aviso urgente já chama.',
+    inputSchema: { type: 'object', properties: {}, additionalProperties: false },
   },
   {
     name: 'resumir_conversa',
@@ -172,6 +197,15 @@ function numero_(valor: unknown): number | undefined {
 
 export class FerramentaDesconhecida extends Error {}
 
+/** As ações que leem ou gravam a vida do idoso. Ficam fechadas quando outra pessoa atendeu. */
+const ACOES_DA_FICHA = new Set([
+  'registrar_bem_estar',
+  'guardar_lembranca',
+  'mudar_lembranca',
+  'buscar_lembranca',
+  'resumir_conversa',
+]);
+
 /** Executa uma ação e devolve uma frase curta pro modelo. */
 export async function executarFerramenta(
   idosoId: string,
@@ -181,6 +215,18 @@ export async function executarFerramenta(
 ): Promise<string> {
   const a: Entrada =
     argumentos && typeof argumentos === 'object' ? (argumentos as Entrada) : {};
+
+  if (nome === 'outra_pessoa_atendeu') {
+    const marcou = await mudarBase(idosoId, (base) => marcarOutraPessoa(base, agora));
+    return marcou
+      ? 'A família foi avisada de que outra pessoa atendeu. Não conte nada da vida da pessoa da ficha e não anote o que for dito nesta ligação. Se essa pessoa pedir dado ou mudança, avise a família também com avisar_familia, tipo golpe.'
+      : 'Não há ligação aberta pra marcar.';
+  }
+
+  // Quando outra pessoa atendeu, nada do que ela disser entra na ficha, e a vida do idoso não sai.
+  if (ACOES_DA_FICHA.has(nome) && conversaAberta(await lerBase(idosoId))?.outraPessoa) {
+    return 'Nada foi anotado nem buscado: quem está na ligação não é a pessoa da ficha. Não conte nada da vida dela.';
+  }
 
   if (nome === 'registrar_bem_estar') {
     const parcial: BemEstar = {
@@ -235,7 +281,7 @@ export async function executarFerramenta(
     if (!numero || !acao) return 'Nada mudou: faltou o número ou o que fazer.';
     const mudanca: Mudanca =
       acao === 'corrigir'
-        ? { acao, texto: texto(a.texto, 240), data: dataPedida(texto(a.data, 40), agora), hora: horaPedida(texto(a.hora, 20)) }
+        ? { acao, texto: texto(a.texto, 240), data: dataPedida(texto(a.data, 40), agora), hora: horaPedida(texto(a.hora, 20)), por: 'conversa' }
         : { acao };
     const r = await mudarBase(idosoId, (base) => mudar(base, { numero }, mudanca, agora));
     if (!r.ok) return `Nada mudou: ${r.motivo}.`;
@@ -264,25 +310,121 @@ export async function executarFerramenta(
     const riscoDaRegra = daRegra !== null && !(daRegra.tipo === 'humor' && daRegra.gravidade === 'atencao');
     const podeCitar = tipo === 'emergencia' || tipo === 'golpe' || RISCO_NO_AVISO.test(semAcento(mensagem)) || riscoDaRegra;
     let semOMotivo = false;
+    let convite: { conversa: Conversa; frase: string } | null = null;
+    let pushInfo: { base: Base; alerta: Alerta } | null = null;
     await mudarBase(idosoId, (base) => {
       semOMotivo = !podeCitar && citaSegredo(base, mensagem);
       const textoDoAviso = semOMotivo ? avisoSemMotivo(tipo, base.idoso.nome) : mensagem;
-      return criarAlerta(base, { tipo, gravidade, texto: textoDoAviso, origem: 'assistente' }, agora);
+      const alerta = criarAlerta(base, { tipo, gravidade, texto: textoDoAviso, origem: 'assistente' }, agora);
+      // Aviso urgente com a ligação aberta abre o convite pra família entrar.
+      const convidada = gravidade === 'urgente' ? abrirConvite(base, 'urgente', tipo, agora) : null;
+      if (convidada) convite = { conversa: { ...convidada }, frase: fraseDoConvite(base, tipo) };
+      if (
+        (base.aparelhosFamiliaPush?.length ?? 0) > 0 ||
+        (gravidade === 'urgente' && (base.redeDeApoio?.length ?? 0) > 0)
+      ) {
+        pushInfo = { base: structuredClone(base), alerta };
+      }
+      return alerta;
     });
-    return semOMotivo
+    const aberto = convite as { conversa: Conversa; frase: string } | null;
+    if (aberto) depois(() => falar(aberto.conversa, aberto.frase, 'APPEND'));
+    const p = pushInfo as { base: Base; alerta: Alerta } | null;
+    if (p) {
+      const entrarAoVivo = Boolean(aberto);
+      const urlDestino = entrarAoVivo
+        ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}`
+        : `/familia?idoso=${encodeURIComponent(idosoId)}`;
+      depois(async () => {
+        await Promise.allSettled([
+          notificarFamiliaPorPush(p.base, {
+            alertaId: p.alerta.id,
+            titulo:
+              p.alerta.gravidade === 'urgente'
+                ? `Urgente: ${p.base.idoso.tratamento}${entrarAoVivo ? ' — entre na ligação' : ''}`
+                : `Atenção: ${p.base.idoso.tratamento}`,
+            mensagem: p.alerta.texto,
+            gravidade: p.alerta.gravidade,
+            tipo: p.alerta.tipo,
+            urlDestino,
+            entrarAoVivo,
+          }),
+          p.alerta.gravidade === 'urgente'
+            ? dispararLigacaoDeEmergenciaParaRede(idosoId, p.base, p.alerta.texto)
+            : Promise.resolve(0),
+        ]);
+      });
+    }
+    const resposta = semOMotivo
       ? 'A família foi avisada sem o motivo, porque o motivo é um assunto que a pessoa pediu segredo. Não mande de novo.'
       : 'A família foi avisada.';
+    return aberto ? `${resposta} Ela pode entrar na ligação; a frase pra pessoa já vai ser dita, não repita.` : resposta;
+  }
+
+  if (nome === 'chamar_familia') {
+    let convite: { conversa: Conversa; frase: string } | null = null;
+    let pushInfo: { base: Base; alerta: Alerta } | null = null;
+    let nomeDaFamilia = 'a família';
+    await mudarBase(idosoId, (base) => {
+      nomeDaFamilia = base.idoso.familiar.nome;
+      const convidada = abrirConvite(base, 'pedido', undefined, agora);
+      if (!convidada) return null;
+      const alerta = criarAlerta(
+        base,
+        { tipo: 'ligacao', gravidade: 'atencao', texto: `Pediu pra falar com você agora, na ligação com a ${NOME_DA_ASSISTENTE}.`, origem: 'assistente' },
+        agora,
+      );
+      convite = { conversa: { ...convidada }, frase: fraseDoConvite(base) };
+      if ((base.aparelhosFamiliaPush?.length ?? 0) > 0) {
+        pushInfo = { base: structuredClone(base), alerta };
+      }
+      return null;
+    });
+    const aberto = convite as { conversa: Conversa; frase: string } | null;
+    if (!aberto) return `${nomeDaFamilia} já foi chamada nesta ligação, ou a ligação não deixa chamar agora. Diga com calma que o recado fica no resumo.`;
+    depois(() => falar(aberto.conversa, aberto.frase, 'APPEND'));
+    const p = pushInfo as { base: Base; alerta: Alerta } | null;
+    if (p) {
+      depois(() =>
+        notificarFamiliaPorPush(p.base, {
+          alertaId: p.alerta.id,
+          titulo: `${p.base.idoso.tratamento} pediu pra falar com você`,
+          mensagem: p.alerta.texto,
+          gravidade: 'urgente',
+          tipo: 'ligacao',
+          urlDestino: `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}`,
+          entrarAoVivo: true,
+        }),
+      );
+    }
+    return `Chamei ${nomeDaFamilia}. A frase pra pessoa já vai ser dita; não repita, só siga a conversa com calma.`;
   }
 
   if (nome === 'resumir_conversa') {
     const resumo = texto(a.resumo, 600);
     if (!resumo) return 'Resumo não guardado: faltou o texto.';
     let cortou = false;
+    let pushResumo: { base: Base; texto: string } | null = null;
     await mudarBase(idosoId, (base) => {
       const limpo = resumoSemSegredo(base, resumo);
       cortou = limpo.cortou;
-      return resumirConversa(base, limpo.resumo);
+      const conv = resumirConversa(base, limpo.resumo);
+      if (conv && (base.aparelhosFamiliaPush?.length ?? 0) > 0) {
+        pushResumo = { base: structuredClone(base), texto: limpo.resumo };
+      }
+      return conv;
     });
+    const pr = pushResumo as { base: Base; texto: string } | null;
+    if (pr) {
+      depois(() =>
+        notificarFamiliaPorPush(pr.base, {
+          titulo: `Conversa com ${pr.base.idoso.tratamento} encerrada`,
+          mensagem: pr.texto,
+          gravidade: 'atencao',
+          tipo: 'ligacao',
+        }),
+      );
+    }
     return cortou ? 'Resumo guardado sem a parte que a pessoa pediu segredo.' : 'Resumo guardado.';
   }
 

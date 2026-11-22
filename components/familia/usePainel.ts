@@ -2,12 +2,20 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Alerta, CategoriaDeLembranca, PainelDaFamilia, RespostaDoAviso } from '@/lib/tipos';
+import { escutarRotaDaFamiliaNativa } from '@/lib/pushNativo';
+import type {
+  Alerta,
+  CategoriaDeLembranca,
+  ContatoDeEmergencia,
+  PainelDaFamilia,
+  RespostaDoAviso,
+} from '@/lib/tipos';
 import { arrumarHorarios } from './formatos';
 import {
   buscarPainel,
   deuCerto,
   enviarAcao,
+  enviarDocumento,
   type AcaoComIdoso,
   type PerfilDoIdoso,
 } from './api';
@@ -60,6 +68,9 @@ export function completar(dado: PainelDaFamilia): PainelDaFamilia {
     ...dado,
     chamadaTocando: dado.chamadaTocando ?? null,
     chamadas: Array.isArray(dado.chamadas) ? dado.chamadas : [],
+    documentos: Array.isArray(dado.documentos) ? dado.documentos : [],
+    redeDeApoio: Array.isArray(dado.redeDeApoio) ? dado.redeDeApoio : [],
+    escalonamentos: Array.isArray(dado.escalonamentos) ? dado.escalonamentos : [],
     reservadas: typeof dado.reservadas === 'number' ? dado.reservadas : 0,
     idoso: {
       ...idoso,
@@ -87,9 +98,20 @@ export function usePainel(idosoId: string | null) {
   const buscarAgora = useRef<() => Promise<void>>(async () => {});
   const versaoDosHorarios = useRef(0);
   const versaoDoAtender = useRef(0);
+  const alertasNotificados = useRef<Set<string> | null>(null);
+  const conviteAvisado = useRef<string | null>(null);
+
+  // No app Android/iOS, ao tocar na notificação urgente, abre direto na sala ao vivo.
+  useEffect(() => {
+    return escutarRotaDaFamiliaNativa((rota) => {
+      router.push(rota);
+    });
+  }, [router]);
 
   useEffect(() => {
     setBruto(null);
+    alertasNotificados.current = null;
+    conviteAvisado.current = null;
     if (!idosoId) return;
     let vivo = true;
     let espera: ReturnType<typeof setTimeout> | undefined;
@@ -248,6 +270,146 @@ export function usePainel(idosoId: string | null) {
     [idosoId, mandarLembranca],
   );
 
+  const anexarDocumento = useCallback(
+    async (
+      arquivo: File,
+      nota?: string,
+    ): Promise<{ ok: true; compromissosCriados: number } | { ok: false; erro: string }> => {
+      if (!idosoId) return { ok: false, erro: 'Nenhum idoso selecionado.' };
+      const { status, dado } = await enviarDocumento(idosoId, arquivo, nota);
+      if (status === 401) router.replace('/entrar');
+      if (deuCerto(status) && dado?.ok) {
+        await buscarAgora.current();
+        return { ok: true, compromissosCriados: dado.compromissosCriados ?? 0 };
+      }
+      return {
+        ok: false,
+        erro: dado?.detalhe ?? 'Não consegui ler esse documento agora. Tente outra foto ou PDF.',
+      };
+    },
+    [idosoId, router],
+  );
+
+  const apagarDocumento = useCallback(
+    async (documentoId: string): Promise<boolean> => {
+      if (!idosoId) return false;
+      const ok = deuCerto(await mandar({ acao: 'apagar_documento', documentoId, idosoId }));
+      if (ok) await buscarAgora.current();
+      return ok;
+    },
+    [idosoId, mandar],
+  );
+
+  const salvarRedeDeApoio = useCallback(
+    async (
+      contatos: Omit<ContatoDeEmergencia, 'id'>[] | ContatoDeEmergencia[],
+    ): Promise<ContatoDeEmergencia[] | null> => {
+      if (!idosoId) return null;
+      const { status, dado } = await enviarAcao({ acao: 'salvar_rede_de_apoio', contatos, idosoId });
+      if (status === 401) router.replace('/entrar');
+      if (status === 0) setSemConexao(true);
+      if (!deuCerto(status)) return null;
+      await buscarAgora.current();
+      const lista =
+        dado && typeof dado === 'object' && Array.isArray((dado as { redeDeApoio?: unknown }).redeDeApoio)
+          ? ((dado as { redeDeApoio: ContatoDeEmergencia[] }).redeDeApoio)
+          : [];
+      return lista;
+    },
+    [idosoId, router],
+  );
+
+  const registrarPushFamilia = useCallback(
+    async (plataforma: 'android' | 'ios', token: string): Promise<boolean> => {
+      if (!idosoId || !token.trim()) return false;
+      const ok = deuCerto(
+        await mandar({ acao: 'registrar_push_familia', plataforma, token: token.trim(), idosoId }),
+      );
+      if (ok) await buscarAgora.current();
+      return ok;
+    },
+    [idosoId, mandar],
+  );
+
+  // Toca sinal sonoro curto e dispara notificação clicável no Web quando chega alerta/convite novo.
+  useEffect(() => {
+    if (!bruto) return;
+
+    // Quando abre um convite ao vivo novo (emergência ou pedido do idoso), toca alerta sonoro no Web.
+    const chaveConvite = bruto.convite ? `${bruto.convite.conversaId}:${bruto.convite.abertoEm}` : null;
+    if (chaveConvite && conviteAvisado.current !== chaveConvite) {
+      const jaInicializado = alertasNotificados.current !== null;
+      conviteAvisado.current = chaveConvite;
+      if (jaInicializado && typeof window !== 'undefined') {
+        try {
+          const AudioCtx =
+            window.AudioContext ||
+            (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+          if (AudioCtx) {
+            const ctx = new AudioCtx();
+            const agoraAudio = ctx.currentTime;
+            for (const offset of [0, 0.25, 0.5]) {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.value = 880;
+              gain.gain.setValueAtTime(0.18, agoraAudio + offset);
+              gain.gain.exponentialRampToValueAtTime(0.001, agoraAudio + offset + 0.18);
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start(agoraAudio + offset);
+              osc.stop(agoraAudio + offset + 0.2);
+            }
+            setTimeout(() => void ctx.close().catch(() => undefined), 1000);
+          }
+        } catch {
+          // Navegador pode exigir interação prévia para áudio.
+        }
+      }
+    }
+
+    if (alertasNotificados.current === null) {
+      alertasNotificados.current = new Set(bruto.alertas.map((a) => a.id));
+      return;
+    }
+    const conhecidos = alertasNotificados.current;
+    const novos = bruto.alertas.filter((a) => !conhecidos.has(a.id));
+    for (const a of novos) conhecidos.add(a.id);
+
+    if (
+      novos.length === 0 ||
+      typeof window === 'undefined' ||
+      !('Notification' in window) ||
+      Notification.permission !== 'granted'
+    ) {
+      return;
+    }
+
+    const rotaLigacao = idosoId ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}` : '/familia';
+    for (const alerta of novos) {
+      if (alerta.visto) continue;
+      const aoVivo = Boolean(bruto.convite) && (alerta.gravidade === 'urgente' || alerta.tipo === 'ligacao');
+      const titulo =
+        alerta.gravidade === 'urgente'
+          ? `Urgente: ${bruto.idoso.tratamento}${aoVivo ? ' — toque pra entrar na ligação' : ''}`
+          : `Aviso: ${bruto.idoso.tratamento}`;
+      try {
+        const notif = new Notification(titulo, {
+          body: alerta.texto,
+          tag: alerta.id,
+          requireInteraction: alerta.gravidade === 'urgente',
+        });
+        notif.onclick = () => {
+          window.focus();
+          if (aoVivo) router.push(rotaLigacao);
+          notif.close();
+        };
+      } catch {
+        // Alguns browsers mobile bloqueiam `new Notification` sem Service Worker.
+      }
+    }
+  }, [bruto, idosoId, router]);
+
   const painel = useMemo<PainelDaFamilia | null>(() => {
     if (!bruto) return null;
     return {
@@ -279,5 +441,9 @@ export function usePainel(idosoId: string | null) {
     ensinarLembranca,
     corrigirLembranca,
     apagarLembranca,
+    anexarDocumento,
+    apagarDocumento,
+    salvarRedeDeApoio,
+    registrarPushFamilia,
   };
 }

@@ -8,7 +8,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         DonaLedaVoipCoordinator.shared.start()
+        DonaLedaFamilyPushCoordinator.shared.configureCenter()
         return true
+    }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        DonaLedaFamilyPushCoordinator.shared.didRegisterToken(deviceToken)
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        DonaLedaFamilyPushCoordinator.shared.didFailToRegister(error)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

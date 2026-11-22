@@ -20,18 +20,75 @@ interface DonaLedaCallPushPlugin {
     aparelhoToken?: string;
     serverUrl?: string;
   }): Promise<{ token?: string; plataforma?: 'android' | 'ios' }>;
+  registerFamilyAlerts(): Promise<{ token?: string; plataforma?: 'android' | 'ios' }>;
   getPendingCall(): Promise<{ acao?: string; chamadaId?: string }>;
+  getPendingFamilyRoute(): Promise<{ rota?: string }>;
   addListener(
-    eventName: 'tokenReceived',
+    eventName: 'tokenReceived' | 'familyTokenReceived',
     listenerFunc: (data: TokenNativo) => void,
   ): Promise<PluginListenerHandle>;
   addListener(
     eventName: 'callAction',
     listenerFunc: (data: AcaoDeChamadaNativa) => void,
   ): Promise<PluginListenerHandle>;
+  addListener(
+    eventName: 'familyDeepLink',
+    listenerFunc: (data: { rota: string }) => void,
+  ): Promise<PluginListenerHandle>;
 }
 
 const plugin = registerPlugin<DonaLedaCallPushPlugin>('DonaLedaCallPush');
+
+export function ehAppNativo(): boolean {
+  return Capacitor.isNativePlatform();
+}
+
+/**
+ * Solicita permissão de notificação no app nativo (Android FCM / iOS APNs Alert)
+ * para o celular do familiar responsável receber alertas e status mesmo fechado.
+ */
+export async function registrarPushDaFamiliaNativo(): Promise<TokenNativo | null> {
+  if (!Capacitor.isNativePlatform()) return null;
+  try {
+    const res = await plugin.registerFamilyAlerts();
+    if (res?.token && (res.plataforma === 'android' || res.plataforma === 'ios')) {
+      return { token: res.token, plataforma: res.plataforma };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Escuta toques em notificações urgentes da família no Android/iOS para abrir
+ * direto a sala da ligação ao vivo (`/familia/ligacao?idoso=...`).
+ */
+export function escutarRotaDaFamiliaNativa(onRota: (rota: string) => void): () => void {
+  if (!Capacitor.isNativePlatform()) return () => undefined;
+  let ativo = true;
+  let handle: PluginListenerHandle | null = null;
+
+  const aceitar = (rota?: string) => {
+    if (!ativo || !rota || !rota.startsWith('/familia')) return;
+    onRota(rota);
+  };
+
+  void (async () => {
+    try {
+      handle = await plugin.addListener('familyDeepLink', (d) => aceitar(d?.rota));
+      const pendente = await plugin.getPendingFamilyRoute();
+      aceitar(pendente?.rota);
+    } catch {
+      // Versão antiga do APK sem este método: segue normalmente no painel.
+    }
+  })();
+
+  return () => {
+    ativo = false;
+    void handle?.remove().catch(() => undefined);
+  };
+}
 
 async function enviarTokenAoServidor(plataforma: 'android' | 'ios', token: string): Promise<void> {
   if (!token || token.length < 16) return;

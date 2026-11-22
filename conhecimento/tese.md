@@ -55,6 +55,8 @@ Fontes: [Censo 2022, pessoas de 60 anos ou mais](https://www.ibge.gov.br/novo-po
 
 **Como medir o último degrau:** perguntar à primeira casa parceira, e às próximas, quantas famílias a procuram por mês e quantas acabam não levando o idoso, e anotar a partir de agora qual casa indicou cada família que entrar.
 
+**Quem mais pode pagar: o plano de saúde.** 8,7 milhões de pessoas com 60 anos ou mais têm plano de saúde (IESS, fevereiro de 2026). Se o plano contratar a Dona Leda pro beneficiário dele, ao mesmo preço, o teto é 8,7 milhões × R$ 129,90 × 12 meses = R$ 13,6 bilhões por ano. É teto: supõe todo plano contratando pra todo beneficiário de 60 anos ou mais. Os planos feitos pra idoso já são grandes: a Prevent Senior tem 549 mil vidas e a MedSênior, 310 mil (`proposta-de-valor.md`). A gente não vende dado: o plano contrata o serviço, com o sim do idoso. A LGPD proíbe passar dado de saúde entre empresas pra ganho econômico (art. 11, § 4º), e o § 5º do mesmo artigo veta o uso de dado de saúde pelo plano pra selecionar risco. Por isso o primeiro contrato passa por advogado.
+
 ### 2. Quanto cobrar
 
 - **O custo, em cinco linhas** (a conta inteira, com as fontes, está em [custos.md](custos.md)):

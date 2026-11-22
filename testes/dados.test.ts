@@ -254,3 +254,223 @@ describe('leitura de QR Code de pareamento', () => {
     expect(extrairCodigoDeTexto('12345')).toBeNull();
   });
 });
+
+describe('gestão de exames, calendário de longo prazo e escalonamento em massa', () => {
+  it('remove CPF/RG dos textos de exames e injeta documentos no prompt sem diagnóstico', async () => {
+    const { limparDadosSensiveis } = await import('@/lib/documentos');
+    const { adicionarDocumento, apagarDocumento } = await import('@/lib/dados');
+
+    expect(limparDadosSensiveis('Paciente CPF 123.456.789-00 glicemia 110')).toBe(
+      'Paciente [documento oculto] glicemia 110',
+    );
+
+    const base = baseDeExemplo(AGORA);
+    const doc = adicionarDocumento(
+      base,
+      {
+        titulo: 'Exame de sangue — Glicemia',
+        tipo: 'exame',
+        data: '2026-11-20',
+        resumoSimples: 'O exame mediu a taxa de açúcar no sangue. O médico vai avaliar o resultado.',
+        orientacao: 'Levar na próxima consulta',
+      },
+      AGORA,
+    );
+    const instrucoes = montarInstrucoes(base, AGORA, true);
+    expect(instrucoes).toContain('Exames, consultas e receitas anexados pela família');
+    expect(instrucoes).toContain('Exame de sangue — Glicemia');
+    expect(instrucoes).toContain('NUNCA dê diagnóstico médico');
+
+    expect(apagarDocumento(base, doc.id)).toBe(true);
+    expect(base.documentos).toHaveLength(0);
+  });
+
+  it('lembra compromissos da semana e consultas marcadas meses à frente', async () => {
+    const { montarRoteiroDoMomento } = await import('@/lib/persona');
+    const hoje = new Date('2026-11-21T12:00:00.000Z');
+    const base = baseDeExemplo(hoje);
+    base.lembrancas.push(
+      {
+        id: 'semana',
+        numero: 201,
+        texto: 'Cardiologista no posto',
+        categoria: 'compromisso',
+        data: '2026-11-25',
+        hora: '10:00',
+        origem: 'familia',
+        criadaEm: hoje.toISOString(),
+      },
+      {
+        id: 'meses',
+        numero: 202,
+        texto: 'Retorno no oftalmologista',
+        categoria: 'compromisso',
+        data: '2027-02-14',
+        hora: '09:30',
+        origem: 'familia',
+        criadaEm: hoje.toISOString(),
+      },
+    );
+    const roteiro = montarRoteiroDoMomento(base, hoje);
+    expect(roteiro).toContain('Compromisso NESTA SEMANA');
+    expect(roteiro).toContain('Cardiologista no posto');
+    expect(roteiro).toContain('Agendado mais à frente');
+    expect(roteiro).toContain('Retorno no oftalmologista');
+  });
+
+  it('normaliza telefones da rede de apoio e registra escalonamento em massa após 3 tentativas', async () => {
+    const { definirRedeDeApoio } = await import('@/lib/dados');
+    const { dispararEscalonamentoEmMassa } = await import('@/lib/sinalizacaoChamada');
+
+    const base = baseDeExemplo(AGORA);
+    const rede = definirRedeDeApoio(base, [
+      { nome: 'Marina', parentesco: 'filha', telefone: '(11) 99999-1234' },
+      { nome: 'Paulo', parentesco: 'filho', telefone: '11988887777' },
+      { nome: 'Invalido', parentesco: 'amigo', telefone: '123' },
+    ]);
+    expect(rede).toHaveLength(2);
+    expect(rede[0].telefone).toBe('+5511999991234');
+    expect(rede[1].telefone).toBe('+5511988887777');
+
+    const esc = await dispararEscalonamentoEmMassa(
+      base.idoso.id,
+      base,
+      {
+        id: 'ch-3',
+        motivo: 'horario',
+        horario: '09:00',
+        tentativa: 3,
+        estado: 'perdida',
+        pedidaEm: AGORA.toISOString(),
+      },
+      AGORA,
+    );
+    expect(esc.contatosAcionados).toHaveLength(2);
+    expect(esc.motivo).toContain('3 tentativas');
+
+    const { registrarEscalonamento } = await import('@/lib/dados');
+    registrarEscalonamento(base, esc);
+    registrarEscalonamento(base, esc);
+    expect(base.escalonamentos).toHaveLength(1);
+  });
+
+  it('valida magic bytes reais de foto/PDF e bloqueia arquivo mascarado', async () => {
+    const { detectarMimeReal, mimeAceito } = await import('@/lib/documentos');
+
+    expect(mimeAceito('image/jpg')).toBe(true);
+    expect(detectarMimeReal(Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0, 0, 0, 0, 0]))).toBe('image/jpeg');
+    expect(detectarMimeReal(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0]))).toBe('image/png');
+    expect(detectarMimeReal(Buffer.from('RIFF\x00\x00\x00\x00WEBP', 'latin1'))).toBe('image/webp');
+    expect(detectarMimeReal(Buffer.from('%PDF-1.7\n1 0 obj', 'ascii'))).toBe('application/pdf');
+    expect(detectarMimeReal(Buffer.from('<script>alert(1)</script>', 'utf8'))).toBeNull();
+  });
+
+  it('registra token de push do celular da família (Android e iOS) sem duplicar e expõe no painel', async () => {
+    const { registrarAparelhoFamiliaPush } = await import('@/lib/dados');
+    const base = baseDeExemplo(AGORA);
+    expect(montarPainel(base, AGORA).notificacoesFamiliaAtivas).toBe(false);
+
+    expect(registrarAparelhoFamiliaPush(base, 'android', 'curto')).toBe(false);
+    expect(registrarAparelhoFamiliaPush(base, 'android', 'fcm-token-android-familia-123456', AGORA)).toBe(true);
+    expect(registrarAparelhoFamiliaPush(base, 'android', 'fcm-token-android-familia-123456', AGORA)).toBe(true);
+    expect(registrarAparelhoFamiliaPush(base, 'ios', 'apns-token-ios-familia-abcdef123456', AGORA)).toBe(true);
+
+    expect(base.aparelhosFamiliaPush).toHaveLength(2);
+    expect(montarPainel(base, AGORA).notificacoesFamiliaAtivas).toBe(true);
+  });
+
+  it('inclui guardrails éticos anti-apego, episódios da semana e múltiplas conversas recentes no prompt', async () => {
+    const { montarInstrucoes } = await import('@/lib/persona');
+    const base = baseDeExemplo(AGORA);
+    const tresDiasAntes = new Date(AGORA.getTime() - 3 * 24 * 60 * 60 * 1000);
+    const umDiaAntes = new Date(AGORA.getTime() - 1 * 24 * 60 * 60 * 1000);
+
+    // Episódio de mal-estar na semana (alerta há 3 dias)
+    criarAlerta(
+      base,
+      { tipo: 'saude', gravidade: 'atencao', texto: 'Relatou tontura ao levantar de manhã.', origem: 'assistente' },
+      tresDiasAntes,
+    );
+    // Dia anterior com dor relevante
+    base.dias.push({
+      data: '2026-11-20',
+      dor: 6,
+      ondeDoi: 'no joelho',
+      sono: 'mal',
+      observacoes: [],
+    });
+    // Consulta recente que já passou ontem
+    base.lembrancas.push({
+      id: 'comp-ontem',
+      numero: 99,
+      texto: 'Cardiologista no posto',
+      categoria: 'compromisso',
+      data: '2026-11-20',
+      origem: 'familia',
+      criadaEm: tresDiasAntes.toISOString(),
+    });
+    // Duas conversas recentes com resumo (ontem e hoje cedo) + uma de outraPessoa (deve ser ignorada)
+    base.conversas.push(
+      {
+        id: 'conv-ontem',
+        inicio: umDiaAntes.toISOString(),
+        fim: new Date(umDiaAntes.getTime() + 5 * 60_000).toISOString(),
+        falasDoIdoso: 4,
+        resumo: 'Ontem contou que cozinhou sopa de legumes.',
+      },
+      {
+        id: 'conv-outra',
+        inicio: new Date(AGORA.getTime() - 2 * 60 * 60 * 1000).toISOString(),
+        fim: new Date(AGORA.getTime() - 115 * 60 * 1000).toISOString(),
+        falasDoIdoso: 2,
+        outraPessoa: true,
+        resumo: 'SEGREDO DE OUTRA PESSOA NÃO PODE ENTRAR',
+      },
+      {
+        id: 'conv-hoje-cedo',
+        inicio: new Date(AGORA.getTime() - 60 * 60 * 1000).toISOString(),
+        fim: new Date(AGORA.getTime() - 55 * 60 * 1000).toISOString(),
+        falasDoIdoso: 5,
+        resumo: 'Hoje cedo disse que o remédio da pressão está no fim.',
+      },
+    );
+
+    const instrucoes = montarInstrucoes(base, AGORA);
+    expect(instrucoes).toContain('Limites éticos e vínculo saudável');
+    expect(instrucoes).toContain('NUNCA alimente ilusão afetiva');
+    expect(instrucoes).toContain('Relatou tontura ao levantar de manhã.');
+    expect(instrucoes).toContain('dor 6/10 (no joelho)');
+    expect(instrucoes).toContain('Cardiologista no posto');
+    expect(instrucoes).toContain('Ontem contou que cozinhou sopa de legumes.');
+    expect(instrucoes).toContain('Hoje cedo disse que o remédio da pressão está no fim.');
+    expect(instrucoes).not.toContain('SEGREDO DE OUTRA PESSOA NÃO PODE ENTRAR');
+  });
+
+  it('salva, lê e apaga anexo privado de exame/PDF para revisita restrita à família', async () => {
+    const {
+      salvarAnexoDeDocumento,
+      lerAnexoDeDocumento,
+      apagarAnexosDeDocumento,
+    } = await import('@/lib/documentos');
+
+    const pdfBytes = Buffer.from('%PDF-1.7\nexame de sangue', 'ascii');
+    const salvo = await salvarAnexoDeDocumento({
+      idosoId: 'idoso-teste',
+      documentoId: 'doc-1',
+      buffer: pdfBytes,
+      mimeType: 'application/pdf',
+      nomeOriginal: 'hemograma.pdf',
+    });
+    expect(salvo).toEqual({
+      caminho: 'idoso-teste/doc-1.pdf',
+      nome: 'hemograma.pdf',
+    });
+
+    const lido = await lerAnexoDeDocumento(salvo!.caminho, 'application/pdf');
+    expect(lido?.mimeType).toBe('application/pdf');
+    expect(lido?.buffer.equals(pdfBytes)).toBe(true);
+
+    await apagarAnexosDeDocumento([salvo!.caminho]);
+    expect(await lerAnexoDeDocumento(salvo!.caminho, 'application/pdf')).toBeNull();
+  });
+});

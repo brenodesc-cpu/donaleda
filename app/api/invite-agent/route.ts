@@ -8,7 +8,7 @@
 // um modo pelo cabeçalho x-donaleda-modo, pra comparar os dois na mesma hora.
 // As ações da assistente (anotar na ficha, avisar a família) entram por /api/mcp.
 
-import { NextRequest, NextResponse } from 'next/server';
+import { after, NextRequest, NextResponse } from 'next/server';
 import {
   AgoraClient,
   Agent,
@@ -28,13 +28,21 @@ import { DEFAULT_AGENT_UID } from '@/lib/agora';
 import { assistenteNaoEntrou } from '@/lib/chamadas';
 import { abrirConversa, lerBase, mudarBase } from '@/lib/dados';
 import { FERRAMENTAS } from '@/lib/ferramentas';
+import { podeComecarConversa, TETO_NORMAL_MS, tetoDaConversaMs } from '@/lib/limiteDoDia';
 import { montarInstrucoes, montarSaudacao, type OrigemDaLigacao } from '@/lib/persona';
 import { chaveDasFerramentas, exigirVariavel, urlPublica } from '@/lib/servidor';
+import { cumprimentarAoEntrar } from '@/lib/saudacaoGemini';
 import { exigirAparelho } from '@/lib/sessao';
 import type { InicioDaConversa } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
 export const preferredRegion = 'iad1';
+export const maxDuration = 30;
+
+/** Ping levíssimo usado pelo aparelho ao abrir o app para acordar o runtime em iad1 sem cold start. */
+export function GET() {
+  return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+}
 
 const agentUid = String(DEFAULT_AGENT_UID);
 const SE_FALHAR = 'Só um instante, por favor.';
@@ -176,6 +184,14 @@ export async function POST(request: NextRequest) {
       ? base.chamadas.find((c) => c.id === body.chamada_id)
       : undefined;
     const origem: OrigemDaLigacao = chamada ? chamada.motivo : 'idoso';
+    // Os minutos de conversa de hoje acabaram: só a ligação pedida pela família passa.
+    if (!podeComecarConversa(base, origem, agora)) {
+      return NextResponse.json(
+        { error: 'limite_do_dia', mensagem: 'Os minutos de conversa de hoje acabaram.' },
+        { status: 409 },
+      );
+    }
+    const tetoMs = tetoDaConversaMs(base, origem, TETO_NORMAL_MS, agora);
     const saudacao = montarSaudacao(base, agora, origem);
 
     const client = new AgoraClient({ area: Area.US, appId, appCertificate });
@@ -327,7 +343,6 @@ export async function POST(request: NextRequest) {
       channel: channel_name,
       agentUid,
       remoteUids: [requester_id],
-      // A assistente espera dois minutos de silêncio antes de sair sozinha.
       // Sozinha na sala por 30 s (o aparelho fechou sem desligar), ela sai e para de gastar minuto.
       idleTimeout: 30,
       expiresIn: ExpiresIn.hours(1),
@@ -335,7 +350,16 @@ export async function POST(request: NextRequest) {
     });
 
     const agentId = await session.start();
-    const conversa = await mudarBase(idosoId, (b) => abrirConversa(b, agora, chamada?.id));
+    // A Dona Leda do Gemini não fala sozinha ao entrar: o servidor pede a saudação.
+    if (modo === 'gemini') {
+      after(async () => {
+        const resultado = await cumprimentarAoEntrar(appId, appCertificate, agentId, channel_name).catch(() => 'falhou');
+        console.log('saudação do Gemini:', resultado);
+      });
+    }
+    const conversa = await mudarBase(idosoId, (b) =>
+      abrirConversa(b, agora, chamada?.id, { canal: channel_name, agenteId: agentId, modo }),
+    );
 
     return NextResponse.json({
       agent_id: agentId,
@@ -345,6 +369,8 @@ export async function POST(request: NextRequest) {
       ferramentas: comFerramentas,
       avatar: Boolean(video),
       modo,
+      teto_ms: tetoMs,
+      nomeDaFamilia: base.idoso.familiar.nome,
     } satisfies InicioDaConversa);
   } catch (error) {
     console.error('Erro ao começar a conversa:', error);
