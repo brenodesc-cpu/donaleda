@@ -97,9 +97,11 @@ export function usePainel(idosoId: string | null) {
   const buscarAgora = useRef<() => Promise<void>>(async () => {});
   const versaoDosHorarios = useRef(0);
   const versaoDoAtender = useRef(0);
+  const alertasNotificados = useRef<Set<string> | null>(null);
 
   useEffect(() => {
     setBruto(null);
+    alertasNotificados.current = null;
     if (!idosoId) return;
     let vivo = true;
     let espera: ReturnType<typeof setTimeout> | undefined;
@@ -307,6 +309,52 @@ export function usePainel(idosoId: string | null) {
     [idosoId, router],
   );
 
+  const registrarPushFamilia = useCallback(
+    async (plataforma: 'android' | 'ios', token: string): Promise<boolean> => {
+      if (!idosoId || !token.trim()) return false;
+      const ok = deuCerto(
+        await mandar({ acao: 'registrar_push_familia', plataforma, token: token.trim(), idosoId }),
+      );
+      if (ok) await buscarAgora.current();
+      return ok;
+    },
+    [idosoId, mandar],
+  );
+
+  // Dispara notificação no navegador (Web Notification API) quando chega um novo alerta não visto.
+  useEffect(() => {
+    if (!bruto) return;
+    if (alertasNotificados.current === null) {
+      alertasNotificados.current = new Set(bruto.alertas.map((a) => a.id));
+      return;
+    }
+    const conhecidos = alertasNotificados.current;
+    const novos = bruto.alertas.filter((a) => !conhecidos.has(a.id));
+    for (const a of novos) conhecidos.add(a.id);
+
+    if (
+      novos.length === 0 ||
+      typeof window === 'undefined' ||
+      !('Notification' in window) ||
+      Notification.permission !== 'granted'
+    ) {
+      return;
+    }
+
+    for (const alerta of novos) {
+      if (alerta.visto) continue;
+      const titulo =
+        alerta.gravidade === 'urgente'
+          ? `Urgente: ${bruto.idoso.tratamento}`
+          : `Aviso: ${bruto.idoso.tratamento}`;
+      try {
+        new Notification(titulo, { body: alerta.texto, tag: alerta.id });
+      } catch {
+        // Alguns browsers mobile bloqueiam `new Notification` sem Service Worker.
+      }
+    }
+  }, [bruto]);
+
   const painel = useMemo<PainelDaFamilia | null>(() => {
     if (!bruto) return null;
     return {
@@ -341,5 +389,6 @@ export function usePainel(idosoId: string | null) {
     anexarDocumento,
     apagarDocumento,
     salvarRedeDeApoio,
+    registrarPushFamilia,
   };
 }

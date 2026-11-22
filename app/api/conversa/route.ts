@@ -15,7 +15,7 @@ import {
 } from '@/lib/posConversa';
 import { avaliarFala } from '@/lib/regras';
 import { exigirAparelho } from '@/lib/sessao';
-import { dispararEscalonamentoEmMassa } from '@/lib/sinalizacaoChamada';
+import { dispararEscalonamentoEmMassa, notificarFamiliaPorPush } from '@/lib/sinalizacaoChamada';
 import type { Alerta, EventoDaConversa, RespostaDoEvento } from '@/lib/tipos';
 import { ehAvisoInterno } from '@/lib/saudacaoGemini';
 
@@ -113,11 +113,31 @@ export async function POST(request: Request) {
         : undefined;
       // Aviso urgente com a ligação aberta abre o convite pra família entrar.
       const convidada = regra?.gravidade === 'urgente' ? abrirConvite(base, 'urgente', regra.tipo) : null;
-      return { alerta, convite: convidada ? { conversa: { ...convidada }, frase: fraseDoConvite(base, regra?.tipo) } : null };
+      return {
+        alerta,
+        convite: convidada ? { conversa: { ...convidada }, frase: fraseDoConvite(base, regra?.tipo) } : null,
+        pushSnapshot: alerta && (base.aparelhosFamiliaPush?.length ?? 0) > 0 ? structuredClone(base) : null,
+      };
     });
     if (!resultado) return NextResponse.json({ ok: false }, { status: 404 });
     const convite = resultado.convite;
     if (convite) depois(() => falar(convite.conversa, convite.frase, 'APPEND'));
+    if (resultado.alerta && resultado.pushSnapshot) {
+      const alerta = resultado.alerta;
+      const baseSnap = resultado.pushSnapshot;
+      depois(() =>
+        notificarFamiliaPorPush(baseSnap, {
+          alertaId: alerta.id,
+          titulo:
+            alerta.gravidade === 'urgente'
+              ? `Urgente: ${baseSnap.idoso.tratamento}`
+              : `Atenção: ${baseSnap.idoso.tratamento}`,
+          mensagem: alerta.texto,
+          gravidade: alerta.gravidade,
+          tipo: alerta.tipo,
+        }),
+      );
+    }
     return NextResponse.json({ ok: true, alerta: resultado.alerta } satisfies RespostaDoEvento);
   }
 

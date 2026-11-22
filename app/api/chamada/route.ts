@@ -4,8 +4,9 @@
 import { NextResponse } from 'next/server';
 import { avancarChamadas, responderChamada, situacaoDaChamada } from '@/lib/chamadas';
 import { mudarBase, mudarBaseQuando, registrarEscalonamento } from '@/lib/dados';
+import { depois } from '@/lib/familiaNaLigacao';
 import { exigirAparelho } from '@/lib/sessao';
-import { dispararEscalonamentoEmMassa } from '@/lib/sinalizacaoChamada';
+import { dispararEscalonamentoEmMassa, notificarFamiliaPorPush } from '@/lib/sinalizacaoChamada';
 import type { RespostaDaChamada } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
@@ -53,9 +54,30 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
 
-  const chamada = await mudarBase(aparelho.valor, (base) =>
-    responderChamada(base, resposta.chamadaId, resposta.acao),
-  );
-  if (!chamada) return NextResponse.json({ ok: false }, { status: 404 });
-  return NextResponse.json({ ok: true, chamada });
+  const res = await mudarBase(aparelho.valor, (base) => {
+    const antes = base.alertas.length;
+    const chamada = responderChamada(base, resposta.chamadaId, resposta.acao);
+    const novoAlerta = base.alertas.length > antes ? base.alertas[base.alertas.length - 1] : null;
+    return {
+      chamada,
+      novoAlerta,
+      pushSnapshot:
+        novoAlerta && (base.aparelhosFamiliaPush?.length ?? 0) > 0 ? structuredClone(base) : null,
+    };
+  });
+  if (!res.chamada) return NextResponse.json({ ok: false }, { status: 404 });
+  if (res.novoAlerta && res.pushSnapshot) {
+    const alerta = res.novoAlerta;
+    const baseSnap = res.pushSnapshot;
+    depois(() =>
+      notificarFamiliaPorPush(baseSnap, {
+        alertaId: alerta.id,
+        titulo: `Status: ${baseSnap.idoso.tratamento}`,
+        mensagem: alerta.texto,
+        gravidade: alerta.gravidade,
+        tipo: alerta.tipo,
+      }),
+    );
+  }
+  return NextResponse.json({ ok: true, chamada: res.chamada });
 }

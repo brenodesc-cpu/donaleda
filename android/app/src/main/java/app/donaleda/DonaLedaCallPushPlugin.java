@@ -95,6 +95,25 @@ public class DonaLedaCallPushPlugin extends Plugin {
     }
 
     /**
+     * Registra o celular do familiar responsável para receber alertas e status via FCM,
+     * pedindo apenas POST_NOTIFICATIONS (sem tela cheia de telefone nem PhoneAccount).
+     */
+    @PluginMethod
+    public void registerFamilyAlerts(PluginCall call) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                && getPermissionState("notifications") != PermissionState.GRANTED) {
+            requestPermissionForAlias("notifications", call, "onFamilyNotificationPermissionResult");
+            return;
+        }
+        fetchFcmToken(call);
+    }
+
+    @PermissionCallback
+    private void onFamilyNotificationPermissionResult(PluginCall call) {
+        fetchFcmToken(call);
+    }
+
+    /**
      * No Android 14+ (API 34+), USE_FULL_SCREEN_INTENT não é liberado automaticamente
      * em APKs instalados fora da Play Store. Abre o ajuste do sistema uma única vez
      * para o usuário ativar "Notificações em tela cheia" (tela de ligação sobre bloqueio).

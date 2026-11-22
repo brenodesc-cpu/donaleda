@@ -27,6 +27,7 @@ export default function PainelDaFamiliaPage() {
     apagarLembranca,
     anexarDocumento,
     apagarDocumento,
+    registrarPushFamilia,
   } = usePainel(idoso?.id ?? null);
   const resumo = painel?.ultimaConversa?.resumo?.trim();
 
@@ -40,7 +41,7 @@ export default function PainelDaFamiliaPage() {
     >
       {painel && idoso ? (
         <>
-          <Cabecalho painel={painel} />
+          <Cabecalho painel={painel} onRegistrarPushFamilia={registrarPushFamilia} />
           <Ligacoes painel={painel} idosoId={idoso.id} pedido={pedidoDeLigacao} onLigar={ligar} />
           {painel.convite?.motivo === 'pedido' ? (
             <a

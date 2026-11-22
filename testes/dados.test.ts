@@ -364,4 +364,18 @@ describe('gestão de exames, calendário de longo prazo e escalonamento em massa
     expect(detectarMimeReal(Buffer.from('%PDF-1.7\n1 0 obj', 'ascii'))).toBe('application/pdf');
     expect(detectarMimeReal(Buffer.from('<script>alert(1)</script>', 'utf8'))).toBeNull();
   });
+
+  it('registra token de push do celular da família (Android e iOS) sem duplicar e expõe no painel', async () => {
+    const { registrarAparelhoFamiliaPush } = await import('@/lib/dados');
+    const base = baseDeExemplo(AGORA);
+    expect(montarPainel(base, AGORA).notificacoesFamiliaAtivas).toBe(false);
+
+    expect(registrarAparelhoFamiliaPush(base, 'android', 'curto')).toBe(false);
+    expect(registrarAparelhoFamiliaPush(base, 'android', 'fcm-token-android-familia-123456', AGORA)).toBe(true);
+    expect(registrarAparelhoFamiliaPush(base, 'android', 'fcm-token-android-familia-123456', AGORA)).toBe(true);
+    expect(registrarAparelhoFamiliaPush(base, 'ios', 'apns-token-ios-familia-abcdef123456', AGORA)).toBe(true);
+
+    expect(base.aparelhosFamiliaPush).toHaveLength(2);
+    expect(montarPainel(base, AGORA).notificacoesFamiliaAtivas).toBe(true);
+  });
 });

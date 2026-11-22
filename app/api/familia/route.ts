@@ -14,6 +14,7 @@ import {
   montarPainel,
   mudarBase,
   mudarBaseQuando,
+  registrarAparelhoFamiliaPush,
   registrarEscalonamento,
 } from '@/lib/dados';
 import { depois, entradaDaFamilia, falar, tirarAssistente } from '@/lib/familiaNaLigacao';
@@ -252,6 +253,17 @@ export async function POST(request: Request) {
   if (acao.acao === 'salvar_rede_de_apoio' && Array.isArray(acao.contatos)) {
     const redeDeApoio = await mudarBase(idosoId, (base) => definirRedeDeApoio(base, acao.contatos));
     return NextResponse.json({ ok: true, redeDeApoio });
+  }
+
+  if (
+    acao.acao === 'registrar_push_familia' &&
+    (acao.plataforma === 'android' || acao.plataforma === 'ios') &&
+    typeof acao.token === 'string'
+  ) {
+    const salvou = await mudarBase(idosoId, (base) =>
+      registrarAparelhoFamiliaPush(base, acao.plataforma, acao.token),
+    );
+    return NextResponse.json({ ok: salvou }, { status: salvou ? 200 : 400 });
   }
 
   if (acao.acao === 'gerar_codigo') {

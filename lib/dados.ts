@@ -353,6 +353,7 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     chamadaTocando: base.chamadas.find((c) => c.estado === 'tocando') ?? null,
     chamadas: [...base.chamadas].reverse().slice(0, 10),
     aparelhoPushAtivo: (base.aparelhosPush?.length ?? 0) > 0,
+    notificacoesFamiliaAtivas: (base.aparelhosFamiliaPush?.length ?? 0) > 0,
     limiteDoDia: limiteDoDia(base, agora),
     documentos: [...(base.documentos ?? [])].reverse().slice(0, 30),
     redeDeApoio: base.redeDeApoio ?? [],
@@ -518,6 +519,21 @@ export function definirRedeDeApoio(
   }
   base.redeDeApoio = limpos;
   return limpos;
+}
+
+export function registrarAparelhoFamiliaPush(
+  base: Base,
+  plataforma: 'android' | 'ios',
+  token: string,
+  agora: Date = new Date(),
+): boolean {
+  const limpo = token.trim();
+  if (limpo.length < 16 || limpo.length > 512) return false;
+  base.aparelhosFamiliaPush ??= [];
+  const semAntigo = base.aparelhosFamiliaPush.filter((a) => a.token !== limpo);
+  semAntigo.push({ plataforma, token: limpo, atualizadoEm: agora.toISOString() });
+  base.aparelhosFamiliaPush = semAntigo.slice(-10);
+  return true;
 }
 
 export function registrarEscalonamento(base: Base, escalonamento: Escalonamento): Escalonamento {

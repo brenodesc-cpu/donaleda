@@ -308,6 +308,8 @@ export interface PainelDaFamilia {
   aparelhoVistoEm?: string | null;
   /** true quando o aparelho do idoso tem push nativo (FCM / APNs VoIP) registrado. */
   aparelhoPushAtivo?: boolean;
+  /** true quando há pelo menos um aparelho da família registrado pra push nativo (Android/iOS). */
+  notificacoesFamiliaAtivas?: boolean;
   /** Exames, consultas e receitas anexados pela família (mais novos primeiro). */
   documentos?: DocumentoClinico[];
   /** Contatos da rede de apoio acionados após 3 tentativas sem atendimento. */
@@ -347,6 +349,8 @@ export type AcaoDaFamilia = (
       acao: 'salvar_rede_de_apoio';
       contatos: { id?: string; nome: string; parentesco: string; telefone: string }[];
     }
+  /** Registra o token FCM (Android) ou APNs Alert (iOS) do celular do familiar responsável. */
+  | { acao: 'registrar_push_familia'; plataforma: 'android' | 'ios'; token: string }
   /** Muda o perfil. Só os campos que vierem. Responde `{ ok, idoso }`. */
   | {
       acao: 'perfil';

@@ -20,9 +20,10 @@ interface DonaLedaCallPushPlugin {
     aparelhoToken?: string;
     serverUrl?: string;
   }): Promise<{ token?: string; plataforma?: 'android' | 'ios' }>;
+  registerFamilyAlerts(): Promise<{ token?: string; plataforma?: 'android' | 'ios' }>;
   getPendingCall(): Promise<{ acao?: string; chamadaId?: string }>;
   addListener(
-    eventName: 'tokenReceived',
+    eventName: 'tokenReceived' | 'familyTokenReceived',
     listenerFunc: (data: TokenNativo) => void,
   ): Promise<PluginListenerHandle>;
   addListener(
@@ -32,6 +33,27 @@ interface DonaLedaCallPushPlugin {
 }
 
 const plugin = registerPlugin<DonaLedaCallPushPlugin>('DonaLedaCallPush');
+
+export function ehAppNativo(): boolean {
+  return Capacitor.isNativePlatform();
+}
+
+/**
+ * Solicita permissão de notificação no app nativo (Android FCM / iOS APNs Alert)
+ * para o celular do familiar responsável receber alertas e status mesmo fechado.
+ */
+export async function registrarPushDaFamiliaNativo(): Promise<TokenNativo | null> {
+  if (!Capacitor.isNativePlatform()) return null;
+  try {
+    const res = await plugin.registerFamilyAlerts();
+    if (res?.token && (res.plataforma === 'android' || res.plataforma === 'ios')) {
+      return { token: res.token, plataforma: res.plataforma };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
 
 async function enviarTokenAoServidor(plataforma: 'android' | 'ios', token: string): Promise<void> {
   if (!token || token.length < 16) return;

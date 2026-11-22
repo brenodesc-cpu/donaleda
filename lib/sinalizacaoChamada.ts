@@ -247,6 +247,148 @@ async function enviarApnsVoip(
   });
 }
 
+/** Envia notificação push padrão (Alert) via APNs HTTP/2 para o iPhone do familiar responsável. */
+async function enviarApnsAlerta(
+  deviceToken: string,
+  titulo: string,
+  mensagem: string,
+  urgente: boolean,
+  dados: Record<string, string>,
+): Promise<boolean> {
+  const keyId = process.env.APNS_KEY_ID?.trim();
+  const teamId = process.env.APNS_TEAM_ID?.trim();
+  const privateKey = process.env.APNS_PRIVATE_KEY?.trim()?.replace(/\\n/g, '\n');
+  if (!keyId || !teamId || !privateKey) return false;
+
+  const bundleId = process.env.APNS_BUNDLE_ID?.trim() || 'app.donaleda';
+  const host =
+    process.env.APNS_SANDBOX === '1'
+      ? 'https://api.sandbox.push.apple.com'
+      : 'https://api.push.apple.com';
+
+  const cabecalho = base64Url(JSON.stringify({ alg: 'ES256', kid: keyId }));
+  const corpo = base64Url(JSON.stringify({ iss: teamId, iat: Math.floor(Date.now() / 1000) }));
+  const assinador = createSign('SHA256');
+  assinador.update(`${cabecalho}.${corpo}`);
+  assinador.end();
+  const assinatura = base64Url(
+    assinador.sign({ key: privateKey, dsaEncoding: 'ieee-p1363' }),
+  );
+  const jwt = `${cabecalho}.${corpo}.${assinatura}`;
+
+  return new Promise<boolean>((resolve) => {
+    const client = http2.connect(host);
+    const timer = setTimeout(() => {
+      client.close();
+      resolve(false);
+    }, TIMEOUT_MS);
+
+    client.on('error', () => {
+      clearTimeout(timer);
+      resolve(false);
+    });
+
+    const req = client.request({
+      ':method': 'POST',
+      ':path': `/3/device/${encodeURIComponent(deviceToken)}`,
+      authorization: `bearer ${jwt}`,
+      'apns-topic': bundleId,
+      'apns-push-type': 'alert',
+      'apns-priority': urgente ? '10' : '5',
+      'content-type': 'application/json',
+    });
+
+    let status = 0;
+    req.on('response', (headers) => {
+      status = Number(headers[':status'] ?? 0);
+    });
+    req.on('end', () => {
+      clearTimeout(timer);
+      client.close();
+      resolve(status >= 200 && status < 300);
+    });
+    req.on('error', () => {
+      clearTimeout(timer);
+      client.close();
+      resolve(false);
+    });
+
+    req.end(
+      JSON.stringify({
+        aps: {
+          alert: { title: titulo, body: mensagem },
+          sound: 'default',
+          'interruption-level': urgente ? 'time-sensitive' : 'active',
+        },
+        ...dados,
+      }),
+    );
+  });
+}
+
+/**
+ * Envia notificação push (Android FCM + iOS APNs Alert) para todos os celulares
+ * cadastrados da família responsável. Nunca lança exceção para não travar a conversa.
+ */
+export async function notificarFamiliaPorPush(
+  base: Base,
+  aviso: {
+    alertaId?: string;
+    titulo: string;
+    mensagem: string;
+    gravidade: 'atencao' | 'urgente';
+    tipo: string;
+  },
+): Promise<{ fcmEnviados: number; apnsEnviados: number }> {
+  const aparelhosFamilia = base.aparelhosFamiliaPush ?? [];
+  if (aparelhosFamilia.length === 0) return { fcmEnviados: 0, apnsEnviados: 0 };
+
+  const urgente = aviso.gravidade === 'urgente';
+  const payload: Record<string, string> = {
+    tipo: urgente ? 'alerta_urgente' : 'alerta_familia',
+    gravidade: aviso.gravidade,
+    categoria: aviso.tipo,
+    alertaId: aviso.alertaId ?? '',
+    assistente: NOME_DA_ASSISTENTE,
+    titulo: aviso.titulo.slice(0, 120),
+    mensagem: aviso.mensagem.slice(0, 240),
+  };
+
+  let fcmEnviados = 0;
+  let apnsEnviados = 0;
+
+  const androids = aparelhosFamilia.filter((a) => a.plataforma === 'android');
+  const ioss = aparelhosFamilia.filter((a) => a.plataforma === 'ios');
+
+  const tarefaAndroid = (async () => {
+    if (androids.length === 0) return;
+    const conta = lerContaDeServicoFirebase();
+    if (!conta) return;
+    try {
+      const token = await obterTokenOAuthGoogle(conta);
+      const envios = await Promise.all(
+        androids.map((a) => enviarFcmV1(conta, token, a.token, payload).catch(() => false)),
+      );
+      fcmEnviados = envios.filter(Boolean).length;
+    } catch {
+      // Falha silenciosa: o alerta continua garantido no painel.
+    }
+  })();
+
+  const tarefaIos = (async () => {
+    if (ioss.length === 0) return;
+    const envios = await Promise.all(
+      ioss.map((a) =>
+        enviarApnsAlerta(a.token, payload.titulo, payload.mensagem, urgente, payload).catch(() => false),
+      ),
+    );
+    apnsEnviados = envios.filter(Boolean).length;
+  })();
+
+  await Promise.allSettled([tarefaAndroid, tarefaIos]);
+  return { fcmEnviados, apnsEnviados };
+}
+
 /**
  * Monta o payload mínimo sem dados pessoais/clínicos para acordar o aparelho do idoso.
  */
@@ -456,29 +598,14 @@ export async function dispararEscalonamentoEmMassa(
     }),
   );
 
-  // 2. Push de alerta urgente pros celulares de familiares cadastrados (FCM / APNs).
-  const aparelhosFamilia = base.aparelhosFamiliaPush ?? [];
-  if (aparelhosFamilia.length > 0) {
-    const payloadAlerta: Record<string, string> = {
-      tipo: 'alerta_urgente',
-      chamadaId: chamada.id,
-      assistente: NOME_DA_ASSISTENTE,
-      titulo: `Atenção: ${base.idoso.tratamento} não atendeu`,
-      mensagem: motivo,
-    };
-    const conta = lerContaDeServicoFirebase();
-    if (conta) {
-      try {
-        const token = await obterTokenOAuthGoogle(conta);
-        const androids = aparelhosFamilia.filter((a) => a.plataforma === 'android');
-        await Promise.allSettled(androids.map((a) => enviarFcmV1(conta, token, a.token, payloadAlerta)));
-      } catch {
-        // Falha silenciosa: o alerta urgente continua registrado no painel.
-      }
-    }
-    const ioss = aparelhosFamilia.filter((a) => a.plataforma === 'ios');
-    await Promise.allSettled(ioss.map((a) => enviarApnsVoip(a.token, payloadAlerta)));
-  }
+  // 2. Push de alerta urgente pros celulares de familiares cadastrados (Android FCM + iOS APNs Alert).
+  await notificarFamiliaPorPush(base, {
+    alertaId: chamada.id,
+    titulo: `Urgente: ${base.idoso.tratamento} não atendeu`,
+    mensagem: motivo,
+    gravidade: 'urgente',
+    tipo: 'ligacao',
+  });
 
   return {
     id: randomUUID(),
