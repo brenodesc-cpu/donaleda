@@ -114,6 +114,10 @@ em{font-style:normal;color:var(--gema)}
   .s{display:block !important;position:relative;width:1920px;height:1080px;background:var(--cafe);page-break-after:always;break-after:page;overflow:hidden}
   .dica{display:none}
 }
+.notas{position:fixed;left:0;right:0;bottom:0;max-height:38vh;overflow:auto;background:rgba(20,12,5,.96);color:var(--casca);font-size:20px;line-height:1.45;padding:16px 24px 20px;display:none;border-top:3px solid var(--gema)}
+.notas b{color:var(--gema);font-family:Gabarito,sans-serif;margin-right:10px}
+body.com-notas .notas{display:block}
+@media print{.notas{display:none !important}}
 </style>
 </head>
 <body>
@@ -258,7 +262,9 @@ em{font-style:normal;color:var(--gema)}
   </section>
 
 </div>
-<div class="dica" id="dica">← → pra passar · F pra tela cheia</div>
+<div class="dica" id="dica">← → pra passar · F pra tela cheia · N pra ver a fala</div>
+<div class="notas" id="notas"></div>
+<script id="notas-dados" type="application/json">{"1": {"seg": "22 s", "txt": "A minha avó tem [idade] anos e mora com o meu avô em [cidade]. [Um momento real, em uma frase, de um dia em que a família quis saber como ela estava e não soube.] Por isso a gente fez a Dona Leda, uma assistente virtual que liga todo dia pro seu pai ou pra sua mãe e te conta como eles estão."}, "2": {"seg": "20 s", "txt": "Você sabe como a sua mãe passou a quinta-feira? Se dormiu bem, se tomou o remédio? No Brasil, 6 milhões de idosos moram sozinhos. Eram 20,6 milhões de brasileiros com 60 anos ou mais em 2010, 32,1 milhões em 2022, e vão ser 75 milhões em 2070."}, "3": {"seg": "21 s", "txt": "Quem compra é a filha ou o filho que trabalha e só vê os pais no fim de semana. Hoje essa família paga um cuidador, de 2.800 a 4.500 reais por mês, ou uma casa de repouso, de uns 6 mil. Quem não pode pagar liga quando dá."}, "4": {"seg": "18 s", "txt": "Então a Dona Leda liga, e a pessoa só precisa atender, sem aplicativo pra aprender. Ela conversa com calma, uma pergunta de cada vez, lembra do que a pessoa contou nos outros dias e sempre diz que é uma assistente virtual."}, "5": {"seg": "2 minutos", "txt": "A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel. (Troca pro painel, toca em Ligar agora e fica calado.)"}, "6": {"seg": "18 s", "txt": "Tudo o que vocês viram rodou na Agora. A chamada é uma sala da Agora, e o motor de conversa da Agora escutou a dona Helena, respondeu e parou quando ela interrompeu. [Como o aviso chegou no painel, se a conversa do servidor confirmar que passa pela Agora.] Está no ar, com o código aberto."}, "7": {"seg": "19 s", "txt": "Ontem a Dona Leda ligou pra [N] avós do time. [N] atenderam e conversaram [X] minutos em média, e hoje às 9h, sem ninguém pedir, [N] atenderam de novo. [N] famílias aceitaram começar o teste, e lendo o aviso, [N] de 2 adultos decidiram certo."}, "8": {"seg": "24 s", "txt": "A casa de repouso contou que quem precisa é o idoso que mora em casa, e topou indicar as famílias. Os mentores pediram pra ver quem assumiu cada aviso, e o painel passou a mostrar. É uma noite e poucos avós, com a família do lado. A partir de segunda, são 30 dias com as famílias da casa."}, "9": {"seg": "23 s", "txt": "A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço: 129,90 por mês. Cada idoso custa pra gente uns 38 reais, medido, e sobram 67. Pela nossa estimativa, são de 1,1 a 1,4 bilhão de reais por ano."}, "10": {"seg": "15 s", "txt": "Dona Leda é o nome da minha avó. [O pedido à banca, em uma frase.] Somos quatro: o Vitor, a Stephanie, o Gustavo e eu. Dona Leda: longevidade com qualidade de vida."}}</script>
 
 <script>
 (function(){
@@ -266,12 +272,15 @@ em{font-style:normal;color:var(--gema)}
   s.forEach(function(el,i){ if(i>0) el.insertAdjacentHTML('beforeend','<p class="num">'+(i+1)+' / '+s.length+'</p>'); });
   var atual=0;
   try{ var h=parseInt(location.hash.slice(1),10); if(h>=1&&h<=s.length) atual=h-1; }catch(e){}
-  function mostra(n){ atual=Math.max(0,Math.min(s.length-1,n)); s.forEach(function(el,i){el.classList.toggle('ativo',i===atual)}); history.replaceState(null,'','#'+(atual+1)); }
+  var dados={}; try{ dados=JSON.parse(document.getElementById('notas-dados').textContent); }catch(e){}
+  function nota(){ var d=dados[String(atual+1)]; var el=document.getElementById('notas'); if(!el) return; el.innerHTML=d?('<b>'+(atual+1)+' · '+d.seg+'</b>'+d.txt.replace(/&/g,'&amp;').replace(/</g,'&lt;')):''; }
+  function mostra(n){ atual=Math.max(0,Math.min(s.length-1,n)); s.forEach(function(el,i){el.classList.toggle('ativo',i===atual)}); history.replaceState(null,'','#'+(atual+1)); nota(); }
   mostra(atual);
   document.addEventListener('keydown',function(e){
     if(['ArrowRight','PageDown',' ','Enter'].indexOf(e.key)>=0){e.preventDefault();mostra(atual+1)}
     else if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>=0){e.preventDefault();mostra(atual-1)}
     else if(e.key==='Home'){mostra(0)} else if(e.key==='End'){mostra(s.length-1)}
+    else if(e.key==='n'||e.key==='N'){document.body.classList.toggle('com-notas')}
     else if(e.key==='f'||e.key==='F'){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()} else {document.exitFullscreen()} }
   });
   document.getElementById('palco').addEventListener('click',function(e){ var r=this.getBoundingClientRect(); mostra(e.clientX-r.left<r.width/3?atual-1:atual+1); });
