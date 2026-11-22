@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Falta a variável de ambiente LIA_GEMINI_KEY' }, { status: 503 });
     }
 
-    const body = (await request.json().catch(() => ({}))) as { chamada_id?: string };
+    const body = (await request.json().catch(() => ({}))) as { chamada_id?: string; conversa_id?: string };
     const agora = new Date();
     // Ficha do Supabase e passe temporário do Google em paralelo: corta ~500 ms na abertura.
     const [base, passe] = await Promise.all([lerBase(idosoId), pedirPasseDoGemini(chaveDoGoogle)]);
@@ -62,8 +62,15 @@ export async function POST(request: NextRequest) {
       ? base.chamadas.find((c) => c.id === body.chamada_id)
       : undefined;
     const origem: OrigemDaLigacao = chamada ? chamada.motivo : 'idoso';
+    // Religar: quando o Google fica mudo no meio da ligação, o aparelho pede um passe
+    // novo pra mesma conversa. Só vale pra conversa deste idoso que ainda está aberta.
+    const conversaPedida = typeof body.conversa_id === 'string' ? body.conversa_id : null;
+    if (conversaPedida && !base.conversas.some((c) => c.id === conversaPedida && !c.fim)) {
+      return NextResponse.json({ error: 'Esta conversa já acabou' }, { status: 409 });
+    }
     // Os minutos de conversa de hoje acabaram: só a ligação pedida pela família passa.
-    if (!podeComecarConversa(base, origem, agora)) {
+    // A ligação que já está aberta e só religa não é barrada aqui: o teto dela já cuida disso.
+    if (!conversaPedida && !podeComecarConversa(base, origem, agora)) {
       return NextResponse.json(
         { error: 'limite_do_dia', mensagem: 'Os minutos de conversa de hoje acabaram.' },
         { status: 409 },
@@ -73,7 +80,9 @@ export async function POST(request: NextRequest) {
     const saudacao = montarSaudacao(base, agora, origem);
     const modelo = process.env.LIA_MODELO_GEMINI?.trim() || 'models/gemini-3.8-live';
 
-    const conversa = await mudarBase(idosoId, (b) => abrirConversa(b, agora, chamada?.id));
+    const conversa = conversaPedida
+      ? { id: conversaPedida }
+      : await mudarBase(idosoId, (b) => abrirConversa(b, agora, chamada?.id));
 
     return NextResponse.json({
       // Não tem assistente da Agora na sala, então não tem agent_id pra parar depois.
