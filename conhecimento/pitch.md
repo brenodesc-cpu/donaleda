@@ -8,7 +8,6 @@ A banca dá nota assim: voz 25%, técnica e uso da Agora 25%, problema 20%, inov
 
 - **A avó:** a foto ou o desenho dela, a idade, a cidade e a história verdadeira em no máximo 25 palavras.
 - **Os números das ligações com os avós**, até 9h30 de domingo.
-- **O tempo de resposta e o tempo pra calar**, medidos no ensaio das 10h30 ou pela conversa do servidor depois das 21h30, e a lista do que da Agora está em uso de verdade.
 - **As decisões do Breno:** quem faz a voz da dona Helena, o pedido à banca e o QR Code pros jurados.
 
 ## Os 10 slides
@@ -22,7 +21,7 @@ Versão 2 da especificação, das 21h10, depois de o Breno reprovar o conteúdo 
 | 3 | "6 milhões moram sozinhos" e as barras grandes de brasileiros com 60 anos ou mais: 20,6 milhões em 2010, 32,1 milhões em 2022, 75 milhões em 2070 | Problema |
 | 4 | Três colunas de altura proporcional: cuidador R$ 2.800 a 4.500, casa de repouso uns R$ 6 mil, Dona Leda R$ 129,90 | Problema e benefício |
 | 5 | O fluxo em três partes, com as telas de verdade do app: o idoso (o celular tocando e a conversa), a Agora (a sala da chamada, o motor de conversa com o Gemini ao vivo, as mensagens em tempo real e as ações da Dona Leda) e a família (a ficha do dia e o aviso) | Técnica e Agora |
-| 6 | "Ao vivo" e o que a banca deve reparar: responde em [X] s, pode ser interrompida, avisa a família na hora. Cada item só fica se a medição confirmar | Voz |
+| 6 | "Ao vivo" e o que a banca deve reparar: responde em menos de 3 s, pode ser interrompida, avisa a família na hora. O tempo foi medido pelo time às 21h37 e 21h40 de 21/11, com voz gravada (média de 2,8 s, pior caso de 4,4 s, a primeira resposta é a mais lenta), porque a Agora não mede esse tempo no modo do Gemini. A interrupção funcionou nas duas ligações | Voz |
 | 7 | Quatro números grandes: avós que atenderam no sábado, que atenderam de novo no domingo, famílias que aceitaram o teste e, no teste das três versões com cinco adultos, quantos dos dois que viram o aviso primeiro decidiram certo | Validação |
 | 8 | O que a gente ouviu e o que mudou: quem precisa ainda mora em casa, então a família paga e a casa indica; visitar toda semana não basta, então ela liga todo dia; aviso sem responsável não vira cuidado, então o painel mostra quem assumiu. Uma linha pro que as ligações ensinarem e os limites numa linha pequena | Validação |
 | 9 | Os R$ 129,90 numa barra só: R$ 38 de custo, R$ 24,50 de imposto e cartão e R$ 67 de sobra, com o mercado estimado numa linha | Benefício e negócio |
@@ -117,7 +116,7 @@ A demonstração entra entre o slide 6 e o 7. A cena é uma só: a dona Helena, 
 | Tempo | Na tela | Quem fala |
 |---|---|---|
 | 0:00 a 0:12 | O slide 6, e depois o painel da Marina | Breno: "A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel." Troca pro painel, toca em "Ligar agora" e para de falar |
-| 0:12 a 0:20 | O celular toca, o disco gira, "Dona Leda está ligando" | A dona Helena toca em Atender e diz "Alô?" logo de cara |
+| 0:12 a 0:20 | O celular toca, o disco gira, "Dona Leda está ligando" | A dona Helena toca em Atender e diz "Alô, Dona Leda?" logo de cara. Na voz do Gemini, a Dona Leda só começa a falar depois que a pessoa fala |
 | 0:20 a 0:40 | A ligação | A Dona Leda se apresenta como assistente virtual e pergunta como ela dormiu. Dona Helena: "Dormi mais ou menos, acordei duas vezes." |
 | 0:40 a 0:55 | A ligação | Quando a Dona Leda estiver no meio da próxima pergunta, a dona Helena fala por cima: "Espera, deixa eu te contar uma coisa." Ela tem que calar e escutar |
 | 0:55 a 1:15 | A ligação | Dona Helena: "Hoje de manhã me ligou um moço dizendo que era o meu neto e pediu um Pix." A Dona Leda diz pra não passar nada, falar com a Marina antes, e que vai avisar a Marina |
@@ -132,7 +131,7 @@ A família entrando na mesma ligação vai ao ar depois das 23h de 21/11, e o bo
 ### O plano de reserva
 
 - **A ligação não tocou em 10 segundos:** o Breno toca em "Ligar agora" mais uma vez. Se não tocar de novo, ele para e põe o vídeo: "A internet do celular caiu, então vou mostrar a mesma cena gravada hoje de manhã."
-- **Ela ficou muda logo no começo:** o celular abre com `?modo=tres` no fim do endereço, que é a voz de reserva pela Agora, e o Breno liga de novo. Esse modo fica gravado no celular até alguém abrir com `?modo=auto`. Deixar um segundo celular já pareado nesse modo poupa esse tempo.
+- **Ela ficou muda logo no começo:** primeiro a dona Helena repete "Alô, Dona Leda?", porque ela só fala depois de ouvir a pessoa. Se continuar muda, o celular abre com `?modo=tres` no fim do endereço, que é a voz de reserva pela Agora, e o Breno liga de novo. Esse modo fica gravado no celular até alguém abrir com `?modo=auto`. Deixar um segundo celular já pareado nesse modo poupa esse tempo.
 - **Ela ficou muda no meio da conversa:** a dona Helena diz "Alô?" uma vez. Sem resposta, o Breno encerra a ligação, mostra no painel o que já foi anotado e põe o vídeo a partir do aviso.
 - **O aviso não apareceu em 15 segundos:** recarregar o painel uma vez. Se não aparecer, o vídeo a partir do aviso.
 - **Nunca consertar no palco.** Depois de uma tentativa, vai o vídeo. O regulamento aceita o vídeo no lugar da demonstração quando a conexão falha.
@@ -170,6 +169,7 @@ Cada resposta cabe em uns 20 segundos. Os números têm fonte em `custos.md`, `p
 | Isso não troca o filho por uma máquina? | O risco existe. Ela se apresenta como assistente virtual, e a família fica por perto pelo painel, pelos avisos e pela ligação que pode mandar fazer na hora. [Se a família na ligação passar no teste das 23h: num aviso urgente, ou quando a idosa pede pra chamar a filha, a filha entra na mesma ligação pela sala da Agora.] |
 | O filho vai pagar todo mês? | É a premissa mais arriscada, e ninguém lá fora publica quantas famílias pagam. A família já paga de R$ 189 a 249 por um botão de emergência. Nas ligações de ontem, [N] de [N] famílias disseram sim aos R$ 129,90, e [N] pediram pra começar o teste |
 | O idoso vai atender de novo depois da novidade? | É o que a ligação de domingo às 9h mediu: [N] de [N] atenderam de novo. Lá fora, no CareCall, 89% atenderam ao menos uma vez em três meses. Num estudo com uma boneca que conversa, o efeito sumiu aos seis meses, então isso se mede por mês |
+| Ela demora quanto pra responder? | Menos de 3 segundos na média, medido pelo time com voz gravada: 2,8 s de média e 4,4 s no pior caso, que é a primeira resposta da ligação. A Agora não mede esse tempo no modo do Gemini, então o número é nosso |
 | Por que vídeo, se lá fora quase todos usam telefone? | Ninguém provou que vídeo ganha. 76% dos idosos conectados já fazem chamada de voz ou vídeo, o vídeo usa a chamada da Agora por inteiro, e a ligação só de voz é o plano B |
 | Ela é uma cuidadora virtual? | Ela liga no horário combinado, conversa, anota o que a pessoa contou e avisa a família. Quem cuida é a família. Ela se apresenta sempre como assistente virtual e não dá diagnóstico nem socorro |
 | Como vocês medem se o idoso ficou mais ativo? | Em quantos dias da semana a pessoa saiu de casa e conversou com alguém. A ficha anota isso todo dia, e o painel soma a semana |
