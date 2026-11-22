@@ -204,7 +204,7 @@ export function useLigacao() {
       fimAvisado.current = true;
       const falasParaEnviar = ultimasFalas.current;
       ultimasFalas.current = [];
-      void fecharNoServidor(dados.conversaId, dados.agentId, falasParaEnviar);
+      void fecharNoServidor(dados.conversaId, dados.agentId, falasParaEnviar, true);
     };
     window.addEventListener('pagehide', aoSair);
     return () => window.removeEventListener('pagehide', aoSair);

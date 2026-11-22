@@ -10,11 +10,23 @@ import { Capacitor } from '@capacitor/core';
 import AgoraRTC, { type IMicrophoneAudioTrack } from 'agora-rtc-react';
 import type { AIDenoiserExtension, IAIDenoiserProcessor } from 'agora-extension-ai-denoiser';
 
-// Na WebView mobile (Capacitor Android/iOS), o Chromium/WebKit já aplica AEC+NS nativo em C++.
-// Rodar o denoiser em WASM dentro da WebView adiciona +50 a 120 ms de latência local;
-// por isso fica ligado no desktop e desligado no app nativo (forçável com =1).
+// Em celulares (app nativo Capacitor, Safari iOS e Chrome Android), o hardware/SO já aplica
+// AEC + NS + AGC nativos em C++/DSP. Rodar o denoiser em WASM/AudioWorklet no mobile adiciona
+// latência e pode cortar ou abafar vozes baixas (principalmente no iOS Safari). Por isso fica
+// ligado no desktop e desligado no mobile por padrão (forçável com NEXT_PUBLIC_LIA_FILTRO_DE_RUIDO=1).
 const FORCADO = process.env.NEXT_PUBLIC_LIA_FILTRO_DE_RUIDO;
-const LIGADO = FORCADO === '1' || (FORCADO !== '0' && !Capacitor.isNativePlatform());
+
+function ehCelularOuTablet(): boolean {
+  if (Capacitor.isNativePlatform()) return true;
+  if (typeof navigator === 'undefined') return false;
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+}
+
+function deveLigarFiltro(): boolean {
+  if (FORCADO === '1') return true;
+  if (FORCADO === '0') return false;
+  return !ehCelularOuTablet();
+}
 
 // A extensão é registrada uma vez por página; registrar de novo dá erro.
 let extensao: AIDenoiserExtension | null = null;
@@ -41,7 +53,7 @@ async function pegarExtensao(): Promise<AIDenoiserExtension | null> {
 
 export function useFiltroDeRuido(faixa: IMicrophoneAudioTrack | null) {
   useEffect(() => {
-    if (!LIGADO || !faixa) return;
+    if (!deveLigarFiltro() || !faixa) return;
     let processador: IAIDenoiserProcessor | null = null;
     let cancelado = false;
 

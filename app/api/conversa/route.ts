@@ -24,6 +24,8 @@ import type { Alerta, EventoDaConversa, RespostaDoEvento } from '@/lib/tipos';
 import { ehAvisoInterno } from '@/lib/saudacaoGemini';
 
 export const dynamic = 'force-dynamic';
+export const preferredRegion = 'iad1';
+export const maxDuration = 30;
 
 export async function POST(request: Request) {
   const aparelho = await exigirAparelho(request);
