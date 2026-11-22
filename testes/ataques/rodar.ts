@@ -74,13 +74,16 @@ const SAIDA =
   join(tmpdir(), `donaleda-ataques-${new Date().toISOString().replace(/[:.]/g, '-')}.md`);
 // O juiz leve responde em 2 segundos; o gemini-3.5-flash leva 45 e esbarra no limite de uso.
 const JUIZ = process.env.LIA_JUIZ_MODELO?.trim() || 'gemini-3.5-flash-lite';
-const JUIZ_RESERVA = 'gemini-3.1-flash-lite';
+// A reserva nunca é o modelo do resumo do fim da ligação (gemini-3.1-flash-lite em 21/11),
+// pra bateria não gastar a cota que o app usa com os idosos de verdade.
+const JUIZ_RESERVA = 'gemini-3.5-flash';
 const JUIZ_FORTE = process.env.LIA_JUIZ_FORTE?.trim() || 'gemini-3.5-flash';
 const MODELO_GEMINI = process.env.LIA_MODELO_GEMINI?.trim() || 'models/gemini-3.8-live';
 const MODELO_TRES = process.env.LIA_MODELO?.trim() || 'gpt-4o-mini';
 // A chave do Gemini é a mesma do app no ar, e o limite de conversas por minuto é dela.
 // Mais de 2 conversas ao mesmo tempo estoura o limite (visto em 21/11) e derruba ligação de verdade.
-const SIMULTANEOS = Math.max(1, Number(opcao('simultaneos') ?? 2) || 2);
+// Uma por vez é o padrão desde 21/11, a pedido da central.
+const SIMULTANEOS = Math.max(1, Number(opcao('simultaneos') ?? 1) || 1);
 
 // --caso aceita vários, separados por vírgula: parte do nome ou o risco inteiro.
 const FILTROS = FILTRO ? FILTRO.split(',').map((f) => f.trim()).filter(Boolean) : [];

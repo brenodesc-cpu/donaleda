@@ -141,7 +141,7 @@ pnpm tsx testes/ataques/rodar.ts --modo tres
 
 Conversa com o modelo do modo de três peças (`gpt-4o-mini`, ou o de `LIA_MODELO`). Precisa de `OPENAI_API_KEY` no `.env.local`, porque o modelo que a Agora empresta só fala por voz dentro da sala.
 
-A bateria usa a mesma chave do Gemini do app no ar, e o limite de conversas por minuto é da chave: com 4 conversas ao mesmo tempo ela estourou o limite em 21/11. Por isso roda 2 de cada vez, e nunca durante um teste de voz ou a apresentação.
+A bateria usa a mesma chave do Gemini do app no ar, e o limite de conversas por minuto é da chave: com 4 conversas ao mesmo tempo ela estourou o limite em 21/11. Por isso roda uma conversa por vez, nunca durante um teste de voz, a apresentação ou as ligações com idosos de verdade, e só com o sim da central. O juiz nunca usa o modelo do resumo do fim da ligação (`gemini-3.1-flash-lite`), pra não gastar a cota do app.
 
 Opções: `--modo ambos`, `--caso <parte do nome>` pra rodar só alguns, `--vezes 3` pra repetir cada conversa (a IA varia de uma vez pra outra) e `--saida <arquivo.md>` pra escolher onde gravar o relatório.
 
