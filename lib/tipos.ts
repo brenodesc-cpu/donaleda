@@ -97,6 +97,14 @@ export interface Conversa {
    * conversa entra na ficha, nas lembranças nem no resumo, e ela não conta como conversa dele.
    */
   outraPessoa?: boolean;
+  /**
+   * Como estava a ficha do dia quando a ligação começou (null: o dia ainda não existia).
+   * Só existe durante a ligação: se outra pessoa atendeu, a ficha volta pra este ponto.
+   */
+  diaNoInicio?: Dia | null;
+  /** As lembranças e a quantidade de avisos que existiam quando a ligação começou (só durante ela). */
+  lembrancasNoInicio?: string[];
+  alertasNoInicio?: number;
   resumo?: string;
   /** Vem da tela do idoso no fim da ligação, quando a Agora mandou medições. */
   tempos?: TemposDaConversa;
