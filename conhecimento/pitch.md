@@ -126,7 +126,20 @@ A demonstração entra entre o slide 6 e o 7. A cena é uma só: a dona Helena, 
 
 As falas da dona Helena são de propósito curtas e com a palavra "Pix", que a regra fixa do aviso reconhece. Elas são as mesmas do teste de voz, situações 2, 3 e 9. Se no ensaio ela não calar quando interrompida, a fala do "Espera" sai do roteiro.
 
-A família entrando na mesma ligação falhou no teste da noite de 21/11 e ficou fora do ar, então a demonstração roda sem ela. A cena só volta se a conversa "Servidor, voz e banco" avisar, até as 8h de domingo, que ela passou no teste.
+A família entrando na mesma ligação está no ar desde 00h11 de 22/11, conferida no site com dois navegadores. Ela entra no roteiro só se o teste com dois celulares de verdade às 8h passar e a central decidir. Até lá vale a cena do Pix acima.
+
+### A cena com a filha na ligação, se a central aprovar às 8h
+
+Ela troca o golpe do Pix pela queda, porque o botão de entrar na ligação só aparece em aviso urgente. Os primeiros 55 segundos ficam iguais, com a saudação, o sono e a interrupção.
+
+| Tempo | Na tela | Quem fala |
+|---|---|---|
+| 0:55 a 1:10 | A ligação | Dona Helena: "Eu caí no banheiro e não consigo levantar." A Dona Leda diz que avisou a Marina, pede pra ligar pro 192 e diz que a Marina pode entrar na ligação |
+| 1:10 a 1:20 | O aviso urgente e o botão "Entrar na ligação agora" no painel | Breno: "A Marina recebeu o aviso e entra na ligação." Toca no botão |
+| 1:20 a 1:45 | A ligação com as duas | A Dona Leda diz "a Marina entrou na ligação, vou deixar vocês conversarem" e sai. Breno, como Marina: "Mãe, tô aqui. Já liguei pro 192." Dona Helena: "Tá bom, filha." E ela toca em Desligar |
+| 1:45 a 2:00 | O cartão do aviso | Breno: "O aviso chegou na hora, e a filha entrou na mesma ligação." |
+
+O que o teste das 8h precisa provar, além de a cena funcionar: o notebook e o celular na mesma sala, na mesma ligação, sem o som de um voltar pelo microfone do outro. Se voltar, o notebook usa um fone de ouvido. A cena da queda fala de socorro, então o Breno diz em voz alta que quem chama o 192 é a família e que a Dona Leda não é serviço de emergência.
 
 ### O plano de reserva
 
