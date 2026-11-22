@@ -38,29 +38,29 @@ São 180 segundos de fala em nove slides, e a demonstração de 2 minutos entra 
 |---:|---:|---:|---|
 | 1, a avó | 24 | 0:24 | problema, com a história que conecta |
 | 2, a Dona Leda | 21 | 0:45 | clareza |
-| 3, 6 milhões | 10 | 0:55 | problema |
-| 4, o dinheiro | 23 | 1:18 | problema e benefício |
-| 5, o fluxo | 26 | 1:44 | técnica e Agora |
+| 3, 6 milhões | 6 | 0:51 | problema |
+| 4, o dinheiro | 24 | 1:15 | problema e benefício |
+| 5, o fluxo | 28 | 1:43 | técnica e Agora |
 | 6 e a demonstração | 120 | à parte | voz |
-| 7, os números | 20 | 2:04 | validação |
-| 8, o que mudou | 22 | 2:26 | validação |
+| 7, os números | 20 | 2:03 | validação |
+| 8, o que mudou | 23 | 2:26 | validação |
 | 9, o negócio | 15 | 2:41 | benefício e negócio |
-| 10, a visão | 20 | 3:01 | inovação e próximos passos |
+| 10, a visão | 21 | 3:02 | inovação e próximos passos |
 
 **[Slide 1, 24 s]**
-A minha avó se chama Leda. Ela tem [idade] anos e mora com o meu avô em [cidade]. [A história verdadeira, em no máximo 25 palavras: um dia em que a família quis saber como ela estava e não soube.] Por isso a assistente que a gente construiu se chama Dona Leda.
+A minha avó se chama Leda. Ela tem [idade] anos e mora com o meu avô em [cidade]. [A história verdadeira, em no máximo 25 palavras: um momento do dia a dia dela que mostra a falta de companhia ou de apoio, e por que a Dona Leda serve pra ela mesmo morando com o meu avô.] Por isso a assistente que a gente construiu se chama Dona Leda.
 
 **[Slide 2, 21 s]**
 Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim. A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, saúde, comunicação e rotina.
 
-**[Slide 3, 10 s]**
-Você sabe como a sua mãe passou a quinta-feira? No Brasil, 6 milhões de idosos moram sozinhos, e o país envelhece rápido.
+**[Slide 3, 6 s]**
+No Brasil, 6 milhões de idosos moram sozinhos, e o país envelhece rápido.
 
-**[Slide 4, 23 s]**
-Pra filha que só vê os pais no fim de semana saber todo dia como eles estão, hoje só pagando um cuidador ou uma casa de repouso. A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
+**[Slide 4, 24 s]**
+Hoje, pra ter quem converse com os pais e acompanhe a rotina deles todo dia, a família paga um cuidador ou uma casa de repouso. A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
 
-**[Slide 5, 26 s]**
-Na hora combinada, o celular toca, e o idoso só precisa atender. A chamada é uma sala da Agora, e o motor de conversa da Agora leva a voz dele pro Gemini e chama as ações dela, como anotar o dia e avisar a família. A família vê a ficha do dia e, num aviso, quem assumiu e como terminou.
+**[Slide 5, 28 s]**
+Na hora combinada, o celular toca, e o idoso só precisa atender. A chamada é uma sala da Agora, e o motor de conversa da Agora leva a voz dele pro Gemini e chama as ações dela, como anotar o dia e avisar a família. Em cada ligação ela lembra do que ele contou nas outras, e a família vê a ficha do dia e quem assumiu cada aviso.
 
 **[Slide 6 e a demonstração, 2 minutos]**
 A primeira fala está no roteiro da demonstração, logo abaixo.
@@ -68,22 +68,22 @@ A primeira fala está no roteiro da demonstração, logo abaixo.
 **[Slide 7, 20 s]**
 Ontem a Dona Leda ligou pra [N] avós do time. [N] atenderam e conversaram [X] minutos em média, e hoje às 9h, sem ninguém pedir, [N] atenderam de novo. [N] famílias aceitaram começar o teste, e lendo o aviso, [N] de 2 adultos decidiram certo.
 
-**[Slide 8, 22 s]**
-A casa de repouso contou que quem precisa ainda mora em casa, e topou indicar as famílias. A pedido dos mentores, o painel mostra quem assumiu cada aviso. [O que as ligações com os avós ensinaram, em uma frase.] É uma noite, com poucos avós e a família do lado.
+**[Slide 8, 23 s]**
+A casa de repouso contou que quem precisa ainda mora em casa, e topou indicar as famílias. A pedido dos mentores, o painel mostra quem assumiu cada aviso. [O que as ligações com os avós ensinaram, em uma frase.] O teste durou uma noite, com poucos avós e com a família ao lado.
 
 **[Slide 9, 15 s]**
 A família paga 129,90 por mês. Cada idoso custa uns 38 reais, medido numa ligação de teste, e tirando imposto e cartão sobram 67.
 
-**[Slide 10, 20 s]**
-Em seguida, a filha entra na mesma ligação. Depois, ela resolve coisas pela pessoa, como pedir o remédio e marcar a consulta: o segundo cérebro de quem envelhece. [O pedido à banca, em uma frase.] Dona Leda: longevidade com qualidade de vida.
+**[Slide 10, 21 s]**
+Em seguida, as famílias que a casa parceira indicar começam o teste. Depois, com o que guardou de cada conversa, ela vira o segundo cérebro de quem envelhece e resolve coisas pela pessoa, como pedir o remédio e marcar a consulta. [O pedido à banca, em uma frase.] Dona Leda: longevidade com qualidade de vida.
 
 ## O que cortar primeiro se o ensaio estourar
 
-Na ordem. Nunca saem: a avó e o nome no slide 1, a definição no slide 2, a Agora no slide 5, os números do slide 7, os limites do slide 8 e o pedido à banca.
+Na ordem. Nunca saem: a avó e o nome no slide 1, a definição no slide 2, a Agora no slide 5, os números do slide 7, os limites do slide 8, a visão do slide 10 e o pedido à banca.
 
 1. **A demonstração, a ficha do dia no fim** (15 s). O aviso e o desfecho já fecharam a cena.
 2. **Slide 8, a frase dos mentores** (6 s). O slide mostra.
-3. **Slide 10, "Depois"** (8 s). O slide mostra o caminho inteiro.
+3. **Slide 9, encurtado pra "A família paga 129,90 por mês, e sobram 67 por idoso"** (6 s). O resto fica na tela.
 4. **Slide 5, a ficha e o aviso da família** (7 s). As telas do slide mostram.
 
 Os anos do envelhecimento, o preço do cuidador e o mercado estimado já saíram da fala e ficaram só na tela, pra ela caber em 3 minutos com a história da avó.
@@ -160,7 +160,7 @@ Cada resposta cabe em uns 20 segundos. Os números têm fonte em `custos.md`, `p
 | Pergunta | Resposta |
 |---|---|
 | Quanto custa cada idoso por mês? | Uns R$ 38 no uso médio de 3 minutos e 20 segundos por dia, medido numa ligação de teste. Dos R$ 129,90 saem imposto e cartão e sobram R$ 67. Quem usa os 10 minutos todo dia dá uns R$ 13 de prejuízo, e uma família no uso médio cobre até cinco dessas. Quatro famílias pagam o site e o banco |
-| E o protótipo de hoje, quanto custa? | Ele roda no motor de conversa da Agora, que custa uns R$ 59 a mais por idoso por mês. A conta de R$ 38 é a da operação, com a chamada na sala da Agora e a voz do Gemini |
+| E o protótipo de hoje, quanto custa? Os R$ 38 incluem o motor de conversa da Agora? | A sala da Agora está em toda ligação, porque é por ela que a filha entra. O motor de conversa da Agora, que é o da demonstração, soma uns R$ 59 por idoso por mês ao custo medido. O preço do motor por volume é a primeira conversa que a gente quer ter com a Agora. [A última frase depende do sim do Breno.] |
 | E a privacidade, a LGPD? | A conversa inteira não é guardada, só a ficha do dia, as lembranças, os avisos e o resumo. Quem cadastrou apaga tudo em Ajustes. O idoso pode pedir pra guardar um assunto íntimo, e a família só sabe que ele anda triste, sem o motivo. Risco (queda, golpe, vontade de morrer) sempre vai pra família, e ela diz isso a ele. Dado de saúde pede base legal própria na LGPD, prazo de guarda e lista de quem acessa, e isso vem antes do primeiro piloto pago |
 | Por que uma IA no lugar de uma pessoa ligando? | Ligação diária feita por gente funciona: num estudo de 2021 (JAMA Psychiatry) ela reduziu a solidão em quatro semanas. Ela custa caro pra fazer todo dia, e hoje quem faz é a filha, de graça, ou um cuidador, de R$ 2.800 a 4.500. A Dona Leda faz a ligação de todo dia por R$ 129,90 e chama a família quando precisa de gente |
 | E o idoso que não tem celular? | Esta versão é pra quem tem celular ou tablet com internet, e perto de 45% dos brasileiros com mais de 60 anos já fazem chamada pela internet. Quem não tem entra depois pela ligação de telefone comum, que é onde estão os maiores números lá fora: o CareCall, da Coreia, liga pra 30 mil idosos |
