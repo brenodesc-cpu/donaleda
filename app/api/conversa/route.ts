@@ -4,6 +4,8 @@
 
 import { NextResponse } from 'next/server';
 import { ligacaoSemFala } from '@/lib/chamadas';
+import { abrirConvite, fraseDoConvite, fraseSemEntrada, vencerConvite } from '@/lib/convite';
+import { depois, falar } from '@/lib/familiaNaLigacao';
 import { criarAlerta, fecharConversa, lerBase, mudarBase } from '@/lib/dados';
 import { limparTempos } from '@/lib/medicao';
 import {
@@ -40,7 +42,9 @@ export async function POST(request: Request) {
     if (falas.some((f) => f.quem === 'idoso')) {
       try {
         const atual = await lerBase(idosoId);
-        extracao = await extrairConhecimentoComIA(atual.idoso.tratamento, falas);
+        // Quando outra pessoa atendeu, nada dela entra na ficha: a leitura por IA nem roda.
+        const outraPessoa = atual.conversas.find((c) => c.id === evento.conversaId)?.outraPessoa;
+        if (!outraPessoa) extracao = await extrairConhecimentoComIA(atual.idoso.tratamento, falas);
       } catch {
         extracao = {};
       }
@@ -86,10 +90,31 @@ export async function POST(request: Request) {
       const alerta: Alerta | undefined = regra
         ? criarAlerta(base, { ...regra, origem: 'regra' })
         : undefined;
-      return { alerta };
+      // Aviso urgente com a ligação aberta abre o convite pra família entrar.
+      const convidada = regra?.gravidade === 'urgente' ? abrirConvite(base, 'urgente', regra.tipo) : null;
+      return { alerta, convite: convidada ? { conversa: { ...convidada }, frase: fraseDoConvite(base, regra?.tipo) } : null };
     });
     if (!resultado) return NextResponse.json({ ok: false }, { status: 404 });
+    const convite = resultado.convite;
+    if (convite) depois(() => falar(convite.conversa, convite.frase, 'APPEND'));
     return NextResponse.json({ ok: true, alerta: resultado.alerta } satisfies RespostaDoEvento);
+  }
+
+  if (evento.tipo === 'convite') {
+    // O aparelho pergunta a cada 5 s. Passado o prazo sem ninguém entrar, a frase toca uma vez.
+    const resultado = await mudarBase(idosoId, (base) => {
+      const conversa = base.conversas.find((c) => c.id === evento.conversaId);
+      if (!conversa) return null;
+      const vencida = vencerConvite(base, evento.conversaId);
+      return {
+        familiaEntrou: Boolean(conversa.convite?.entrouEm),
+        aviso: vencida ? { conversa: { ...vencida }, frase: fraseSemEntrada(base, vencida.convite?.tipo) } : null,
+      };
+    });
+    if (!resultado) return NextResponse.json({ ok: false }, { status: 404 });
+    const aviso = resultado.aviso;
+    if (aviso) depois(() => falar(aviso.conversa, aviso.frase, 'APPEND'));
+    return NextResponse.json({ ok: true, familiaEntrou: resultado.familiaEntrou } satisfies RespostaDoEvento);
   }
 
   return NextResponse.json({ ok: false }, { status: 400 });

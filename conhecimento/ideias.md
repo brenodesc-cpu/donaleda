@@ -92,6 +92,18 @@ Seis opções foram comparadas pelo que mudam pro idoso, pelo peso na nota e pel
 
 A Dona Leda começa pelo aparelho que o idoso ou o residencial já tem, e o telefone comum vem logo depois. A pulseira e a caixinha entram quando o residencial pedir, e só disparam a ligação, porque a conversa, a ficha e o aviso já existem. A caixinha roda no exemplo de ESP32 que a própria Agora publica.
 
+## Próximo passo fora do hackathon (21/11/2026)
+
+### 8. Reconhecer de verdade a voz do idoso
+
+Desde 21/11, quando a voz claramente não combina com a ficha, a Dona Leda pergunta uma vez com quem está falando. Se for outra pessoa, ela não conta nada da vida do idoso nem anota as respostas. Ela não guarda a voz de ninguém. O passo seguinte seria comparar a voz de quem atende com uma amostra gravada do próprio idoso.
+
+Ficou fora agora por três motivos:
+
+- **Pede um serviço a mais junto da ligação.** A comparação de voz roda à parte da conversa, com outro fornecedor, outro custo e mais um ponto que pode falhar no meio da ligação.
+- **Erra com voz rouca e com gravação.** Gripe, rouquidão e a idade mudam a voz, e uma gravação tocada perto do microfone pode passar pela pessoa. Um idoso gripado barrado na própria ligação é pior do que a falha que se quer evitar.
+- **A impressão de voz é dado biométrico.** A lei de proteção de dados (LGPD, art. 5º, II) trata dado biométrico como dado pessoal sensível, e o uso dele pede o consentimento próprio do idoso, específico e destacado (art. 11, I). A autorização da família não basta.
+
 ## Como usar isso no pitch
 
 Na parte de limites e próximos passos, que vale 10% da nota: o toque no botão é o limite de hoje, e o aparelho próprio é a segunda fase.

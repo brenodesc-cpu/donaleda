@@ -7,7 +7,9 @@ import { randomInt } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { marcarAvisoVisto, registrarDesfecho, respostaValida } from '@/lib/avisos';
 import { arrumarHorarios, avancarChamadas, pedirChamadaDaFamilia } from '@/lib/chamadas';
+import { fraseDaEntrada, registrarEntrada } from '@/lib/convite';
 import { montarPainel, mudarBase, mudarBaseQuando } from '@/lib/dados';
+import { depois, entradaDaFamilia, falar, tirarAssistente } from '@/lib/familiaNaLigacao';
 import { dataPedida, GAVETAS, guardar, horaPedida, mudar } from '@/lib/memoria';
 import { dispararConviteDeChamada } from '@/lib/sinalizacaoChamada';
 import { exigirIdosoDaFamilia } from '@/lib/sessao';
@@ -183,10 +185,32 @@ export async function POST(request: Request) {
             sobre: typeof acao.sobre === 'string' ? acao.sobre : undefined,
             data: typeof acao.data === 'string' ? (dataPedida(acao.data) ?? '') : undefined,
             hora: typeof acao.hora === 'string' ? (horaPedida(acao.hora) ?? '') : undefined,
+            // A família corrigiu ou tocou em "Está certo": o que era dedução vira fato.
+            por: 'familia',
           });
     });
     if (!r.ok) return NextResponse.json({ ok: false, erro: r.motivo.startsWith('não achei') ? 'nao_achada' : 'recusada', motivo: r.motivo }, { status: r.motivo.startsWith('não achei') ? 404 : 422 });
     return NextResponse.json({ ok: true, lembranca: r.lembranca });
+  }
+
+  if (acao.acao === 'entrar_na_ligacao') {
+    // Só entra com convite aberto (aviso urgente ou pedido do idoso) e a ligação ainda aberta.
+    // A primeira entrada faz a Dona Leda anunciar e sair; quem recarrega a página só pega outra chave.
+    const achada = await mudarBase(idosoId, (base) => {
+      const entrada = registrarEntrada(base, new Date());
+      return entrada ? { conversa: { ...entrada.conversa }, primeira: entrada.primeira, frase: fraseDaEntrada(base) } : null;
+    });
+    if (!achada) return NextResponse.json({ ok: false, erro: 'sem_convite' }, { status: 409 });
+    const entrada = entradaDaFamilia(achada.conversa.canal!);
+    if (achada.primeira) {
+      depois(async () => {
+        await falar(achada.conversa, achada.frase, 'INTERRUPT');
+        // Uns 6 segundos pra frase terminar antes de a Dona Leda sair da sala.
+        await new Promise((r) => setTimeout(r, 6500));
+        await tirarAssistente(achada.conversa);
+      });
+    }
+    return NextResponse.json({ ok: true, ...entrada });
   }
 
   if (acao.acao === 'gerar_codigo') {

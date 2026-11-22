@@ -130,6 +130,8 @@ export default function TelaDoIdoso() {
       <Esperando
         horarios={situacao?.horariosDeLigacao ?? []}
         proxima={situacao?.proximaLigacao ?? null}
+        proximaEAmanha={situacao?.proximaEAmanha}
+        limiteAcabou={situacao?.limiteDoDia?.acabou ?? false}
         onLigar={ligarEu}
       />
     );

@@ -58,6 +58,13 @@ export async function pedirToken(parametros = ''): Promise<TokenDaAgora> {
   return (await resposta.json()) as TokenDaAgora;
 }
 
+/** O servidor recusou a conversa: os minutos de conversa de hoje acabaram. */
+export class LimiteDoDiaAcabou extends Error {
+  constructor() {
+    super('os minutos de conversa de hoje acabaram');
+  }
+}
+
 export async function chamarAssistente(
   token: TokenDaAgora,
   chamadaId?: string,
@@ -76,6 +83,10 @@ export async function chamarAssistente(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(pedido),
   });
+  if (resposta.status === 409) {
+    const corpo = (await resposta.json().catch(() => ({}))) as { error?: string };
+    if (corpo.error === 'limite_do_dia') throw new LimiteDoDiaAcabou();
+  }
   if (!resposta.ok) throw new Error('a assistente não entrou');
   return (await resposta.json()) as InicioDaConversa;
 }

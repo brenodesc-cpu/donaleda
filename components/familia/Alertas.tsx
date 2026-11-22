@@ -1,4 +1,5 @@
 import {
+  Video,
   Check,
   Frown,
   HeartPulse,
@@ -21,6 +22,8 @@ interface AlertasProps {
   onMarcarVisto: (alertaId: string) => void;
   /** Sem ele, o aviso visto não pergunta o que a pessoa fez (página de exemplo). */
   onResponder?: ResponderAviso;
+  /** Endereço pra entrar na ligação acontecendo agora, quando há uma. Aparece nos avisos urgentes. */
+  entrarNaLigacao?: string | null;
 }
 
 const ICONE_DO_TIPO: Record<TipoDeAlerta, LucideIcon> = {
@@ -44,6 +47,8 @@ interface CartaoProps {
   agora: string;
   onMarcarVisto?: (alertaId: string) => void;
   onResponder?: ResponderAviso;
+  /** Endereço pra entrar na ligação acontecendo agora, quando há uma. */
+  entrarNaLigacao?: string | null;
 }
 
 function CartaoDoAlerta({
@@ -54,6 +59,7 @@ function CartaoDoAlerta({
   agora,
   onMarcarVisto,
   onResponder,
+  entrarNaLigacao,
 }: CartaoProps) {
   const Icone = ICONE_DO_TIPO[alerta.tipo] ?? HeartPulse;
   const urgente = alerta.gravidade === 'urgente';
@@ -95,6 +101,15 @@ function CartaoDoAlerta({
         </div>
       </div>
       {onResponder ? <PerguntaDoDesfecho alerta={alerta} cheio={cheio} onResponder={onResponder} /> : null}
+      {cheio && entrarNaLigacao ? (
+        <a
+          href={entrarNaLigacao}
+          className="inline-flex min-h-14 items-center justify-center gap-3 rounded-xl bg-success px-6 text-xl font-semibold text-white hover:bg-success/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <Video aria-hidden="true" className="h-6 w-6" />
+          Entrar na ligação agora
+        </a>
+      ) : null}
       {!alerta.visto && onMarcarVisto ? (
         <button
           type="button"
@@ -116,6 +131,7 @@ export function Alertas({
   hoje,
   onMarcarVisto,
   onResponder,
+  entrarNaLigacao,
 }: AlertasProps) {
   const agora = new Date().toISOString();
   const novos = alertas.filter(avisoAberto).sort(maisNovoPrimeiro);
@@ -135,6 +151,7 @@ export function Alertas({
               agora={agora}
               onMarcarVisto={onMarcarVisto}
               onResponder={onResponder}
+              entrarNaLigacao={entrarNaLigacao}
             />
           ))}
         </ul>

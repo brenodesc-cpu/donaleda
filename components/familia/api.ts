@@ -4,6 +4,7 @@
 import type {
   AcaoDaFamilia,
   CodigoDoAparelho,
+  EntradaNaLigacao,
   Idoso,
   IdosoDaFamilia,
   NovoIdoso,
@@ -71,6 +72,9 @@ export const buscarPainel = (idosoId: string) =>
   pedir<PainelDaFamilia>(`/api/familia?idoso=${encodeURIComponent(idosoId)}`);
 
 export const enviarAcao = (acao: AcaoComIdoso) => pedir<unknown>('/api/familia', postar(acao));
+
+export const entrarNaLigacao = (idosoId: string) =>
+  pedir<{ ok: boolean } & EntradaNaLigacao>('/api/familia', postar({ acao: 'entrar_na_ligacao', idosoId }));
 
 export const gerarCodigo = (idosoId: string) =>
   pedir<CodigoDoAparelho>('/api/familia', postar({ acao: 'gerar_codigo', idosoId }));

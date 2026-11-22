@@ -41,6 +41,8 @@ export interface Dia {
   atualizadoEm?: string;
 }
 
+export type OrigemDaLembranca = 'conversa' | 'familia' | 'deduzida';
+
 /** Algo que a Dona Leda aprendeu sobre a pessoa e usa nas próximas conversas. */
 export interface Lembranca {
   id: string;
@@ -55,8 +57,13 @@ export interface Lembranca {
   hora?: string;
   /** O idoso pediu pra não contar à família. A família vê só quantas são. */
   reservada?: boolean;
-  /** Quem contou: o idoso na conversa ou a família no painel. */
-  origem?: 'conversa' | 'familia';
+  /**
+   * Quem contou: o idoso na conversa, a família no painel, ou a Dona Leda deduziu da
+   * conversa depois que ela acabou (lib/posConversa.ts), sem ninguém confirmar.
+   * Dedução nunca é tratada como fato: a assistente confirma antes, e o painel mostra
+   * separado até alguém da família tocar em "Está certo" ou corrigir.
+   */
+  origem?: OrigemDaLembranca;
   criadaEm: string;
   atualizadaEm?: string;
   exemplo?: boolean;
@@ -92,11 +99,42 @@ export interface Conversa {
   falasDoIdoso: number;
   /** A ligação que abriu esta conversa, quando foi a assistente que ligou. */
   chamadaId?: string;
+  /**
+   * Quem atendeu não era o idoso (a assistente percebeu ou a pessoa disse). Nada desta
+   * conversa entra na ficha, nas lembranças nem no resumo, e ela não conta como conversa dele.
+   */
+  outraPessoa?: boolean;
+  /**
+   * Como estava a ficha do dia quando a ligação começou (null: o dia ainda não existia).
+   * Só existe durante a ligação: se outra pessoa atendeu, a ficha volta pra este ponto.
+   */
+  diaNoInicio?: Dia | null;
+  /** As lembranças e a quantidade de avisos que existiam quando a ligação começou (só durante ela). */
+  lembrancasNoInicio?: string[];
+  alertasNoInicio?: number;
   resumo?: string;
   /** Vem da tela do idoso no fim da ligação, quando a Agora mandou medições. */
   tempos?: TemposDaConversa;
   /** Só no modo direto: os tokens que o Google cobrou e o custo da ligação. */
   uso?: UsoDaConversa;
+  /** A sala da Agora da ligação e a assistente que entrou nela, pra família poder entrar. */
+  canal?: string;
+  agenteId?: string;
+  /** O jeito de voz da ligação: as ligações do Gemini respondem por outro endereço da Agora. */
+  modo?: 'gemini' | 'tres';
+  /** O convite pra família entrar, aberto por aviso urgente ou pedido da pessoa. */
+  convite?: ConviteDaFamilia;
+}
+
+/** O convite pra família entrar na ligação. Só existe com a ligação aberta. */
+export interface ConviteDaFamilia {
+  abertoEm: string;
+  motivo: 'urgente' | 'pedido';
+  /** O tipo do aviso que abriu, pra frase de quando ninguém entra (golpe muda a frase). */
+  tipo?: TipoDeAlerta;
+  entrouEm?: string;
+  /** Quando a frase de "não conseguiu entrar" tocou. Toca uma vez só. */
+  semEntradaEm?: string;
 }
 
 /** Os tokens que o Gemini cobrou numa ligação do modo direto, somados resposta por resposta. */
@@ -136,6 +174,11 @@ export interface Idoso {
   remedios: { nome: string; horario: string }[];
   /** A primeira conversa leva a apresentação completa da assistente virtual. */
   primeiraConversaFeita: boolean;
+  /**
+   * Quando o idoso ouviu o aviso de privacidade (lib/privacidade.ts): na saudação da
+   * primeira ligação em que ele falou. A versão diz qual texto foi dito.
+   */
+  avisoDePrivacidade?: { dadoEm: string; versao: number };
   /** Horas em que a assistente liga todo dia, "HH:MM" no horário de Brasília. */
   horariosDeLigacao: string[];
   /** Quando ligado, a ligação é atendida sozinha depois de alguns segundos tocando. */
@@ -195,6 +238,8 @@ export interface PainelDaFamilia {
     resumo?: string;
     emAndamento: boolean;
   } | null;
+  /** Convite aberto pra família entrar na ligação que está acontecendo agora. null quando não há. */
+  convite: { conversaId: string; abertoEm: string; motivo: ConviteDaFamilia['motivo']; entrou: boolean } | null;
   /** Não vistos primeiro, depois os mais novos. */
   alertas: Alerta[];
   /** Sete dias, do mais antigo até hoje. Dia sem dado vem com os campos vazios. */
@@ -207,6 +252,8 @@ export interface PainelDaFamilia {
   chamadaTocando: Chamada | null;
   /** As últimas ligações, da mais nova pra mais antiga. */
   chamadas: Chamada[];
+  /** Os minutos de conversa de hoje, somando as ligações, contra o limite do plano. */
+  limiteDoDia?: LimiteDoDia;
   /** true quando o aparelho do idoso consultou o servidor nos últimos 30 s (app aberto). */
   aparelhoOnline?: boolean;
   /** Último instante em que o aparelho do idoso respondeu ao servidor, ou null. */
@@ -231,6 +278,8 @@ export type AcaoDaFamilia = (
   | { acao: 'atender_sozinho'; ligado: boolean }
   /** Gera o código de 6 números pra ligar um aparelho. Responde `{ ok, ...CodigoDoAparelho }`. */
   | { acao: 'gerar_codigo' }
+  /** Entra na ligação que está acontecendo, com voz e vídeo. Responde `{ ok, ...EntradaNaLigacao }`, ou 409 sem ligação. */
+  | { acao: 'entrar_na_ligacao' }
   /** A família ensina uma lembrança. Responde `{ ok, lembranca }` ou 422 `{ ok:false, erro:'recusada', motivo }`. */
   | { acao: 'ensinar'; texto: string; categoria: CategoriaDeLembranca; sobre?: string; data?: string; hora?: string }
   /** A família corrige uma lembrança que vê. Só os campos que vierem. Responde `{ ok, lembranca }`. */
@@ -258,7 +307,11 @@ export interface SituacaoDaChamada {
   atenderSozinhoEm: number | null;
   /** Próxima hora marcada de hoje ou de amanhã, "HH:MM", ou null. */
   proximaLigacao: string | null;
+  /** true quando a próxima ligação marcada é só amanhã. */
+  proximaEAmanha?: boolean;
   horariosDeLigacao: string[];
+  /** Os minutos de conversa de hoje: quando acaba, o idoso não começa outra conversa. */
+  limiteDoDia?: LimiteDoDia;
 }
 
 /** POST /api/chamada: o aparelho do idoso conta o que aconteceu com a ligação. */
@@ -276,12 +329,16 @@ export interface FalaDaSessao {
 export type EventoDaConversa =
   | { tipo: 'fala'; conversaId: string; texto: string }
   | { tipo: 'fim'; conversaId: string; falas?: FalaDaSessao[] }
+  /** O aparelho pergunta a cada 5 s, durante a ligação, se alguém da família entrou. */
+  | { tipo: 'convite'; conversaId: string }
   | { tipo: 'tempos'; conversaId: string; tempos: TemposDaConversa };
 
 export interface RespostaDoEvento {
   ok: boolean;
   /** Vem quando a fala disparou uma regra de segurança (queda, golpe). */
   alerta?: Alerta;
+  /** Resposta do evento 'convite': se alguém da família já entrou. */
+  familiaEntrou?: boolean;
 }
 
 /** O que POST /api/invite-agent devolve além dos campos do projeto-base. */
@@ -301,6 +358,10 @@ export interface InicioDaConversa {
   modo?: 'gemini' | 'tres' | 'direto';
   /** Só no modo direto: o que o aparelho precisa pra abrir a conversa com o Gemini. */
   direto?: InicioDireto;
+  /** Teto desta ligação em milissegundos: o normal ou o que sobra do limite do dia. */
+  teto_ms?: number;
+  /** O nome de quem da família pode entrar na ligação, pra tela do idoso mostrar. */
+  nomeDaFamilia?: string;
 }
 
 /** POST /api/direto devolve isto dentro de InicioDaConversa. */
@@ -333,6 +394,18 @@ export interface PedidoDeUso {
   conversaId: string;
   uso: UsoDoGemini;
   segundos: number;
+}
+
+/**
+ * Minutos de conversa do dia contra o limite do plano (lib/limiteDoDia.ts). A ligação
+ * pedida pela família no "Ligar agora" passa mesmo quando o limite acabou.
+ */
+export interface LimiteDoDia {
+  limiteMin: number;
+  usadoMin: number;
+  restanteMs: number;
+  /** Sobra menos de 1 minuto: ligação marcada e ligação do idoso não começam mais hoje. */
+  acabou: boolean;
 }
 
 // ---------- Contas, idosos e aparelhos (21/11, contrato entre servidor, painel e app) ----------
@@ -377,3 +450,11 @@ export interface AparelhoPareado {
 
 /** Cabeçalho que todo pedido do aparelho do idoso manda pro servidor. */
 export const CABECALHO_DO_APARELHO = 'x-donaleda-aparelho';
+
+/** O que a família recebe pra entrar na sala da Agora em que o idoso está. */
+export interface EntradaNaLigacao {
+  appId: string;
+  canal: string;
+  uid: string;
+  token: string;
+}

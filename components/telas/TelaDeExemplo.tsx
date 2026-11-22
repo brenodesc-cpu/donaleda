@@ -40,6 +40,8 @@ export interface DadosDeExemplo {
   helena: PainelDaFamilia;
   /** O seu Jorge, morador do residencial de exemplo, no dia de um aviso urgente. */
   jorge: PainelDaFamilia;
+  /** A dona Helena num dia com os 10 minutos usados, uma dedução e o aviso de privacidade dado. */
+  helenaNoLimite: PainelDaFamilia;
   moradores: Morador[];
   conta: ContaDaCasa;
   /** A hora em que os dados foram montados. */
@@ -96,6 +98,7 @@ function Painel({ painel }: { painel: PainelDaFamilia }) {
       <Lembrancas
         lembrancas={painel.lembrancas}
         reservadas={painel.reservadas}
+        avisoDePrivacidadeEm={painel.idoso.avisoDePrivacidade?.dadoEm}
         assistente={painel.assistente}
         tratamento={painel.idoso.tratamento}
       />
@@ -161,6 +164,18 @@ function conteudoDaTela(tela: string, dados: DadosDeExemplo): ReactNode {
       return (
         <main className={MOLDURA_DO_IDOSO}>
           <Esperando horarios={horarios} proxima={horarios[horarios.length - 1] ?? null} onLigar={nada} />
+        </main>
+      );
+    case 'minutos-de-hoje-acabaram':
+      return (
+        <main className={MOLDURA_DO_IDOSO}>
+          <Esperando
+            horarios={horarios}
+            proxima={horarios[0] ?? null}
+            proximaEAmanha
+            limiteAcabou
+            onLigar={nada}
+          />
         </main>
       );
     case 'tocando':
@@ -263,6 +278,8 @@ function conteudoDaTela(tela: string, dados: DadosDeExemplo): ReactNode {
       return <Painel painel={dados.helena} />;
     case 'painel-com-aviso':
       return <Painel painel={dados.jorge} />;
+    case 'painel-memoria-e-minutos':
+      return <Painel painel={dados.helenaNoLimite} />;
     case 'ajustes':
       // Montada como em app/familia/ajustes/page.tsx.
       return (

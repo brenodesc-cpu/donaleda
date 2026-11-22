@@ -14,6 +14,7 @@ import {
   fecharNoServidor,
   ligarRtm,
   pedirToken,
+  LimiteDoDiaAcabou,
   type TokenDaAgora,
 } from './pedidosDaLigacao';
 
@@ -120,6 +121,9 @@ export function useLigacao() {
         if (inicio.status === 'fulfilled') {
           void fecharNoServidor(inicio.value.conversa_id, inicio.value.agent_id);
         }
+        if (inicio.status === 'rejected' && inicio.reason instanceof LimiteDoDiaAcabou) {
+          throw inicio.reason;
+        }
         throw new Error('a ligação não completou');
       }
       fimAvisado.current = false;
@@ -131,12 +135,14 @@ export function useLigacao() {
         avatar: Boolean(inicio.value.avatar),
         modo: inicio.value.modo,
         direto: inicio.value.direto,
+        tetoMs: inicio.value.teto_ms,
+        nomeDaFamilia: inicio.value.nomeDaFamilia,
       });
       setFase('conversando');
     } catch (erro) {
       console.error('Não consegui ligar:', erro);
       ocupado.current = false;
-      setMotivo('conexao');
+      setMotivo(erro instanceof LimiteDoDiaAcabou ? 'limite' : 'conexao');
       setFase('erro');
     }
   }, []);
