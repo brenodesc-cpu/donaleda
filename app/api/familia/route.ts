@@ -6,7 +6,7 @@
 import { randomInt } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { marcarAvisoVisto, registrarDesfecho, respostaValida } from '@/lib/avisos';
-import { arrumarHorarios, avancarChamadas, pedirChamadaDaFamilia } from '@/lib/chamadas';
+import { arrumarHorarios, avancarChamadas, chamadaTocando, pedirChamadaDaFamilia } from '@/lib/chamadas';
 import { fraseDaEntrada, registrarEntrada } from '@/lib/convite';
 import {
   apagarDocumento,
@@ -40,11 +40,16 @@ export async function GET(request: Request) {
   const agora = new Date();
   const [painelRes, aparelhosRes] = await Promise.all([
     mudarBaseQuando(conferido.valor.idosoId, (base) => {
+      const antesId = chamadaTocando(base)?.id ?? null;
       const { mudou, escalarChamada } = avancarChamadas(base, agora);
+      const depoisChamada = chamadaTocando(base);
+      const novaChamada = depoisChamada && depoisChamada.id !== antesId ? depoisChamada : null;
       return {
         gravar: mudou,
         resultado: {
           painel: montarPainel(base, agora),
+          novaChamada,
+          aparelhosPush: novaChamada ? base.aparelhosPush : undefined,
           escalarChamada,
           baseSnapshot: escalarChamada ? structuredClone(base) : null,
         },
@@ -57,6 +62,12 @@ export async function GET(request: Request) {
       .order('visto_em', { ascending: false })
       .limit(1),
   ]);
+
+  if (painelRes.novaChamada) {
+    const nova = painelRes.novaChamada;
+    const aparelhos = painelRes.aparelhosPush;
+    depois(() => dispararConviteDeChamada(conferido.valor.idosoId, aparelhos, nova));
+  }
 
   let painel = painelRes.painel;
   if (painelRes.escalarChamada && painelRes.baseSnapshot) {

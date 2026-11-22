@@ -2,11 +2,15 @@
 // ligando. É também por aqui que ele conta que atendeu ou que tocou em "Agora não".
 
 import { NextResponse } from 'next/server';
-import { avancarChamadas, responderChamada, situacaoDaChamada } from '@/lib/chamadas';
+import { avancarChamadas, chamadaTocando, responderChamada, situacaoDaChamada } from '@/lib/chamadas';
 import { mudarBase, mudarBaseQuando, registrarEscalonamento } from '@/lib/dados';
 import { depois } from '@/lib/familiaNaLigacao';
 import { exigirAparelho } from '@/lib/sessao';
-import { dispararEscalonamentoEmMassa, notificarFamiliaPorPush } from '@/lib/sinalizacaoChamada';
+import {
+  dispararConviteDeChamada,
+  dispararEscalonamentoEmMassa,
+  notificarFamiliaPorPush,
+} from '@/lib/sinalizacaoChamada';
 import type { RespostaDaChamada } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
@@ -16,16 +20,26 @@ export async function GET(request: Request) {
   if (!aparelho.ok) return aparelho.resposta;
   const agora = new Date();
   const res = await mudarBaseQuando(aparelho.valor, (base) => {
+    const antesId = chamadaTocando(base)?.id ?? null;
     const { mudou, escalarChamada } = avancarChamadas(base, agora);
+    const depoisChamada = chamadaTocando(base);
+    const novaChamada = depoisChamada && depoisChamada.id !== antesId ? depoisChamada : null;
     return {
       gravar: mudou,
       resultado: {
         situacao: situacaoDaChamada(base, agora),
+        novaChamada,
+        aparelhosPush: novaChamada ? base.aparelhosPush : undefined,
         escalarChamada,
         baseSnapshot: escalarChamada ? structuredClone(base) : null,
       },
     };
   });
+  if (res.novaChamada) {
+    const nova = res.novaChamada;
+    const aparelhos = res.aparelhosPush;
+    depois(() => dispararConviteDeChamada(aparelho.valor, aparelhos, nova));
+  }
   if (res.escalarChamada && res.baseSnapshot) {
     const esc = await dispararEscalonamentoEmMassa(
       aparelho.valor,
