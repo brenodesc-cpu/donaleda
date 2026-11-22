@@ -23,7 +23,7 @@ Versão 2 da especificação, das 21h10, depois de o Breno reprovar o conteúdo 
 | 4 | Três colunas de altura proporcional: cuidador R$ 2.800 a 4.500, casa de repouso uns R$ 6 mil, Dona Leda R$ 129,90 | Problema e benefício |
 | 5 | O fluxo em três partes, com as telas de verdade do app: o idoso (o celular tocando e a conversa), a Agora (a sala da chamada, o motor de conversa com o Gemini ao vivo, as mensagens em tempo real e as ações da Dona Leda) e a família (a ficha do dia e o aviso) | Técnica e Agora |
 | 6 | "Ao vivo" e o que a banca deve reparar: responde em [X] s, pode ser interrompida, avisa a família na hora. Cada item só fica se a medição confirmar | Voz |
-| 7 | Quatro números grandes: avós que atenderam no sábado, que atenderam de novo no domingo, famílias que aceitaram o teste e quem decidiu certo lendo o aviso | Validação |
+| 7 | Quatro números grandes: avós que atenderam no sábado, que atenderam de novo no domingo, famílias que aceitaram o teste e, no teste das três versões com cinco adultos, quantos dos dois que viram o aviso primeiro decidiram certo | Validação |
 | 8 | O que a gente ouviu e o que mudou: quem precisa ainda mora em casa, então a família paga e a casa indica; visitar toda semana não basta, então ela liga todo dia; aviso sem responsável não vira cuidado, então o painel mostra quem assumiu. Uma linha pro que as ligações ensinarem e os limites numa linha pequena | Validação |
 | 9 | Os R$ 129,90 numa barra só: R$ 38 de custo, R$ 24,50 de imposto e cartão e R$ 67 de sobra, com o mercado estimado numa linha | Benefício e negócio |
 | 10 | "O segundo cérebro de quem envelhece" em três tempos. Hoje: a ligação de todo dia, a memória do que ele contou e o aviso pra família. Em seguida: a filha entra na ligação, o telefone comum e as famílias que a casa indicar. Depois, marcado como visão: pedir o remédio e as compras, marcar a consulta e o aparelho próprio, como uma pulseira. O pedido à banca e a assinatura | Inovação e próximos passos |
@@ -66,7 +66,7 @@ Na hora combinada, o celular toca, e o idoso só precisa atender. A chamada é u
 A primeira fala está no roteiro da demonstração, logo abaixo.
 
 **[Slide 7, 20 s]**
-Ontem a Dona Leda ligou pra [N] avós do time. [N] atenderam e conversaram [X] minutos em média, e hoje às 9h, sem ninguém pedir, [N] atenderam de novo. [N] famílias aceitaram começar o teste, e lendo o aviso, [N] de 2 adultos decidiram certo.
+Ontem a Dona Leda ligou pra [N] avós do time. [N] atenderam e conversaram [X] minutos em média, e hoje às 9h, sem ninguém pedir, [N] atenderam de novo. [N] famílias aceitaram começar o teste, e dos dois adultos que viram o aviso primeiro, [N] decidiram certo.
 
 **[Slide 8, 23 s]**
 A casa de repouso contou que quem precisa ainda mora em casa, e topou indicar as famílias. A pedido dos mentores, o painel mostra quem assumiu cada aviso. [O que as ligações com os avós ensinaram, em uma frase.] O teste durou uma noite, com poucos avós e com a família ao lado.
