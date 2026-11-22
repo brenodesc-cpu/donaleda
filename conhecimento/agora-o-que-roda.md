@@ -12,6 +12,7 @@ Roda numa ligação comum pelo site, no modo padrão.
 - **O filtro de ruído da Agora** (AI Denoiser) limpa o microfone no site (`hooks/useFiltroDeRuido.ts`). No app de celular ele fica desligado, porque o próprio celular já filtra. Dá pra dizer, e a tela não mostra que ele ligou.
 - **A família entra na mesma sala** com voz e vídeo. A Dona Leda anuncia com uma frase fixa e sai da sala (`lib/familiaNaLigacao.ts`). O botão só aparece num aviso urgente ou quando o idoso pede pra chamar a família.
 - **O fim gentil aos 8 minutos e 30 segundos:** o servidor manda pela Agora uma instrução pra ela se despedir (`lib/pararAssistente.ts`).
+- **A Agora chama as ações da Dona Leda** (anotar a ficha, guardar lembrança, avisar a família, resumir) no servidor dela, em `/api/mcp`, também na ligação padrão com o Gemini. O histórico da Agora de uma ligação de queda às 00h04 de 22/11 mostrou a chamada da ação e a resposta "ok" do servidor, e o aviso da ligação das 8h24 foi gravado por essa ação. No modo do Gemini o código passa esse endereço à mão, porque o SDK ainda não leva o protocolo nesse modo.
 - **Chaves temporárias** pra sala de áudio, pras mensagens e pro motor de conversa. Elas vencem em uma hora.
 
 ## Pronto no código, sem mostrar
@@ -28,7 +29,3 @@ Roda numa ligação comum pelo site, no modo padrão.
 - **Que o convite da ligação chega pelas mensagens em tempo real.** O aparelho toca porque pergunta ao servidor a cada 2 segundos se tem ligação (`hooks/useChamada.ts`).
 - **Que o UIKit da Agora é usado.** Ele está instalado e não tem uso. O que é usado é o Agent Client Toolkit.
 - **Que a ligação telefônica pra várias pessoas ou o avatar funcionam.** Os dois estão no código e desligados.
-
-## Em aberto
-
-No modo do Gemini, o código põe o endereço das ações (`/api/mcp`) na configuração à mão, porque o SDK ainda não leva esse protocolo nesse modo. Até a conversa do servidor confirmar nos registros uma chamada em `/api/mcp` vinda de uma ligação no modo do Gemini, ninguém diz "MCP" nem "a Agora chama as ações" falando da ligação padrão. Dá pra dizer que a Dona Leda anota a ficha do dia e avisa a família, sem dizer por qual caminho.
