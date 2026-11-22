@@ -21,7 +21,7 @@ A pessoa idosa lúcida que mora sozinha usa, e só precisa atender. A filha ou o
 
 - **Ela liga.** O aparelho do idoso toca na hora marcada, ou quando a família toca em "Ligar agora" no painel. O idoso atende com um toque, ou a ligação atende sozinha depois de 10 segundos, se a família ligar essa opção.
 - **Ligação não atendida vira aviso.** Sem resposta, ela tenta de novo em 3 minutos e depois avisa a família.
-- **Conversa em português do Brasil.** Fala devagar, em frases curtas, e espera 650 milissegundos de silêncio antes de responder, porque quem tem mais idade faz pausas no meio da frase. A pessoa pode interromper.
+- **Conversa em português do Brasil.** Fala devagar, em frases curtas, e espera meio segundo de silêncio antes de responder, porque quem tem mais idade faz pausas no meio da frase. A pessoa pode interromper.
 - **Diz que é uma assistente virtual.** Na primeira conversa ela se apresenta como assistente virtual e diz quem da família pediu as conversas.
 - **Pergunta do dia.** Sono, comida, remédio, dor e como a pessoa está se sentindo, no meio da conversa.
 - **Lembra.** O que a pessoa conta (o nome do neto, a consulta de quinta) volta nas conversas seguintes.
@@ -46,15 +46,19 @@ A pessoa idosa lúcida que mora sozinha usa, e só precisa atender. A filha ou o
 
 ## Como a Agora entra
 
-Toda a conversa passa pela Agora.
+Toda a conversa passa pela Agora. O que cada pessoa do time pode dizer sobre isso no pitch está em `conhecimento/agora-o-que-roda.md`.
 
-1. O aparelho do idoso entra numa sala de áudio da Agora (SDK de RTC) e publica o microfone.
-2. O servidor chama o **Conversational AI Engine** da Agora, que põe a assistente na mesma sala. São dois modos, escolhidos pela variável `LIA_MODO`:
-   - **`gemini`:** o Gemini Live, dentro da Agora, escuta e fala num modelo só, com a voz Leda em português do Brasil. Precisa da chave do Google AI Studio em `LIA_GEMINI_KEY`.
-   - **`tres`:** Deepgram escuta, OpenAI responde e a voz da OpenAI fala, com as chaves gerenciadas pela Agora. É a reserva, e o único modo que aceita avatar em vídeo.
-   Sem `LIA_MODO`, vale o Gemini quando a chave existe. Abrir `/?modo=gemini` ou `/?modo=tres` no aparelho compara os dois na hora.
-3. A legenda e o estado da assistente (ouvindo, pensando, falando) chegam à tela pelo canal de mensagens da Agora (RTM), e o rosto mexe a boca pelo volume do áudio.
-4. Quando o modelo decide agir, a Agora chama as ações da Dona Leda em `/api/mcp` (protocolo MCP): `registrar_bem_estar`, `guardar_lembranca`, `avisar_familia` e `resumir_conversa`. Cada idoso tem a sua chave, então a chave de um não abre a ficha de outro.
+1. O aparelho do idoso entra numa sala de áudio da Agora (SDK de RTC) e publica o microfone, com uma chave temporária que vence em uma hora. A câmera do idoso fica desligada. O aparelho sabe que tem ligação porque pergunta ao servidor a cada 2 segundos (`hooks/useChamada.ts`).
+2. No site, o filtro de ruído da Agora (AI Denoiser) limpa o microfone antes de o áudio sair (`hooks/useFiltroDeRuido.ts`). No app de celular ele fica desligado, porque o próprio celular já filtra e o filtro somaria de 50 a 120 milissegundos.
+3. O servidor chama o **Conversational AI Engine** da Agora, que põe a assistente na mesma sala. São dois modos, escolhidos pela variável `LIA_MODO`:
+   - **`gemini`:** o Gemini Live, dentro da Agora, escuta e fala num modelo só, com a voz Leda em português do Brasil. Ele responde depois de meio segundo de silêncio, sem frase de espera. Precisa da chave do Google AI Studio em `LIA_GEMINI_KEY`.
+   - **`tres`:** Deepgram escuta, o GPT-4o-mini responde e a voz da OpenAI fala, com as chaves gerenciadas pela Agora, o fim de fala pelo sentido da frase e as frases de espera da Agora. É a reserva, e o único modo que aceita avatar em vídeo.
+   Sem `LIA_MODO`, vale o Gemini quando a chave existe. A troca é à mão: se o Gemini falha, a ligação não abre sozinha no outro modo. Abrir `/?modo=gemini` ou `/?modo=tres` no aparelho compara os dois na hora.
+4. A legenda e o estado da assistente (ouvindo, pensando, falando) chegam à tela pelo canal de mensagens da Agora (RTM), com o Agent Client Toolkit, e o rosto mexe a boca pelo volume do áudio. Com `?medir=1` no endereço, a tela mostra o tempo de resposta medido pela Agora.
+5. As ações da Dona Leda ficam em `/api/mcp` (protocolo MCP): `registrar_bem_estar`, `guardar_lembranca`, `avisar_familia` e `resumir_conversa`. No modo `tres`, a Agora recebe esse endereço pelo campo oficial do SDK. No `gemini`, o código põe o mesmo endereço na configuração à mão, porque o SDK ainda não leva MCP nesse modo. Cada idoso tem a sua chave, então a chave de um não abre a ficha de outro.
+6. **A família entra na ligação.** Num aviso urgente, ou quando o idoso pede pra chamar a família, o painel mostra "Entrar na ligação agora". A filha entra na mesma sala com voz e vídeo, a Dona Leda anuncia com uma frase fixa (`speak`) e sai da sala (`leave`), e as duas seguem conversando (`lib/familiaNaLigacao.ts`).
+7. **O fim da ligação.** Aos 8 minutos e 30 segundos, o servidor manda pela Agora uma instrução pra ela se despedir (`agentThink`, em `lib/pararAssistente.ts`), dentro do limite de 10 minutos por dia.
+8. **Telefone comum, desligado.** Depois de 3 tentativas sem atendimento, o código liga pra rede de apoio pela telefonia da Agora (`lib/sinalizacaoChamada.ts`). Falta um número na conta da Agora e um teste de verdade, e sem `AGORA_TELEPHONY_FROM_NUMBER` ninguém recebe ligação.
 
 Além das ações decididas pelo modelo, cada fala do idoso passa por regras fixas do código (`lib/regras.ts`). Um aviso de queda ou de golpe sai mesmo se o modelo não chamar nenhuma ação.
 
@@ -111,7 +115,7 @@ pnpm lint
 ## Dependências
 
 - Next.js 16, React 19, TypeScript, Tailwind CSS
-- Da Agora: `agora-agents` (servidor), `agora-rtc-sdk-ng` e `agora-rtc-react` (áudio), `agora-rtm` (mensagens), `agora-agent-client-toolkit` (legenda e estado), `agora-token`
+- Da Agora: `agora-agents` (servidor), `agora-rtc-sdk-ng` e `agora-rtc-react` (áudio), `agora-rtm` (mensagens), `agora-agent-client-toolkit` (legenda e estado), `agora-extension-ai-denoiser` (filtro de ruído), `agora-token`
 - Supabase (`@supabase/supabase-js` e `@supabase/ssr`): banco e login da família
 - Capacitor 8: app de iPhone e Android
 - Vitest: conferências automáticas
@@ -134,6 +138,11 @@ A lista completa com as versões está em `package.json` e `pnpm-lock.yaml`.
 - o painel da família, o cadastro, o código do aparelho e os ajustes (`app/familia`, `app/entrar`, `components/familia`);
 - a marca: quatro direções, a Gema aplicada, o rosto de disco de telefone e o ícone (`app/marca`, `components/marca`, `conhecimento/marca.md`);
 - os apps de iPhone e Android (`capacitor.config.ts`, `ios/`, `android/`);
+- a família entrando na mesma ligação e o fim gentil aos 8 minutos e 30 segundos (`lib/familiaNaLigacao.ts`, `lib/pararAssistente.ts`);
+- o filtro de ruído da Agora no microfone do site (`hooks/useFiltroDeRuido.ts`);
+- a leitura de exames, pedidos de consulta e receitas que a família anexa: o Gemini lê a foto ou o PDF na hora, o arquivo é descartado e fica só um resumo em linguagem simples, sem CPF nem RG (`lib/documentos.ts`, `app/api/familia/documento`);
+- a agenda da família com consultas meses e anos à frente, que a Dona Leda lembra na semana do compromisso (`components/familia/AgendaEDocumentos.tsx`, `lib/persona.ts`);
+- a ligação pelo telefone comum pra rede de apoio depois de 3 tentativas, desligada até ter número (`lib/sinalizacaoChamada.ts`);
 - as conferências automáticas (`testes/`);
 - a base de conhecimento do time (`conhecimento/`).
 
@@ -142,8 +151,10 @@ O código foi escrito pelo time com ajuda do Claude Code.
 ## O que é simulação
 
 - **A dona Helena é inventada.** O perfil, as lembranças e os seis dias anteriores do exemplo vêm de `lib/exemplo.ts`. O painel marca esses dias, e um dia deixa de ser exemplo quando recebe uma conversa de verdade.
-- **O rosto é um desenho**, sem avatar em vídeo.
-- **A ligação acontece pela internet**, no app ou no navegador do aparelho do idoso. Ligação pelo telefone comum ainda não existe.
+- **O rosto é um desenho.** O avatar em vídeo (Anam ou HeyGen) está no código e fica fora da demonstração, porque só funciona no modo `tres` e com a chave do fornecedor.
+- **A ligação acontece pela internet**, no app ou no navegador do aparelho do idoso. A ligação pelo telefone comum pra família está no código e desligada: falta um número na conta da Agora e um teste de verdade.
+- **O modo de reserva não entra sozinho.** Se o Gemini falha, a ligação não abre, e o modo `tres` só entra escolhido à mão.
+- **Os exames e a agenda de longo prazo** entraram no código na madrugada de 22/11 e ainda não foram usados por uma família de verdade.
 
 ## Privacidade e limites
 
@@ -157,8 +168,7 @@ O código foi escrito pelo time com ajuda do Claude Code.
 ## Próximos passos
 
 - Medir com avós de verdade quantos conversam até o fim e quantos atendem no dia seguinte.
-- Passar a ligação pra uma pessoa da família na hora da urgência.
-- Ligação pelo telefone comum, pra quem não usa celular com internet.
+- Ligar o telefone comum: um número na conta da Agora e um teste de verdade, pra família e depois pra quem não usa celular com internet.
 - Aviso à família por notificação ou WhatsApp, além do painel.
 - Ligação tocando com a tela bloqueada no celular.
 - Baixar o custo por minuto da conversa (conta em `conhecimento/tese.md`).
