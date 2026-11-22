@@ -68,7 +68,7 @@ Por dentro, a chamada é uma sala de áudio da Agora. O motor de conversa da Ago
 Isso já funciona lá fora. Na Coreia, 89% dos idosos atenderam a ligação de uma IA em três meses. Nos Estados Unidos, uma empresa que faz companhia pra idosos, paga por planos de saúde, chegou a valer 1,4 bilhão de dólares.
 
 **[Slide 7, 16 s]**
-Aqui, ontem a Dona Leda ligou pra [N] avós do time, e hoje [N] atenderam de novo. Ela responde em 2,8 segundos, e acertou 40 de 55 conversas de golpe e de queda na nossa bateria de segurança. Com a casa de repouso parceira, a gente aprendeu que quem precisa ainda mora em casa.
+Aqui, ontem a Dona Leda ligou pra [N] avós do time, e hoje [N] atenderam de novo. Ela responde em 2,8 segundos, e acertou 40 de 55 conversas simuladas de golpe e de queda na nossa bateria de segurança. Com a casa de repouso parceira, a gente aprendeu que quem precisa ainda mora em casa.
 
 **[Slide 8, 27 s]**
 O nosso modelo é B2C e B2B. A família paga 129,90 por mês, e sobram 67 por idoso. As casas de repouso usam a Dona Leda pra potencializar as cuidadoras ou indicam pras famílias que não conseguem pagar a casa: já fechamos uma parceria com uma casa em Petrolina e estamos conversando com a maior rede de casas de idosos do Brasil. E os planos de saúde e as seguradoras podem contratar a Dona Leda pros clientes deles: são até 13,6 bilhões por ano.
