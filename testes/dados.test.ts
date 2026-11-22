@@ -243,3 +243,14 @@ describe('aviso repetido (verificador, 21/11)', () => {
     expect(base.alertas.filter((a) => a.tipo === 'emergencia')).toHaveLength(2);
   });
 });
+
+describe('leitura de QR Code de pareamento', () => {
+  it('extrai os 6 dígitos tanto do link completo quanto de código puro e rejeita lixo', async () => {
+    const { extrairCodigoDeTexto } = await import('@/components/Parear');
+    expect(extrairCodigoDeTexto('https://donaleda.vercel.app/parear?codigo=482910')).toBe('482910');
+    expect(extrairCodigoDeTexto('/parear?codigo=123456')).toBe('123456');
+    expect(extrairCodigoDeTexto('987 654')).toBe('987654');
+    expect(extrairCodigoDeTexto('https://exemplo.com/sem-codigo')).toBeNull();
+    expect(extrairCodigoDeTexto('12345')).toBeNull();
+  });
+});

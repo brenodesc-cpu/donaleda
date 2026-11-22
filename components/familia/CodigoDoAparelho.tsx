@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CheckCircle2, Link2 } from 'lucide-react';
+import QRCode from 'qrcode';
 import type { CodigoDoAparelho as Codigo, IdosoDaFamilia } from '@/lib/tipos';
 import { deuCerto, gerarCodigo } from './api';
 import { CLASSE_DO_BOTAO_PRINCIPAL, CLASSE_DO_BOTAO_SECUNDARIO, Erro } from './campos';
@@ -31,7 +32,19 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
   const [restam, setRestam] = useState(0);
   const [aparelhosAntes, setAparelhosAntes] = useState(idoso.aparelhos);
   const [copiado, setCopiado] = useState(false);
+  const qrCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const ligouAgora = codigo !== null && idoso.aparelhos > aparelhosAntes;
+
+  useEffect(() => {
+    if (!codigo || ligouAgora || restam === 0 || !qrCanvasRef.current) return;
+    const link = `${window.location.origin}/parear?codigo=${codigo.codigo}`;
+    void QRCode.toCanvas(qrCanvasRef.current, link, {
+      width: 220,
+      margin: 2,
+      errorCorrectionLevel: 'M',
+      color: { dark: '#33200F', light: '#FFFFFF' },
+    }).catch(() => undefined);
+  }, [codigo, ligouAgora, restam]);
 
   useEffect(() => {
     if (!codigo || ligouAgora) return;
@@ -96,11 +109,20 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <p className="text-base text-muted-foreground">Código do aparelho</p>
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-white p-4 shadow-sm">
+        <canvas
+          ref={qrCanvasRef}
+          aria-label={`QR Code para ligar o aparelho de ${idoso.tratamento}`}
+          className="h-[220px] w-[220px]"
+        />
+      </div>
+      <p className="max-w-sm text-center text-base text-muted-foreground">
+        Aponte a câmera do celular de {idoso.tratamento} pra este QR Code, ou digite os 6 números:
+      </p>
       <p
         aria-label={`Código ${codigo.codigo.split('').join(' ')}`}
-        className="font-titulo tabular-nums text-6xl font-bold tracking-widest text-foreground md:text-7xl"
+        className="font-titulo tabular-nums text-5xl font-bold tracking-widest text-foreground md:text-6xl"
       >
         {separar(codigo.codigo)}
       </p>
@@ -112,7 +134,7 @@ export function CodigoDoAparelho({ idoso, onConferir }: CodigoDoAparelhoProps) {
         {copiado ? 'Link pronto pra mandar' : `Mandar o link pra ${idoso.tratamento}`}
       </button>
       <p className="text-center text-base text-muted-foreground">
-        Quem abre o link no celular de {idoso.tratamento} liga o aparelho sem digitar nada.
+        Quem abre o link ou lê o QR Code no celular de {idoso.tratamento} liga o aparelho sem digitar nada.
       </p>
       <button type="button" onClick={handleGerar} disabled={gerando} className={`${CLASSE_DO_BOTAO_SECUNDARIO} sm:w-auto`}>
         Gerar outro código

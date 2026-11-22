@@ -35,11 +35,11 @@ export default function AparelhoPage() {
                 No celular ou tablet de {idoso.tratamento}, abra o app Dona Leda.
               </li>
               <li>Toque em &quot;Este aparelho vai receber as ligações&quot;.</li>
-              <li>Digite o código que aparece aqui embaixo.</li>
+              <li>Aponte a câmera pro QR Code ou digite os 6 números que aparecem aqui embaixo.</li>
             </ol>
             <p className="text-base text-muted-foreground">
-              Deixe o aparelho ligado na tomada e na internet, com o app aberto, pra ele tocar na
-              hora das ligações.
+              Depois de parear, aceite as notificações no celular de {idoso.tratamento} pra ele
+              tocar nas ligações mesmo com a tela fechada.
             </p>
           </Cartao>
 
