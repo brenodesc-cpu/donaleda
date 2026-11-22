@@ -44,6 +44,10 @@ interface Entrada {
   pronto: boolean;
   /** A conversa com o Gemini caiu sem ninguém desligar. `jaConversou` diz se ela chegou a abrir. */
   aoCair: (jaConversou: boolean) => void;
+  /** Pra onde vão as ações. A demonstração pública troca por uma rota que não anota nada. */
+  rotaDasAcoes?: string;
+  /** Pra onde vai a conta de tokens no fim. null não manda (demonstração pública). */
+  rotaDaConta?: string | null;
 }
 
 interface ChamadaDeFuncao {
@@ -54,7 +58,16 @@ interface ChamadaDeFuncao {
 
 type ContextoDeSom = typeof AudioContext;
 
-export function useGeminiDireto({ direto, conversaId, uidDaAssistente, microfone, pronto, aoCair }: Entrada) {
+export function useGeminiDireto({
+  direto,
+  conversaId,
+  uidDaAssistente,
+  microfone,
+  pronto,
+  aoCair,
+  rotaDasAcoes = '/api/direto/acao',
+  rotaDaConta = '/api/direto/uso',
+}: Entrada) {
   const [legenda, setLegenda] = useState<EstadoDaLegenda>(LEGENDA_VAZIA);
   const [naLinha, setNaLinha] = useState(false);
   const [falando, setFalando] = useState(false);
@@ -208,7 +221,7 @@ export function useGeminiDireto({ direto, conversaId, uidDaAssistente, microfone
         let texto = SE_A_ACAO_FALHAR;
         try {
           const pedido: PedidoDeAcao = { nome: chamada.name ?? '', argumentos: chamada.args ?? {} };
-          const resposta = await fetchDoAparelho('/api/direto/acao', {
+          const resposta = await fetchDoAparelho(rotaDasAcoes, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(pedido),
@@ -310,10 +323,10 @@ export function useGeminiDireto({ direto, conversaId, uidDaAssistente, microfone
 
     // A conta de tokens vai pro servidor uma vez, quando a ligação acaba.
     const entregarConta = () => {
-      if (contaEntregue || uso.respostas === 0 || !abertoEm) return;
+      if (!rotaDaConta || contaEntregue || uso.respostas === 0 || !abertoEm) return;
       contaEntregue = true;
       const pedidoDeUso: PedidoDeUso = { conversaId, uso, segundos: Math.round((Date.now() - abertoEm) / 1000) };
-      void fetchDoAparelho('/api/direto/uso', {
+      void fetchDoAparelho(rotaDaConta, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pedidoDeUso),
