@@ -79,11 +79,25 @@ function senhora(tratamento: string): string {
   return /^seu\b/i.test(tratamento.trim()) ? 'o senhor' : 'a senhora';
 }
 
-/** Quando o convite abre. */
-export function fraseDoConvite(base: Base): string {
+/**
+ * Quando o convite abre. Esta frase pode tomar o lugar da resposta da Dona Leda
+ * (no Gemini, a fala dela depois de avisar a família sumia; medido em 22/11), então
+ * a orientação de segurança vai junto dela: 192 no corpo, nenhum dado no golpe e o
+ * CVV quando a pessoa fala em não querer viver.
+ */
+export function fraseDoConvite(base: Base, tipo?: TipoDeAlerta): string {
   const { familiar, tratamento } = base.idoso;
   const f = quem(familiar);
-  return `${maiuscula(tratamento)}, eu avisei ${f.nome}. Se ${f.ela} puder agora, ${f.ela} entra aqui na ligação com a gente. Enquanto isso, eu fico com ${senhora(tratamento)}.`;
+  const voce = senhora(tratamento);
+  const seguranca =
+    tipo === 'golpe'
+      ? ' Não passa nenhum dado nem dinheiro pra ninguém.'
+      : tipo === 'humor'
+        ? ` Se ${voce} quiser conversar com alguém agora, o CVV atende de graça no um oito oito.`
+        : tipo
+          ? ` Se ${voce} precisar de ajuda agora, liga pro um nove dois.`
+          : '';
+  return `${maiuscula(tratamento)}, eu avisei ${f.nome}.${seguranca} Se ${f.ela} puder agora, ${f.ela} entra aqui na ligação com a gente. Enquanto isso, eu fico com ${voce}.`;
 }
 
 /** Quando a família entra. Depois dela a Dona Leda sai da sala. */

@@ -314,7 +314,7 @@ export async function executarFerramenta(
       const alerta = criarAlerta(base, { tipo, gravidade, texto: textoDoAviso, origem: 'assistente' }, agora);
       // Aviso urgente com a ligação aberta abre o convite pra família entrar.
       const convidada = gravidade === 'urgente' ? abrirConvite(base, 'urgente', tipo, agora) : null;
-      if (convidada) convite = { conversa: { ...convidada }, frase: fraseDoConvite(base) };
+      if (convidada) convite = { conversa: { ...convidada }, frase: fraseDoConvite(base, tipo) };
       return alerta;
     });
     const aberto = convite as { conversa: Conversa; frase: string } | null;

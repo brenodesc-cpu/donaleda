@@ -92,7 +92,7 @@ export async function POST(request: Request) {
         : undefined;
       // Aviso urgente com a ligação aberta abre o convite pra família entrar.
       const convidada = regra?.gravidade === 'urgente' ? abrirConvite(base, 'urgente', regra.tipo) : null;
-      return { alerta, convite: convidada ? { conversa: { ...convidada }, frase: fraseDoConvite(base) } : null };
+      return { alerta, convite: convidada ? { conversa: { ...convidada }, frase: fraseDoConvite(base, regra?.tipo) } : null };
     });
     if (!resultado) return NextResponse.json({ ok: false }, { status: 404 });
     const convite = resultado.convite;

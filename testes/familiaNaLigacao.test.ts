@@ -109,6 +109,9 @@ describe('as frases fixas', () => {
   const base = baseDeExemplo(AGORA, 'id');
   const frases = [
     fraseDoConvite(base),
+    fraseDoConvite(base, 'emergencia'),
+    fraseDoConvite(base, 'golpe'),
+    fraseDoConvite(base, 'humor'),
     fraseDaEntrada(base),
     fraseSemEntrada(base, 'emergencia'),
     fraseSemEntrada(base, 'golpe'),
@@ -116,12 +119,19 @@ describe('as frases fixas', () => {
 
   it('dizem o que o desenho combinou', () => {
     expect(frases[0]).toBe('Dona Helena, eu avisei a Marina. Se ela puder agora, ela entra aqui na ligação com a gente. Enquanto isso, eu fico com a senhora.');
-    expect(frases[1]).toBe('Dona Helena, a Marina entrou na ligação. Vou deixar vocês conversarem.');
-    expect(frases[2]).toBe('A Marina não conseguiu entrar agora. O aviso ficou com ela, e ela vê assim que pegar o celular. Se a senhora precisar de ajuda agora, liga pro um nove dois.');
-    expect(frases[3]).toContain('Não passa nenhum dado pra ninguém antes de falar com ela.');
+    expect(frases[4]).toBe('Dona Helena, a Marina entrou na ligação. Vou deixar vocês conversarem.');
+    expect(frases[5]).toBe('A Marina não conseguiu entrar agora. O aviso ficou com ela, e ela vê assim que pegar o celular. Se a senhora precisar de ajuda agora, liga pro um nove dois.');
+    expect(frases[6]).toContain('Não passa nenhum dado pra ninguém antes de falar com ela.');
   });
 
-  it.each([0, 1, 2, 3])('nenhuma promete socorro nem diz que alguém está vindo (%i)', (i) => {
+  it('na urgência, a frase do convite já leva a orientação de segurança', () => {
+    expect(frases[1]).toBe('Dona Helena, eu avisei a Marina. Se a senhora precisar de ajuda agora, liga pro um nove dois. Se ela puder agora, ela entra aqui na ligação com a gente. Enquanto isso, eu fico com a senhora.');
+    expect(frases[2]).toContain('Não passa nenhum dado nem dinheiro pra ninguém.');
+    expect(frases[3]).toContain('o CVV atende de graça no um oito oito');
+    expect(frases[0]).not.toMatch(/um nove dois/);
+  });
+
+  it.each([0, 1, 2, 3, 4, 5, 6])('nenhuma promete socorro nem diz que alguém está vindo (%i)', (i) => {
     expect(frases[i]).not.toMatch(/a caminho|vindo|chegando|chamei o socorro|socorro est/i);
   });
 });
