@@ -25,12 +25,12 @@ Tudo de um idoso fica num objeto só, a ficha (`Base`, em `lib/tipos.ts:255-272`
 | Resumo de exame, consulta ou receita | saúde | a IA lê o arquivo que a família anexa | `lib/tipos.ts:219-230` |
 | Código do celular do idoso e os códigos de notificação dos celulares | técnico | o aparelho | `lib/tipos.ts:208-214`, migração `:31-38` |
 
-### O que não fica guardado
+### O que não fica guardado, e o exame, que passou a ficar
 
 - **Áudio e vídeo.** Nenhuma gravação é pedida à Agora: a busca por gravação no código não acha nada.
 - **A conversa inteira.** Cada fala do idoso passa pelas regras de segurança e é descartada (`app/api/conversa/route.ts:102-106`). No fim da ligação, as últimas 60 falas vão em texto pro servidor, que tira a ficha e o resumo e não grava o texto (`lib/posConversa.ts:4-5` e `58-71`).
 - **A fala que dispara um aviso fica guardada.** Quando uma regra de segurança dispara, o aviso leva um trecho de até 160 caracteres do que o idoso disse (`lib/regras.ts:109-111` e `123-158`). O aviso de tristeza que dura dias vai sem a fala (`lib/regras.ts:166`).
-- **O arquivo do exame.** A foto ou o PDF é lido na memória do servidor e descartado. Fica o resumo (`app/api/familia/documento/route.ts:54-69`, `lib/documentos.ts:1-5`).
+- **O arquivo do exame passou a ficar guardado em 22/11.** Até a gravação `3b6190b`, a foto ou o PDF era lido e descartado, e ficava só o resumo. Desde ela, no ar às 10h20, o arquivo original fica num espaço privado do Supabase, com tudo o que estiver escrito nele, e a família logada abre pelo painel (`lib/documentos.ts:56-116`). Ele é apagado quando a família apaga o documento ou o idoso (`lib/documentos.ts:119-134`). A página `/privacidade` do site ainda diz o contrário.
 - **Quem testa em `/experimente`.** O banco guarda o dia, os segundos e dois códigos embaralhados que mudam todo dia, sem nome, endereço nem fala (migração `20261121200000_demonstracao.sql:1-3`).
 
 ### Por quanto tempo
