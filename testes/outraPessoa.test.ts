@@ -70,6 +70,31 @@ describe('outra pessoa atendeu a ligação', () => {
     expect(busca).not.toMatch(/cardiolog|renato/i);
   });
 
+  it('o que foi anotado antes de a pessoa dizer quem era sai da ficha (teste por voz de 21/11)', async () => {
+    const { id } = await fichaComConversaAberta();
+    const antes = await ler(id);
+    const diaAntes = JSON.stringify(hoje(antes) ?? null);
+    const lembrancasAntes = antes.lembrancas.length;
+    const alertasAntes = antes.alertas.length;
+
+    // Quem atendeu respondeu como se fosse a idosa, antes de dizer que não era.
+    await ferramentas.executarFerramenta(id, 'registrar_bem_estar', { sono: 'mal', remedio: 'nao_tomou', alimentacao: 'nao_comeu' }, AGORA);
+    await ferramentas.executarFerramenta(id, 'guardar_lembranca', { texto: 'Gosta de jogar dominó com o Carlos.', categoria: 'gosto' }, AGORA);
+    await ferramentas.executarFerramenta(id, 'avisar_familia', { tipo: 'emergencia', gravidade: 'urgente', mensagem: 'Contou que caiu no banheiro.' }, AGORA);
+    const noMeio = await ler(id);
+    expect(noMeio.alertas.slice(alertasAntes).some((a) => a.tipo === 'remedio')).toBe(true);
+
+    await ferramentas.executarFerramenta(id, 'outra_pessoa_atendeu', {}, AGORA);
+    const depois = await ler(id);
+    expect(JSON.stringify(hoje(depois) ?? null)).toBe(diaAntes);
+    expect(depois.lembrancas).toHaveLength(lembrancasAntes);
+    const novos = depois.alertas.slice(alertasAntes);
+    expect(novos.some((a) => a.tipo === 'remedio')).toBe(false);
+    // Queda, golpe e tristeza continuam com a família, por segurança.
+    expect(novos.some((a) => a.tipo === 'emergencia')).toBe(true);
+    expect(novos.some((a) => a.texto.includes('Outra pessoa atendeu'))).toBe(true);
+  });
+
   it('o aviso pra família continua funcionando nessa ligação', async () => {
     const { id } = await fichaComConversaAberta();
     await ferramentas.executarFerramenta(id, 'outra_pessoa_atendeu', {}, AGORA);

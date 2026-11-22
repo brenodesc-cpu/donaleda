@@ -174,10 +174,14 @@ export function abrirConversa(base: Base, agora: Date = new Date(), chamadaId?: 
   for (const c of base.conversas) {
     if (!c.fim) c.fim = agora.toISOString();
   }
+  const diaDeHoje = base.dias.find((d) => d.data === dataEmBrasilia(agora));
   const conversa: Conversa = {
     id: randomUUID(),
     inicio: agora.toISOString(),
     falasDoIdoso: 0,
+    diaNoInicio: diaDeHoje ? structuredClone(diaDeHoje) : null,
+    lembrancasNoInicio: base.lembrancas.map((l) => l.id),
+    alertasNoInicio: base.alertas.length,
     ...(chamadaId ? { chamadaId } : {}),
   };
   base.conversas.push(conversa);
@@ -199,6 +203,7 @@ export function marcarOutraPessoa(base: Base, agora: Date = new Date()): boolean
   if (!conversa) return false;
   if (conversa.outraPessoa) return true;
   conversa.outraPessoa = true;
+  desfazerOQueALigacaoAnotou(base, conversa);
   const hora = new Intl.DateTimeFormat('pt-BR', {
     timeZone: 'America/Sao_Paulo',
     hour: '2-digit',
@@ -219,6 +224,35 @@ export function marcarOutraPessoa(base: Base, agora: Date = new Date()): boolean
   return true;
 }
 
+/**
+ * Quem atendeu pode ter respondido como se fosse o idoso antes de dizer quem era.
+ * A ficha do dia volta a como estava no começo da ligação, e saem as lembranças
+ * guardadas nela e os avisos que nasceram da ficha (remédio e dor). Queda, golpe e
+ * tristeza ficam com a família, por segurança.
+ */
+function desfazerOQueALigacaoAnotou(base: Base, conversa: Conversa): void {
+  if (conversa.diaNoInicio !== undefined) {
+    const data = conversa.diaNoInicio?.data ?? dataEmBrasilia(new Date(conversa.inicio));
+    const i = base.dias.findIndex((d) => d.data === data);
+    if (conversa.diaNoInicio === null) {
+      if (i >= 0) base.dias.splice(i, 1);
+    } else if (i >= 0) {
+      base.dias[i] = structuredClone(conversa.diaNoInicio);
+    }
+  }
+  if (conversa.lembrancasNoInicio) {
+    const existiam = new Set(conversa.lembrancasNoInicio);
+    base.lembrancas = base.lembrancas.filter((l) => existiam.has(l.id) || l.origem !== 'conversa');
+  }
+  if (typeof conversa.alertasNoInicio === 'number') {
+    const inicio = conversa.alertasNoInicio;
+    // Os avisos só crescem no fim da lista: os de depois do início são desta ligação.
+    base.alertas = base.alertas.filter(
+      (a, i) => i < inicio || !(a.origem === 'regra' && (a.tipo === 'remedio' || a.tipo === 'saude')),
+    );
+  }
+}
+
 export function fecharConversa(
   base: Base,
   conversaId: string,
@@ -227,6 +261,9 @@ export function fecharConversa(
   const conversa = base.conversas.find((c) => c.id === conversaId);
   if (!conversa) return null;
   if (!conversa.fim) conversa.fim = agora.toISOString();
+  delete conversa.diaNoInicio;
+  delete conversa.lembrancasNoInicio;
+  delete conversa.alertasNoInicio;
   if (conversa.falasDoIdoso > 0 && !conversa.outraPessoa) base.idoso.primeiraConversaFeita = true;
   return conversa;
 }
