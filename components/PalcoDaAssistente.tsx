@@ -31,20 +31,23 @@ export function SomDoRemoto({ usuario }: { usuario: IAgoraRTCRemoteUser }) {
 }
 
 interface PalcoDaAssistenteProps {
-  /** Quem está mandando vídeo na ligação (o avatar), se houver. */
+  /** Quem está mandando vídeo na ligação (o avatar ou a família), se houver. */
   comVideo: IAgoraRTCRemoteUser | undefined;
   estado: EstadoDoRosto;
   nivel: number;
+  /** Rótulo no canto superior esquerdo (padrão: "Dona Leda, assistente virtual"). */
+  etiqueta?: string;
 }
 
 /**
- * O "vídeo" da assistente, que ocupa a tela como numa chamada de vídeo: o
- * avatar quando ele existe, ou o rosto desenhado.
+ * O "vídeo" da assistente (ou do familiar quando entra na chamada), que ocupa a
+ * tela como numa chamada de vídeo.
  */
 export function PalcoDaAssistente({
   comVideo,
   estado,
   nivel,
+  etiqueta,
 }: PalcoDaAssistenteProps) {
   return (
     <div
@@ -59,7 +62,7 @@ export function PalcoDaAssistente({
         <Rosto estado={estado} nivel={nivel} className="sm:h-80 sm:w-80" />
       )}
       <p className="absolute left-3 top-3 rounded-full bg-card/90 px-4 py-1.5 font-titulo text-lg font-semibold shadow-sm">
-        {NOME_DA_ASSISTENTE}, assistente virtual
+        {etiqueta ?? `${NOME_DA_ASSISTENTE}, assistente virtual`}
       </p>
     </div>
   );

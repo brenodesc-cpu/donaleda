@@ -7,7 +7,7 @@ import { randomInt } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { marcarAvisoVisto, registrarDesfecho, respostaValida } from '@/lib/avisos';
 import { arrumarHorarios, avancarChamadas, chamadaTocando, pedirChamadaDaFamilia } from '@/lib/chamadas';
-import { fraseDaEntrada, registrarEntrada } from '@/lib/convite';
+import { conviteAberto, fraseDaEntrada, registrarEntrada } from '@/lib/convite';
 import {
   apagarDocumento,
   definirRedeDeApoio,
@@ -239,13 +239,26 @@ export async function POST(request: Request) {
 
   if (acao.acao === 'entrar_na_ligacao') {
     // Só entra com convite aberto (aviso urgente ou pedido do idoso) e a ligação ainda aberta.
-    // A primeira entrada faz a Dona Leda anunciar e sair; quem recarrega a página só pega outra chave.
+    // Só devolve a chave RTC aqui: a Dona Leda permanece na sala segurando a ligação do idoso
+    // até o navegador da família confirmar `familia_conectada` (isConnected === true na Agora).
+    const aberto = await mudarBaseQuando(idosoId, (base) => ({
+      gravar: false,
+      resultado: conviteAberto(base, new Date()),
+    }));
+    if (!aberto?.conversa.canal) {
+      return NextResponse.json({ ok: false, erro: 'sem_convite' }, { status: 409 });
+    }
+    const entrada = entradaDaFamilia(aberto.conversa.canal);
+    return NextResponse.json({ ok: true, ...entrada });
+  }
+
+  if (acao.acao === 'familia_conectada') {
+    // A família já está conectada na sala RTC com o idoso: anuncia a entrada e retira a Dona Leda.
     const achada = await mudarBase(idosoId, (base) => {
       const entrada = registrarEntrada(base, new Date());
       return entrada ? { conversa: { ...entrada.conversa }, primeira: entrada.primeira, frase: fraseDaEntrada(base) } : null;
     });
     if (!achada) return NextResponse.json({ ok: false, erro: 'sem_convite' }, { status: 409 });
-    const entrada = entradaDaFamilia(achada.conversa.canal!);
     if (achada.primeira) {
       depois(async () => {
         await falar(achada.conversa, achada.frase, 'INTERRUPT');
@@ -254,7 +267,7 @@ export async function POST(request: Request) {
         await tirarAssistente(achada.conversa);
       });
     }
-    return NextResponse.json({ ok: true, ...entrada });
+    return NextResponse.json({ ok: true, primeira: achada.primeira });
   }
 
   if (acao.acao === 'apagar_documento' && typeof acao.documentoId === 'string') {

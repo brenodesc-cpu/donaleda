@@ -342,6 +342,8 @@ export type AcaoDaFamilia = (
   | { acao: 'gerar_codigo' }
   /** Entra na ligação que está acontecendo, com voz e vídeo. Responde `{ ok, ...EntradaNaLigacao }`, ou 409 sem ligação. */
   | { acao: 'entrar_na_ligacao' }
+  /** Confirmado pelo aparelho da família após conectar no canal Agora RTC: anuncia e retira a assistente. */
+  | { acao: 'familia_conectada' }
   /** A família ensina uma lembrança. Responde `{ ok, lembranca }` ou 422 `{ ok:false, erro:'recusada', motivo }`. */
   | { acao: 'ensinar'; texto: string; categoria: CategoriaDeLembranca; sobre?: string; data?: string; hora?: string }
   /** A família corrige uma lembrança que vê. Só os campos que vierem. Responde `{ ok, lembranca }`. */
@@ -408,6 +410,8 @@ export interface RespostaDoEvento {
   ok: boolean;
   /** Vem quando a fala disparou uma regra de segurança (queda, golpe). */
   alerta?: Alerta;
+  /** Resposta do evento 'convite': se há convite aberto nesta conversa. */
+  conviteAberto?: boolean;
   /** Resposta do evento 'convite': se alguém da família já entrou. */
   familiaEntrou?: boolean;
 }

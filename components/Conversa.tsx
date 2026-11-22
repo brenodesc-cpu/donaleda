@@ -107,7 +107,7 @@ export default function Conversa({
     pronto: pronto && entrou,
   });
   useEnviarFalas(transcript, dados.conversaId, uidDaAssistente);
-  useConviteDaFamilia(dados.conversaId, pronto && entrou);
+  const { conviteAberto, familiaEntrou } = useConviteDaFamilia(dados.conversaId, pronto && entrou);
 
   // Mantém a cópia efêmera das falas pra consolidar resumo/ficha no encerramento.
   useEffect(() => {
@@ -170,9 +170,9 @@ export default function Conversa({
   }, [erroDoMicrofone, onFalha]);
 
   // Assistente que não entra vira aviso simples. Assistente que esteve e saiu
-  // quer dizer que a ligação acabou, e a tela volta a esperar a próxima.
+  // quer dizer que a ligação acabou — salvo durante convite/transição pra família entrar.
   const naoEntrou = useCallback(() => onFalha('conexao'), [onFalha]);
-  usePresencaDaAssistente(alguemNaLinha, onEncerrar, naoEntrou);
+  usePresencaDaAssistente(alguemNaLinha, encerrarComFalas, naoEntrou, conviteAberto || familiaEntrou);
 
   useClientEvent(client, 'connection-state-change', (atual, _anterior, razao) => {
     if (atual === 'DISCONNECTED' && String(razao) !== 'LEAVE') onFalha('conexao');
@@ -208,11 +208,12 @@ export default function Conversa({
   // Teto de 10 minutos por ligação (com sinal suave pra IA encaminhar a despedida aos 8m30s)
   // e 2 minutos sem o idoso falar. O microfone entra junto da legenda, pra ligação não cair
   // se a legenda falhar.
-  // Com a família na ligação, o teto de tempo e o corte por silêncio ficam parados.
+  // Com a família na ligação (ou com convite de urgência/família aberto esperando ela entrar),
+  // o teto de tempo e o corte por silêncio ficam parados pra nunca derrubar uma emergência.
   useTetoDaLigacao(
     transcript,
     uidDaAssistente,
-    alguemNaLinha && !familiaNaLinha,
+    alguemNaLinha && !familiaNaLinha && !conviteAberto && !familiaEntrou,
     estado === 'falando',
     localMicrophoneTrack,
     encerrarComFalas,
@@ -229,7 +230,12 @@ export default function Conversa({
       aria-label={`Ligação com a ${NOME_DA_ASSISTENTE}`}
       className="flex w-full flex-1 flex-col items-center justify-between gap-4"
     >
-      <PalcoDaAssistente comVideo={comVideo} estado={estado} nivel={nivel} />
+      <PalcoDaAssistente
+        comVideo={comVideo}
+        estado={estado}
+        nivel={nivel}
+        etiqueta={familiaNaLinha ? `${dados.nomeDaFamilia ?? 'Sua família'} na ligação` : undefined}
+      />
 
       <div className="flex w-full flex-col items-center gap-2">
         <p role="status" className="text-xl font-medium text-muted-foreground">

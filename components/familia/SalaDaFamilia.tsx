@@ -17,10 +17,11 @@ import {
   type IAgoraRTCRemoteUser,
 } from 'agora-rtc-react';
 import { Mic, MicOff, PhoneOff, Video, VideoOff } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DEFAULT_AGENT_UID, ehDaFamilia } from '@/lib/agora';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import type { EntradaNaLigacao } from '@/lib/tipos';
+import { confirmarFamiliaConectada } from './api';
 
 function Som({ usuario }: { usuario: IAgoraRTCRemoteUser }) {
   const { track } = useRemoteUserTrack(usuario, 'audio');
@@ -33,13 +34,15 @@ function VideoDoIdoso({ usuario, nome }: { usuario: IAgoraRTCRemoteUser; nome: s
 }
 
 interface Props {
+  idosoId: string;
   entrada: EntradaNaLigacao;
   tratamento: string;
   onSair: () => void;
 }
 
-export default function SalaDaFamilia({ entrada, tratamento, onSair }: Props) {
+export default function SalaDaFamilia({ idosoId, entrada, tratamento, onSair }: Props) {
   const [pronto, setPronto] = useState(false);
+  const confirmou = useRef(false);
   useEffect(() => {
     const relogio = setTimeout(() => setPronto(true), 0);
     return () => {
@@ -48,10 +51,17 @@ export default function SalaDaFamilia({ entrada, tratamento, onSair }: Props) {
     };
   }, []);
 
-  const { isConnected } = useJoin(
+  const { isConnected, error: erroDeConexao } = useJoin(
     { appid: entrada.appId, channel: entrada.canal, token: entrada.token, uid: Number(entrada.uid) },
     pronto,
   );
+  // Só avisa o servidor pra anunciar e retirar a Dona Leda DEPOIS que o familiar já
+  // está fisicamente conectado na sala Agora RTC — evita derrubar a ligação do idoso.
+  useEffect(() => {
+    if (!isConnected || confirmou.current) return;
+    confirmou.current = true;
+    void confirmarFamiliaConectada(idosoId);
+  }, [isConnected, idosoId]);
   const [microfoneLigado, setMicrofoneLigado] = useState(true);
   const [cameraLigada, setCameraLigada] = useState(true);
   const { localMicrophoneTrack, error: erroDoMicrofone } = useLocalMicrophoneTrack(pronto);
@@ -118,8 +128,9 @@ export default function SalaDaFamilia({ entrada, tratamento, onSair }: Props) {
           {cameraLigada ? 'Desligar câmera' : 'Ligar câmera'}
         </button>
       </div>
-      {erroDoMicrofone || erroDaCamera ? (
+      {erroDeConexao || erroDoMicrofone || erroDaCamera ? (
         <p className="text-center text-base text-destructive">
+          {erroDeConexao ? 'Não consegui conectar na sala de vídeo. Tente sair e entrar de novo. ' : ''}
           {erroDoMicrofone ? 'O navegador não liberou o microfone. ' : ''}
           {erroDaCamera ? 'O navegador não liberou a câmera.' : ''}
         </p>

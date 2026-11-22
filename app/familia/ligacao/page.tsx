@@ -47,9 +47,9 @@ export default function LigacaoDaFamiliaPage() {
 
   return (
     <Moldura idosos={idosos} idoso={idoso} onEscolher={escolher} ativa="painel" semConexao={semLista || semConexao}>
-      {entrada ? (
+      {entrada && idoso ? (
         <ProvedorDaAgora>
-          <SalaDaFamilia entrada={entrada} tratamento={tratamento} onSair={sair} />
+          <SalaDaFamilia idosoId={idoso.id} entrada={entrada} tratamento={tratamento} onSair={sair} />
         </ProvedorDaAgora>
       ) : painel ? (
         <section className="flex flex-col gap-4 rounded-2xl border-2 border-foreground bg-card p-6">

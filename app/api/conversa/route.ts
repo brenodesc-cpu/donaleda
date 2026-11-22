@@ -171,6 +171,7 @@ export async function POST(request: Request) {
       if (!conversa) return null;
       const vencida = vencerConvite(base, evento.conversaId);
       return {
+        conviteAberto: Boolean(conversa.convite),
         familiaEntrou: Boolean(conversa.convite?.entrouEm),
         aviso: vencida ? { conversa: { ...vencida }, frase: fraseSemEntrada(base, vencida.convite?.tipo) } : null,
       };
@@ -178,7 +179,11 @@ export async function POST(request: Request) {
     if (!resultado) return NextResponse.json({ ok: false }, { status: 404 });
     const aviso = resultado.aviso;
     if (aviso) depois(() => falar(aviso.conversa, aviso.frase, 'APPEND'));
-    return NextResponse.json({ ok: true, familiaEntrou: resultado.familiaEntrou } satisfies RespostaDoEvento);
+    return NextResponse.json({
+      ok: true,
+      conviteAberto: resultado.conviteAberto,
+      familiaEntrou: resultado.familiaEntrou,
+    } satisfies RespostaDoEvento);
   }
 
   return NextResponse.json({ ok: false }, { status: 400 });
