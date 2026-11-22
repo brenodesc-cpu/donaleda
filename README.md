@@ -158,6 +158,11 @@ O código foi escrito pelo time com ajuda do Claude Code.
 
 ## Privacidade e limites
 
+O mapa completo dos dados está em [`conhecimento/privacidade-e-dados.md`](conhecimento/privacidade-e-dados.md): o que fica guardado, pra qual empresa cada dado vai, o que o idoso controla e o que falta antes de um piloto com famílias de verdade.
+
+- O protótipo ainda não cumpre tudo o que a LGPD pede de quem cuida de dado de saúde. Faltam o sim registrado do próprio idoso, o prazo de guarda, o contrato com os fornecedores e a revisão de um advogado.
+- A voz e a conversa passam pela Agora e pelo Google (Gemini). O banco fica no Supabase e o servidor na Vercel. Com a chave grátis do Gemini, o Google pode usar o conteúdo enviado pra melhorar os produtos dele, então família de verdade só entra com a chave paga.
+- Na primeira ligação, a Dona Leda avisa o idoso de que guarda o que ele contar e de que a família recebe um resumo. Ele pode pedir pra ela esquecer uma lembrança ou guardar um assunto só com ela. Queda, emergência, golpe e vontade de morrer sempre chegam à família.
 - A conversa inteira não é guardada. O banco guarda a ficha do dia, as lembranças, os avisos e o resumo. A fala só fica registrada dentro de um aviso de segurança.
 - As tabelas do banco só são lidas pelo servidor. O navegador fala apenas com as rotas `/api`.
 - A família apaga todos os dados de um idoso em `/familia/ajustes`.
