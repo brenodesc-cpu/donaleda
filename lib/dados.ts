@@ -227,8 +227,9 @@ export function marcarOutraPessoa(base: Base, agora: Date = new Date()): boolean
 /**
  * Quem atendeu pode ter respondido como se fosse o idoso antes de dizer quem era.
  * A ficha do dia volta a como estava no começo da ligação, e saem as lembranças
- * guardadas nela e os avisos que nasceram da ficha (remédio e dor). Queda, golpe e
- * tristeza ficam com a família, por segurança.
+ * guardadas nela e os avisos de rotina dela: remédio e saúde de atenção, da regra
+ * ou da assistente. Os avisos de risco (emergência, golpe, tristeza e saúde urgente)
+ * ficam com a família, por segurança.
  */
 function desfazerOQueALigacaoAnotou(base: Base, conversa: Conversa): void {
   if (conversa.diaNoInicio !== undefined) {
@@ -247,9 +248,8 @@ function desfazerOQueALigacaoAnotou(base: Base, conversa: Conversa): void {
   if (typeof conversa.alertasNoInicio === 'number') {
     const inicio = conversa.alertasNoInicio;
     // Os avisos só crescem no fim da lista: os de depois do início são desta ligação.
-    base.alertas = base.alertas.filter(
-      (a, i) => i < inicio || !(a.origem === 'regra' && (a.tipo === 'remedio' || a.tipo === 'saude')),
-    );
+    const deRotina = (a: Alerta) => a.tipo === 'remedio' || (a.tipo === 'saude' && a.gravidade === 'atencao');
+    base.alertas = base.alertas.filter((a, i) => i < inicio || !deRotina(a));
   }
 }
 
