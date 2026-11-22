@@ -79,14 +79,14 @@ export function Cabecalho({ painel, onRegistrarPushFamilia }: CabecalhoProps) {
 
   useEffect(() => {
     if (ehAppNativo()) {
-      if (painel.notificacoesFamiliaAtivas) setEstadoNotif('ativo');
+      setEstadoNotif(painel.notificacoesFamiliaAtivas ? 'ativo' : 'idle');
       return;
     }
     if (typeof window !== 'undefined' && 'Notification' in window) {
       if (Notification.permission === 'granted') setEstadoNotif('ativo');
       else if (Notification.permission === 'denied') setEstadoNotif('negado');
     }
-  }, [painel.notificacoesFamiliaAtivas]);
+  }, [painel.idoso.id, painel.notificacoesFamiliaAtivas]);
 
   const ativarNotificacoes = async () => {
     setEstadoNotif('ativando');

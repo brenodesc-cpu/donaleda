@@ -1,7 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { PhoneOff, Video } from 'lucide-react';
+import { destravarSom } from '@/hooks/somDoAparelho';
+import { useToque } from '@/hooks/useToque';
 import { AgendaEDocumentos } from '@/components/familia/AgendaEDocumentos';
 import { Alertas } from '@/components/familia/Alertas';
 import { enderecoCom } from '@/components/familia/api';
@@ -37,8 +40,15 @@ export default function PainelDaFamiliaPage() {
   const mostrarChamadaCheia =
     Boolean(painel && idoso && painel.convite && !painel.convite.entrou) &&
     chaveConvite !== conviteMinimizado;
-  const alertaUrgente = painel?.alertas.find((a) => a.gravidade === 'urgente' && !a.visto);
-  const linkLigacaoAuto = idoso ? `${enderecoCom('/familia/ligacao', idoso.id)}&auto=1` : '/familia/ligacao';
+  useToque(mostrarChamadaCheia);
+  const alertaUrgente =
+    painel?.alertas.find((a) => a.gravidade === 'urgente' && !a.visto) ??
+    painel?.alertas.find((a) => a.gravidade === 'urgente');
+  const tratamento = painel?.idoso.tratamento?.trim() || 'seu familiar';
+  const tratamentoTitulo = `${tratamento[0].toUpperCase()}${tratamento.slice(1)}`;
+  const linkLigacaoAuto = idoso
+    ? `${enderecoCom('/familia/ligacao', idoso.id)}&auto=1`
+    : '/familia/ligacao?auto=1';
 
   return (
     <Moldura
@@ -60,12 +70,11 @@ export default function PainelDaFamiliaPage() {
               {painel.convite?.motivo === 'urgente' ? 'Emergência ao vivo' : 'Pedido de chamada'}
             </span>
             <h2 id="titulo-chamada-emergencia" className="text-3xl font-bold sm:text-4xl">
-              {painel.idoso.tratamento[0].toUpperCase()}
-              {painel.idoso.tratamento.slice(1)}
+              {tratamentoTitulo}
             </h2>
             <p className="max-w-md text-lg text-[#FDEBB5]">
               {alertaUrgente?.texto ??
-                `A ${painel.assistente} está na ligação com ${painel.idoso.tratamento} esperando você entrar.`}
+                `A ${painel.assistente} está na ligação com ${tratamento} esperando você entrar.`}
             </p>
           </div>
 
@@ -84,12 +93,16 @@ export default function PainelDaFamiliaPage() {
               </span>
               <span className="text-base font-semibold">Ver no painel</span>
             </button>
-            <a href={linkLigacaoAuto} className="flex flex-col items-center gap-2">
+            <Link
+              href={linkLigacaoAuto}
+              onClick={() => void destravarSom()}
+              className="flex flex-col items-center gap-2"
+            >
               <span className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-[#1B7A3D] text-white shadow-lg">
                 <Video aria-hidden="true" className="h-9 w-9" />
               </span>
               <span className="text-base font-semibold">Atender vídeo</span>
-            </a>
+            </Link>
           </div>
         </div>
       ) : null}
@@ -98,18 +111,18 @@ export default function PainelDaFamiliaPage() {
           <Cabecalho painel={painel} onRegistrarPushFamilia={registrarPushFamilia} />
           <Ligacoes painel={painel} idosoId={idoso.id} pedido={pedidoDeLigacao} onLigar={ligar} />
           {painel.convite?.motivo === 'pedido' ? (
-            <a
-              href={enderecoCom('/familia/ligacao', idoso.id)}
+            <Link
+              href={linkLigacaoAuto}
+              onClick={() => void destravarSom()}
               className="flex flex-col gap-3 rounded-2xl border-2 border-foreground bg-warning-soft p-5"
             >
               <span className="text-lg font-semibold">
-                {painel.idoso.tratamento[0].toUpperCase()}
-                {painel.idoso.tratamento.slice(1)} pediu pra falar com você agora
+                {tratamentoTitulo} pediu pra falar com você agora
               </span>
               <span className="inline-flex min-h-14 items-center justify-center rounded-xl bg-success px-6 text-xl font-semibold text-white">
                 Entrar na ligação
               </span>
-            </a>
+            </Link>
           ) : null}
           <Alertas
             alertas={painel.alertas}
@@ -118,7 +131,7 @@ export default function PainelDaFamiliaPage() {
             hoje={painel.hoje.data}
             onMarcarVisto={marcarVisto}
             onResponder={responderAviso}
-            entrarNaLigacao={painel.convite ? enderecoCom('/familia/ligacao', idoso.id) : null}
+            entrarNaLigacao={painel.convite ? linkLigacaoAuto : null}
           />
           <DiaDeHoje hoje={painel.hoje} />
           {resumo ? <ResumoDaConversa resumo={resumo} /> : null}
