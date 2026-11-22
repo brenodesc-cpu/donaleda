@@ -34,9 +34,13 @@ em{font-style:normal;color:var(--gema)}
 .tit{position:absolute;left:6cqw;top:5cqw;font-size:4.6cqw;max-width:80cqw}
 .fim{position:absolute;left:6cqw;font-size:2.6cqw;font-weight:700}
 /* 1 a pergunta */
-.s1 .q{position:absolute;left:6cqw;right:10cqw;top:14cqw;font-size:9.4cqw;line-height:1.04}
+.s1 .q{position:absolute;left:6cqw;right:4cqw;top:17cqw;font-size:6.6cqw;line-height:1.08;white-space:nowrap}
+.s1 .saiba{position:absolute;left:6cqw;top:38cqw;font-size:2cqw;font-weight:700;color:var(--cafe);background:var(--gema);border-radius:99cqw;padding:.9cqw 2.2cqw;text-decoration:none}
 /* a Dona Leda surge */
+.sx .tit{font-size:1.5cqw;top:6cqw;letter-spacing:.02em}
 .sx .disco{position:absolute;left:6cqw;top:14.5cqw;width:11cqw;height:auto;aspect-ratio:1}
+@keyframes discar{0%,10%{transform:rotate(0deg)}45%,55%{transform:rotate(150deg)}90%,100%{transform:rotate(0deg)}}
+.sx .disco .gira{transform-origin:60px 60px;animation:discar 2.4s cubic-bezier(.5,0,.3,1) infinite}
 .sx .nome{position:absolute;left:6cqw;top:27.5cqw;font-size:6.4cqw}
 .sx .def{position:absolute;left:6.2cqw;top:36cqw;font-size:2.7cqw;font-weight:700;max-width:34cqw;line-height:1.2}
 .sx .faz{position:absolute;left:6.2cqw;top:44cqw;font-size:2.3cqw;font-weight:700;color:var(--gema);max-width:34cqw}
@@ -150,6 +154,7 @@ em{font-style:normal;color:var(--gema)}
 .s.ativo svg.circ circle{transform-box:fill-box;transform-origin:center bottom;animation:surge .7s both}
 .s.ativo svg.circ circle:nth-child(2){animation-delay:.3s}.s.ativo svg.circ circle:nth-child(3){animation-delay:.6s}
 .s.ativo .rt{animation:entra .5s 1.5s both}
+.s.ativo .sx-fix{}
 .s.ativo .hero{animation:surge .7s cubic-bezier(.2,.9,.3,1.2) both;transform-origin:left center}
 @media (prefers-reduced-motion:reduce){.s.ativo *{animation:none !important}}
 /* 10 o time */
@@ -182,7 +187,8 @@ body.com-notas .notas{display:block}
 <div class="palco" id="palco">
 
   <section class="s s1">
-    <p class="ttl q">Quantas vezes você ainda vai ver <em>seus pais</em>?</p>
+    <p class="ttl q">Quantas vezes você<br>ainda vai ver <em>seus pais</em>?</p>
+    <a class="saiba" href="https://donaleda.vercel.app/pitch/index.html" target="_blank" rel="noopener">Saiba mais →</a>
   </section>
 
   <section class="s s2">
@@ -224,7 +230,7 @@ body.com-notas .notas{display:block}
 
   <section class="s sx">
     <p class="ttl tit">Foi assim que a <em>Dona Leda</em> surgiu</p>
-    <svg class="disco"><use href="#disco"/></svg>
+    <svg class="disco" viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="#F7B90F"/><g class="gira" fill="#33200F"><circle cx="70.35" cy="98.65" r="6.5"/><circle cx="49.65" cy="98.65" r="6.5"/><circle cx="31.7" cy="88.3" r="6.5"/><circle cx="21.35" cy="70.35" r="6.5"/><circle cx="21.35" cy="49.65" r="6.5"/><circle cx="31.7" cy="31.7" r="6.5"/><circle cx="49.65" cy="21.35" r="6.5"/><circle cx="70.35" cy="21.35" r="6.5"/><circle cx="88.3" cy="31.7" r="6.5"/><circle cx="98.65" cy="49.65" r="6.5"/></g><path d="M 97.25 81.5 L 111 89.5" fill="none" stroke="#33200F" stroke-width="4.5" stroke-linecap="round"/><circle cx="60" cy="60" r="25" fill="#FFFFFF"/><ellipse cx="52" cy="55.5" rx="2.75" ry="4.25" fill="#33200F"/><ellipse cx="68" cy="55.5" rx="2.75" ry="4.25" fill="#33200F"/><path d="M 49.5 65 Q 60 75 70.5 65" fill="none" stroke="#33200F" stroke-width="3.25" stroke-linecap="round"/></svg>
     <p class="ttl nome">Dona Leda</p>
     <p class="def">A assistente de cuidado de quem envelhece</p>
     <p class="faz">Liga todo dia, conversa e avisa a família</p>
@@ -354,7 +360,7 @@ body.com-notas .notas{display:block}
     else if(e.key==='n'||e.key==='N'){document.body.classList.toggle('com-notas')}
     else if(e.key==='f'||e.key==='F'){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()} else {document.exitFullscreen()} }
   });
-  document.getElementById('palco').addEventListener('click',function(e){ var r=this.getBoundingClientRect(); mostra(e.clientX-r.left<r.width/3?atual-1:atual+1); });
+  document.getElementById('palco').addEventListener('click',function(e){ if(e.target.closest&&e.target.closest('a')) return; var r=this.getBoundingClientRect(); mostra(e.clientX-r.left<r.width/3?atual-1:atual+1); });
   setTimeout(function(){document.getElementById('dica').style.opacity=0},4000);
 })();
 </script>
