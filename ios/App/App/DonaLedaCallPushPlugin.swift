@@ -215,6 +215,13 @@ final class DonaLedaFamilyPushCoordinator: NSObject, UNUserNotificationCenterDel
                 }
                 self.pendingCallbacks.append(completion)
                 UIApplication.shared.registerForRemoteNotifications()
+                // Timeout de segurança (ex.: conta Apple gratuita ou simulador sem APNs) pra UI nunca travar.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 8) {
+                    guard !self.pendingCallbacks.isEmpty else { return }
+                    let callbacks = self.pendingCallbacks
+                    self.pendingCallbacks.removeAll()
+                    callbacks.forEach { $0(self.lastApnsToken) }
+                }
             }
         }
     }

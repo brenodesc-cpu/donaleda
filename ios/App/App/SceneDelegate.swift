@@ -3,11 +3,12 @@ import Capacitor
 import WebKit
 
 final class DonaLedaBridgeViewController: CAPBridgeViewController {
-    override open func capacitorDidLoad() {
+    override func capacitorDidLoad() {
+        super.capacitorDidLoad()
         bridge?.registerPluginInstance(DonaLedaCallPushPlugin())
     }
 
-    override open func webViewConfiguration(for instanceConfiguration: InstanceConfiguration) -> WKWebViewConfiguration {
+    override func webViewConfiguration(for instanceConfiguration: InstanceConfiguration) -> WKWebViewConfiguration {
         let config = super.webViewConfiguration(for: instanceConfiguration)
         // Garante vídeo inline e áudio WebRTC sem bloqueio de autoplay no WKWebView do iPhone.
         config.allowsInlineMediaPlayback = true
