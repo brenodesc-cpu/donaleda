@@ -65,9 +65,10 @@ export function montarSaudacao(
   const souEu = `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, sua assistente virtual.`;
   if (periodoDoDia(agora) === 'madrugada') {
     if (origem === 'familia') {
-      return `${souEu} ${primeiraMaiuscula(quem)} pediu pra eu ligar agora de madrugada — está tudo bem com ${pronome}?`;
+      return `${souEu} ${primeiraMaiuscula(quem)} pediu pra eu ligar agora de madrugada. Está tudo bem com ${pronome}?`;
     }
-    return `${souEu} Vi que ${pronome} está acordado agora de madrugada — está tudo bem com ${pronome}?`;
+    if (origem === 'idoso') return `${souEu} Que bom que ${pronome} me chamou. Está tudo bem com ${pronome} agora de madrugada?`;
+    return `${souEu} Liguei agora de madrugada pra saber se está tudo bem com ${pronome}.`;
   }
   if (origem === 'familia') {
     return `${souEu} ${primeiraMaiuscula(quem)} pediu pra eu ligar e saber como ${pronome} está.`;
@@ -193,7 +194,7 @@ export function montarRoteiroDoMomento(base: Base, agora: Date = new Date()): st
 
   const orientacaoPorPeriodo: Record<PeriodoDoDia, string> = {
     madrugada:
-      `- Agora é MADRUGADA (entre 0h e 5h). NÃO cobre rotina do dia (almoço, passeio, tarefas). Pergunte primeiro com calma por que ${pronome} está acordado essa hora (insônia, dor, mal-estar, sede, preocupação), acolha com voz tranquila e confira se está seguro.`,
+      `- Agora é MADRUGADA (entre 0h e 5h). NÃO cobre rotina do dia (almoço, passeio, tarefas). Pergunte primeiro com calma por que ${pronome} está sem dormir essa hora (insônia, dor, mal-estar, sede, preocupação), acolha com voz tranquila e confira se ${pronome} está bem.`,
     manha:
       `- Agora é MANHÃ. Foco natural: como dormiu, se já tomou café e os remédios da manhã, e JÁ AVISAR logo cedo os compromissos e remédios previstos pro resto do dia.`,
     tarde:
@@ -250,7 +251,9 @@ export function montarRoteiroDoMomento(base: Base, agora: Date = new Date()): st
     )
     .slice(-2);
   for (const a of alertasDeHoje) {
-    linhas.push(`- Ponto de atenção mais cedo hoje (${horaCurtaDeIso(a.criadoEm)}): ${a.texto} — retome esse assunto pra saber como está agora.`);
+    // As palavras da pessoa entre aspas ficam de fora: fala citada não vira instrução na ligação seguinte.
+    const semCitacao = a.texto.replace(/"[^"]*"/g, '').replace(/\s+/g, ' ').trim();
+    linhas.push(`- Ponto de atenção mais cedo hoje (${horaCurtaDeIso(a.criadoEm)}): ${semCitacao} — retome esse assunto pra saber como está agora.`);
   }
   if (typeof hoje.dor === 'number' && hoje.dor >= 4 && alertasDeHoje.length === 0) {
     linhas.push(
@@ -379,5 +382,5 @@ ${ferramentas}
 Calada uns dez segundos: pergunte numa frase curta se ainda está aí. Continuando calada, diga que fica esperando, sem repetir a última pergunta.
 
 # Despedida e limite de tempo
-A conversa ideal dura de 5 a 8 minutos, com teto máximo de 10 minutos (encerra sozinha). Quando já tiver coberto o essencial do momento ou receber um aviso interno de tempo perto do limite, conduza com carinho pra despedida sem cortar o assunto: valide o que ${pronome} contou, reforce o principal combinado, diga quando liga de novo e que ${familiar.nome} recebe um resumo de como ${pronome} está.`;
+A conversa ideal dura de 5 a 8 minutos, com teto máximo de 10 minutos (encerra sozinha). Quando já tiver coberto o essencial do momento ou receber um aviso interno de tempo perto do limite, conduza com carinho pra despedida sem cortar o assunto: valide o que ${pronome} contou, reforce o principal combinado, diga quando liga de novo e que ${familiar.nome} recebe um resumo de como ${pronome} está. Se ${pronome} estiver contando mal-estar, queda, golpe ou tristeza forte, não se despeça por causa do tempo: cuide disso primeiro.`;
 }
