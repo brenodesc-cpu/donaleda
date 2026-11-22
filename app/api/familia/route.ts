@@ -18,6 +18,7 @@ import {
   registrarEscalonamento,
 } from '@/lib/dados';
 import { depois, entradaDaFamilia, falar, tirarAssistente } from '@/lib/familiaNaLigacao';
+import { apagarAnexosDeDocumento } from '@/lib/documentos';
 import { dataPedida, GAVETAS, guardar, horaPedida, mudar } from '@/lib/memoria';
 import {
   dispararConviteDeChamada,
@@ -257,8 +258,15 @@ export async function POST(request: Request) {
   }
 
   if (acao.acao === 'apagar_documento' && typeof acao.documentoId === 'string') {
-    const apagou = await mudarBase(idosoId, (base) => apagarDocumento(base, acao.documentoId));
-    return NextResponse.json({ ok: apagou }, { status: apagou ? 200 : 404 });
+    const res = await mudarBase(idosoId, (base) => {
+      const caminho = (base.documentos ?? []).find((d) => d.id === acao.documentoId)?.arquivoCaminho;
+      const apagou = apagarDocumento(base, acao.documentoId);
+      return { apagou, caminho };
+    });
+    if (res.apagou && res.caminho) {
+      await apagarAnexosDeDocumento([res.caminho]);
+    }
+    return NextResponse.json({ ok: res.apagou }, { status: res.apagou ? 200 : 404 });
   }
 
   if (acao.acao === 'salvar_rede_de_apoio' && Array.isArray(acao.contatos)) {

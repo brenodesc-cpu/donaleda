@@ -4,7 +4,8 @@
 
 import { NextResponse } from 'next/server';
 import { arrumarHorarios } from '@/lib/chamadas';
-import { criarFicha } from '@/lib/dados';
+import { criarFicha, lerBase } from '@/lib/dados';
+import { apagarAnexosDeDocumento } from '@/lib/documentos';
 import { baseDeExemplo, baseNova, residencialDeExemplo } from '@/lib/exemplo';
 import { exigirFamilia, exigirIdosoDaFamilia } from '@/lib/sessao';
 import { clienteDoServidor } from '@/lib/supabase/servidor';
@@ -183,7 +184,11 @@ export async function DELETE(request: Request) {
   if (conferida.valor.papel !== 'responsavel') {
     return NextResponse.json({ ok: false, erro: 'sem_acesso' }, { status: 403 });
   }
+  const caminhos = await lerBase(id)
+    .then((b) => (b.documentos ?? []).map((d) => d.arquivoCaminho).filter((c): c is string => Boolean(c)))
+    .catch(() => [] as string[]);
   const { error } = await clienteDoServidor().from('idosos').delete().eq('id', id);
   if (error) return NextResponse.json({ ok: false, erro: 'banco' }, { status: 500 });
+  if (caminhos.length > 0) await apagarAnexosDeDocumento(caminhos);
   return NextResponse.json({ ok: true });
 }

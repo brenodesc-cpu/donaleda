@@ -478,13 +478,13 @@ export function normalizarTelefone(bruto: string): string {
 
 export function adicionarDocumento(
   base: Base,
-  entrada: Omit<DocumentoClinico, 'id' | 'criadoEm'>,
+  entrada: Omit<DocumentoClinico, 'id' | 'criadoEm'> & { id?: string },
   agora: Date = new Date(),
 ): DocumentoClinico {
   base.documentos ??= [];
   const doc: DocumentoClinico = {
-    id: randomUUID(),
     ...entrada,
+    id: entrada.id?.trim() || randomUUID(),
     criadoEm: agora.toISOString(),
   };
   base.documentos.push(doc);

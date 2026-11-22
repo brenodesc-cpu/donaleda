@@ -69,6 +69,7 @@ export default function PainelDaFamiliaPage() {
           <DiaDeHoje hoje={painel.hoje} />
           {resumo ? <ResumoDaConversa resumo={resumo} /> : null}
           <AgendaEDocumentos
+            idosoId={idoso.id}
             lembrancas={painel.lembrancas}
             documentos={painel.documentos ?? []}
             assistente={painel.assistente}

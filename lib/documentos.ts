@@ -4,7 +4,135 @@
 // CPF/RG e em linguagem simples, respeitando privacidade (LGPD) e segurança clínica
 // (nunca dá diagnóstico nem altera dose de remédio).
 
+import { clienteDoServidor } from './supabase/servidor';
 import type { Base, DocumentoClinico, TipoDeDocumento } from './tipos';
+
+const BUCKET_DOCUMENTOS = 'documentos-clinicos';
+const EXTENSAO_POR_MIME: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'application/pdf': 'pdf',
+};
+
+const globalAnexos = globalThis as typeof globalThis & {
+  __anexosDocumentosMemoria?: Map<string, { buffer: Buffer; mimeType: string }>;
+  __bucketDocumentosPronto?: boolean;
+};
+
+function mapaMemoria() {
+  return (globalAnexos.__anexosDocumentosMemoria ??= new Map());
+}
+
+function usarAnexosEmMemoria(): boolean {
+  return process.env.LIA_DADOS === 'memoria' || process.env.VITEST === 'true';
+}
+
+function nomeArquivoSeguro(nome: string | undefined, mimeType: string): string {
+  const ext = EXTENSAO_POR_MIME[mimeType] ?? 'bin';
+  const limpo = (nome ?? '')
+    .replace(/[^a-zA-Z0-9._ -]/g, '')
+    .trim()
+    .slice(0, 80);
+  if (!limpo) return `documento.${ext}`;
+  return limpo.includes('.') ? limpo : `${limpo}.${ext}`;
+}
+
+async function garantirBucketPrivado(): Promise<void> {
+  if (globalAnexos.__bucketDocumentosPronto) return;
+  const banco = clienteDoServidor();
+  const { error } = await banco.storage.createBucket(BUCKET_DOCUMENTOS, {
+    public: false,
+    fileSizeLimit: TAMANHO_MAXIMO_BYTES,
+    allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'],
+  });
+  // Se já existe (409 / "already exists"), segue normalmente.
+  if (!error || /already exists|duplicate/i.test(error.message)) {
+    globalAnexos.__bucketDocumentosPronto = true;
+  }
+}
+
+/**
+ * Salva o anexo original (foto ou PDF) no bucket privado do Supabase Storage
+ * (`documentos-clinicos`, public: false) para a família poder revisitar depois.
+ * Retorna o caminho salvo ou null se o storage não estiver disponível.
+ */
+export async function salvarAnexoDeDocumento(entrada: {
+  idosoId: string;
+  documentoId: string;
+  buffer: Buffer;
+  mimeType: string;
+  nomeOriginal?: string;
+}): Promise<{ caminho: string; nome: string } | null> {
+  const ext = EXTENSAO_POR_MIME[entrada.mimeType];
+  if (!ext) return null;
+  const caminho = `${entrada.idosoId}/${entrada.documentoId}.${ext}`;
+  const nome = nomeArquivoSeguro(entrada.nomeOriginal, entrada.mimeType);
+
+  if (usarAnexosEmMemoria()) {
+    mapaMemoria().set(caminho, { buffer: Buffer.from(entrada.buffer), mimeType: entrada.mimeType });
+    return { caminho, nome };
+  }
+
+  try {
+    await garantirBucketPrivado();
+    const { error } = await clienteDoServidor()
+      .storage.from(BUCKET_DOCUMENTOS)
+      .upload(caminho, entrada.buffer, {
+        contentType: entrada.mimeType,
+        upsert: true,
+      });
+    if (error) {
+      console.error('[documentos] não consegui salvar anexo no storage:', error.message);
+      return null;
+    }
+    return { caminho, nome };
+  } catch (erro) {
+    console.error('[documentos] falha ao salvar anexo:', erro);
+    return null;
+  }
+}
+
+/** Lê o binário do anexo privado (usado apenas em GET /api/familia/documento já autenticado). */
+export async function lerAnexoDeDocumento(
+  caminho: string,
+  mimePadrao: string,
+): Promise<{ buffer: Buffer; mimeType: string } | null> {
+  if (!caminho || caminho.includes('..')) return null;
+
+  if (usarAnexosEmMemoria()) {
+    return mapaMemoria().get(caminho) ?? null;
+  }
+
+  try {
+    const { data, error } = await clienteDoServidor()
+      .storage.from(BUCKET_DOCUMENTOS)
+      .download(caminho);
+    if (error || !data) return null;
+    const buffer = Buffer.from(await data.arrayBuffer());
+    return { buffer, mimeType: data.type || mimePadrao };
+  } catch {
+    return null;
+  }
+}
+
+/** Remove um ou mais anexos do bucket privado (LGPD: eliminação junto com o documento ou idoso). */
+export async function apagarAnexosDeDocumento(caminhos: string[]): Promise<void> {
+  const validos = caminhos.filter((c) => c && !c.includes('..'));
+  if (validos.length === 0) return;
+
+  if (usarAnexosEmMemoria()) {
+    const m = mapaMemoria();
+    for (const c of validos) m.delete(c);
+    return;
+  }
+
+  try {
+    await clienteDoServidor().storage.from(BUCKET_DOCUMENTOS).remove(validos);
+  } catch {
+    // Remoção best-effort no storage: o registro na ficha já foi apagado.
+  }
+}
 
 export interface CompromissoExtraido {
   texto: string;

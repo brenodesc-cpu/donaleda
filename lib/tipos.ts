@@ -215,7 +215,7 @@ export interface AparelhoPush {
 
 export type TipoDeDocumento = 'exame' | 'consulta' | 'receita';
 
-/** Resumo estruturado de exame, consulta ou receita (o arquivo original é descartado após leitura). */
+/** Resumo estruturado de exame, consulta ou receita + referência ao anexo privado da família. */
 export interface DocumentoClinico {
   id: string;
   titulo: string;
@@ -226,6 +226,12 @@ export interface DocumentoClinico {
   resumoSimples: string;
   /** Preparo ou observação explícita do documento (ex.: jejum de 8h). */
   orientacao?: string;
+  /** Caminho interno no bucket privado do Supabase Storage (acesso restrito à família). */
+  arquivoCaminho?: string;
+  /** MIME real validado (image/jpeg, image/png, image/webp ou application/pdf). */
+  arquivoMime?: string;
+  /** Nome original sanitizado pra exibir/baixar no painel. */
+  arquivoNome?: string;
   criadoEm: string;
 }
 

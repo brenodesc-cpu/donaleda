@@ -445,4 +445,32 @@ describe('gestão de exames, calendário de longo prazo e escalonamento em massa
     expect(instrucoes).toContain('Hoje cedo disse que o remédio da pressão está no fim.');
     expect(instrucoes).not.toContain('SEGREDO DE OUTRA PESSOA NÃO PODE ENTRAR');
   });
+
+  it('salva, lê e apaga anexo privado de exame/PDF para revisita restrita à família', async () => {
+    const {
+      salvarAnexoDeDocumento,
+      lerAnexoDeDocumento,
+      apagarAnexosDeDocumento,
+    } = await import('@/lib/documentos');
+
+    const pdfBytes = Buffer.from('%PDF-1.7\nexame de sangue', 'ascii');
+    const salvo = await salvarAnexoDeDocumento({
+      idosoId: 'idoso-teste',
+      documentoId: 'doc-1',
+      buffer: pdfBytes,
+      mimeType: 'application/pdf',
+      nomeOriginal: 'hemograma.pdf',
+    });
+    expect(salvo).toEqual({
+      caminho: 'idoso-teste/doc-1.pdf',
+      nome: 'hemograma.pdf',
+    });
+
+    const lido = await lerAnexoDeDocumento(salvo!.caminho, 'application/pdf');
+    expect(lido?.mimeType).toBe('application/pdf');
+    expect(lido?.buffer.equals(pdfBytes)).toBe(true);
+
+    await apagarAnexosDeDocumento([salvo!.caminho]);
+    expect(await lerAnexoDeDocumento(salvo!.caminho, 'application/pdf')).toBeNull();
+  });
 });

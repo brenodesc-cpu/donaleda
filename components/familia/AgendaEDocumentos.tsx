@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react';
-import { Calendar, ChevronLeft, ChevronRight, FileText, Plus, Trash2, Upload } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, ExternalLink, FileText, Plus, Trash2, Upload } from 'lucide-react';
 import type { CategoriaDeLembranca, DocumentoClinico, Lembranca } from '@/lib/tipos';
 import {
   CLASSE_DO_BOTAO_PRINCIPAL,
@@ -14,6 +14,7 @@ import { dataDeBrasilia, gavetaDe, quandoDoCompromisso } from './formatos';
 import type { CamposDaLembranca, ResultadoDaLembranca } from './usePainel';
 
 interface AgendaEDocumentosProps {
+  idosoId: string;
   lembrancas: Lembranca[];
   documentos: DocumentoClinico[];
   assistente: string;
@@ -58,6 +59,7 @@ function isoDe(ano: number, mes: number, dia: number): string {
  * (lidos em memória via IA multimodal pra Dona Leda explicar de forma simples e avisar na semana).
  */
 export function AgendaEDocumentos({
+  idosoId,
   lembrancas,
   documentos,
   assistente,
@@ -170,7 +172,7 @@ export function AgendaEDocumentos({
           : '';
       setAvisoDoc({
         tipo: 'ok',
-        texto: `Documento lido e salvo sem guardar a imagem original.${extra}`,
+        texto: `Documento lido e salvo com acesso restrito à família.${extra}`,
       });
     } else {
       setAvisoDoc({ tipo: 'erro', texto: res.erro });
@@ -381,9 +383,9 @@ export function AgendaEDocumentos({
           </h3>
         </div>
         <p className="text-base text-muted-foreground">
-          Tire foto ou anexe o PDF de um exame ou pedido médico. A IA extrai um resumo em palavras
-          simples (sem guardar a imagem nem CPF) pra {assistente} ajudar {tratamento} a entender —
-          sempre sem dar diagnóstico.
+          Tire foto ou anexe o PDF de um exame ou pedido médico. O anexo fica guardado com acesso
+          restrito à família pra você revisitar quando quiser, e a {assistente} recebe um resumo em
+          palavras simples (sem CPF/RG e sempre sem dar diagnóstico).
         </p>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -448,6 +450,19 @@ export function AgendaEDocumentos({
                   <p className="text-sm font-medium text-muted-foreground">
                     Preparo / nota: {doc.orientacao}
                   </p>
+                ) : null}
+                {doc.arquivoCaminho ? (
+                  <div className="pt-1">
+                    <a
+                      href={`/api/familia/documento?idoso=${encodeURIComponent(idosoId)}&id=${encodeURIComponent(doc.id)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm font-semibold text-foreground hover:bg-muted"
+                    >
+                      <ExternalLink aria-hidden="true" className="h-4 w-4" />
+                      Abrir anexo{doc.arquivoNome ? ` (${doc.arquivoNome})` : ''}
+                    </a>
+                  </div>
                 ) : null}
               </li>
             ))}
