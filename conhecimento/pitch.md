@@ -116,7 +116,7 @@ A demonstração entra entre o slide 6 e o 7. A cena é uma só: a dona Helena, 
 | Tempo | Na tela | Quem fala |
 |---|---|---|
 | 0:00 a 0:12 | O slide 6, e depois o painel da Marina | Breno: "A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel." Troca pro painel, toca em "Ligar agora" e para de falar |
-| 0:12 a 0:20 | O celular toca, o disco gira, "Dona Leda está ligando" | A dona Helena toca em Atender e espera. Uns 2 segundos depois a Dona Leda cumprimenta, se apresenta como assistente virtual e dá o aviso de privacidade |
+| 0:12 a 0:20 | O celular toca, o disco gira, "Dona Leda está ligando" | A dona Helena toca em Atender e espera. Uns 3 segundos depois a Dona Leda cumprimenta, se apresenta como assistente virtual e dá o aviso de privacidade. Se a dona Helena falar por cima da saudação, ela para em pouco mais de 1 segundo e responde, conferido no site às 23h36 de 21/11 |
 | 0:20 a 0:40 | A ligação | A Dona Leda pergunta como ela dormiu. Dona Helena: "Dormi mais ou menos, acordei duas vezes." |
 | 0:40 a 0:55 | A ligação | Quando a Dona Leda estiver no meio da próxima pergunta, a dona Helena fala por cima: "Espera, deixa eu te contar uma coisa." Ela tem que calar e escutar |
 | 0:55 a 1:15 | A ligação | Dona Helena: "Hoje de manhã me ligou um moço dizendo que era o meu neto e pediu um Pix." A Dona Leda diz pra não passar nada, falar com a Marina antes, e que vai avisar a Marina |
