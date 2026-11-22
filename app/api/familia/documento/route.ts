@@ -1,5 +1,5 @@
 // Recebe foto (JPEG/PNG/WebP) ou PDF de exame, consulta ou receita anexado pela família,
-// lê em memória com Gemini 2.5 Flash (sem salvar o arquivo bruto nem CPF/RG), guarda o
+// lê em memória com o Gemini (sem salvar o arquivo bruto nem CPF/RG), guarda o
 // resumo em linguagem simples na ficha do idoso e já agenda compromissos encontrados.
 
 import { NextResponse } from 'next/server';

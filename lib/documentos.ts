@@ -23,7 +23,9 @@ export interface ResultadoDaLeituraDeDocumento {
 
 const MIME_ACEITOS = new Set(['image/jpeg', 'image/png', 'image/webp', 'application/pdf']);
 export const TAMANHO_MAXIMO_BYTES = 6 * 1024 * 1024;
-const MODELO_DOCUMENTOS = 'gemini-2.5-flash';
+// O mesmo modelo da leitura do fim da ligação (variável LIA_MODELO_EXTRACAO na Vercel).
+// O gemini-2.5-flash responde 404 nesta chave (21/11).
+const MODELO_DOCUMENTOS = () => process.env.LIA_MODELO_EXTRACAO?.trim() || 'gemini-3.1-flash-lite';
 const TIMEOUT_MS = 18_000;
 
 export function mimeAceito(mime: string): boolean {
@@ -122,10 +124,10 @@ Regras obrigatórias de privacidade e segurança:
 ${nota ? `Observação da família sobre este anexo: "${nota}"` : ''}`;
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODELO_DOCUMENTOS}:generateContent?key=${encodeURIComponent(chave)}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODELO_DOCUMENTOS()}:generateContent`;
     const resposta = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': chave },
       body: JSON.stringify({
         contents: [
           {
