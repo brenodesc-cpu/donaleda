@@ -535,13 +535,17 @@ export function registrarAparelhoFamiliaPush(
   if (!temToken && !temVoip) return false;
   const chave = temToken ? limpo : voipLimpo!;
   base.aparelhosFamiliaPush ??= [];
+  const anterior = base.aparelhosFamiliaPush.find(
+    (a) => a.token === chave || (temVoip && a.voipToken === voipLimpo),
+  );
+  const voipFinal = temVoip ? voipLimpo : anterior?.voipToken;
   const semAntigo = base.aparelhosFamiliaPush.filter(
-    (a) => a.token !== chave && (!temVoip || a.voipToken !== voipLimpo),
+    (a) => a.token !== chave && (!voipFinal || a.voipToken !== voipFinal),
   );
   semAntigo.push({
     plataforma,
     token: chave,
-    ...(temVoip ? { voipToken: voipLimpo } : {}),
+    ...(voipFinal ? { voipToken: voipFinal } : {}),
     atualizadoEm: agora.toISOString(),
   });
   base.aparelhosFamiliaPush = semAntigo.slice(-10);

@@ -174,6 +174,115 @@ async function enviarFcmV1(
   return resposta.ok;
 }
 
+interface RespostaApns {
+  ok: boolean;
+  status: number;
+  reason?: string;
+}
+
+function enviarApnsHttp2(
+  host: string,
+  path: string,
+  headers: Record<string, string>,
+  body: string,
+): Promise<RespostaApns> {
+  return new Promise<RespostaApns>((resolve) => {
+    const client = http2.connect(host);
+    const timer = setTimeout(() => {
+      client.close();
+      resolve({ ok: false, status: 0 });
+    }, TIMEOUT_MS);
+
+    client.on('error', () => {
+      clearTimeout(timer);
+      resolve({ ok: false, status: 0 });
+    });
+
+    const req = client.request({
+      ':method': 'POST',
+      ':path': path,
+      ...headers,
+    });
+
+    let status = 0;
+    const chunks: Buffer[] = [];
+    req.on('response', (resHeaders) => {
+      status = Number(resHeaders[':status'] ?? 0);
+    });
+    req.on('data', (chunk: Buffer | string) => {
+      chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+    });
+    req.on('end', () => {
+      clearTimeout(timer);
+      client.close();
+      let reason: string | undefined;
+      if (chunks.length > 0) {
+        try {
+          const parsed = JSON.parse(Buffer.concat(chunks).toString('utf8')) as { reason?: unknown };
+          if (typeof parsed.reason === 'string') reason = parsed.reason;
+        } catch {
+          // Resposta sem JSON
+        }
+      }
+      resolve({ ok: status >= 200 && status < 300, status, reason });
+    });
+    req.on('error', () => {
+      clearTimeout(timer);
+      client.close();
+      resolve({ ok: false, status: 0 });
+    });
+
+    req.end(body);
+  });
+}
+
+function criarJwtApns(keyId: string, teamId: string, privateKey: string): string {
+  const cabecalho = base64Url(JSON.stringify({ alg: 'ES256', kid: keyId }));
+  const corpo = base64Url(JSON.stringify({ iss: teamId, iat: Math.floor(Date.now() / 1000) }));
+  const assinador = createSign('SHA256');
+  assinador.update(`${cabecalho}.${corpo}`);
+  assinador.end();
+  const assinatura = base64Url(
+    assinador.sign({ key: privateKey, dsaEncoding: 'ieee-p1363' }),
+  );
+  return `${cabecalho}.${corpo}.${assinatura}`;
+}
+
+/**
+ * Envia ao host principal (prod ou sandbox conforme APNS_SANDBOX) e, se a Apple
+ * devolver 400 BadDeviceToken/EnvironmentMismatch (ex.: iPhone instalado via Xcode USB
+ * conversando com servidor em produção, ou vice-versa), tenta automaticamente o outro ambiente.
+ */
+async function enviarApnsComFallbackDeAmbiente(
+  deviceToken: string,
+  headers: Record<string, string>,
+  body: string,
+): Promise<boolean> {
+  const primario =
+    process.env.APNS_SANDBOX === '1'
+      ? 'https://api.sandbox.push.apple.com'
+      : 'https://api.push.apple.com';
+  const secundario =
+    primario === 'https://api.sandbox.push.apple.com'
+      ? 'https://api.push.apple.com'
+      : 'https://api.sandbox.push.apple.com';
+  const path = `/3/device/${encodeURIComponent(deviceToken)}`;
+
+  const primeiro = await enviarApnsHttp2(primario, path, headers, body);
+  if (primeiro.ok) return true;
+
+  if (
+    primeiro.status === 400 &&
+    (primeiro.reason === 'BadDeviceToken' ||
+      primeiro.reason === 'DeviceTokenNotForTopic' ||
+      primeiro.reason === 'EnvironmentMismatch')
+  ) {
+    const segundo = await enviarApnsHttp2(secundario, path, headers, body);
+    return segundo.ok;
+  }
+  return false;
+}
+
 /** Envia PushKit VoIP via APNs HTTP/2 para acordar CallKit no iOS mesmo com app fechado. */
 async function enviarApnsVoip(
   deviceToken: string,
@@ -185,66 +294,23 @@ async function enviarApnsVoip(
   if (!keyId || !teamId || !privateKey) return false;
 
   const bundleId = process.env.APNS_BUNDLE_ID?.trim() || 'app.donaleda';
-  const host =
-    process.env.APNS_SANDBOX === '1'
-      ? 'https://api.sandbox.push.apple.com'
-      : 'https://api.push.apple.com';
+  const jwt = criarJwtApns(keyId, teamId, privateKey);
 
-  const cabecalho = base64Url(JSON.stringify({ alg: 'ES256', kid: keyId }));
-  const corpo = base64Url(JSON.stringify({ iss: teamId, iat: Math.floor(Date.now() / 1000) }));
-  const assinador = createSign('SHA256');
-  assinador.update(`${cabecalho}.${corpo}`);
-  assinador.end();
-  const assinatura = base64Url(
-    assinador.sign({ key: privateKey, dsaEncoding: 'ieee-p1363' }),
-  );
-  const jwt = `${cabecalho}.${corpo}.${assinatura}`;
-
-  return new Promise<boolean>((resolve) => {
-    const client = http2.connect(host);
-    const timer = setTimeout(() => {
-      client.close();
-      resolve(false);
-    }, TIMEOUT_MS);
-
-    client.on('error', () => {
-      clearTimeout(timer);
-      resolve(false);
-    });
-
-    const req = client.request({
-      ':method': 'POST',
-      ':path': `/3/device/${encodeURIComponent(deviceToken)}`,
+  return enviarApnsComFallbackDeAmbiente(
+    deviceToken,
+    {
       authorization: `bearer ${jwt}`,
       'apns-topic': `${bundleId}.voip`,
       'apns-push-type': 'voip',
       'apns-priority': '10',
       'apns-expiration': String(Math.floor(Date.now() / 1000) + 45),
       'content-type': 'application/json',
-    });
-
-    let status = 0;
-    req.on('response', (headers) => {
-      status = Number(headers[':status'] ?? 0);
-    });
-    req.on('end', () => {
-      clearTimeout(timer);
-      client.close();
-      resolve(status >= 200 && status < 300);
-    });
-    req.on('error', () => {
-      clearTimeout(timer);
-      client.close();
-      resolve(false);
-    });
-
-    req.end(
-      JSON.stringify({
-        aps: { 'content-available': 1 },
-        ...dados,
-      }),
-    );
-  });
+    },
+    JSON.stringify({
+      aps: { 'content-available': 1 },
+      ...dados,
+    }),
+  );
 }
 
 /** Envia notificação push padrão (Alert) via APNs HTTP/2 para o iPhone do familiar responsável. */
@@ -261,69 +327,26 @@ async function enviarApnsAlerta(
   if (!keyId || !teamId || !privateKey) return false;
 
   const bundleId = process.env.APNS_BUNDLE_ID?.trim() || 'app.donaleda';
-  const host =
-    process.env.APNS_SANDBOX === '1'
-      ? 'https://api.sandbox.push.apple.com'
-      : 'https://api.push.apple.com';
+  const jwt = criarJwtApns(keyId, teamId, privateKey);
 
-  const cabecalho = base64Url(JSON.stringify({ alg: 'ES256', kid: keyId }));
-  const corpo = base64Url(JSON.stringify({ iss: teamId, iat: Math.floor(Date.now() / 1000) }));
-  const assinador = createSign('SHA256');
-  assinador.update(`${cabecalho}.${corpo}`);
-  assinador.end();
-  const assinatura = base64Url(
-    assinador.sign({ key: privateKey, dsaEncoding: 'ieee-p1363' }),
-  );
-  const jwt = `${cabecalho}.${corpo}.${assinatura}`;
-
-  return new Promise<boolean>((resolve) => {
-    const client = http2.connect(host);
-    const timer = setTimeout(() => {
-      client.close();
-      resolve(false);
-    }, TIMEOUT_MS);
-
-    client.on('error', () => {
-      clearTimeout(timer);
-      resolve(false);
-    });
-
-    const req = client.request({
-      ':method': 'POST',
-      ':path': `/3/device/${encodeURIComponent(deviceToken)}`,
+  return enviarApnsComFallbackDeAmbiente(
+    deviceToken,
+    {
       authorization: `bearer ${jwt}`,
       'apns-topic': bundleId,
       'apns-push-type': 'alert',
       'apns-priority': urgente ? '10' : '5',
       'content-type': 'application/json',
-    });
-
-    let status = 0;
-    req.on('response', (headers) => {
-      status = Number(headers[':status'] ?? 0);
-    });
-    req.on('end', () => {
-      clearTimeout(timer);
-      client.close();
-      resolve(status >= 200 && status < 300);
-    });
-    req.on('error', () => {
-      clearTimeout(timer);
-      client.close();
-      resolve(false);
-    });
-
-    req.end(
-      JSON.stringify({
-        aps: {
-          alert: { title: titulo, body: mensagem },
-          sound: 'default',
-          'interruption-level': urgente ? 'time-sensitive' : 'active',
-        },
-        ...dados,
-      }),
-    );
-  });
+    },
+    JSON.stringify({
+      aps: {
+        alert: { title: titulo, body: mensagem },
+        sound: 'default',
+        'interruption-level': urgente ? 'time-sensitive' : 'active',
+      },
+      ...dados,
+    }),
+  );
 }
 
 /**
@@ -386,13 +409,18 @@ export async function notificarFamiliaPorPush(
   const tarefaIos = (async () => {
     if (ioss.length === 0) return;
     const envios = await Promise.all(
-      ioss.map((a) => {
+      ioss.map(async (a) => {
         // Em emergência ao vivo com token PushKit VoIP cadastrado, aciona CallKit em tela cheia
         // tocando igual ligação de WhatsApp no iPhone, mesmo bloqueado ou fechado.
+        // Se o VoIP falhar (ex.: build sem PushKit), cai pro alerta APNs normal pra nunca deixar sem aviso.
         if (aviso.entrarAoVivo && a.voipToken) {
-          return enviarApnsVoip(a.voipToken, payload).catch(() => false);
+          const okVoip = await enviarApnsVoip(a.voipToken, payload).catch(() => false);
+          if (okVoip) return true;
         }
-        return enviarApnsAlerta(a.token, payload.titulo, payload.mensagem, urgente, payload).catch(() => false);
+        if (a.token && a.token !== a.voipToken) {
+          return enviarApnsAlerta(a.token, payload.titulo, payload.mensagem, urgente, payload).catch(() => false);
+        }
+        return false;
       }),
     );
     apnsEnviados = envios.filter(Boolean).length;

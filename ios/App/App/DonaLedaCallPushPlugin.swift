@@ -103,8 +103,11 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
         guard type == .voIP else { return }
         let token = pushCredentials.token.map { String(format: "%02x", $0) }.joined()
         guard !token.isEmpty else { return }
-        lastVoipToken = token
-        activePlugin?.emitToken(token)
+        DispatchQueue.main.async {
+            self.lastVoipToken = token
+            self.activePlugin?.emitToken(token)
+            DonaLedaFamilyPushCoordinator.shared.didUpdateVoipToken(token)
+        }
     }
 
     func pushRegistry(
@@ -166,12 +169,15 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
             }
             return
         }
-        let chamadaId = activeCalls[action.callUUID]
-        if let id = chamadaId {
+        if let id = activeCalls.removeValue(forKey: action.callUUID) {
             sendCallResponseInBackground(acao: "atender", chamadaId: id)
             dispatchAction(acao: "atender", chamadaId: id)
         }
         action.fulfill()
+        // Libera a sessão CallKit depois que o WebView assume a ligação pra não travar o microfone da Agora RTC.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            self.provider.reportCall(with: action.callUUID, endedAt: Date(), reason: .remoteEnded)
+        }
     }
 
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
@@ -197,10 +203,12 @@ final class DonaLedaVoipCoordinator: NSObject, PKPushRegistryDelegate, CXProvide
     }
 
     private func dispatchAction(acao: String, chamadaId: String) {
-        if let plugin = activePlugin {
-            plugin.emitCallAction(acao: acao, chamadaId: chamadaId)
-        } else {
-            pendingAction = (acao, chamadaId)
+        DispatchQueue.main.async {
+            if let plugin = self.activePlugin, plugin.hasListeners("callAction") {
+                plugin.emitCallAction(acao: acao, chamadaId: chamadaId)
+            } else {
+                self.pendingAction = (acao, chamadaId)
+            }
         }
     }
 }
@@ -228,11 +236,21 @@ final class DonaLedaFamilyPushCoordinator: NSObject, UNUserNotificationCenterDel
     func dispatchRoute(_ rota: String) {
         guard rota.hasPrefix("/familia") else { return }
         DispatchQueue.main.async {
-            if let plugin = self.activePlugin {
+            if let plugin = self.activePlugin, plugin.hasListeners("familyDeepLink") {
                 plugin.emitFamilyDeepLink(rota)
             } else {
                 self.pendingRoute = rota
             }
+        }
+    }
+
+    func didUpdateVoipToken(_ voipToken: String) {
+        guard !voipToken.isEmpty else { return }
+        DispatchQueue.main.async {
+            self.activePlugin?.emitFamilyToken(
+                self.lastApnsToken ?? voipToken,
+                voipToken: voipToken
+            )
         }
     }
 
@@ -266,7 +284,10 @@ final class DonaLedaFamilyPushCoordinator: NSObject, UNUserNotificationCenterDel
         guard !token.isEmpty else { return }
         DispatchQueue.main.async {
             self.lastApnsToken = token
-            self.activePlugin?.emitFamilyToken(token)
+            self.activePlugin?.emitFamilyToken(
+                token,
+                voipToken: DonaLedaVoipCoordinator.shared.lastVoipToken
+            )
             let callbacks = self.pendingCallbacks
             self.pendingCallbacks.removeAll()
             callbacks.forEach { $0(token) }
@@ -302,13 +323,7 @@ final class DonaLedaFamilyPushCoordinator: NSObject, UNUserNotificationCenterDel
     ) {
         let userInfo = response.notification.request.content.userInfo
         if let rota = userInfo["urlDestino"] as? String, rota.hasPrefix("/familia") {
-            DispatchQueue.main.async {
-                if let plugin = self.activePlugin {
-                    plugin.emitFamilyDeepLink(rota)
-                } else {
-                    self.pendingRoute = rota
-                }
-            }
+            dispatchRoute(rota)
         }
         completionHandler()
     }
@@ -391,11 +406,15 @@ public class DonaLedaCallPushPlugin: CAPPlugin, CAPBridgedPlugin {
         ])
     }
 
-    func emitFamilyToken(_ token: String) {
-        notifyListeners("familyTokenReceived", data: [
+    func emitFamilyToken(_ token: String, voipToken: String? = nil) {
+        var data: [String: Any] = [
             "token": token,
             "plataforma": "ios",
-        ])
+        ]
+        if let voip = voipToken, !voip.isEmpty {
+            data["voipToken"] = voip
+        }
+        notifyListeners("familyTokenReceived", data: data)
     }
 
     func emitCallAction(acao: String, chamadaId: String) {

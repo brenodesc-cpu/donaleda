@@ -73,6 +73,45 @@ export async function registrarPushDaFamiliaNativo(): Promise<TokenNativo | null
 }
 
 /**
+ * Escuta atualizações assíncronas de token APNs/VoIP/FCM no app nativo da família
+ * (ex.: token VoIP do PushKit chegando segundos depois do botão de ativar notificações).
+ */
+export function escutarAtualizacaoPushDaFamiliaNativo(
+  onToken: (dados: TokenNativo) => void,
+): () => void {
+  if (!Capacitor.isNativePlatform()) return () => undefined;
+  let ativo = true;
+  let handle: PluginListenerHandle | null = null;
+
+  void (async () => {
+    try {
+      handle = await plugin.addListener('familyTokenReceived', (d) => {
+        if (
+          !ativo ||
+          !d ||
+          (d.plataforma !== 'android' && d.plataforma !== 'ios') ||
+          (!d.token && !d.voipToken)
+        ) {
+          return;
+        }
+        onToken({
+          token: d.token ?? d.voipToken ?? '',
+          ...(d.voipToken ? { voipToken: d.voipToken } : {}),
+          plataforma: d.plataforma,
+        });
+      });
+    } catch {
+      // Versão antiga do app sem este listener.
+    }
+  })();
+
+  return () => {
+    ativo = false;
+    void handle?.remove().catch(() => undefined);
+  };
+}
+
+/**
  * Escuta toques em notificações urgentes da família no Android/iOS para abrir
  * direto a sala da ligação ao vivo (`/familia/ligacao?idoso=...`).
  */

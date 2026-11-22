@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { escutarRotaDaFamiliaNativa } from '@/lib/pushNativo';
+import {
+  escutarAtualizacaoPushDaFamiliaNativo,
+  escutarRotaDaFamiliaNativa,
+} from '@/lib/pushNativo';
 import type {
   Alerta,
   CategoriaDeLembranca,
@@ -95,7 +98,7 @@ export function usePainel(idosoId: string | null) {
   const [atenderSozinhoAqui, setAtenderSozinhoAqui] = useState<boolean | null>(null);
   const [pedidoDeLigacao, setPedidoDeLigacao] = useState<PedidoDeLigacao>('parado');
 
-  const buscarAgora = useRef<() => Promise<void>>(async () => {});
+  const buscarAgora = useRef<() => Promise<void>>(async () => { });
   const versaoDosHorarios = useRef(0);
   const versaoDoAtender = useRef(0);
   const alertasNotificados = useRef<Set<string> | null>(null);
@@ -337,6 +340,16 @@ export function usePainel(idosoId: string | null) {
     [idosoId, mandar],
   );
 
+  // Sincroniza automaticamente no servidor se o token VoIP/APNs do iPhone chegar segundos depois
+  // de o familiar ativar as notificações ou rotacionar em segundo plano.
+  const notificacoesAtivas = Boolean(bruto?.notificacoesFamiliaAtivas);
+  useEffect(() => {
+    if (!idosoId || !notificacoesAtivas) return;
+    return escutarAtualizacaoPushDaFamiliaNativo((dados) => {
+      void registrarPushFamilia(dados.plataforma, dados.token, dados.voipToken);
+    });
+  }, [idosoId, notificacoesAtivas, registrarPushFamilia]);
+
   // Toca sinal sonoro curto e dispara notificação clicável no Web quando chega alerta/convite novo.
   useEffect(() => {
     if (!bruto) return;
@@ -429,8 +442,8 @@ export function usePainel(idosoId: string | null) {
         vistosAqui.size === 0
           ? bruto.alertas
           : bruto.alertas.map((alerta) =>
-              vistosAqui.has(alerta.id) ? vistoAqui(alerta) : alerta,
-            ),
+            vistosAqui.has(alerta.id) ? vistoAqui(alerta) : alerta,
+          ),
     };
   }, [bruto, vistosAqui, horariosAqui, atenderSozinhoAqui]);
 
