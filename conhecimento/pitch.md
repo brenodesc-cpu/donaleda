@@ -1,100 +1,98 @@
 # Pitch da Dona Leda
 
-Versão de 21/11/2026, às 21h, na especificação final da central (20h50): o palco escuro, 10 slides em que cada um pontua num critério da banca, uma fala de 180 segundos e a demonstração de 2 minutos entre o slide 5 e o 6. O Breno fala sozinho. Escrita a partir de `proposta-de-valor.md`, `tese.md`, `custos.md`, `validacao.md`, `decisoes.md`, `teste-de-voz.md`, `marca.md` e `hackathon.md`, e das notas da YC sobre pitch e demo day no cérebro do Breno. O que está entre colchetes sai das ligações com os avós, da conversa do servidor ou de uma decisão do Breno, e nunca é preenchido com estimativa.
+Versão de 21/11/2026, às 21h30, na versão 2 da especificação da central (21h10): o palco escuro, a narrativa aprovada em `proposta-de-valor.md`, a avó na abertura, o fluxo com as telas de verdade e a visão do segundo cérebro no fim, uma fala de 180 segundos e a demonstração de 2 minutos entre o slide 6 e o 7. O Breno fala sozinho. Escrita a partir de `proposta-de-valor.md`, `tese.md`, `custos.md`, `validacao.md`, `decisoes.md`, `teste-de-voz.md`, `marca.md` e `hackathon.md`, e das notas da YC sobre pitch e demo day no cérebro do Breno. O que está entre colchetes sai das ligações com os avós, da conversa do servidor ou de uma decisão do Breno, e nunca é preenchido com estimativa.
 
 A banca dá nota assim: voz 25%, técnica e uso da Agora 25%, problema 20%, inovação 15%, validação 10% e apresentação 5%. O pitch tem até 3 minutos de fala, até 2 de demonstração e até 3 de perguntas.
 
 ## O que falta pra fechar
 
-- **Os fatos da avó:** a idade, a cidade e um momento real em que a família quis saber como ela estava e não soube.
+- **A avó:** a foto ou o desenho dela, a idade, a cidade e a história verdadeira em no máximo 25 palavras.
 - **Os números das ligações com os avós**, até 9h30 de domingo.
 - **O tempo de resposta e o tempo pra calar**, medidos no ensaio das 10h30 ou pela conversa do servidor depois das 21h30, e a lista do que da Agora está em uso de verdade.
 - **As decisões do Breno:** quem faz a voz da dona Helena, o pedido à banca e o QR Code pros jurados.
 
 ## Os 10 slides
 
-Especificação final da central, às 20h50: o palco escuro, um ponto por slide, letra muito grande, o amarelo só na palavra ou no número que importa, a fonte numa legenda pequena e sem o fio do telefone embaixo. Cada slide existe pra pontuar num critério da banca. O deck está em `recursos/pitch/slides.html` (setas pra passar, F pra tela cheia), com o PDF 16:9 ao lado em `slides.pdf`.
+Versão 2 da especificação, das 21h10, depois de o Breno reprovar o conteúdo da anterior ("está um pitch de IA", sem os benefícios e sem o potencial de longo prazo). O estilo é o palco escuro. Cada slide tem uma imagem ou um número e no máximo umas 6 palavras, sem título que só nomeia o slide, com a fonte numa legenda minúscula. O deck está em `recursos/pitch/slides.html` (setas pra passar, F pra tela cheia, N pra ver a fala), com o PDF 16:9 em `slides.pdf` e as telas do app em `recursos/pitch/telas/`.
 
-| # | Critério | O que aparece na tela |
+| # | O que aparece na tela | O que pontua |
 |---:|---|---|
-| 1 | Clareza | "Dona Leda". "Liga pros seus pais todo dia. E te conta como eles estão." |
-| 2 | Problema | "6 milhões de idosos moram sozinhos", e os brasileiros com 60 anos ou mais: 20,6 milhões em 2010, 32,1 milhões em 2022 e 75 milhões em 2070 |
-| 3 | Problema e público | "Hoje, saber como eles estão custa caro": cuidador R$ 2.800 a 4.500, casa de repouso uns R$ 6 mil, botão de emergência R$ 189 a 249 só depois que algo deu errado. "Quem não pode pagar liga quando dá." |
-| 4 | Inovação | "Ela só precisa atender." "Sem aplicativo pra aprender. A Dona Leda liga, conversa e lembra do que a pessoa contou." |
-| 5 | Voz | "Ao vivo": responde em [X] segundos, pode ser interrompida, avisa a família na hora. Cada item só fica se o ensaio confirmar |
-| 6 | Técnica e Agora | "Feito na Agora": o celular do idoso, a sala da Agora com o motor de conversa e o painel da família, a lista do que da Agora está em uso e "No ar em donaleda.vercel.app, em teste no iPhone e no Android, código aberto." |
-| 7 | Validação: testes com gente | "Testamos com gente": os avós que atenderam no sábado e no domingo, as famílias que aceitaram o teste e disseram sim ao preço, o teste das três versões e as casas ouvidas |
-| 8 | Validação: aprendizados, limites e próximos passos | "O que a gente aprendeu": a casa de repouso indica e a família paga; visitar toda semana não basta pra perceber; aviso sem responsável não vira cuidado. Os limites numa linha e o próximo passo com data |
-| 9 | Benefício e negócio | "R$ 129,90 por mês": R$ 38 de custo medido, R$ 67 de sobra e R$ 1,1 a 1,4 bilhão por ano de 700 a 900 mil famílias, com a palavra estimativa |
-| 10 | Fecho | "Dona Leda é o nome da minha avó.", o pedido à banca, o time numa linha, a assinatura e o QR Code de /experimente se a página estiver no ar |
+| 1 | O lugar da foto ou do desenho da avó Leda (o Breno decide), "Leda" e [idade] anos, [cidade] | Problema, com a história que conecta |
+| 2 | O disco, "Dona Leda", "A assistente de cuidado de quem envelhece" e cinco ícones: companhia, segurança, saúde, comunicação e rotina | Clareza |
+| 3 | "6 milhões moram sozinhos" e as barras grandes de brasileiros com 60 anos ou mais: 20,6 milhões em 2010, 32,1 milhões em 2022, 75 milhões em 2070 | Problema |
+| 4 | Três colunas de altura proporcional: cuidador R$ 2.800 a 4.500, casa de repouso uns R$ 6 mil, Dona Leda R$ 129,90 | Problema e benefício |
+| 5 | O fluxo em três partes, com as telas de verdade do app: o idoso (o celular tocando e a conversa), a Agora (a sala da chamada, o motor de conversa com o Gemini ao vivo, as mensagens em tempo real e as ações da Dona Leda) e a família (a ficha do dia e o aviso) | Técnica e Agora |
+| 6 | "Ao vivo" e o que a banca deve reparar: responde em [X] s, pode ser interrompida, avisa a família na hora. Cada item só fica se a medição confirmar | Voz |
+| 7 | Quatro números grandes: avós que atenderam no sábado, que atenderam de novo no domingo, famílias que aceitaram o teste e quem decidiu certo lendo o aviso | Validação |
+| 8 | O que a gente ouviu e o que mudou: quem precisa ainda mora em casa, então a família paga e a casa indica; visitar toda semana não basta, então ela liga todo dia; aviso sem responsável não vira cuidado, então o painel mostra quem assumiu. Uma linha pro que as ligações ensinarem e os limites numa linha pequena | Validação |
+| 9 | Os R$ 129,90 numa barra só: R$ 38 de custo, R$ 24,50 de imposto e cartão e R$ 67 de sobra, com o mercado estimado numa linha | Benefício e negócio |
+| 10 | "O segundo cérebro de quem envelhece" em três tempos. Hoje: a ligação de todo dia, a memória do que ele contou e o aviso pra família. Em seguida: a filha entra na ligação, o telefone comum e as famílias que a casa indicar. Depois, marcado como visão: pedir o remédio e as compras, marcar a consulta e o aparelho próprio, como uma pulseira. O pedido à banca e a assinatura | Inovação e próximos passos |
 
-**Fontes dos números:** IBGE (PNAD Contínua 2025, Censos 2010 e 2022, Projeções da População de 2024, com 2070 como projeção); Cidesp, maio de 2026 (cuidador); Mercado Mineiro, agosto de 2026 (média de R$ 5.955 em Belo Horizonte); Tecnosenior, 21/11/2026 (botão); `custos.md` (custo medido em 21/11) e `tese.md` (mercado estimado). A faixa de R$ 6 mil a 11 mil e o ano em que os idosos passam as crianças saíram, porque não têm fonte oficial conferida.
-
-**O próximo passo do slide 8** é o de segunda, 23/11, porque a segunda ligação das 9h já terá acontecido na hora do pitch, e o resultado dela entra no slide 7.
+**Fontes:** IBGE (PNAD Contínua 2025, Censos 2010 e 2022, Projeções da População de 2024, com 2070 como projeção); Cidesp, maio de 2026 (cuidador); Mercado Mineiro, agosto de 2026 (média de R$ 5.955 em Belo Horizonte); `custos.md` (custo medido em 21/11) e `tese.md` (mercado estimado). O que da Agora está em uso foi conferido no código pela conversa "Servidor, voz e banco" às 20h58 de 21/11. O filtro de ruído saiu do slide, porque só roda no navegador. Os itens de "Em seguida" saem do `README.md` e de `conhecimento/ideias.md`, e os de "Depois" da proposta de valor e de `segundo-cerebro.md`.
 
 ## A fala de 3 minutos, cronometrada
 
-São 180 segundos de fala em nove slides e 2 minutos de demonstração entre o slide 5 e o 6, que ficam à parte. A conta usa umas 2,3 palavras por segundo, o ritmo calmo de quem fala pra uma banca. Os colchetes são os fatos da avó, o pedido à banca e os números das ligações, e somam uns 10 segundos quando forem preenchidos.
+São 180 segundos de fala em nove slides, e a demonstração de 2 minutos entra entre o slide 6 e o 7, à parte. A conta usa umas 2,3 palavras por segundo, o ritmo calmo de quem fala pra uma banca, e já inclui os números ditos por extenso e o que vai entrar nos colchetes.
 
 | Slide | Segundos | Acumulado | O que pontua |
 |---:|---:|---:|---|
-| 1 | 24 | 0:24 | clareza |
-| 2 | 13 | 0:37 | problema |
-| 3 | 27 | 1:04 | problema e público |
-| 4 | 16 | 1:20 | inovação |
-| 5 e a demonstração | 120 | à parte | voz |
-| 6 | 19 | 1:39 | técnica e Agora |
-| 7 | 20 | 1:59 | validação |
-| 8 | 24 | 2:23 | validação |
-| 9 | 24 | 2:47 | problema e impacto |
-| 10 | 14 | 3:01 | apresentação |
-
-Os segundos já contam os números ditos por extenso ("cento e vinte e nove e noventa") e o que vai entrar nos colchetes, com o momento da avó em no máximo 15 palavras. Se no ensaio passar de 3 minutos e 10, entra o primeiro corte da lista abaixo.
+| 1, a avó | 24 | 0:24 | problema, com a história que conecta |
+| 2, a Dona Leda | 21 | 0:45 | clareza |
+| 3, 6 milhões | 10 | 0:55 | problema |
+| 4, o dinheiro | 23 | 1:18 | problema e benefício |
+| 5, o fluxo | 26 | 1:44 | técnica e Agora |
+| 6 e a demonstração | 120 | à parte | voz |
+| 7, os números | 20 | 2:04 | validação |
+| 8, o que mudou | 22 | 2:26 | validação |
+| 9, o negócio | 15 | 2:41 | benefício e negócio |
+| 10, a visão | 20 | 3:01 | inovação e próximos passos |
 
 **[Slide 1, 24 s]**
-A minha avó tem [idade] anos e mora com o meu avô em [cidade]. [Um momento real, em uma frase, de um dia em que a família quis saber como ela estava e não soube.] Por isso a gente fez a Dona Leda, uma assistente virtual que liga todo dia pro seu pai ou pra sua mãe e te conta como eles estão.
+A minha avó se chama Leda. Ela tem [idade] anos e mora com o meu avô em [cidade]. [A história verdadeira, em no máximo 25 palavras: um dia em que a família quis saber como ela estava e não soube.] Por isso a assistente que a gente construiu se chama Dona Leda.
 
-**[Slide 2, 13 s]**
-Você sabe como a sua mãe passou a quinta-feira? Se dormiu bem, se alguém ligou pedindo um Pix? No Brasil, 6 milhões de idosos moram sozinhos, e o país envelhece rápido.
+**[Slide 2, 21 s]**
+Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim. A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, saúde, comunicação e rotina.
 
-**[Slide 3, 27 s]**
-Quem compra é a filha ou o filho que só vê os pais no fim de semana. Hoje, pra saber todo dia como eles estão, só pagando um cuidador, de 2.800 a 4.500 reais, ou uma casa de repouso, de uns 6 mil. Quem não pode pagar liga quando dá.
+**[Slide 3, 10 s]**
+Você sabe como a sua mãe passou a quinta-feira? No Brasil, 6 milhões de idosos moram sozinhos, e o país envelhece rápido.
 
-**[Slide 4, 16 s]**
-Então a Dona Leda liga, e a pessoa só precisa atender, sem aplicativo pra aprender. Ela conversa com calma, lembra do que a pessoa contou nos outros dias e sempre diz que é uma assistente virtual.
+**[Slide 4, 23 s]**
+Pra filha que só vê os pais no fim de semana saber todo dia como eles estão, hoje só pagando um cuidador ou uma casa de repouso. A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
 
-**[Slide 5 e a demonstração, 2 minutos]**
+**[Slide 5, 26 s]**
+Na hora combinada, o celular toca, e o idoso só precisa atender. A chamada é uma sala da Agora, e o motor de conversa da Agora leva a voz dele pro Gemini e chama as ações dela, como anotar o dia e avisar a família. A família vê a ficha do dia e, num aviso, quem assumiu e como terminou.
+
+**[Slide 6 e a demonstração, 2 minutos]**
 A primeira fala está no roteiro da demonstração, logo abaixo.
-
-**[Slide 6, 19 s]**
-A ligação que vocês viram rodou na Agora: a chamada é uma sala da Agora, e o motor de conversa da Agora escutou a dona Helena, respondeu com a voz do Gemini e parou quando ela interrompeu. [Como o aviso chegou no painel, se a conversa do servidor confirmar que passa pela Agora.] Está no ar, com o código aberto.
 
 **[Slide 7, 20 s]**
 Ontem a Dona Leda ligou pra [N] avós do time. [N] atenderam e conversaram [X] minutos em média, e hoje às 9h, sem ninguém pedir, [N] atenderam de novo. [N] famílias aceitaram começar o teste, e lendo o aviso, [N] de 2 adultos decidiram certo.
 
-**[Slide 8, 24 s]**
-A casa de repouso contou que quem precisa é o idoso que mora em casa, e topou indicar as famílias. A pedido dos mentores, o painel passou a mostrar quem assumiu cada aviso. É uma noite e poucos avós, com a família do lado. A partir de segunda, são 30 dias com as famílias da casa.
+**[Slide 8, 22 s]**
+A casa de repouso contou que quem precisa ainda mora em casa, e topou indicar as famílias. A pedido dos mentores, o painel mostra quem assumiu cada aviso. [O que as ligações com os avós ensinaram, em uma frase.] É uma noite, com poucos avós e a família do lado.
 
-**[Slide 9, 24 s]**
-A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço: 129,90 por mês. Cada idoso custa uns 38 reais, medido, e tirando imposto e cartão sobram 67.
+**[Slide 9, 15 s]**
+A família paga 129,90 por mês. Cada idoso custa uns 38 reais, medido numa ligação de teste, e tirando imposto e cartão sobram 67.
 
-**[Slide 10, 14 s]**
-Dona Leda é o nome da minha avó. [O pedido à banca, em uma frase.] Somos quatro: o Vitor, a Stephanie, o Gustavo e eu. Dona Leda: longevidade com qualidade de vida.
+**[Slide 10, 20 s]**
+Em seguida, a filha entra na mesma ligação. Depois, ela resolve coisas pela pessoa, como pedir o remédio e marcar a consulta: o segundo cérebro de quem envelhece. [O pedido à banca, em uma frase.] Dona Leda: longevidade com qualidade de vida.
 
 ## O que cortar primeiro se o ensaio estourar
 
-Os três anos do envelhecimento, a frase do mercado e "uma pergunta de cada vez" já saíram da fala e ficaram só nos slides, a pedido do avaliador, porque a fala passava de 3 minutos. Se ainda estourar, na ordem:
+Na ordem. Nunca saem: a avó e o nome no slide 1, a definição no slide 2, a Agora no slide 5, os números do slide 7, os limites do slide 8 e o pedido à banca.
 
 1. **A demonstração, a ficha do dia no fim** (15 s). O aviso e o desfecho já fecharam a cena.
-2. **Slide 8, a frase dos mentores** (6 s). O slide mostra o aprendizado.
-3. **Slide 6, "Está no ar, com o código aberto"** (3 s). O slide mostra.
-4. **Slide 1, o momento da avó encurtado** pra uma frase de 10 palavras.
+2. **Slide 8, a frase dos mentores** (6 s). O slide mostra.
+3. **Slide 10, "Depois"** (8 s). O slide mostra o caminho inteiro.
+4. **Slide 5, a ficha e o aviso da família** (7 s). As telas do slide mostram.
 
-Nunca saem: o que a Dona Leda faz no slide 1, a Agora no slide 6, os números do slide 7, os limites e o próximo passo do slide 8, e o nome da avó no fim. Se no ensaio ela não calar quando interrompida, "e parou quando ela interrompeu" sai do slide 6, e "Pode ser interrompida" sai da tela do slide 5.
+Os anos do envelhecimento, o preço do cuidador e o mercado estimado já saíram da fala e ficaram só na tela, pra ela caber em 3 minutos com a história da avó.
+
+Se no ensaio ela não calar quando interrompida, "Pode ser interrompida" sai do slide 6 e a fala da demonstração perde o "Espera".
 
 ## A demonstração de 2 minutos
 
-A cena é uma só: a dona Helena, de exemplo, conta que pediram um Pix em nome do neto, o aviso de golpe chega no painel da Marina, a Marina assume e o painel mostra como terminou. A conversa "Servidor, voz e banco" confirmou às 19h58 de 21/11 que tudo isso está no ar: a frase do Pix dispara o aviso pela regra fixa, mesmo se a IA não avisar, e o painel tem o "Já vi" e depois o "Liguei, está tudo bem". A demonstração mostra também o que a banca dá nota na voz: a Dona Leda sendo interrompida no meio da frase.
+A demonstração entra entre o slide 6 e o 7. A cena é uma só: a dona Helena, de exemplo, conta que pediram um Pix em nome do neto, o aviso de golpe chega no painel da Marina, a Marina assume e o painel mostra como terminou. A conversa "Servidor, voz e banco" confirmou às 19h58 de 21/11 que tudo isso está no ar: a frase do Pix dispara o aviso pela regra fixa, mesmo se a IA não avisar, e o painel tem o "Já vi" e depois o "Liguei, está tudo bem". A demonstração mostra também o que a banca dá nota na voz: a Dona Leda sendo interrompida no meio da frase.
 
 ### Quem faz o quê
 
@@ -118,7 +116,7 @@ A cena é uma só: a dona Helena, de exemplo, conta que pediram um Pix em nome d
 
 | Tempo | Na tela | Quem fala |
 |---|---|---|
-| 0:00 a 0:12 | O slide 5, e depois o painel da Marina | Breno: "A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel." Troca pro painel, toca em "Ligar agora" e para de falar |
+| 0:00 a 0:12 | O slide 6, e depois o painel da Marina | Breno: "A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel." Troca pro painel, toca em "Ligar agora" e para de falar |
 | 0:12 a 0:20 | O celular toca, o disco gira, "Dona Leda está ligando" | A dona Helena toca em Atender e diz "Alô?" logo de cara |
 | 0:20 a 0:40 | A ligação | A Dona Leda se apresenta como assistente virtual e pergunta como ela dormiu. Dona Helena: "Dormi mais ou menos, acordei duas vezes." |
 | 0:40 a 0:55 | A ligação | Quando a Dona Leda estiver no meio da próxima pergunta, a dona Helena fala por cima: "Espera, deixa eu te contar uma coisa." Ela tem que calar e escutar |
@@ -150,7 +148,7 @@ Cada ensaio tem alguém do time com o cronômetro e a tabela de segundos da fala
 | Ensaio | Quando | O que roda | O que sai dele |
 |---|---|---|---|
 | 1 | 8h, depois de ler os números que já chegaram | Só a fala, com os slides, sem a demonstração, duas vezes seguidas | O tempo de cada slide e os cortes que entram. Os colchetes da avó e do pedido à banca já preenchidos |
-| 2 | 10h30, com os números das 9h | A fala e a demonstração inteiras, no celular de verdade, na internet dele, com o painel no notebook e o `?medir=1` no endereço do celular. No fim, três perguntas da banca, uma de cada pessoa do time | O tempo de resposta e o tempo pra calar, que decidem os três itens do slide 5. Os 5 minutos fechados. As respostas que travaram |
+| 2 | 10h30, com os números das 9h | A fala e a demonstração inteiras, no celular de verdade, na internet dele, com o painel no notebook e o `?medir=1` no endereço do celular. No fim, três perguntas da banca, uma de cada pessoa do time | O tempo de resposta e o tempo pra calar, que decidem os três itens do slide 6. Os 5 minutos fechados. As respostas que travaram |
 | 3 | 12h15, na sala do pitch, se a organização deixar | Tudo, do começo ao fim, com o microfone do evento e o telão. No meio, alguém simula a queda da internet e o Breno troca pro vídeo em menos de 10 segundos | O som da sala testado com o celular, a troca de janela ensaiada e o plano de reserva provado. No fim, um exemplo novo criado na hora, porque o mesmo aviso não aparece de novo por 30 minutos |
 
 Entre um ensaio e outro, ninguém roda teste na voz, pra não gastar a chave do Gemini nem deixar a ligação muda na hora do pitch.
