@@ -37,6 +37,8 @@ Tudo de um idoso fica num objeto só, a ficha (`Base`, em `lib/tipos.ts:255-272`
 
 Hoje nada vence. Dias, avisos, conversas e lembranças ficam na ficha até alguém apagar. Só três listas têm teto: as 60 últimas ligações (`lib/chamadas.ts:79`), os 40 últimos documentos (`lib/dados.ts:491`) e os 20 últimos acionamentos da rede de apoio (`lib/dados.ts:545`).
 
+O produto usa bem menos do que guarda. O painel mostra 7 dias (`lib/dados.ts:302-306`), as instruções levam os 3 últimos dias (`lib/persona.ts:335-340`) e só o resumo da última conversa aparece (`lib/dados.ts:309-321`). O histórico mais antigo fica guardado sem uso hoje. O argumento de dados do pitch conta com esse histórico, então ele precisa de uma finalidade escrita e dita ao idoso antes do piloto: **[advogado]**.
+
 ## Onde fica e quem lê
 
 - **Banco:** Supabase (Postgres), nas tabelas `idosos`, `membros`, `fichas`, `aparelhos`, `codigos` e `demonstracoes`. Todas têm a trava de linha ligada e nenhuma regra de acesso, então só o servidor, com a chave secreta, lê e grava (`supabase/migrations/20261121130000_inicio.sql:52-56`). A auditoria de 21/11 conferiu isso no banco no ar.
@@ -63,7 +65,7 @@ Três pontos pedem atenção.
 
 **As lembranças reservadas vão pra IA.** O "só entre vocês" esconde a lembrança da família. A assistente precisa dela pra conversar, então o texto vai nas instruções (`lib/memoria.ts:383`).
 
-**A notificação nova carrega dado de saúde.** A gravação `a0ba520`, de 22/11 às 8h41, ainda sem revisão e sem publicação, manda pro celular da família o texto do aviso em até 240 caracteres, com o trecho da fala do idoso, e o resumo da conversa quando ela acaba (`app/api/conversa/route.ts:125-139`, `lib/ferramentas.ts:332-340` e `402-409`). Esse texto passa pelo Google e pela Apple e aparece na tela bloqueada do celular.
+**A notificação nova carrega dado de saúde.** A gravação `a0ba520`, de 22/11 às 8h41, ainda sem revisão e sem publicação, manda pro celular da família o texto do aviso em até 240 caracteres, com o trecho da fala do idoso, e o resumo da conversa quando ela acaba (`app/api/conversa/route.ts:125-139`, `lib/ferramentas.ts:332-340` e `402-409`). Esse texto passa pelo Google e pela Apple e aparece na tela bloqueada do celular. O celular que sai da conta continua na lista de notificação, que guarda os 10 últimos e não tem ação de tirar (`lib/dados.ts:524-537`).
 
 **A rede de apoio por telefone está desligada.** A ligação pra telefone comum só sai com a variável `AGORA_TELEPHONY_FROM_NUMBER` (`lib/sinalizacaoChamada.ts:559-598`). Os telefones dos contatos ficam guardados mesmo assim.
 
