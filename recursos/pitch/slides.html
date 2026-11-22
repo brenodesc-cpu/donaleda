@@ -81,7 +81,7 @@ em{font-style:normal;color:var(--gema)}
 .s4 .cap{position:absolute;top:46.2cqw;text-align:center}
 .s4 .cap b{display:block;font-family:Gabarito,sans-serif;font-weight:900;font-size:2.2cqw;line-height:1.1}
 .s4 .cap span{display:block;font-size:1.55cqw;color:var(--apoio);margin-top:.3cqw}
-.s4 .c1{left:2.3cqw;width:22cqw}.s4 .c2{left:22.3cqw;width:22cqw}.s4 .c3{left:47cqw;width:45.5cqw}
+.s4 .c1{left:4.1cqw;width:18.4cqw}.s4 .c2{left:24.1cqw;width:18.4cqw}.s4 .c3{left:47cqw;width:45.5cqw}
 /* 5 por dentro */
 .s5 svg.setas{position:absolute;inset:0;width:100%;height:100%}
 .s5 .cx{position:absolute;border:.3cqw solid var(--linha);border-radius:1.2cqw;padding:1cqw 1.2cqw;height:12.6cqw}
@@ -99,6 +99,7 @@ em{font-style:normal;color:var(--gema)}
 .s6 .fila span,.s7 .fila span{font-size:2.3cqw}
 .s6 .fila small,.s7 .fila small{display:block;font-size:1.6cqw;color:var(--apoio);margin-top:.4cqw}
 .s7 .aqui{position:absolute;left:6cqw;right:6cqw;top:37.5cqw;font-size:2.7cqw;font-weight:700;line-height:1.25;border-top:.2cqw solid var(--linha);padding-top:2cqw}
+.s7 .lim{position:absolute;left:6cqw;top:49.6cqw;font-size:1.5cqw;color:var(--legenda)}
 .s7 .aqui small{display:block;font-size:2cqw;font-weight:400;color:var(--apoio);margin-top:.8cqw}
 /* 8 o modelo, com as setas */
 .s8 svg.setas{position:absolute;inset:0;width:100%;height:100%}
@@ -119,6 +120,7 @@ em{font-style:normal;color:var(--gema)}
 .s9 .h1{left:29cqw}.s9 .h2{left:52cqw;color:var(--apoio)}.s9 .h3{left:74.5cqw;color:var(--apoio)}
 .s9 .rt{position:absolute;font-size:1.8cqw;font-weight:700;max-width:21.5cqw;line-height:1.15}
 .s9 .tit{font-size:3.7cqw;max-width:88cqw}
+.s9 .rt small{display:block;font-size:1.3cqw;font-weight:400;color:var(--apoio);margin-top:.2cqw}
 .s9 .rt i{position:absolute;left:0;top:-3.9cqw;font-style:normal;font-size:1.15cqw;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gema)}
 .s9 .x1{left:29cqw}.s9 .x2{left:52cqw}.s9 .x3{left:74.5cqw;max-width:19.5cqw}
 .s9 .r1{top:22cqw}.s9 .r2{top:30.5cqw}.s9 .r3{top:39cqw}.s9 .r4{top:47.5cqw}
@@ -223,7 +225,7 @@ body.com-notas .notas{display:block}
     <div class="cartao k1"><img src="telas/painel-dia.png" alt=""></div>
     <div class="cartao k2"><img src="telas/painel-aviso.png" alt=""></div>
     <div class="cartao k3"><img src="telas/painel-semana.png" alt=""></div>
-    <p class="cap c1"><b>1. Ela liga</b><span>O celular toca na hora combinada</span></p>
+    <p class="cap c1"><b>1. Ela liga</b><span>Sem ler nem digitar: ele só atende</span></p>
     <p class="cap c2"><b>2. Conversa e lembra</b><span>Pergunta do dia e do que ele já contou</span></p>
     <p class="cap c3"><b>3. A família acompanha no painel</b><span>O dia de hoje, o aviso na hora e a semana inteira do idoso</span></p>
   </section>
@@ -247,7 +249,7 @@ body.com-notas .notas{display:block}
     <div class="cx a3 ag"><i>Agora · IA de conversa</i><b>Motor de conversa</b><span>Responde em 2,8 s e aceita interrupção</span></div>
     <div class="cx a4"><i>Google</i><b>Gemini ao vivo</b><span>Ouve e fala em português</span></div>
     <div class="cx b1"><i>&nbsp;</i><b>Painel da família</b><span>O dia, a semana e o aviso</span></div>
-    <div class="cx b2"><i>&nbsp;</i><b>Banco</b><span>Ficha, lembranças e avisos. Nenhum áudio</span></div>
+    <div class="cx b2"><i>&nbsp;</i><b>Banco</b><span>Ficha, lembranças e avisos. Nenhum áudio guardado hoje</span></div>
     <div class="cx b3"><i>MCP</i><b>Ações da Dona Leda</b><span>Anota, lembra e avisa a família</span></div>
     <div class="cx b4 ag"><i>Agora · RTM</i><b>Mensagens ao vivo</b><span>Legenda e estado na tela</span></div>
     <p class="aovivo"><span class="ponto"></span>Agora, ao vivo</p>
@@ -271,6 +273,7 @@ body.com-notas .notas{display:block}
       <div><b>1</b><span>casa de repouso parceira</span><small>desde 21/11, em teste</small></div>
     </div>
     <p class="aqui">Avós do time atenderam a Dona Leda em 21 e 22/11.<small>Aprendemos com a casa parceira que quem precisa ainda mora em casa.</small></p>
+    <p class="lim">Limites: uma noite e uma manhã, poucos avós, alguém da família do lado.</p>
   </section>
 
   <section class="s s8">
@@ -311,7 +314,7 @@ body.com-notas .notas{display:block}
     <p class="rt r1 x1"><i>Quem ela atende</i>Idoso que mora sozinho</p><p class="rt r1 x2">Pós-operatório</p><p class="rt r1 x3">Tratamento em casa</p>
     <p class="rt r2 x1"><i>Por onde ela liga</i>Celular e tablet</p><p class="rt r2 x2">Telefone comum</p><p class="rt r2 x3">Pulseira e caixa de voz</p>
     <p class="rt r3 x1"><i>Quem paga</i>A família</p><p class="rt r3 x2">Planos de saúde</p><p class="rt r3 x3">Seguros e prefeituras</p>
-    <p class="rt r4 x1"><i>O que ela faz</i>Liga, lembra e avisa</p><p class="rt r4 x2">Pede remédio e compras, marca a consulta</p><p class="rt r4 x3">Mecanismo preditivo de doenças pela voz</p>
+    <p class="rt r4 x1"><i>O que ela faz</i>Liga, lembra e avisa</p><p class="rt r4 x2">Pede remédio e compras, marca a consulta</p><p class="rt r4 x3">Mecanismo preditivo de doenças pela voz<small>com o sim do idoso</small></p>
   </section>
 
   <section class="s s10">
