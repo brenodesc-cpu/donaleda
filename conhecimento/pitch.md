@@ -17,18 +17,18 @@ Cada slide tem uma ideia e completa a frase que o Breno está dizendo. O deck es
 
 | # | O que aparece na tela | O que pontua |
 |---:|---|---|
-| 1 | "Quantas vezes você ainda vai ver sua mãe?" e o número 36 | Problema |
-| 2 | 37% não veem um filho toda semana, 18% moram sozinhos, 1 em cada 6 se sente sozinho sempre e 1 em cada 4 cai por ano | Problema |
-| 3 | A Dona Leda, a definição e as barras de preço: cuidador R$ 2.800, casa de repouso R$ 6 mil, Dona Leda R$ 129,90 | Clareza e benefício |
-| 4 | "O idoso só precisa atender", com três telas de verdade: o celular tocando, a conversa e o painel da família | Voz e inovação |
-| 5 | A arquitetura: celular do idoso, sala de áudio e motor de conversa da Agora, Gemini ao vivo, ações da Dona Leda, banco, painel da família e mensagens ao vivo da Agora. A demonstração de 2 minutos sai daqui | Técnica e Agora |
-| 6 | "Lá fora funciona, e a gente testou": Coreia, Callie e Papa, e os números do teste com os avós, com os limites | Validação |
-| 7 | O mercado em círculos: 35,2 milhões de idosos, 6,4 milhões que moram sozinhos (R$ 10 bi por ano) e 700 mil famílias que podem pagar (R$ 1,1 bi), mais os 8,7 milhões com plano de saúde | Negócio |
-| 8 | O modelo com setas: marketing direto e casas de repouso levam à família, que paga (B2C), e planos e seguros contratam (B2B) | Negócio |
-| 9 | A evolução em três etapas com ícones: hoje, o pós-operatório e os aparelhos, e o segundo cérebro | Próximos passos e inovação |
-| 10 | O time, com a foto dos quatro e o que cada um traz | Apresentação |
+| 1 | A Dona Leda (disco, nome e definição) ao lado da pergunta "Quantas vezes você ainda vai ver seus pais?" | Problema e clareza |
+| 2 | 37% dos brasileiros com 50+ não veem os filhos semanalmente, três colunas (35,2 milhões de idosos, 6,4 milhões moram sozinhos, 1 em 6 se sente sozinho sempre) e o gráfico do Brasil envelhecendo (2010, 2025 e 2070) | Problema |
+| 3 | "Saber como ela está custa caro": as barras do cuidador, da casa de repouso e da Dona Leda. É o slide que sobrou quando o 1 e o da Dona Leda se juntaram, e o Breno ainda decide o que fica nele | Benefício |
+| 4 | "O idoso só precisa atender": o celular tocando, a conversa e o painel da família com o dia de hoje, o aviso e a semana do idoso | Voz e inovação |
+| 5 | A arquitetura com as peças da Agora. A demonstração de 2 minutos sai daqui | Técnica e Agora |
+| 6 | "Lá fora funciona, e a gente testou": Coreia, Callie e Papa, uma linha do nosso teste e os limites | Validação |
+| 7 | O mercado em círculos, com os planos de saúde | Negócio |
+| 8 | O modelo com setas: B2C e B2B | Negócio |
+| 9 | A evolução em quatro ramos ao longo do tempo: quem ela atende, por onde liga, quem paga e o que faz | Próximos passos e inovação |
+| 10 | O time, com a foto | Apresentação |
 
-Os rodapés dos slides ficaram só com a fonte em poucas palavras, e o pedido à banca saiu da tela (pedido do Breno às 10h10 de 22/11). A demonstração agora entra depois do slide 5, e o slide "Ao vivo" saiu.
+Os rodapés dos slides ficaram só com a fonte em poucas palavras, e o pedido à banca saiu da tela (pedido do Breno às 10h10 de 22/11). A demonstração agora entra depois do slide 5, e o slide "Ao vivo" saiu. O deck tem animações de entrada na tela, e o PDF mostra o estado final de cada slide.
 
 **Fontes:** IBGE, Tábuas Completas de Mortalidade 2024 (9,0 anos de vida média aos 80); ELSI-Brasil, contato com os filhos (Rev. Saúde Pública, 2024), solidão (Cad. Saúde Pública, 2023) e quedas (Rev. Saúde Pública, 2018, 25,1% em 12 meses); IBGE, PNAD Contínua 2025 (6,4 de 35,2 milhões de pessoas com 60 anos ou mais moram sozinhas, 18%, conta sobre as tabelas 9402 e 6407); Cidesp, maio de 2026 (cuidador); Mercado Mineiro, agosto de 2026 (média de R$ 5.955 em Belo Horizonte); `concorrentes.md` (CareCall, Callie Care e Papa, lidos em 21/11); `custos.md` (custo medido); IESS, fevereiro de 2026 (8,7 milhões de beneficiários com 60 anos ou mais; teto = 8,7 milhões × R$ 129,90 × 12 meses). As ideias de evolução saem de `ideias.md` (telefone comum, caixinha de voz e pulseira) e do Breno (pós-operatório). O que cada pessoa do time traz foi informado pelo Breno em 22/11. <!-- tom-ok -->
 
@@ -50,7 +50,7 @@ A fala tem umas 610 palavras. O Breno disse a versão anterior, de 445 palavras,
 | 10 | 26 | 3:04 |
 
 **[Slide 1, 16 s]**
-Quantas vezes você ainda vai ver a sua mãe? Pelo IBGE, quem chega aos 80 vive, em média, mais nove anos. No caso da minha avó, eu vejo ela quatro vezes por ano: são umas 36 visitas. Entre uma visita e outra, a família não sabe como está o dia a dia dela.
+Quantas vezes você ainda vai ver os seus pais? Pelo IBGE, quem chega aos 80 vive, em média, mais nove anos. No caso da minha avó, eu vejo ela quatro vezes por ano. Entre uma visita e outra, a família não sabe como está o dia a dia dela.
 
 **[Slide 2, 12 s]**
 No Brasil, mais de um terço das pessoas com 50 anos ou mais que têm filhos não veem os filhos toda semana. Temos uma população envelhecendo, e 18% dos idosos moram sozinhos: sem supervisão, com solidão e com riscos à saúde.

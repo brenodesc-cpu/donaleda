@@ -33,39 +33,47 @@ em{font-style:normal;color:var(--gema)}
 .grade small{display:block;font-size:1.6cqw;color:var(--apoio);margin-top:.3cqw}
 .tit{position:absolute;left:6cqw;top:5cqw;font-size:4.6cqw;max-width:80cqw}
 .fim{position:absolute;left:6cqw;font-size:2.6cqw;font-weight:700}
-/* 1 abertura */
-.s1 .q{position:absolute;left:6cqw;top:6cqw;font-size:6.2cqw;max-width:84cqw}
-.s1 .n{position:absolute;left:5.4cqw;top:21cqw;font-size:24cqw;line-height:1;color:var(--gema)}
-.s1 .v{position:absolute;left:38cqw;top:25.5cqw;font-size:6.2cqw}
-.s1 .sub{position:absolute;left:38.4cqw;top:33.5cqw;font-size:2.8cqw;font-weight:700;max-width:52cqw;line-height:1.25}
-.s1 .conta{position:absolute;left:38.4cqw;top:41.5cqw;font-size:2.2cqw;color:var(--apoio)}
+/* 1 a pergunta e a Dona Leda */
+.s1 .disco{position:absolute;left:6cqw;top:8cqw;width:15cqw;height:auto;aspect-ratio:1}
+.s1 .nome{position:absolute;left:6cqw;top:26cqw;font-size:7.4cqw}
+.s1 .def{position:absolute;left:6.2cqw;top:36cqw;font-size:2.8cqw;font-weight:700;max-width:38cqw;line-height:1.2}
+.s1 .q{position:absolute;left:52cqw;right:6cqw;top:14.5cqw;font-size:6.4cqw;line-height:1.06;border-left:.4cqw solid var(--gema);padding-left:3.4cqw}
 /* 2 o Brasil */
-.s2 .hero{position:absolute;left:6cqw;top:4.5cqw;font-size:15cqw;line-height:1;color:var(--gema)}
-.s2 .ht{position:absolute;left:42cqw;top:7.2cqw;font-size:3.2cqw;font-weight:700;max-width:50cqw;line-height:1.2}
-.s2 .fila{top:27cqw}
-/* 3 Dona Leda e o custo */
-.s3 .disco{position:absolute;left:6cqw;top:5.5cqw;width:13cqw;height:auto;aspect-ratio:1}
-.s3 .nome{position:absolute;left:6cqw;top:20.5cqw;font-size:7.4cqw}
-.s3 .def{position:absolute;left:6.2cqw;top:30.2cqw;font-size:2.8cqw;font-weight:700;max-width:42cqw;line-height:1.2}
-.s3 .faz{position:absolute;left:6.2cqw;top:38.6cqw;font-size:2.5cqw;font-weight:700;color:var(--gema);max-width:42cqw;line-height:1.2}
-.s3 .cols{position:absolute;left:54cqw;right:6cqw;top:6cqw;height:38.5cqw;display:flex;align-items:flex-end;gap:3cqw}
+.s2 .hero{position:absolute;left:6cqw;top:4.5cqw;font-size:13cqw;line-height:1;color:var(--gema)}
+.s2 .ht{position:absolute;left:6.2cqw;top:19cqw;font-size:3cqw;font-weight:700;max-width:46cqw;line-height:1.2}
+.s2 .fila{top:32cqw;right:44cqw;gap:2.4cqw}
+.s2 .fila b{font-size:4cqw}
+.s2 .fila span{font-size:1.8cqw}
+.s2 .gt{position:absolute;left:62cqw;top:5.4cqw;font-size:1.5cqw;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--legenda)}
+.s2 .barras{position:absolute;left:62cqw;right:6cqw;top:9cqw;bottom:8.5cqw;display:flex;align-items:flex-end;gap:2.4cqw}
+.s2 .barras div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.s2 .barras .v{font-family:Gabarito,sans-serif;font-weight:900;font-size:2.8cqw;margin-bottom:.7cqw;white-space:nowrap}
+.s2 .barras .b{display:block;width:100%;background:var(--gema);border-radius:.9cqw .9cqw 0 0}
+.s2 .barras .b.proj{background:repeating-linear-gradient(135deg,var(--gema) 0 1.1cqw,#8a6510 1.1cqw 2.2cqw)}
+.s2 .barras .a{font-size:2.2cqw;font-weight:700;margin-top:.7cqw}
+/* 3 o custo */
+.s3 .cols{position:absolute;left:6cqw;width:50cqw;top:13cqw;height:33cqw;display:flex;align-items:flex-end;gap:4cqw}
 .s3 .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
-.s3 .col .v{font-family:Gabarito,sans-serif;font-weight:900;font-size:3cqw;margin-bottom:.8cqw;white-space:nowrap}
+.s3 .col .v{font-family:Gabarito,sans-serif;font-weight:900;font-size:3.4cqw;margin-bottom:.8cqw;white-space:nowrap}
 .s3 .col .b{display:block;width:100%;border-radius:1cqw 1cqw 0 0;background:rgba(255,248,232,.28)}
 .s3 .col.dl .b{background:var(--gema)}
-.s3 .col.dl .v{color:var(--gema);font-size:3.6cqw}
-.s3 .rot{position:absolute;left:54cqw;right:6cqw;top:45.6cqw;display:flex;gap:3cqw}
-.s3 .rot p{flex:1;text-align:center;font-size:2cqw;font-weight:700}
+.s3 .col.dl .v{color:var(--gema);font-size:4cqw}
+.s3 .rot{position:absolute;left:6cqw;width:50cqw;top:47cqw;display:flex;gap:4cqw}
+.s3 .rot p{flex:1;text-align:center;font-size:2.1cqw;font-weight:700}
+.s3 .lado{position:absolute;left:62cqw;right:6cqw;top:22cqw;font-family:Gabarito,sans-serif;font-weight:900;font-size:3.6cqw;line-height:1.1;color:var(--gema)}
+.s3 .lado small{display:block;font-family:"Atkinson Hyperlegible Next",sans-serif;font-weight:700;font-size:2.2cqw;color:var(--casca);margin-top:2cqw;line-height:1.3}
 /* 4 como funciona */
-.s4 .tel{position:absolute;top:12.4cqw;width:13.4cqw;border-radius:2cqw;overflow:hidden;border:.45cqw solid #120b05;background:#120b05}
-.s4 .tel img{width:100%;display:block}
-.s4 .t1{left:12cqw}.s4 .t2{left:43.3cqw}.s4 .t3{left:74.6cqw}
-.s4 .cap{position:absolute;top:42.6cqw;width:29cqw;text-align:center}
-.s4 .cap b{display:block;font-family:Gabarito,sans-serif;font-weight:900;font-size:2.4cqw;line-height:1.1}
-.s4 .cap span{display:block;font-size:1.7cqw;color:var(--apoio);margin-top:.4cqw}
-.s4 .c1{left:4.2cqw}.s4 .c2{left:35.5cqw}.s4 .c3{left:66.8cqw}
-.s4 .seta{position:absolute;top:23cqw;font-family:Gabarito,sans-serif;font-weight:900;font-size:5cqw;color:var(--gema)}
-.s4 .a1{left:32cqw}.s4 .a2{left:63.3cqw}
+.s4 .tel{position:absolute;top:12.4cqw;width:14.6cqw;border-radius:2cqw;overflow:hidden;border:.45cqw solid #120b05;background:#120b05}
+.s4 .tel img,.s4 .cartao img{width:100%;display:block}
+.s4 .t1{left:6cqw}.s4 .t2{left:26cqw}
+.s4 .seta{position:absolute;top:25cqw;font-family:Gabarito,sans-serif;font-weight:900;font-size:4cqw;color:var(--gema)}
+.s4 .a1{left:21.5cqw}.s4 .a2{left:41.6cqw}
+.s4 .cartao{position:absolute;border-radius:1.2cqw;overflow:hidden;background:var(--casca);box-shadow:0 .6cqw 2cqw rgba(0,0,0,.45)}
+.s4 .k1{left:47cqw;top:12.4cqw;width:23cqw}.s4 .k2{left:47cqw;top:33.6cqw;width:23cqw}.s4 .k3{left:72.5cqw;top:12.4cqw;width:20cqw}
+.s4 .cap{position:absolute;top:46.2cqw;text-align:center}
+.s4 .cap b{display:block;font-family:Gabarito,sans-serif;font-weight:900;font-size:2.2cqw;line-height:1.1}
+.s4 .cap span{display:block;font-size:1.55cqw;color:var(--apoio);margin-top:.3cqw}
+.s4 .c1{left:2.3cqw;width:22cqw}.s4 .c2{left:22.3cqw;width:22cqw}.s4 .c3{left:47cqw;width:45.5cqw}
 /* 5 por dentro */
 .s5 svg.setas{position:absolute;inset:0;width:100%;height:100%}
 .s5 .cx{position:absolute;border:.3cqw solid var(--linha);border-radius:1.2cqw;padding:1cqw 1.2cqw;height:12.6cqw}
@@ -85,6 +93,9 @@ em{font-style:normal;color:var(--gema)}
 .s6 .tit{font-size:4.4cqw;max-width:88cqw}
 .s6 .r1{top:11.6cqw}.s6 .f1{top:14cqw}.s6 .r2{top:30cqw}.s6 .f2{top:32.4cqw}
 .s6 .fim{top:46.9cqw;font-size:2cqw;font-weight:400;color:var(--apoio)}
+.s6 .fila{top:14cqw}
+.s6 .aqui{position:absolute;left:6cqw;right:6cqw;top:36cqw;font-size:2.8cqw;font-weight:700;line-height:1.25;border-top:.2cqw solid var(--linha);padding-top:2cqw}
+.s6 .fim{top:46.5cqw;font-size:1.9cqw;font-weight:400;color:var(--apoio)}
 /* 7 o mercado em círculos */
 .s7 svg.circ{position:absolute;inset:0;width:100%;height:100%}
 .s7 .ci{position:absolute;width:20cqw;left:15cqw;text-align:center;font-family:Gabarito,sans-serif;font-weight:900}
@@ -107,14 +118,34 @@ em{font-style:normal;color:var(--gema)}
 .s8 .dln{position:absolute;left:73cqw;width:22cqw;top:33.4cqw;text-align:center;font-size:3.2cqw}
 .s8 .dls{position:absolute;left:73cqw;width:22cqw;top:37.6cqw;text-align:center;font-size:1.7cqw;color:var(--apoio)}
 .s8 .et{position:absolute;font-size:1.5cqw;font-weight:700;color:var(--apoio)}
-/* 9 a evolução */
-.s9 .etapas{position:absolute;left:6cqw;right:6cqw;top:13.5cqw;display:grid;grid-template-columns:repeat(3,1fr);gap:4.6cqw}
-.s9 .etapa{position:relative}
-.s9 .etapa svg{width:8cqw;height:8cqw;stroke:var(--gema);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;padding:1.6cqw;border:.3cqw solid var(--gema);border-radius:50%;box-sizing:border-box}
-.s9 .etapa i{display:block;font-style:normal;font-size:1.5cqw;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--legenda);margin-top:1.4cqw}
-.s9 .etapa h3{font-family:Gabarito,sans-serif;font-weight:900;font-size:3.2cqw;line-height:1.1;margin:.4cqw 0 1.2cqw}
-.s9 .etapa p{font-size:2cqw;font-weight:700;line-height:1.25;margin-bottom:1cqw}
-.s9 .etapa+.etapa::before{content:"→";position:absolute;left:-4cqw;top:2cqw;font-family:Gabarito,sans-serif;font-weight:900;font-size:3.4cqw;color:var(--gema)}
+/* 9 a evolução em ramos */
+.s9 svg.ramos{position:absolute;inset:0;width:100%;height:100%}
+.s9 .raiz{position:absolute;left:6cqw;top:28.2cqw;width:9.6cqw;height:auto;aspect-ratio:1}
+.s9 .cab{position:absolute;top:12.4cqw;font-family:Gabarito,sans-serif;font-weight:900;font-size:2.4cqw}
+.s9 .h1{left:29cqw}.s9 .h2{left:52cqw;color:var(--apoio)}.s9 .h3{left:76cqw;color:var(--apoio)}
+.s9 .rt{position:absolute;font-size:1.8cqw;font-weight:700;white-space:nowrap}
+.s9 .rt i{position:absolute;left:0;top:-3.9cqw;font-style:normal;font-size:1.15cqw;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gema)}
+.s9 .x1{left:29cqw}.s9 .x2{left:52cqw}.s9 .x3{left:76cqw}
+.s9 .r1{top:22cqw}.s9 .r2{top:30.5cqw}.s9 .r3{top:39cqw}.s9 .r4{top:47.5cqw}
+/* animações */
+@keyframes entra{from{opacity:0;transform:translateY(1.4cqw)}to{opacity:1;transform:none}}
+@keyframes cresce{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes desenha{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@keyframes surge{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+.s.ativo>*{animation:entra .6s cubic-bezier(.2,.7,.2,1) both}
+.s.ativo>*:nth-child(2){animation-delay:.12s}.s.ativo>*:nth-child(3){animation-delay:.24s}.s.ativo>*:nth-child(4){animation-delay:.36s}.s.ativo>*:nth-child(5){animation-delay:.48s}.s.ativo>*:nth-child(6){animation-delay:.6s}.s.ativo>*:nth-child(7){animation-delay:.72s}.s.ativo>*:nth-child(8){animation-delay:.84s}.s.ativo>*:nth-child(9){animation-delay:.96s}.s.ativo>*:nth-child(n+10){animation-delay:1.08s}
+.s.ativo .b{transform-origin:bottom;animation:cresce 1s .35s cubic-bezier(.2,.7,.2,1) both}
+.s.ativo .fila>div,.s.ativo .lin>p,.s.ativo .time>div{animation:entra .6s both}
+.s.ativo .fila>div:nth-child(2),.s.ativo .lin>p:nth-child(2),.s.ativo .time>div:nth-child(2){animation-delay:.25s}
+.s.ativo .fila>div:nth-child(3),.s.ativo .lin>p:nth-child(3),.s.ativo .time>div:nth-child(3){animation-delay:.5s}
+.s.ativo .time>div:nth-child(4){animation-delay:.75s}
+.s.ativo svg.setas g path,.s.ativo svg.ramos g path{stroke-dasharray:100;animation:desenha 1.4s .4s ease-out both}
+.s.ativo svg.ramos circle{transform-box:fill-box;transform-origin:center;animation:surge .5s 1.3s both}
+.s.ativo svg.circ circle{transform-box:fill-box;transform-origin:center bottom;animation:surge .7s both}
+.s.ativo svg.circ circle:nth-child(2){animation-delay:.3s}.s.ativo svg.circ circle:nth-child(3){animation-delay:.6s}
+.s.ativo .rt{animation:entra .5s 1.5s both}
+.s.ativo .hero{animation:surge .7s cubic-bezier(.2,.9,.3,1.2) both;transform-origin:left center}
+@media (prefers-reduced-motion:reduce){.s.ativo *{animation:none !important}}
 /* 10 o time */
 .s10 .foto{position:absolute;left:6cqw;top:13.5cqw;width:35cqw;border-radius:1.6cqw;display:block}
 .s10 .time{position:absolute;left:46cqw;right:6cqw;top:13.5cqw;display:grid;grid-template-columns:1fr 1fr;gap:2.6cqw 3cqw}
@@ -127,7 +158,7 @@ em{font-style:normal;color:var(--gema)}
 .notas{position:fixed;left:0;right:0;bottom:0;max-height:38vh;overflow:auto;background:rgba(20,12,5,.96);color:var(--casca);font-size:20px;line-height:1.45;padding:16px 24px 20px;display:none;border-top:3px solid var(--gema)}
 .notas b{color:var(--gema);font-family:Gabarito,sans-serif;margin-right:10px}
 body.com-notas .notas{display:block}
-@media print{@page{size:1920px 1080px;margin:0}html,body{background:var(--cafe);display:block;overflow:visible;height:auto}.palco{width:1920px;height:auto;overflow:visible;background:none}.s{display:block !important;position:relative;width:1920px;height:1080px;background:var(--cafe);page-break-after:always;break-after:page;overflow:hidden}.dica,.notas{display:none !important}}
+@media print{@page{size:1920px 1080px;margin:0}html,body{background:var(--cafe);display:block;overflow:visible;height:auto}.palco{width:1920px;height:auto;overflow:visible;background:none}.s{display:block !important;position:relative;width:1920px;height:1080px;background:var(--cafe);page-break-after:always;break-after:page;overflow:hidden}.dica,.notas{display:none !important}.s *{animation:none !important}}
 </style>
 </head>
 <body>
@@ -145,48 +176,53 @@ body.com-notas .notas{display:block}
 <div class="palco" id="palco">
 
   <section class="s s1">
-    <p class="ttl q">Quantas vezes você ainda vai ver sua mãe?</p>
-    <p class="ttl n">36</p>
-    <p class="ttl v">visitas</p>
-    <p class="sub">é o que me resta com a minha avó Leda</p>
-    <p class="conta">4 visitas por ano × 9 anos</p>
-    <p class="legenda">IBGE, 2024</p>
+    <svg class="disco"><use href="#disco"/></svg>
+    <p class="ttl nome">Dona Leda</p>
+    <p class="def">A assistente de cuidado de quem envelhece</p>
+    <p class="ttl q">Quantas vezes você ainda vai ver <em>seus pais</em>?</p>
   </section>
 
   <section class="s s2">
     <p class="ttl hero">37%</p>
-    <p class="ht">dos brasileiros com 50 anos ou mais que têm filhos não veem nenhum deles toda semana</p>
+    <p class="ht">dos brasileiros com 50+ não veem os filhos semanalmente</p>
     <div class="fila">
-      <div><b>18%</b><span>dos idosos moram sozinhos: 6,4 milhões</span></div>
-      <div><b>1 em cada 6</b><span>se sente sozinho sempre</span></div>
-      <div><b>1 em cada 4</b><span>cai pelo menos uma vez por ano</span></div>
+      <div><b>35,2 mi</b><span>de idosos no Brasil</span></div>
+      <div><b>6,4 mi</b><span>moram sozinhos</span></div>
+      <div><b>1 em 6</b><span>se sente sozinho sempre</span></div>
     </div>
-    <p class="legenda">ELSI-Brasil · IBGE, 2025</p>
+    <p class="gt">O Brasil envelhecendo</p>
+    <div class="barras">
+      <div><p class="v">20,6 mi</p><span class="b" style="height:27%"></span><p class="a">2010</p></div>
+      <div><p class="v">35,2 mi</p><span class="b" style="height:47%"></span><p class="a">2025</p></div>
+      <div><p class="v">75 mi</p><span class="b proj" style="height:100%"></span><p class="a">2070</p></div>
+    </div>
+    <p class="legenda">ELSI-Brasil, entre quem tem filhos · IBGE</p>
   </section>
 
   <section class="s s3">
-    <svg class="disco"><use href="#disco"/></svg>
-    <p class="ttl nome">Dona Leda</p>
-    <p class="def">A assistente de cuidado de quem envelhece</p>
-    <p class="faz">Liga todo dia, conversa e avisa a família</p>
+    <p class="ttl tit">Saber como ela está <em>custa caro</em></p>
     <div class="cols">
       <div class="col"><p class="v">R$ 2.800</p><span class="b" style="height:14cqw"></span></div>
       <div class="col"><p class="v">R$ 6 mil</p><span class="b" style="height:30cqw"></span></div>
       <div class="col dl"><p class="v">R$ 129,90</p><span class="b" style="height:.7cqw"></span></div>
     </div>
     <div class="rot"><p>Cuidador</p><p>Casa de repouso</p><p><em>Dona Leda</em></p></div>
+    <p class="lado">E nada do dia a dia fica registrado.<small>A Dona Leda custa menos de um décimo de um cuidador.</small></p>
     <p class="legenda">Por mês · Cidesp e Mercado Mineiro, 2026</p>
   </section>
 
   <section class="s s4">
     <p class="ttl tit">O idoso <em>só precisa atender</em></p>
     <div class="tel t1"><img src="telas/tocando.png" alt=""></div>
+    <p class="seta a1">→</p>
     <div class="tel t2"><img src="telas/conversa.png" alt=""></div>
-    <div class="tel t3"><img src="telas/painel-com-aviso.png" alt=""></div>
-    <p class="seta a1">→</p><p class="seta a2">→</p>
-    <p class="cap c1"><b>1. Ela liga na hora combinada</b><span>O celular toca, e ele atende</span></p>
+    <p class="seta a2">→</p>
+    <div class="cartao k1"><img src="telas/painel-dia.png" alt=""></div>
+    <div class="cartao k2"><img src="telas/painel-aviso.png" alt=""></div>
+    <div class="cartao k3"><img src="telas/painel-semana.png" alt=""></div>
+    <p class="cap c1"><b>1. Ela liga</b><span>O celular toca na hora combinada</span></p>
     <p class="cap c2"><b>2. Conversa e lembra</b><span>Pergunta do dia e do que ele já contou</span></p>
-    <p class="cap c3"><b>3. A família vê no painel</b><span>O dia, a semana e o aviso na hora</span></p>
+    <p class="cap c3"><b>3. A família acompanha no painel</b><span>O dia de hoje, o aviso na hora e a semana inteira do idoso</span></p>
   </section>
 
   <section class="s s5">
@@ -194,13 +230,13 @@ body.com-notas .notas{display:block}
     <svg class="setas" viewBox="0 0 100 56.25" preserveAspectRatio="none" aria-hidden="true">
       <defs><marker id="p5" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#F7B90F"/></marker></defs>
       <g fill="none" stroke="#F7B90F" stroke-width=".4">
-        <path d="M24.6 19.6 H28.4" marker-end="url(#p5)" marker-start="url(#p5)"/>
-        <path d="M49.1 19.6 H52.9" marker-end="url(#p5)" marker-start="url(#p5)"/>
-        <path d="M73.6 19.6 H77.4" marker-end="url(#p5)" marker-start="url(#p5)"/>
-        <path d="M63.2 26.3 V30.4" marker-end="url(#p5)"/>
-        <path d="M52.9 37.3 H49.1" marker-end="url(#p5)"/>
-        <path d="M28.4 37.3 H24.6" marker-end="url(#p5)"/>
-        <path d="M73.4 26.1 C76 27.5 78 28.6 80.5 30.4" marker-end="url(#p5)"/>
+        <path pathLength="100" d="M24.6 19.6 H28.4" marker-end="url(#p5)" marker-start="url(#p5)"/>
+        <path pathLength="100" d="M49.1 19.6 H52.9" marker-end="url(#p5)" marker-start="url(#p5)"/>
+        <path pathLength="100" d="M73.6 19.6 H77.4" marker-end="url(#p5)" marker-start="url(#p5)"/>
+        <path pathLength="100" d="M63.2 26.3 V30.4" marker-end="url(#p5)"/>
+        <path pathLength="100" d="M52.9 37.3 H49.1" marker-end="url(#p5)"/>
+        <path pathLength="100" d="M28.4 37.3 H24.6" marker-end="url(#p5)"/>
+        <path pathLength="100" d="M73.4 26.1 C76 27.5 78 28.6 80.5 30.4" marker-end="url(#p5)"/>
       </g>
     </svg>
     <div class="cx a1"><i>&nbsp;</i><b>Celular do idoso</b><span>Microfone com filtro de ruído da Agora</span></div>
@@ -216,20 +252,13 @@ body.com-notas .notas{display:block}
 
   <section class="s s6">
     <p class="ttl tit">Lá fora funciona, e a gente <em>testou</em></p>
-    <p class="rot r1">Lá fora</p>
-    <div class="fila f1">
+    <div class="fila">
       <div><b>89%</b><span>dos idosos atenderam a IA em três meses</span><small>CareCall, Coreia · 2.990 idosos</small></div>
       <div><b>85%</b><span>pediram pra continuar a conversa</span><small>Callie Care, EUA · dado da empresa</small></div>
       <div><b>US$ 1,4 bi</b><span>valia a Papa, paga por planos de saúde</span><small>companhia pra idosos, EUA · 2021</small></div>
     </div>
-    <p class="rot r2">Aqui</p>
-    <div class="fila f2">
-      <div><b>[N] de [N]</b><span>avós atenderam no sábado</span></div>
-      <div><b>[N]</b><span>atenderam de novo no domingo</span></div>
-      <div><b>1</b><span>casa de repouso parceira, que indica as famílias</span></div>
-    </div>
-    <p class="fim">Limites do nosso teste: uma noite e uma manhã, poucos avós, alguém da família do lado.</p>
-    <p class="legenda">Dados públicos, lidos em 21/11/2026</p>
+    <p class="aqui"><em>Aqui:</em> testamos com avós do time em 21 e 22/11 e fechamos com 1 casa de repouso parceira.</p>
+    <p class="fim">Limites: uma noite e uma manhã, poucos avós, alguém da família do lado.</p>
   </section>
 
   <section class="s s7">
@@ -254,10 +283,10 @@ body.com-notas .notas{display:block}
     <svg class="setas" viewBox="0 0 100 56.25" preserveAspectRatio="none" aria-hidden="true">
       <defs><marker id="ponta" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#F7B90F"/></marker></defs>
       <g fill="none" stroke="#F7B90F" stroke-width=".4" marker-end="url(#ponta)">
-        <path d="M35.6 17 C39 17 39.5 20 42.4 20.6"/>
-        <path d="M35.6 30.2 C39.5 30.2 39.5 25.4 42.4 24.6"/>
-        <path d="M66.6 22.6 C70.5 22.6 72 24 75.8 24.6"/>
-        <path d="M35.6 43.6 C56 43.6 68 40 76.6 31.2"/>
+        <path pathLength="100" d="M35.6 17 C39 17 39.5 20 42.4 20.6"/>
+        <path pathLength="100" d="M35.6 30.2 C39.5 30.2 39.5 25.4 42.4 24.6"/>
+        <path pathLength="100" d="M66.6 22.6 C70.5 22.6 72 24 75.8 24.6"/>
+        <path pathLength="100" d="M35.6 43.6 C56 43.6 68 40 76.6 31.2"/>
       </g>
     </svg>
     <div class="no n1"><i>B2C · direto</i><b>Marketing direto</b><span>Pro filho de 40 a 60 anos que vê os pais pouco</span></div>
@@ -271,11 +300,23 @@ body.com-notas .notas{display:block}
 
   <section class="s s9">
     <p class="ttl tit">Da ligação diária ao <em>segundo cérebro</em></p>
-    <div class="etapas">
-      <div class="etapa"><svg viewBox="0 0 24 24"><path d="M5 3h3l2 5-2.5 1.5a11 11 0 0 0 7 7L16 14l5 2v3a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg><i>Hoje</i><h3>Liga, lembra e avisa</h3><p>O idoso que mora sozinho</p><p>Em 30 dias: as famílias que a casa parceira indicar</p></div>
-      <div class="etapa"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 7.5v9M7.5 12h9"/></svg><i>Em seguida</i><h3>Pós-operatório</h3><p>Liga todo dia depois da alta e pergunta da dor e do remédio</p><p>Telefone comum, pulseira e caixinha de voz</p></div>
-      <div class="etapa"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><circle cx="4.5" cy="5.5" r="1.8"/><circle cx="19.5" cy="5.5" r="1.8"/><circle cx="4.5" cy="18.5" r="1.8"/><circle cx="19.5" cy="18.5" r="1.8"/><path d="M6 6.8l3.6 3M18 6.8l-3.6 3M6 17.2l3.6-3M18 17.2l-3.6-3"/></svg><i>Depois</i><h3>Segundo cérebro</h3><p>Lembra de tudo que ele contou</p><p>E resolve por ele: pede o remédio e as compras, marca a consulta</p></div>
-    </div>
+    <svg class="ramos" viewBox="0 0 100 56.25" preserveAspectRatio="none" aria-hidden="true">
+      <defs><marker id="p9" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#F7B90F"/></marker></defs>
+      <g fill="none" stroke="#F7B90F" stroke-width=".4" marker-end="url(#p9)">
+        <path pathLength="100" d="M15.5 33 C21 33 19.5 21 25 21 H93"/>
+        <path pathLength="100" d="M15.5 33 C21 33 20.5 29.5 25 29.5 H93"/>
+        <path pathLength="100" d="M15.5 33 C21 33 20.5 38 25 38 H93"/>
+        <path pathLength="100" d="M15.5 33 C21 33 19.5 46.5 25 46.5 H93"/>
+      </g>
+      <g fill="#F7B90F"><circle cx="30" cy="21" r=".9"/><circle cx="30" cy="29.5" r=".9"/><circle cx="30" cy="38" r=".9"/><circle cx="30" cy="46.5" r=".9"/></g>
+      <g fill="#33200F" stroke="#F7B90F" stroke-width=".35"><circle cx="53" cy="21" r=".9"/><circle cx="53" cy="29.5" r=".9"/><circle cx="53" cy="38" r=".9"/><circle cx="53" cy="46.5" r=".9"/><circle cx="77" cy="21" r=".9"/><circle cx="77" cy="29.5" r=".9"/><circle cx="77" cy="38" r=".9"/><circle cx="77" cy="46.5" r=".9"/></g>
+    </svg>
+    <svg class="raiz"><use href="#disco"/></svg>
+    <p class="cab h1">Hoje</p><p class="cab h2">Em seguida</p><p class="cab h3">Depois</p>
+    <p class="rt r1 x1"><i>Quem ela atende</i>Idoso que mora sozinho</p><p class="rt r1 x2">Pós-operatório</p><p class="rt r1 x3">Tratamento em casa</p>
+    <p class="rt r2 x1"><i>Por onde ela liga</i>Celular e tablet</p><p class="rt r2 x2">Telefone comum</p><p class="rt r2 x3">Pulseira e caixa de voz</p>
+    <p class="rt r3 x1"><i>Quem paga</i>A família</p><p class="rt r3 x2">Planos de saúde</p><p class="rt r3 x3">Seguros e prefeituras</p>
+    <p class="rt r4 x1"><i>O que ela faz</i>Liga, lembra e avisa</p><p class="rt r4 x2">Pede remédio e compras</p><p class="rt r4 x3">Marca a consulta</p>
   </section>
 
   <section class="s s10">
@@ -292,7 +333,7 @@ body.com-notas .notas{display:block}
 </div>
 <div class="dica" id="dica">← → pra passar · F pra tela cheia · N pra ver a fala</div>
 <div class="notas" id="notas"></div>
-<script id="notas-dados" type="application/json">{"1": {"seg": "16 s", "txt": "Quantas vezes você ainda vai ver a sua mãe? Pelo IBGE, quem chega aos 80 vive, em média, mais nove anos. No caso da minha avó, eu vejo ela quatro vezes por ano: são umas 36 visitas. Entre uma visita e outra, a família não sabe como está o dia a dia dela."}, "2": {"seg": "12 s", "txt": "No Brasil, mais de um terço das pessoas com 50 anos ou mais que têm filhos não veem os filhos toda semana. Temos uma população envelhecendo, e 18% dos idosos moram sozinhos: sem supervisão, com solidão e com riscos à saúde."}, "3": {"seg": "29 s", "txt": "Eu queria saber como a minha avó está no dia a dia, mas resolver isso é muito caro. Você pode pagar um cuidador ou levar o idoso pra uma casa de repouso, e mesmo assim esses processos são muito manuais: os dados não ficam guardados, e o idoso fica sem o acompanhamento que a qualidade de vida dele merece. Por isso a gente construiu a Dona Leda, com o nome da minha avó. Ela é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, prevenção, comunicação e rotina, por menos de um décimo do preço de um cuidador."}, "4": {"seg": "11 s", "txt": "É simples o bastante pro idoso só ter que atender uma ligação. Ela conversa, lembra do que ele contou e pergunta do dia, e a família vê no painel a ficha do dia, a semana e o aviso na hora."}, "5": {"seg": "15 s", "txt": "Por dentro, a chamada é uma sala de áudio da Agora. O motor de conversa da Agora leva a voz pro Gemini ao vivo, aceita interrupção e chama as ações da Dona Leda, que guardam a ficha e avisam a família. A legenda na tela e o filtro de ruído também são da Agora. (Demonstração de 2 minutos: A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel. (Cmd+2 pro painel, toca em Ligar agora e fica calado. A dona Helena atende e espera a Dona Leda cumprimentar.))"}, "6": {"seg": "18 s", "txt": "Isso já funciona lá fora. Na Coreia, 89% dos idosos atenderam a ligação de uma IA em três meses. Nos Estados Unidos, uma empresa que faz companhia pra idosos, paga por planos de saúde, chegou a valer 1,4 bilhão de dólares. Aqui, ontem a Dona Leda ligou pra [N] avós do time, e hoje [N] atenderam de novo."}, "7": {"seg": "9 s", "txt": "São 35 milhões de idosos no Brasil, e 6,4 milhões moram sozinhos. As famílias que já podem pagar somam 1,1 bilhão de reais por ano."}, "8": {"seg": "29 s", "txt": "O nosso modelo é B2C e B2B. A família paga 129,90 por mês, e sobram 67 por idoso. Quem traz as famílias são as casas de repouso: já fechamos uma parceria com uma casa em Petrolina, que vai levar a Dona Leda pra quem não tem condição de pagar os 6 mil por mês deles, e estamos conversando com a maior rede de casas de idosos do Brasil. E os planos de saúde e as seguradoras podem contratar a Dona Leda pros clientes deles: são até 13,6 bilhões por ano."}, "9": {"seg": "19 s", "txt": "Nos próximos 30 dias, a casa parceira indica as famílias, e a gente mede quantas ligações o idoso atende. Em seguida vem o pós-operatório: a mesma ligação acompanha quem acabou de sair de uma cirurgia, perguntando da dor e do remédio todo dia. Depois, com o que guardou, ela vira o segundo cérebro de quem envelhece e passa a resolver coisas por ele, como pedir o remédio."}, "10": {"seg": "26 s", "txt": "No time, o Vitor trabalha com a Terça da Serra, a maior rede de casas de idosos do Brasil. O Gustavo é desenvolvedor pelo Mackenzie e fundador de uma healthtech. A Stephanie é especialista em dados e precificação e já passou pela Microsoft e pela Livelo. E eu sou empreendedor e criador de conteúdo, com mais de 300 mil seguidores, formado em administração pelo Insper. [O pedido à banca, em uma frase.] Entre as visitas que me restam, a minha avó vai ter com quem conversar todo dia."}}</script>
+<script id="notas-dados" type="application/json">{"1": {"seg": "16 s", "txt": "Quantas vezes você ainda vai ver os seus pais? Pelo IBGE, quem chega aos 80 vive, em média, mais nove anos. No caso da minha avó, eu vejo ela quatro vezes por ano. Entre uma visita e outra, a família não sabe como está o dia a dia dela."}, "2": {"seg": "12 s", "txt": "No Brasil, mais de um terço das pessoas com 50 anos ou mais que têm filhos não veem os filhos toda semana. Temos uma população envelhecendo, e 18% dos idosos moram sozinhos: sem supervisão, com solidão e com riscos à saúde."}, "3": {"seg": "29 s", "txt": "Eu queria saber como a minha avó está no dia a dia, mas resolver isso é muito caro. Você pode pagar um cuidador ou levar o idoso pra uma casa de repouso, e mesmo assim esses processos são muito manuais: os dados não ficam guardados, e o idoso fica sem o acompanhamento que a qualidade de vida dele merece. Por isso a gente construiu a Dona Leda, com o nome da minha avó. Ela é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, prevenção, comunicação e rotina, por menos de um décimo do preço de um cuidador."}, "4": {"seg": "11 s", "txt": "É simples o bastante pro idoso só ter que atender uma ligação. Ela conversa, lembra do que ele contou e pergunta do dia, e a família vê no painel a ficha do dia, a semana e o aviso na hora."}, "5": {"seg": "15 s", "txt": "Por dentro, a chamada é uma sala de áudio da Agora. O motor de conversa da Agora leva a voz pro Gemini ao vivo, aceita interrupção e chama as ações da Dona Leda, que guardam a ficha e avisam a família. A legenda na tela e o filtro de ruído também são da Agora. (Demonstração de 2 minutos: A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel. (Cmd+2 pro painel, toca em Ligar agora e fica calado. A dona Helena atende e espera a Dona Leda cumprimentar.))"}, "6": {"seg": "18 s", "txt": "Isso já funciona lá fora. Na Coreia, 89% dos idosos atenderam a ligação de uma IA em três meses. Nos Estados Unidos, uma empresa que faz companhia pra idosos, paga por planos de saúde, chegou a valer 1,4 bilhão de dólares. Aqui, ontem a Dona Leda ligou pra [N] avós do time, e hoje [N] atenderam de novo."}, "7": {"seg": "9 s", "txt": "São 35 milhões de idosos no Brasil, e 6,4 milhões moram sozinhos. As famílias que já podem pagar somam 1,1 bilhão de reais por ano."}, "8": {"seg": "29 s", "txt": "O nosso modelo é B2C e B2B. A família paga 129,90 por mês, e sobram 67 por idoso. Quem traz as famílias são as casas de repouso: já fechamos uma parceria com uma casa em Petrolina, que vai levar a Dona Leda pra quem não tem condição de pagar os 6 mil por mês deles, e estamos conversando com a maior rede de casas de idosos do Brasil. E os planos de saúde e as seguradoras podem contratar a Dona Leda pros clientes deles: são até 13,6 bilhões por ano."}, "9": {"seg": "19 s", "txt": "Nos próximos 30 dias, a casa parceira indica as famílias, e a gente mede quantas ligações o idoso atende. Em seguida vem o pós-operatório: a mesma ligação acompanha quem acabou de sair de uma cirurgia, perguntando da dor e do remédio todo dia. Depois, com o que guardou, ela vira o segundo cérebro de quem envelhece e passa a resolver coisas por ele, como pedir o remédio."}, "10": {"seg": "26 s", "txt": "No time, o Vitor trabalha com a Terça da Serra, a maior rede de casas de idosos do Brasil. O Gustavo é desenvolvedor pelo Mackenzie e fundador de uma healthtech. A Stephanie é especialista em dados e precificação e já passou pela Microsoft e pela Livelo. E eu sou empreendedor e criador de conteúdo, com mais de 300 mil seguidores, formado em administração pelo Insper. [O pedido à banca, em uma frase.] Entre as visitas que me restam, a minha avó vai ter com quem conversar todo dia."}}</script>
 <script>
 (function(){
   var s=[].slice.call(document.querySelectorAll('.s'));
