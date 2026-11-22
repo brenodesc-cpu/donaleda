@@ -33,11 +33,20 @@ em{font-style:normal;color:var(--gema)}
 .grade small{display:block;font-size:1.6cqw;color:var(--apoio);margin-top:.3cqw}
 .tit{position:absolute;left:6cqw;top:5cqw;font-size:4.6cqw;max-width:80cqw}
 .fim{position:absolute;left:6cqw;font-size:2.6cqw;font-weight:700}
-/* 1 a pergunta e a Dona Leda */
-.s1 .disco{position:absolute;left:6cqw;top:8cqw;width:15cqw;height:auto;aspect-ratio:1}
-.s1 .nome{position:absolute;left:6cqw;top:26cqw;font-size:7.4cqw}
-.s1 .def{position:absolute;left:6.2cqw;top:36cqw;font-size:2.8cqw;font-weight:700;max-width:38cqw;line-height:1.2}
-.s1 .q{position:absolute;left:52cqw;right:6cqw;top:14.5cqw;font-size:6.4cqw;line-height:1.06;border-left:.4cqw solid var(--gema);padding-left:3.4cqw}
+/* 1 a pergunta */
+.s1 .q{position:absolute;left:6cqw;right:10cqw;top:14cqw;font-size:9.4cqw;line-height:1.04}
+/* a Dona Leda surge */
+.sx .disco{position:absolute;left:6cqw;top:14.5cqw;width:11cqw;height:auto;aspect-ratio:1}
+.sx .nome{position:absolute;left:6cqw;top:27.5cqw;font-size:6.4cqw}
+.sx .def{position:absolute;left:6.2cqw;top:36cqw;font-size:2.7cqw;font-weight:700;max-width:34cqw;line-height:1.2}
+.sx .faz{position:absolute;left:6.2cqw;top:44cqw;font-size:2.3cqw;font-weight:700;color:var(--gema);max-width:34cqw}
+.sx .janela{position:absolute;left:55cqw;top:12.5cqw;width:39cqw;height:36cqw;border-radius:1.4cqw;overflow:hidden;background:var(--casca);box-shadow:0 .8cqw 2.6cqw rgba(0,0,0,.5)}
+.sx .janela .barra{height:2.6cqw;background:#e9dfc8;display:flex;align-items:center;gap:.5cqw;padding:0 1cqw}
+.sx .janela .barra i{width:.8cqw;height:.8cqw;border-radius:50%;background:#c9bda3}
+.sx .janela .barra span{margin-left:1cqw;font-size:1.1cqw;font-weight:700;color:#6b5a45}
+.sx .janela img{width:100%;display:block}
+.sx .tel{position:absolute;left:43.6cqw;top:23cqw;width:12.4cqw;border-radius:1.8cqw;overflow:hidden;border:.4cqw solid #120b05;background:#120b05;box-shadow:0 .8cqw 2.6cqw rgba(0,0,0,.55)}
+.sx .tel img{width:100%;display:block}
 /* 2 o Brasil e o mercado */
 .s2 .hero{position:absolute;left:6cqw;top:5cqw;font-size:12cqw;line-height:1;color:var(--gema)}
 .s2 .ht{position:absolute;left:6.2cqw;top:18.6cqw;font-size:2.7cqw;font-weight:700;max-width:28cqw;line-height:1.2}
@@ -173,9 +182,6 @@ body.com-notas .notas{display:block}
 <div class="palco" id="palco">
 
   <section class="s s1">
-    <svg class="disco"><use href="#disco"/></svg>
-    <p class="ttl nome">Dona Leda</p>
-    <p class="def">A assistente de cuidado de quem envelhece</p>
     <p class="ttl q">Quantas vezes você ainda vai ver <em>seus pais</em>?</p>
   </section>
 
@@ -214,6 +220,16 @@ body.com-notas .notas{display:block}
       <p><b>Não usa tecnologia</b><span>Deixa de fora o que a tecnologia faz pelo idoso</span></p>
     </div>
     <p class="legenda">Por mês · Cidesp e Mercado Mineiro, 2026</p>
+  </section>
+
+  <section class="s sx">
+    <p class="ttl tit">Foi assim que a <em>Dona Leda</em> surgiu</p>
+    <svg class="disco"><use href="#disco"/></svg>
+    <p class="ttl nome">Dona Leda</p>
+    <p class="def">A assistente de cuidado de quem envelhece</p>
+    <p class="faz">Liga todo dia, conversa e avisa a família</p>
+    <div class="janela"><div class="barra"><i></i><i></i><i></i><span>O painel da família</span></div><img src="telas/painel-largo.png" alt=""></div>
+    <div class="tel"><img src="telas/tocando.png" alt=""></div>
   </section>
 
   <section class="s s4">
@@ -263,17 +279,6 @@ body.com-notas .notas{display:block}
       <div><b>US$ 1,4 bi</b><span>valia a Papa, paga por planos de saúde</span><small>companhia pra idosos, EUA · 2021</small></div>
     </div>
     <p class="legenda">Dados públicos, lidos em 21/11/2026</p>
-  </section>
-
-  <section class="s s7">
-    <p class="ttl tit">O que a gente <em>testou</em></p>
-    <div class="fila">
-      <div><b>2,8 s</b><span>de resposta, em média</span><small>medido pelo time em 21/11</small></div>
-      <div><b>40 de 55</b><span>conversas simuladas de golpe e queda resolvidas certo</span><small>bateria de segurança, por texto</small></div>
-      <div><b>1</b><span>casa de repouso parceira</span><small>desde 21/11, em teste</small></div>
-    </div>
-    <p class="aqui">Ouvimos uma casa de repouso e os mentores do evento em 21/11.<small>Aprendemos com a casa parceira que quem precisa ainda mora em casa.</small></p>
-    <p class="lim">Limites: ninguém pagou ainda, e o teste com as famílias começa depois do evento.</p>
   </section>
 
   <section class="s s8">
@@ -331,7 +336,7 @@ body.com-notas .notas{display:block}
 </div>
 <div class="dica" id="dica">← → pra passar · F pra tela cheia · N pra ver a fala</div>
 <div class="notas" id="notas"></div>
-<script id="notas-dados" type="application/json">{"1": {"seg": "14 s", "txt": "Quantas vezes você ainda vai ver os seus pais? Pelo IBGE, quem chega aos 80 vive, em média, mais nove anos. No caso da minha avó, eu vejo ela quatro vezes por ano. Entre uma visita e outra, a família não sabe como está o dia a dia dela."}, "2": {"seg": "18 s", "txt": "No Brasil, mais de um terço das pessoas com 50 anos ou mais que têm filhos não veem os filhos toda semana. A população está envelhecendo: são 35 milhões de idosos hoje e serão 75 milhões em 2070. Dos de hoje, 6,4 milhões moram sozinhos, sem supervisão, com solidão e com riscos à saúde."}, "3": {"seg": "17 s", "txt": "Eu queria saber como a minha avó está no dia a dia, mas resolver isso é muito caro. Você pode pagar um cuidador ou levar o idoso pra uma casa de repouso, e mesmo assim é um trabalho muito manual, que não guarda os dados ao longo do tempo e deixa de fora o que a tecnologia pode fazer pelo idoso."}, "4": {"seg": "23 s", "txt": "Por isso a gente construiu a Dona Leda, com o nome da minha avó. Ela é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, prevenção, comunicação e rotina, por menos de um décimo do preço de um cuidador. É simples o bastante pro idoso só ter que atender uma ligação. Ela conversa, lembra do que ele contou, e a família acompanha no painel o dia de hoje, o aviso na hora e a semana inteira."}, "5": {"seg": "15 s", "txt": "Por dentro, a chamada é uma sala de áudio da Agora. O motor de conversa da Agora leva a voz pro Gemini ao vivo, aceita interrupção e chama as ações da Dona Leda, que guardam a ficha e avisam a família. A legenda na tela e o filtro de ruído também são da Agora. (Demonstração de 2 minutos: A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel. (Cmd+2 pro painel, toca em Ligar agora e fica calado. A dona Helena atende e espera a Dona Leda cumprimentar.))"}, "6": {"seg": "13 s", "txt": "Isso já funciona lá fora. Na Coreia, 89% dos idosos atenderam a ligação de uma IA em três meses. Nos Estados Unidos, uma empresa que faz companhia pra idosos, paga por planos de saúde, chegou a valer 1,4 bilhão de dólares."}, "7": {"seg": "16 s", "txt": "Aqui, ontem a Dona Leda ligou pra [N] avós do time, e hoje [N] atenderam de novo. Ela responde em 2,8 segundos, e acertou 40 de 55 conversas simuladas de golpe e de queda na nossa bateria de segurança. Com a casa de repouso parceira, a gente aprendeu que quem precisa ainda mora em casa."}, "8": {"seg": "27 s", "txt": "O nosso modelo é B2C e B2B. A família paga 129,90 por mês, e sobram 67 por idoso. As casas de repouso usam a Dona Leda pra potencializar as cuidadoras ou indicam pras famílias que não conseguem pagar a casa: já fechamos uma parceria com uma casa em Petrolina e estamos conversando com a maior rede de casas de idosos do Brasil. E os planos de saúde e as seguradoras podem contratar a Dona Leda pros clientes deles: são até 13,6 bilhões por ano."}, "9": {"seg": "19 s", "txt": "Nos próximos 30 dias, a casa parceira indica as famílias, e a gente mede quantas ligações o idoso atende. Em seguida vêm o pós-operatório e o telefone comum, e ela passa a pedir o remédio, as compras e marcar a consulta. Depois, com o que guardou, ela vira o segundo cérebro do idoso, e os dados de voz de todo dia viram a base de um mecanismo que prevê doenças."}, "10": {"seg": "26 s", "txt": "No time, o Vitor trabalha com a Terça da Serra, a maior rede de casas de idosos do Brasil. O Gustavo é desenvolvedor pelo Mackenzie e fundador de uma healthtech. A Stephanie é especialista em dados e precificação e já passou pela Microsoft e pela Livelo. E eu sou empreendedor e criador de conteúdo, com mais de 300 mil seguidores, formado em administração pelo Insper. [O pedido à banca, em uma frase.] Entre as visitas que me restam, a minha avó vai ter com quem conversar todo dia."}}</script>
+<script id="notas-dados" type="application/json">{"1": {"seg": "14 s", "txt": "Quantas vezes você ainda vai ver os seus pais? Pelo IBGE, quem chega aos 80 vive, em média, mais nove anos. No caso da minha avó, eu vejo ela quatro vezes por ano. Entre uma visita e outra, a família não sabe como está o dia a dia dela."}, "2": {"seg": "18 s", "txt": "No Brasil, mais de um terço das pessoas com 50 anos ou mais que têm filhos não veem os filhos toda semana. A população está envelhecendo: são 35 milhões de idosos hoje e serão 75 milhões em 2070. Dos de hoje, 6,4 milhões moram sozinhos, sem supervisão, com solidão e com riscos à saúde."}, "3": {"seg": "17 s", "txt": "Eu queria saber como a minha avó está no dia a dia, mas resolver isso é muito caro. Você pode pagar um cuidador ou levar o idoso pra uma casa de repouso, e mesmo assim é um trabalho muito manual, que não guarda os dados ao longo do tempo e deixa de fora o que a tecnologia pode fazer pelo idoso."}, "4": {"seg": "13 s", "txt": "Por isso a gente construiu a Dona Leda, com o nome da minha avó. Ela é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, prevenção, comunicação e rotina, por menos de um décimo do preço de um cuidador."}, "5": {"seg": "10 s", "txt": "É simples o bastante pro idoso só ter que atender uma ligação. Ela conversa, lembra do que ele contou, e a família acompanha no painel o dia de hoje, o aviso na hora e a semana inteira."}, "6": {"seg": "15 s", "txt": "Por dentro, a chamada é uma sala de áudio da Agora. O motor de conversa da Agora leva a voz pro Gemini ao vivo, aceita interrupção e chama as ações da Dona Leda, que guardam a ficha e avisam a família. A legenda na tela e o filtro de ruído também são da Agora. (Demonstração de 2 minutos: A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel. (Cmd+2 pro painel, toca em Ligar agora e fica calado. A dona Helena atende e espera a Dona Leda cumprimentar.))"}, "7": {"seg": "20 s", "txt": "Isso já funciona lá fora. Na Coreia, 89% dos idosos atenderam a ligação de uma IA em três meses. Nos Estados Unidos, uma empresa que faz companhia pra idosos, paga por planos de saúde, chegou a valer 1,4 bilhão de dólares. Aqui, a Dona Leda responde em 2,8 segundos e acertou 40 de 55 conversas simuladas de golpe e de queda."}, "8": {"seg": "27 s", "txt": "O nosso modelo é B2C e B2B. A família paga 129,90 por mês, e sobram 67 por idoso. As casas de repouso usam a Dona Leda pra potencializar as cuidadoras ou indicam pras famílias que não conseguem pagar a casa: já fechamos uma parceria com uma casa em Petrolina e estamos conversando com a maior rede de casas de idosos do Brasil. E os planos de saúde e as seguradoras podem contratar a Dona Leda pros clientes deles: são até 13,6 bilhões por ano."}, "9": {"seg": "19 s", "txt": "Nos próximos 30 dias, a casa parceira indica as famílias, e a gente mede quantas ligações o idoso atende. Em seguida vêm o pós-operatório e o telefone comum, e ela passa a pedir o remédio, as compras e marcar a consulta. Depois, com o que guardou, ela vira o segundo cérebro do idoso, e os dados de voz de todo dia viram a base de um mecanismo que prevê doenças."}, "10": {"seg": "26 s", "txt": "No time, o Vitor trabalha com a Terça da Serra, a maior rede de casas de idosos do Brasil. O Gustavo é desenvolvedor pelo Mackenzie e fundador de uma healthtech. A Stephanie é especialista em dados e precificação e já passou pela Microsoft e pela Livelo. E eu sou empreendedor e criador de conteúdo, com mais de 300 mil seguidores, formado em administração pelo Insper. [O pedido à banca, em uma frase.] Entre as visitas que me restam, a minha avó vai ter com quem conversar todo dia."}}</script>
 <script>
 (function(){
   var s=[].slice.call(document.querySelectorAll('.s'));
