@@ -5,7 +5,7 @@ A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no d
 Projeto do hackathon **UNMUTE by Agora** (NewHack e Agora), feito em 21 e 22 de novembro de 2026, na AI House Brasil, em São Paulo.
 
 - **No ar:** https://donaleda.vercel.app
-- **Versão entregue:** 0.2.0 (a gravação marcada com a etiqueta `entrega` é a que vale pra banca).
+- **Versão entregue:** 0.2.0, a mesma do `package.json`. A gravação que vale pra banca é a que leva a etiqueta `entrega` neste repositório.
 
 ## O problema
 
@@ -75,11 +75,13 @@ Preencha o `.env.local`:
 
 - `NEXT_PUBLIC_AGORA_APP_ID` e `NEXT_AGORA_APP_CERTIFICATE`: do seu projeto na Agora.
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`: do seu projeto no Supabase, em Project Settings, API.
-- `LIA_GEMINI_KEY`: opcional, pro modo Gemini.
+- `LIA_GEMINI_KEY`: a chave do Google AI Studio. Com ela a conversa usa o Gemini Live, que é o modo da demonstração, e o servidor tira o resumo no fim da ligação e lê os exames. Sem ela, a conversa cai no modo de três peças, e o resumo e os exames ficam desligados.
+
+As outras variáveis são opcionais e estão explicadas no `env.local.example`: a voz e o modelo, o limite de minutos por dia, a notificação no celular (Firebase e Apple), o agendador das ligações e a telefonia da Agora.
 
 No Supabase, em Authentication, desligue a confirmação de e-mail (Confirm email), senão a família não consegue entrar logo depois de criar a conta.
 
-Crie as tabelas rodando `supabase/migrations/20261121130000_inicio.sql` no SQL Editor do Supabase. Depois:
+Crie as tabelas rodando no SQL Editor do Supabase os dois arquivos de `supabase/migrations/`, na ordem do nome: `20261121130000_inicio.sql` e `20261121200000_demonstracao.sql`. O espaço privado dos exames (`documentos-clinicos`) é criado sozinho no primeiro anexo. Depois:
 
 ```bash
 pnpm dev
@@ -140,21 +142,47 @@ A lista completa com as versões está em `package.json` e `pnpm-lock.yaml`.
 - os apps de iPhone e Android (`capacitor.config.ts`, `ios/`, `android/`);
 - a família entrando na mesma ligação e o fim gentil aos 8 minutos e 30 segundos (`lib/familiaNaLigacao.ts`, `lib/pararAssistente.ts`);
 - o filtro de ruído da Agora no microfone do site (`hooks/useFiltroDeRuido.ts`);
-- a leitura de exames, pedidos de consulta e receitas que a família anexa: o Gemini lê a foto ou o PDF na hora, o arquivo é descartado e fica só um resumo em linguagem simples, sem CPF nem RG (`lib/documentos.ts`, `app/api/familia/documento`);
+- a leitura de exames, pedidos de consulta e receitas que a família anexa: o Gemini lê a foto ou o PDF, a ficha guarda um resumo em linguagem simples, sem CPF nem RG, e o arquivo fica num espaço privado do banco, que só a família logada abre e apaga (`lib/documentos.ts`, `app/api/familia/documento`);
 - a agenda da família com consultas meses e anos à frente, que a Dona Leda lembra na semana do compromisso (`components/familia/AgendaEDocumentos.tsx`, `lib/persona.ts`);
 - a ligação pelo telefone comum pra rede de apoio depois de 3 tentativas, desligada até ter número (`lib/sinalizacaoChamada.ts`);
+- a memória da Dona Leda: lembranças por assunto, com quem contou cada uma, e o assunto que o idoso pede pra guardar só com ela (`lib/memoria.ts`);
+- o aviso de privacidade falado na primeira ligação, com o dia e a versão gravados na ficha (`lib/privacidade.ts`);
+- a reação quando outra pessoa atende: nada da ligação entra na ficha e a família recebe um aviso (`lib/dados.ts`, `testes/outraPessoa.test.ts`);
+- o limite de 10 minutos de conversa por dia (`lib/limiteDoDia.ts`);
+- o aviso no celular do parente, com texto fixo e sem dado de saúde, e o aviso urgente que abre direto a entrada na ligação (`lib/sinalizacaoChamada.ts`, `lib/pushNativo.ts`);
+- o botão de Configurações na tela do idoso, com a página de privacidade e o desconectar do aparelho (`components/TelaDoIdoso.tsx`);
+- o modo direto, em que o aparelho fala com o Gemini e a Agora fica com a sala, com religação sozinha quando o Google fica mudo. Ele só entra com `?modo=direto` (`lib/direto.ts`, `app/api/direto`);
+- a demonstração aberta em `/experimente` e a galeria de telas sem login em `/telas` (`app/experimente`, `app/telas`);
+- a bateria de ataque, com conversas de golpe, queda, segredo e remédio (`testes/ataques/`);
 - as conferências automáticas (`testes/`);
 - a base de conhecimento do time (`conhecimento/`).
 
 O código foi escrito pelo time com ajuda do Claude Code.
 
+## Onde fica cada coisa
+
+| Pasta | O que tem |
+|---|---|
+| `app/` | As páginas e as rotas do servidor (`app/api/`) |
+| `components/` | As telas: a do idoso, o painel da família (`components/familia/`), a marca e a landing |
+| `lib/` | As regras do produto: instruções da assistente, ações, regras de segurança, ficha, memória, ligações e avisos |
+| `hooks/` | A ligação no aparelho: sala de áudio, microfone, filtro de ruído e toque da chamada |
+| `testes/` | As conferências automáticas e a bateria de ataque (`testes/ataques/`) |
+| `supabase/` | As tabelas do banco |
+| `conhecimento/` | O que o time sabe: tese, validação, pitch, guardrails, custos, privacidade e o que roda da Agora |
+| `recursos/` | Os arquivos da marca e os geradores de ícone |
+| `ios/` e `android/` | Os projetos dos apps de celular (Capacitor) |
+| `public/` | Ícones, imagens da marca, os arquivos do filtro de ruído da Agora e a página do teste das três versões |
+
 ## O que é simulação
 
-- **A dona Helena é inventada.** O perfil, as lembranças e os seis dias anteriores do exemplo vêm de `lib/exemplo.ts`. O painel marca esses dias, e um dia deixa de ser exemplo quando recebe uma conversa de verdade.
-- **O rosto é um desenho.** O avatar em vídeo (Anam ou HeyGen) está no código e fica fora da demonstração, porque só funciona no modo `tres` e com a chave do fornecedor.
+- **A dona Helena e a filha Marina são inventadas.** O perfil, as lembranças e os seis dias anteriores do exemplo vêm de `lib/exemplo.ts`. O painel marca esses dias, e um dia deixa de ser exemplo quando recebe uma conversa de verdade.
+- **O rosto é um desenho.** O avatar em vídeo (Anam ou HeyGen) está no código e desligado, porque só funciona no modo `tres` e com a chave do fornecedor.
 - **A ligação acontece pela internet**, no app ou no navegador do aparelho do idoso. A ligação pelo telefone comum pra família está no código e desligada: falta um número na conta da Agora e um teste de verdade.
 - **O modo de reserva não entra sozinho.** Se o Gemini falha, a ligação não abre, e o modo `tres` só entra escolhido à mão.
 - **Os exames e a agenda de longo prazo** entraram no código na madrugada de 22/11 e ainda não foram usados por uma família de verdade.
+- **A bateria de ataque roda por texto.** As conversas de golpe, queda, segredo e remédio usam as mesmas instruções e o mesmo modelo da ligação, sem voz, e um segundo modelo dá a nota (`conhecimento/guardrails.md`).
+- **O custo por ligação foi medido com voz gravada** no lugar do microfone, em duas ligações de teste (`conhecimento/custos.md`).
 
 ## Privacidade e limites
 
@@ -164,7 +192,7 @@ O mapa completo dos dados está em [`conhecimento/privacidade-e-dados.md`](conhe
 - A voz e a conversa passam pela Agora e pelo Google (Gemini). O banco fica no Supabase e o servidor na Vercel. Com a chave grátis do Gemini, o Google pode usar o conteúdo enviado pra melhorar os produtos dele, então família de verdade só entra com a chave paga.
 - Na primeira ligação, a Dona Leda avisa o idoso de que guarda o que ele contar e de que a família recebe um resumo. Ele pode pedir pra ela esquecer uma lembrança ou guardar um assunto só com ela. Queda, emergência, golpe e vontade de morrer sempre chegam à família.
 - A conversa inteira não é guardada. O banco guarda a ficha do dia, as lembranças, os avisos e o resumo. A fala só fica registrada dentro de um aviso de segurança.
-- O exame que a família anexa fica guardado num espaço privado do banco, e ela apaga quando quiser. O aviso também chega como notificação no celular da família, pelo Google (Firebase) e pela Apple.
+- O exame que a família anexa fica guardado num espaço privado do banco, e ela apaga quando quiser. O aviso também chega como notificação no celular da família, pelo Google (Firebase) e pela Apple, com um texto fixo que pede pra abrir o app, sem dado de saúde.
 - A tela do idoso tem um botão de Configurações, em que ele abre a página de privacidade e desconecta o aparelho.
 - As tabelas do banco só são lidas pelo servidor. O navegador fala apenas com as rotas `/api`.
 - A família apaga todos os dados de um idoso em `/familia/ajustes`.
@@ -176,7 +204,7 @@ O mapa completo dos dados está em [`conhecimento/privacidade-e-dados.md`](conhe
 
 - Medir com avós de verdade quantos conversam até o fim e quantos atendem no dia seguinte.
 - Ligar o telefone comum: um número na conta da Agora e um teste de verdade, pra família e depois pra quem não usa celular com internet.
-- Aviso à família por notificação ou WhatsApp, além do painel.
+- Aviso à família por WhatsApp, além do painel e da notificação do app.
 - Ligação tocando com a tela bloqueada no celular.
 - Baixar o custo por minuto da conversa (conta em `conhecimento/tese.md`).
 
