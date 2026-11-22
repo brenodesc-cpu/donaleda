@@ -22,6 +22,7 @@ interface DonaLedaCallPushPlugin {
   }): Promise<{ token?: string; plataforma?: 'android' | 'ios' }>;
   registerFamilyAlerts(): Promise<{ token?: string; plataforma?: 'android' | 'ios' }>;
   getPendingCall(): Promise<{ acao?: string; chamadaId?: string }>;
+  getPendingFamilyRoute(): Promise<{ rota?: string }>;
   addListener(
     eventName: 'tokenReceived' | 'familyTokenReceived',
     listenerFunc: (data: TokenNativo) => void,
@@ -29,6 +30,10 @@ interface DonaLedaCallPushPlugin {
   addListener(
     eventName: 'callAction',
     listenerFunc: (data: AcaoDeChamadaNativa) => void,
+  ): Promise<PluginListenerHandle>;
+  addListener(
+    eventName: 'familyDeepLink',
+    listenerFunc: (data: { rota: string }) => void,
   ): Promise<PluginListenerHandle>;
 }
 
@@ -53,6 +58,36 @@ export async function registrarPushDaFamiliaNativo(): Promise<TokenNativo | null
   } catch {
     return null;
   }
+}
+
+/**
+ * Escuta toques em notificações urgentes da família no Android/iOS para abrir
+ * direto a sala da ligação ao vivo (`/familia/ligacao?idoso=...`).
+ */
+export function escutarRotaDaFamiliaNativa(onRota: (rota: string) => void): () => void {
+  if (!Capacitor.isNativePlatform()) return () => undefined;
+  let ativo = true;
+  let handle: PluginListenerHandle | null = null;
+
+  const aceitar = (rota?: string) => {
+    if (!ativo || !rota || !rota.startsWith('/familia')) return;
+    onRota(rota);
+  };
+
+  void (async () => {
+    try {
+      handle = await plugin.addListener('familyDeepLink', (d) => aceitar(d?.rota));
+      const pendente = await plugin.getPendingFamilyRoute();
+      aceitar(pendente?.rota);
+    } catch {
+      // Versão antiga do APK sem este método: segue normalmente no painel.
+    }
+  })();
+
+  return () => {
+    ativo = false;
+    void handle?.remove().catch(() => undefined);
+  };
 }
 
 async function enviarTokenAoServidor(plataforma: 'android' | 'ios', token: string): Promise<void> {

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { escutarRotaDaFamiliaNativa } from '@/lib/pushNativo';
 import type {
   Alerta,
   CategoriaDeLembranca,
@@ -98,10 +99,19 @@ export function usePainel(idosoId: string | null) {
   const versaoDosHorarios = useRef(0);
   const versaoDoAtender = useRef(0);
   const alertasNotificados = useRef<Set<string> | null>(null);
+  const conviteAvisado = useRef<string | null>(null);
+
+  // No app Android/iOS, ao tocar na notificação urgente, abre direto na sala ao vivo.
+  useEffect(() => {
+    return escutarRotaDaFamiliaNativa((rota) => {
+      router.push(rota);
+    });
+  }, [router]);
 
   useEffect(() => {
     setBruto(null);
     alertasNotificados.current = null;
+    conviteAvisado.current = null;
     if (!idosoId) return;
     let vivo = true;
     let espera: ReturnType<typeof setTimeout> | undefined;
@@ -321,9 +331,43 @@ export function usePainel(idosoId: string | null) {
     [idosoId, mandar],
   );
 
-  // Dispara notificação no navegador (Web Notification API) quando chega um novo alerta não visto.
+  // Toca sinal sonoro curto e dispara notificação clicável no Web quando chega alerta/convite novo.
   useEffect(() => {
     if (!bruto) return;
+
+    // Quando abre um convite ao vivo novo (emergência ou pedido do idoso), toca alerta sonoro no Web.
+    const chaveConvite = bruto.convite ? `${bruto.convite.conversaId}:${bruto.convite.abertoEm}` : null;
+    if (chaveConvite && conviteAvisado.current !== chaveConvite) {
+      const jaInicializado = alertasNotificados.current !== null;
+      conviteAvisado.current = chaveConvite;
+      if (jaInicializado && typeof window !== 'undefined') {
+        try {
+          const AudioCtx =
+            window.AudioContext ||
+            (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+          if (AudioCtx) {
+            const ctx = new AudioCtx();
+            const agoraAudio = ctx.currentTime;
+            for (const offset of [0, 0.25, 0.5]) {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.value = 880;
+              gain.gain.setValueAtTime(0.18, agoraAudio + offset);
+              gain.gain.exponentialRampToValueAtTime(0.001, agoraAudio + offset + 0.18);
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start(agoraAudio + offset);
+              osc.stop(agoraAudio + offset + 0.2);
+            }
+            setTimeout(() => void ctx.close().catch(() => undefined), 1000);
+          }
+        } catch {
+          // Navegador pode exigir interação prévia para áudio.
+        }
+      }
+    }
+
     if (alertasNotificados.current === null) {
       alertasNotificados.current = new Set(bruto.alertas.map((a) => a.id));
       return;
@@ -341,19 +385,30 @@ export function usePainel(idosoId: string | null) {
       return;
     }
 
+    const rotaLigacao = idosoId ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}` : '/familia';
     for (const alerta of novos) {
       if (alerta.visto) continue;
+      const aoVivo = Boolean(bruto.convite) && (alerta.gravidade === 'urgente' || alerta.tipo === 'ligacao');
       const titulo =
         alerta.gravidade === 'urgente'
-          ? `Urgente: ${bruto.idoso.tratamento}`
+          ? `Urgente: ${bruto.idoso.tratamento}${aoVivo ? ' — toque pra entrar na ligação' : ''}`
           : `Aviso: ${bruto.idoso.tratamento}`;
       try {
-        new Notification(titulo, { body: alerta.texto, tag: alerta.id });
+        const notif = new Notification(titulo, {
+          body: alerta.texto,
+          tag: alerta.id,
+          requireInteraction: alerta.gravidade === 'urgente',
+        });
+        notif.onclick = () => {
+          window.focus();
+          if (aoVivo) router.push(rotaLigacao);
+          notif.close();
+        };
       } catch {
         // Alguns browsers mobile bloqueiam `new Notification` sem Service Worker.
       }
     }
-  }, [bruto]);
+  }, [bruto, idosoId, router]);
 
   const painel = useMemo<PainelDaFamilia | null>(() => {
     if (!bruto) return null;

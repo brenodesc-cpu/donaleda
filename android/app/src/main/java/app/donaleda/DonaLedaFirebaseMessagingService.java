@@ -51,6 +51,7 @@ public class DonaLedaFirebaseMessagingService extends FirebaseMessagingService {
 
         if ("alerta_urgente".equals(tipo) || "alerta_familia".equals(tipo)) {
             boolean urgente = "alerta_urgente".equals(tipo) || "urgente".equals(data.get("gravidade"));
+            boolean entrarAoVivo = "1".equals(data.get("entrarAoVivo"));
             String titulo = data.get("titulo");
             if (titulo == null || titulo.trim().isEmpty()) {
                 titulo = urgente ? "Alerta urgente — Dona Leda" : "Aviso — Dona Leda";
@@ -60,7 +61,16 @@ public class DonaLedaFirebaseMessagingService extends FirebaseMessagingService {
                 mensagem = "Abra o painel da família para conferir os detalhes.";
             }
             String alertaId = data.get("alertaId");
-            mostrarNotificacaoFamilia(getApplicationContext(), titulo.trim(), mensagem.trim(), urgente, alertaId);
+            String urlDestino = data.get("urlDestino");
+            mostrarNotificacaoFamilia(
+                getApplicationContext(),
+                titulo.trim(),
+                mensagem.trim(),
+                urgente,
+                entrarAoVivo,
+                alertaId,
+                urlDestino
+            );
         }
     }
 
@@ -74,7 +84,7 @@ public class DonaLedaFirebaseMessagingService extends FirebaseMessagingService {
             "Alertas urgentes da família",
             NotificationManager.IMPORTANCE_HIGH
         );
-        urgente.setDescription("Emergências, quedas, golpes e 3 tentativas sem atendimento");
+        urgente.setDescription("Emergências, quedas, golpes e tentativas sem atendimento");
         urgente.enableVibration(true);
         urgente.setVibrationPattern(new long[] { 0, 400, 200, 400, 200, 500 });
         manager.createNotificationChannel(urgente);
@@ -93,13 +103,17 @@ public class DonaLedaFirebaseMessagingService extends FirebaseMessagingService {
         String titulo,
         String mensagem,
         boolean urgente,
-        String alertaId
+        boolean entrarAoVivo,
+        String alertaId,
+        String urlDestino
     ) {
         ensureFamilyChannels(context);
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         if (manager == null) return;
 
+        String rota = (urlDestino != null && urlDestino.startsWith("/familia")) ? urlDestino : "/familia";
         Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(MainActivity.EXTRA_FAMILY_ROUTE, rota);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
         int requestCode = (alertaId != null && !alertaId.isEmpty()) ? alertaId.hashCode() : (int) System.currentTimeMillis();
@@ -112,9 +126,13 @@ public class DonaLedaFirebaseMessagingService extends FirebaseMessagingService {
             .setContentText(mensagem)
             .setStyle(new NotificationCompat.BigTextStyle().bigText(mensagem))
             .setPriority(urgente ? NotificationCompat.PRIORITY_HIGH : NotificationCompat.PRIORITY_DEFAULT)
-            .setCategory(urgente ? NotificationCompat.CATEGORY_ALARM : NotificationCompat.CATEGORY_STATUS)
+            .setCategory(urgente ? NotificationCompat.CATEGORY_CALL : NotificationCompat.CATEGORY_STATUS)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent);
+
+        if (entrarAoVivo) {
+            builder.addAction(0, "Entrar na ligação agora", pendingIntent);
+        }
 
         int notifId = 4000 + Math.abs(requestCode % 5000);
         manager.notify(notifId, builder.build());

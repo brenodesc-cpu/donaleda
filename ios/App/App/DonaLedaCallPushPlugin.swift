@@ -188,10 +188,17 @@ final class DonaLedaFamilyPushCoordinator: NSObject, UNUserNotificationCenterDel
 
     private(set) var lastApnsToken: String?
     private var pendingCallbacks: [(String?) -> Void] = []
+    private var pendingRoute: String?
     weak var activePlugin: DonaLedaCallPushPlugin?
 
     func configureCenter() {
         UNUserNotificationCenter.current().delegate = self
+    }
+
+    func consumePendingRoute() -> String? {
+        let rota = pendingRoute
+        pendingRoute = nil
+        return rota
     }
 
     func requestAndRegister(completion: @escaping (String?) -> Void) {
@@ -244,6 +251,25 @@ final class DonaLedaFamilyPushCoordinator: NSObject, UNUserNotificationCenterDel
             completionHandler([.alert, .sound, .badge])
         }
     }
+
+    // Quando o familiar toca na notificação urgente no iPhone, abre direto na sala da ligação ao vivo.
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        let userInfo = response.notification.request.content.userInfo
+        if let rota = userInfo["urlDestino"] as? String, rota.hasPrefix("/familia") {
+            DispatchQueue.main.async {
+                if let plugin = self.activePlugin {
+                    plugin.emitFamilyDeepLink(rota)
+                } else {
+                    self.pendingRoute = rota
+                }
+            }
+        }
+        completionHandler()
+    }
 }
 
 @objc(DonaLedaCallPushPlugin)
@@ -254,6 +280,7 @@ public class DonaLedaCallPushPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "register", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "registerFamilyAlerts", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getPendingCall", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getPendingFamilyRoute", returnType: CAPPluginReturnPromise),
     ]
 
     public override func load() {
@@ -296,6 +323,20 @@ public class DonaLedaCallPushPlugin: CAPPlugin, CAPBridgedPlugin {
             result["chamadaId"] = pending.chamadaId
         }
         call.resolve(result)
+    }
+
+    @objc func getPendingFamilyRoute(_ call: CAPPluginCall) {
+        var result: [String: Any] = [:]
+        if let rota = DonaLedaFamilyPushCoordinator.shared.consumePendingRoute() {
+            result["rota"] = rota
+        }
+        call.resolve(result)
+    }
+
+    func emitFamilyDeepLink(_ rota: String) {
+        notifyListeners("familyDeepLink", data: [
+            "rota": rota,
+        ])
     }
 
     func emitToken(_ token: String) {

@@ -338,6 +338,10 @@ export async function notificarFamiliaPorPush(
     mensagem: string;
     gravidade: 'atencao' | 'urgente';
     tipo: string;
+    /** Rota relativa para abrir direto ao tocar (ex.: "/familia/ligacao?idoso=..."). */
+    urlDestino?: string;
+    /** true quando a ligação com o idoso está ao vivo e a família pode entrar agora. */
+    entrarAoVivo?: boolean;
   },
 ): Promise<{ fcmEnviados: number; apnsEnviados: number }> {
   const aparelhosFamilia = base.aparelhosFamiliaPush ?? [];
@@ -352,6 +356,8 @@ export async function notificarFamiliaPorPush(
     assistente: NOME_DA_ASSISTENTE,
     titulo: aviso.titulo.slice(0, 120),
     mensagem: aviso.mensagem.slice(0, 240),
+    urlDestino: aviso.urlDestino ?? '/familia',
+    entrarAoVivo: aviso.entrarAoVivo ? '1' : '0',
   };
 
   let fcmEnviados = 0;
@@ -548,6 +554,32 @@ async function ligarFamiliarViaAgoraTelephony(
   } catch {
     return false;
   }
+}
+
+/**
+ * Dispara ligação telefônica em paralelo via Agora Telephony (quando configurado) para a
+ * rede de apoio em uma emergência urgente durante a conversa, sem encerrar a call do idoso.
+ */
+export async function dispararLigacaoDeEmergenciaParaRede(
+  idosoId: string,
+  base: Base,
+  motivo: string,
+): Promise<number> {
+  const contatos = base.redeDeApoio ?? [];
+  const temTelephonyAgora = Boolean(
+    contatos.length > 0 &&
+      process.env.AGORA_TELEPHONY_FROM_NUMBER?.trim() &&
+      process.env.NEXT_PUBLIC_AGORA_APP_ID?.trim() &&
+      process.env.NEXT_AGORA_APP_CERTIFICATE?.trim(),
+  );
+  if (!temTelephonyAgora) return 0;
+
+  const resultados = await Promise.allSettled(
+    contatos.map((c) =>
+      ligarFamiliarViaAgoraTelephony(idosoId, base.idoso.tratamento, c, motivo),
+    ),
+  );
+  return resultados.filter((r) => r.status === 'fulfilled' && r.value).length;
 }
 
 /**

@@ -15,7 +15,7 @@ import {
 import { NOME_DA_ASSISTENTE } from './assistente';
 import { abrirConvite, fraseDoConvite } from './convite';
 import { depois, falar } from './familiaNaLigacao';
-import { notificarFamiliaPorPush } from './sinalizacaoChamada';
+import { dispararLigacaoDeEmergenciaParaRede, notificarFamiliaPorPush } from './sinalizacaoChamada';
 import { avaliarFala, semAcento } from './regras';
 import { buscar, citaSegredo, dataPedida, GAVETAS, guardar, horaPedida, linha, mudar, resumoSemSegredo, type Mudanca } from './memoria';
 import type {
@@ -319,7 +319,10 @@ export async function executarFerramenta(
       // Aviso urgente com a ligação aberta abre o convite pra família entrar.
       const convidada = gravidade === 'urgente' ? abrirConvite(base, 'urgente', tipo, agora) : null;
       if (convidada) convite = { conversa: { ...convidada }, frase: fraseDoConvite(base, tipo) };
-      if ((base.aparelhosFamiliaPush?.length ?? 0) > 0) {
+      if (
+        (base.aparelhosFamiliaPush?.length ?? 0) > 0 ||
+        (gravidade === 'urgente' && (base.redeDeApoio?.length ?? 0) > 0)
+      ) {
         pushInfo = { base: structuredClone(base), alerta };
       }
       return alerta;
@@ -328,18 +331,29 @@ export async function executarFerramenta(
     if (aberto) depois(() => falar(aberto.conversa, aberto.frase, 'APPEND'));
     const p = pushInfo as { base: Base; alerta: Alerta } | null;
     if (p) {
-      depois(() =>
-        notificarFamiliaPorPush(p.base, {
-          alertaId: p.alerta.id,
-          titulo:
-            p.alerta.gravidade === 'urgente'
-              ? `Urgente: ${p.base.idoso.tratamento}`
-              : `Atenção: ${p.base.idoso.tratamento}`,
-          mensagem: p.alerta.texto,
-          gravidade: p.alerta.gravidade,
-          tipo: p.alerta.tipo,
-        }),
-      );
+      const entrarAoVivo = Boolean(aberto);
+      const urlDestino = entrarAoVivo
+        ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}`
+        : `/familia?idoso=${encodeURIComponent(idosoId)}`;
+      depois(async () => {
+        await Promise.allSettled([
+          notificarFamiliaPorPush(p.base, {
+            alertaId: p.alerta.id,
+            titulo:
+              p.alerta.gravidade === 'urgente'
+                ? `Urgente: ${p.base.idoso.tratamento}${entrarAoVivo ? ' — entre na ligação' : ''}`
+                : `Atenção: ${p.base.idoso.tratamento}`,
+            mensagem: p.alerta.texto,
+            gravidade: p.alerta.gravidade,
+            tipo: p.alerta.tipo,
+            urlDestino,
+            entrarAoVivo,
+          }),
+          p.alerta.gravidade === 'urgente'
+            ? dispararLigacaoDeEmergenciaParaRede(idosoId, p.base, p.alerta.texto)
+            : Promise.resolve(0),
+        ]);
+      });
     }
     const resposta = semOMotivo
       ? 'A família foi avisada sem o motivo, porque o motivo é um assunto que a pessoa pediu segredo. Não mande de novo.'
@@ -378,6 +392,8 @@ export async function executarFerramenta(
           mensagem: p.alerta.texto,
           gravidade: 'urgente',
           tipo: 'ligacao',
+          urlDestino: `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}`,
+          entrarAoVivo: true,
         }),
       );
     }

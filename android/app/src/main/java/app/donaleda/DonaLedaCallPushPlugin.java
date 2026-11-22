@@ -41,6 +41,7 @@ public class DonaLedaCallPushPlugin extends Plugin {
     private static final String KEY_ASKED_FULLSCREEN = "asked_fullscreen_intent";
     private static final String KEY_PENDING_ACTION = "pending_action";
     private static final String KEY_PENDING_CALL_ID = "pending_call_id";
+    private static final String KEY_PENDING_FAMILY_ROUTE = "pending_family_route";
     private static final String DEFAULT_SERVER_URL = "https://donaleda.vercel.app";
 
     private static WeakReference<DonaLedaCallPushPlugin> activeInstance = new WeakReference<>(null);
@@ -171,6 +172,34 @@ public class DonaLedaCallPushPlugin extends Plugin {
             result.put("chamadaId", chamadaId);
         }
         call.resolve(result);
+    }
+
+    @PluginMethod
+    public void getPendingFamilyRoute(PluginCall call) {
+        SharedPreferences prefs = getContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String rota = prefs.getString(KEY_PENDING_FAMILY_ROUTE, null);
+        prefs.edit().remove(KEY_PENDING_FAMILY_ROUTE).apply();
+
+        JSObject result = new JSObject();
+        if (rota != null && rota.startsWith("/familia")) {
+            result.put("rota", rota);
+        }
+        call.resolve(result);
+    }
+
+    public static void dispatchFamilyRoute(Context context, String rota) {
+        if (rota == null || !rota.startsWith("/familia")) return;
+        DonaLedaCallPushPlugin plugin = activeInstance.get();
+        if (plugin != null) {
+            JSObject data = new JSObject();
+            data.put("rota", rota);
+            plugin.notifyListeners("familyDeepLink", data);
+            return;
+        }
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .edit()
+            .putString(KEY_PENDING_FAMILY_ROUTE, rota)
+            .apply();
     }
 
     public static void saveToken(Context context, String token) {
