@@ -164,6 +164,8 @@ O mapa completo dos dados está em [`conhecimento/privacidade-e-dados.md`](conhe
 - A voz e a conversa passam pela Agora e pelo Google (Gemini). O banco fica no Supabase e o servidor na Vercel. Com a chave grátis do Gemini, o Google pode usar o conteúdo enviado pra melhorar os produtos dele, então família de verdade só entra com a chave paga.
 - Na primeira ligação, a Dona Leda avisa o idoso de que guarda o que ele contar e de que a família recebe um resumo. Ele pode pedir pra ela esquecer uma lembrança ou guardar um assunto só com ela. Queda, emergência, golpe e vontade de morrer sempre chegam à família.
 - A conversa inteira não é guardada. O banco guarda a ficha do dia, as lembranças, os avisos e o resumo. A fala só fica registrada dentro de um aviso de segurança.
+- O exame que a família anexa fica guardado num espaço privado do banco, e ela apaga quando quiser. O aviso também chega como notificação no celular da família, pelo Google (Firebase) e pela Apple.
+- A tela do idoso tem um botão de Configurações, em que ele abre a página de privacidade e desconecta o aparelho.
 - As tabelas do banco só são lidas pelo servidor. O navegador fala apenas com as rotas `/api`.
 - A família apaga todos os dados de um idoso em `/familia/ajustes`.
 - A Dona Leda não é médica, não dá diagnóstico e não muda remédio. Ela não substitui serviço de emergência: em urgência, orienta ligar pro 192 e avisa a família.

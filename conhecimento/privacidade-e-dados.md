@@ -1,6 +1,6 @@
 # Privacidade e dados da Dona Leda
 
-O que a Dona Leda guarda, pra onde cada dado vai, o que o idoso controla e o que falta antes de um piloto com famílias de verdade. Conferido no código em 22/11/2026, na gravação `868a6e2`. Cada linha traz o arquivo e a linha de onde saiu.
+O que a Dona Leda guarda, pra onde cada dado vai, o que o idoso controla e o que falta antes de um piloto com famílias de verdade. Conferido no código em 22/11/2026, na gravação `868a6e2`, e revisto na `3b6190b`, que está no ar desde as 10h20 do mesmo dia. Os números de linha são da primeira, salvo onde a segunda é citada. Cada linha traz o arquivo e a linha de onde saiu.
 
 A Dona Leda é um protótipo de hackathon e ainda não cumpre tudo o que a LGPD pede de quem cuida de dado de saúde. Esta página lista o que já existe e o que falta, com dono. Ela foi escrita pelo time, sem advogado, e cada ponto que precisa de um está marcado com **[advogado]**.
 
@@ -22,7 +22,7 @@ Tudo de um idoso fica num objeto só, a ficha (`Base`, em `lib/tipos.ts:255-272`
 | Lembranças de saúde, dificuldade e humor | saúde | o idoso conta, a família ensina ou a IA deduz | `lib/tipos.ts:10-18` |
 | Avisos pra família (queda, emergência, golpe, remédio, tristeza, vontade de morrer), com quem viu e o que fez | saúde | a IA ou uma regra fixa | `lib/tipos.ts:73-87` |
 | Resumo de cada conversa, até 600 caracteres | saúde | a IA | `lib/tipos.ts:116` |
-| Resumo de exame, consulta ou receita | saúde | a IA lê o arquivo que a família anexa | `lib/tipos.ts:219-230` |
+| Resumo de exame, consulta ou receita, e desde a `3b6190b` o arquivo original | saúde | a família anexa e a IA lê | `lib/tipos.ts:219-230`, `lib/documentos.ts:56-116` |
 | Código do celular do idoso e os códigos de notificação dos celulares | técnico | o aparelho | `lib/tipos.ts:208-214`, migração `:31-38` |
 
 ### O que não fica guardado, e o exame, que passou a ficar
@@ -37,7 +37,7 @@ Tudo de um idoso fica num objeto só, a ficha (`Base`, em `lib/tipos.ts:255-272`
 
 Hoje nada vence. Dias, avisos, conversas e lembranças ficam na ficha até alguém apagar. Só três listas têm teto: as 60 últimas ligações (`lib/chamadas.ts:79`), os 40 últimos documentos (`lib/dados.ts:491`) e os 20 últimos acionamentos da rede de apoio (`lib/dados.ts:545`).
 
-O produto usa bem menos do que guarda. O painel mostra 7 dias (`lib/dados.ts:302-306`), as instruções levam os 3 últimos dias (`lib/persona.ts:335-340`) e só o resumo da última conversa aparece (`lib/dados.ts:309-321`). O histórico mais antigo fica guardado sem uso hoje. O argumento de dados do pitch conta com esse histórico, então ele precisa de uma finalidade escrita e dita ao idoso antes do piloto: **[advogado]**.
+O produto usa menos do que guarda. O painel mostra 7 dias (`lib/dados.ts:302-306`). Desde a gravação `e846d43`, as instruções da assistente levam os 3 últimos dias, até 4 avisos dos últimos 7 dias sem a fala citada, até 3 dias da semana com dor, sono ruim ou remédio faltando, e o resumo das 3 últimas conversas (`lib/persona.ts:300`, `335`, `358` e `398`, na `3b6190b`). Tudo isso vai pro Google a cada ligação. O que é mais antigo que uma semana fica guardado sem uso hoje. O argumento de dados do pitch conta com esse histórico, então ele precisa de uma finalidade escrita e dita ao idoso antes do piloto: **[advogado]**.
 
 ## Onde fica e quem lê
 
@@ -65,7 +65,7 @@ Três pontos pedem atenção.
 
 **As lembranças reservadas vão pra IA.** O "só entre vocês" esconde a lembrança da família. A assistente precisa dela pra conversar, então o texto vai nas instruções (`lib/memoria.ts:383`).
 
-**A notificação nova carrega dado de saúde.** A gravação `a0ba520`, de 22/11 às 8h41, ainda sem revisão e sem publicação, manda pro celular da família o texto do aviso em até 240 caracteres, com o trecho da fala do idoso, e o resumo da conversa quando ela acaba (`app/api/conversa/route.ts:125-139`, `lib/ferramentas.ts:332-340` e `402-409`). Esse texto passa pelo Google e pela Apple e aparece na tela bloqueada do celular. O celular que sai da conta continua na lista de notificação, que guarda os 10 últimos e não tem ação de tirar (`lib/dados.ts:524-537`).
+**A notificação nova carrega dado de saúde.** A gravação `a0ba520`, de 22/11 às 8h41, no ar desde as 10h20, manda pro celular da família o texto do aviso em até 240 caracteres, com o trecho da fala do idoso, e o resumo da conversa quando ela acaba (`app/api/conversa/route.ts:125-139`, `lib/ferramentas.ts:332-340` e `402-409`). Esse texto passa pelo Google e pela Apple e aparece na tela bloqueada do celular. O celular que sai da conta continua na lista de notificação, que guarda os 10 últimos e não tem ação de tirar (`lib/dados.ts:524-537`). Desde a `16c85bd`, o aviso urgente no meio da ligação abre no celular da família direto a tela de entrar na ligação, e a ligação pra telefone comum da rede de apoio continua dependendo da variável da telefonia (`lib/sinalizacaoChamada.ts:563`, na `3b6190b`). O texto fixo na notificação está com quem cuida do servidor.
 
 **A rede de apoio por telefone está desligada.** A ligação pra telefone comum só sai com a variável `AGORA_TELEPHONY_FROM_NUMBER` (`lib/sinalizacaoChamada.ts:559-598`). Os telefones dos contatos ficam guardados mesmo assim.
 
@@ -92,6 +92,7 @@ As ligações de teste com os avós, em 21 e 22/11, rodaram nessa chave. O pedid
 4. **Pede pra ela esquecer** uma lembrança, uma de cada vez, por voz (`lib/persona.ts:352`, `lib/memoria.ts:301-306`).
 5. **Recusa a ligação ou encerra** quando quiser.
 6. **Fica com a câmera desligada.** Só a família manda vídeo quando entra na ligação (`conhecimento/agora-o-que-roda.md`).
+8. **Tem um botão de Configurações na tela dele** desde a `545f63e`. Ali ele lê que voz e vídeo não são gravados, abre a página de privacidade, confere o microfone e desconecta o aparelho, que para de receber ligações até ser ligado de novo (`components/TelaDoIdoso.tsx:48` e `185`, na `3b6190b`). O mesmo quadro tem um atalho pro login da família (`:231`), que qualquer pessoa com o celular na mão alcança.
 7. **Fica protegido quando outra pessoa atende.** A ficha do dia volta a como estava, as lembranças e os avisos de rotina daquela ligação saem, e a família recebe um aviso só (`lib/dados.ts:213-266`).
 
 ### O que o segredo não cobre
@@ -110,7 +111,7 @@ Queda, emergência, vontade de morrer, golpe, senha e Pix sempre chegam à famí
 
 Tudo sai de uma função só, `montarPainel` (`lib/dados.ts:299-362`).
 
-**Vê:** a ficha de hoje e dos últimos sete dias, com as observações; as lembranças não reservadas, com a origem de cada uma; quantas lembranças estão reservadas; até 20 avisos, os abertos primeiro, com o trecho da fala quando uma regra disparou; o resumo e a duração da última conversa; as 10 últimas ligações; os resumos de exame; a rede de apoio. Num aviso urgente, ou quando o idoso pede, ela pode entrar na ligação com voz e vídeo.
+**Vê:** a ficha de hoje e dos últimos sete dias, com as observações; as lembranças não reservadas, com a origem de cada uma; quantas lembranças estão reservadas; até 20 avisos, os abertos primeiro, com o trecho da fala quando uma regra disparou; o resumo e a duração da última conversa; as 10 últimas ligações; os resumos de exame e o arquivo original de cada um; a rede de apoio. Num aviso urgente, ou quando o idoso pede, ela pode entrar na ligação com voz e vídeo.
 
 **Não vê:** a conversa inteira e o áudio, que não existem guardados; o texto das lembranças reservadas; o motivo de uma tristeza que o idoso pediu pra guardar.
 
@@ -124,7 +125,7 @@ As datas sem dia marcado dependem de quando a primeira família indicada pela ca
 |---|---|---|---|
 | Apagar os dados dos avós do teste de 21 e 22/11 que não derem um sim novo | foi o combinado com quem participou | quem cuida do servidor | até 23/11/2026 |
 | Chave paga do Gemini | no plano grátis o Google pode usar a voz, a conversa e o exame | Breno (conta do Google) | antes de qualquer idoso de fora do time |
-| Notificação sem dado de saúde no texto ("Aviso urgente, abra o app") | o texto passa por Google e Apple e aparece na tela bloqueada | quem cuida do servidor | antes de publicar a `a0ba520` |
+| Notificação sem dado de saúde no texto ("Aviso urgente, abra o app") | o texto passa por Google e Apple e aparece na tela bloqueada | quem cuida do servidor | já está no ar com a fala no texto; o conserto está pedido |
 | Página `/privacidade` do site em dia | ela não fala de exame, rede de apoio, notificação, Vercel, Firebase e Apple | quem cuida do servidor | antes da primeira família |
 | O sim do próprio idoso e o aceite da família, registrados com dia e versão do texto | a lei pede consentimento específico e destacado do titular pra dado de saúde (art. 11, I), a família não responde por um idoso capaz, e hoje ninguém marca aceite | time de produto, **[advogado]** no texto | antes da primeira família |
 | Base legal de cada grupo de dado | cadastro e rotina podem ter base diferente de saúde (arts. 7º e 11). A base de proteção da saúde vale pra profissional e serviço de saúde, o que a Dona Leda não é | **[advogado]** | antes da primeira família |
