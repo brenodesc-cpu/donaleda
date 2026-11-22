@@ -116,8 +116,8 @@ A demonstração entra entre o slide 6 e o 7. A cena é uma só: a dona Helena, 
 | Tempo | Na tela | Quem fala |
 |---|---|---|
 | 0:00 a 0:12 | O slide 6, e depois o painel da Marina | Breno: "A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel." Troca pro painel, toca em "Ligar agora" e para de falar |
-| 0:12 a 0:20 | O celular toca, o disco gira, "Dona Leda está ligando" | A dona Helena toca em Atender e diz "Alô, Dona Leda?" logo de cara. Na voz do Gemini, a Dona Leda só começa a falar depois que a pessoa fala |
-| 0:20 a 0:40 | A ligação | A Dona Leda se apresenta como assistente virtual e pergunta como ela dormiu. Dona Helena: "Dormi mais ou menos, acordei duas vezes." |
+| 0:12 a 0:20 | O celular toca, o disco gira, "Dona Leda está ligando" | A dona Helena toca em Atender e espera. Uns 2 segundos depois a Dona Leda cumprimenta, se apresenta como assistente virtual e dá o aviso de privacidade |
+| 0:20 a 0:40 | A ligação | A Dona Leda pergunta como ela dormiu. Dona Helena: "Dormi mais ou menos, acordei duas vezes." |
 | 0:40 a 0:55 | A ligação | Quando a Dona Leda estiver no meio da próxima pergunta, a dona Helena fala por cima: "Espera, deixa eu te contar uma coisa." Ela tem que calar e escutar |
 | 0:55 a 1:15 | A ligação | Dona Helena: "Hoje de manhã me ligou um moço dizendo que era o meu neto e pediu um Pix." A Dona Leda diz pra não passar nada, falar com a Marina antes, e que vai avisar a Marina |
 | 1:15 a 1:25 | O aviso de golpe aparece no painel | Dona Helena: "Tá bom, obrigada. Tchau." E ela mesma toca em Desligar, porque a Dona Leda não desliga sozinha com o tchau. O Breno só volta a falar com a ligação fechada |
@@ -131,7 +131,7 @@ A família entrando na mesma ligação vai ao ar depois das 23h de 21/11, e o bo
 ### O plano de reserva
 
 - **A ligação não tocou em 10 segundos:** o Breno toca em "Ligar agora" mais uma vez. Se não tocar de novo, ele para e põe o vídeo: "A internet do celular caiu, então vou mostrar a mesma cena gravada hoje de manhã."
-- **Ela ficou muda logo no começo:** primeiro a dona Helena repete "Alô, Dona Leda?", porque ela só fala depois de ouvir a pessoa. Se continuar muda, o celular abre com `?modo=tres` no fim do endereço, que é a voz de reserva pela Agora, e o Breno liga de novo. Esse modo fica gravado no celular até alguém abrir com `?modo=auto`. Deixar um segundo celular já pareado nesse modo poupa esse tempo.
+- **Ela ficou muda logo no começo:** se em 5 segundos ela não cumprimentar, a dona Helena diz "Alô, Dona Leda?". Se continuar muda, o celular abre com `?modo=tres` no fim do endereço, que é a voz de reserva pela Agora, e o Breno liga de novo. Esse modo fica gravado no celular até alguém abrir com `?modo=auto`. Deixar um segundo celular já pareado nesse modo poupa esse tempo.
 - **Ela ficou muda no meio da conversa:** a dona Helena diz "Alô?" uma vez. Sem resposta, o Breno encerra a ligação, mostra no painel o que já foi anotado e põe o vídeo a partir do aviso.
 - **O aviso não apareceu em 15 segundos:** recarregar o painel uma vez. Se não aparecer, o vídeo a partir do aviso.
 - **Nunca consertar no palco.** Depois de uma tentativa, vai o vídeo. O regulamento aceita o vídeo no lugar da demonstração quando a conexão falha.
