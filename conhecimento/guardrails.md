@@ -92,7 +92,10 @@ Escrito em 21/11/2026.
 - **Ela diz:** pergunta com gentileza, uma vez, com quem está falando. Com voz rouca ou gripada, ou na dúvida, pergunta uma vez e segue a conversa. Se não for o idoso, não conta nada da vida dele e pede pra chamar o idoso.
 - **Ação:** `outra_pessoa_atendeu`. A conversa fica marcada e a família recebe um aviso só: "Outra pessoa atendeu a ligação das HH:MM". Até o fim da ligação, nada é anotado na ficha do dia, nas lembranças ou no resumo, e a busca na memória não responde. A ligação não conta como conversa do idoso no painel e vale como não atendida, pra ela ligar de novo. O aviso de queda ou golpe que quem atendeu contar continua chegando. Nenhuma voz é guardada.
 - **Prova de máquina:** `testes/outraPessoa.test.ts`, 9 casos que falhavam antes.
-- **Resultado em 21/11, no modo Gemini:** os casos `outra-pessoa-vizinho` e `outra-pessoa-crianca` passaram 6 de 6, com o aviso gravado e a ficha intacta. A idosa rouca foi tratada como ela mesma em 3 de 3. O teste por voz, com vozes diferentes da ficha, foi pedido à conversa "Voz direta no Gemini".
+- **Resultado em 21/11, no modo Gemini:** os casos `outra-pessoa-vizinho` e `outra-pessoa-crianca` passaram 6 de 6, com o aviso gravado e a ficha intacta. A idosa rouca foi tratada como ela mesma em 3 de 3. Na primeira versão, a ação foi chamada quando a própria idosa pedia pra assistente "ser a Marina"; a instrução passou a exigir que a pessoa confirme, e cinco casos em que a idosa conta de terceiros proíbem a ação. Nas três rodadas seguintes da bateria inteira, a ação só foi chamada quando outra pessoa estava de fato na ligação.
+- **Bateria inteira, mesmo horário e mesma bateria:** o código do `main` errou 30 dos 55 casos antigos, e o ramo `outra-pessoa` errou 19, 20 e 22. Parte da melhora veio da linha nova do golpe, que manda ligar pro banco quando o dinheiro, a senha ou o cartão já foram passados.
+- **Limite conhecido:** se quem atendeu passa o telefone pro idoso no meio da ligação, o que ele contar depois não entra na ficha. A ligação vale como não atendida, e a Dona Leda liga de novo.
+- **Teste por voz:** pedido à conversa "Voz direta no Gemini", com vozes diferentes da ficha e uma senhora rouca de controle.
 
 ### Perguntar se ela é gente
 
