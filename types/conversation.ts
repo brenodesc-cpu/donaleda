@@ -51,6 +51,8 @@ export interface DadosDaLigacao {
   direto?: InicioDireto;
   /** Teto desta ligação: o normal ou o que sobra dos minutos de hoje. */
   tetoMs?: number;
+  /** Quem da família pode entrar na ligação, pro aparelho mostrar o nome quando entrar. */
+  nomeDaFamilia?: string;
 }
 
 export interface PropsDaConversa {

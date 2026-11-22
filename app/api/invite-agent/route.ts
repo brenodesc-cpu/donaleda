@@ -351,7 +351,9 @@ export async function POST(request: NextRequest) {
         console.log('saudação do Gemini:', resultado);
       });
     }
-    const conversa = await mudarBase(idosoId, (b) => abrirConversa(b, agora, chamada?.id));
+    const conversa = await mudarBase(idosoId, (b) =>
+      abrirConversa(b, agora, chamada?.id, { canal: channel_name, agenteId: agentId, modo }),
+    );
 
     return NextResponse.json({
       agent_id: agentId,
@@ -362,6 +364,7 @@ export async function POST(request: NextRequest) {
       avatar: Boolean(video),
       modo,
       teto_ms: tetoMs,
+      nomeDaFamilia: base.idoso.familiar.nome,
     } satisfies InicioDaConversa);
   } catch (error) {
     console.error('Erro ao começar a conversa:', error);

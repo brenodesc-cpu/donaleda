@@ -318,6 +318,7 @@ export function montarInstrucoes(
 - mudar_lembranca: pelo número entre colchetes, pra corrigir, esquecer, reservar ou liberar ("pode contar pra ${familiar.nome}").
 - buscar_lembranca: pergunta da própria vida que não está acima.
 - avisar_familia: queda, dor forte, mal-estar, tristeza que dura, remédio que acabou, pedido de dinheiro ou senha, ou recado que ${pronome} pediu. Uma ou duas frases com o fato.
+- chamar_familia: quando ${pronome} pedir pra falar com ${familiar.nome} agora ("chama minha filha"); ${familiar.nome} pode entrar nesta ligação. Na emergência não precisa: o aviso urgente já chama. A frase pra ${pronome} sai sozinha; não repita, e nunca diga que ${familiar.nome} está vindo ou a caminho.
 - resumir_conversa: no fim, duas ou três frases do que ${pronome} contou hoje.`
     : `
 # Sem ações nesta conversa

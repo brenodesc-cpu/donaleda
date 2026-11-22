@@ -3,6 +3,7 @@
 
 import { avisoAberto } from './avisos';
 import { randomUUID } from 'node:crypto';
+import { conviteAberto } from './convite';
 import { citaSegredo, guardar, normalizarLembrancas, paraOPainel } from './memoria';
 import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
 import { limiteDoDia } from './limiteDoDia';
@@ -171,7 +172,12 @@ export function guardarLembranca(
   return r.ok ? r.lembranca : null;
 }
 
-export function abrirConversa(base: Base, agora: Date = new Date(), chamadaId?: string): Conversa {
+export function abrirConversa(
+  base: Base,
+  agora: Date = new Date(),
+  chamadaId?: string,
+  sala?: { canal: string; agenteId: string; modo?: 'gemini' | 'tres' },
+): Conversa {
   // Conversa que ficou aberta (aba fechada, queda de conexão) é encerrada aqui.
   for (const c of base.conversas) {
     if (!c.fim) c.fim = agora.toISOString();
@@ -185,6 +191,7 @@ export function abrirConversa(base: Base, agora: Date = new Date(), chamadaId?: 
     lembrancasNoInicio: base.lembrancas.map((l) => l.id),
     alertasNoInicio: base.alertas.length,
     ...(chamadaId ? { chamadaId } : {}),
+    ...(sala ? { canal: sala.canal, agenteId: sala.agenteId, ...(sala.modo ? { modo: sala.modo } : {}) } : {}),
   };
   base.conversas.push(conversa);
   return conversa;
@@ -313,6 +320,8 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     };
   }
 
+  const aberto = conviteAberto(base, agora);
+
   const alertas = [...base.alertas]
     .sort((a, b) => {
       // Aberto primeiro: ninguém viu, ou quem viu ainda não contou o que fez.
@@ -332,6 +341,9 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
         dataEmBrasilia(new Date(c.inicio)) === hojeData && !c.outraPessoa && (c.falasDoIdoso > 0 || !c.fim),
     ),
     ultimaConversa,
+    convite: aberto
+      ? { conversaId: aberto.conversa.id, abertoEm: aberto.convite.abertoEm, motivo: aberto.convite.motivo, entrou: Boolean(aberto.convite.entrouEm) }
+      : null,
     alertas,
     semana,
     ...paraOPainel(base),

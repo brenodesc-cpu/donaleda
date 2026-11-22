@@ -136,6 +136,7 @@ export function useLigacao() {
         modo: inicio.value.modo,
         direto: inicio.value.direto,
         tetoMs: inicio.value.teto_ms,
+        nomeDaFamilia: inicio.value.nomeDaFamilia,
       });
       setFase('conversando');
     } catch (erro) {

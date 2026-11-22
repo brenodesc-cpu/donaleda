@@ -12,7 +12,7 @@ import AgoraRTC, {
   useRTCClient,
 } from 'agora-rtc-react';
 import { PhoneOff } from 'lucide-react';
-import { DEFAULT_AGENT_UID } from '@/lib/agora';
+import { DEFAULT_AGENT_UID, ehDaFamilia } from '@/lib/agora';
 import { fetchDoAparelho } from '@/lib/aparelho';
 import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import {
@@ -23,6 +23,7 @@ import {
 } from '@/lib/conversation';
 import { avisarServidor } from '@/lib/avisarServidor';
 import { linhaDaMedicao, medidorLigado, resumirMedicao } from '@/lib/medicao';
+import { useConviteDaFamilia } from '@/hooks/useConviteDaFamilia';
 import { useEnviarFalas } from '@/hooks/useEnviarFalas';
 import { useFiltroDeRuido } from '@/hooks/useFiltroDeRuido';
 import { useNivelDoAudio } from '@/hooks/useNivelDoAudio';
@@ -106,6 +107,7 @@ export default function Conversa({
     pronto: pronto && entrou,
   });
   useEnviarFalas(transcript, dados.conversaId, uidDaAssistente);
+  useConviteDaFamilia(dados.conversaId, pronto && entrou);
 
   // Mantém a cópia efêmera das falas pra consolidar resumo/ficha no encerramento.
   useEffect(() => {
@@ -146,7 +148,12 @@ export default function Conversa({
   // assistente em si. Por isso a tela toca o som de todos e mostra o vídeo de
   // quem tiver vídeo.
   const alguemNaLinha = usuariosRemotos.length > 0;
-  const comVideo = usuariosRemotos.find((usuario) => usuario.hasVideo);
+  // Alguém da família entrou pelo convite (aviso urgente ou pedido do idoso). Se ela
+  // ligar a câmera, o vídeo dela vai pro palco. A câmera do aparelho fica desligada.
+  const familiaNaLinha = usuariosRemotos.some((usuario) => ehDaFamilia(usuario.uid));
+  const comVideo =
+    usuariosRemotos.find((usuario) => ehDaFamilia(usuario.uid) && usuario.hasVideo) ??
+    usuariosRemotos.find((usuario) => usuario.hasVideo);
   const donoDaVoz =
     usuariosRemotos.find(
       (usuario) => String(usuario.uid) === uidDaAssistente && usuario.hasAudio,
@@ -201,10 +208,11 @@ export default function Conversa({
   // Teto de 10 minutos por ligação (com sinal suave pra IA encaminhar a despedida aos 8m30s)
   // e 2 minutos sem o idoso falar. O microfone entra junto da legenda, pra ligação não cair
   // se a legenda falhar.
+  // Com a família na ligação, o teto de tempo e o corte por silêncio ficam parados.
   useTetoDaLigacao(
     transcript,
     uidDaAssistente,
-    alguemNaLinha,
+    alguemNaLinha && !familiaNaLinha,
     estado === 'falando',
     localMicrophoneTrack,
     encerrarComFalas,
@@ -225,7 +233,11 @@ export default function Conversa({
 
       <div className="flex w-full flex-col items-center gap-2">
         <p role="status" className="text-xl font-medium text-muted-foreground">
-          {estado === 'ligando' ? 'Só um instante...' : TEXTO_DO_ESTADO[estado]}
+          {familiaNaLinha
+            ? `${dados.nomeDaFamilia ?? 'Sua família'} está na ligação`
+            : estado === 'ligando'
+              ? 'Só um instante...'
+              : TEXTO_DO_ESTADO[estado]}
         </p>
         <p
           aria-live="polite"

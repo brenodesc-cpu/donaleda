@@ -117,6 +117,24 @@ export interface Conversa {
   tempos?: TemposDaConversa;
   /** Só no modo direto: os tokens que o Google cobrou e o custo da ligação. */
   uso?: UsoDaConversa;
+  /** A sala da Agora da ligação e a assistente que entrou nela, pra família poder entrar. */
+  canal?: string;
+  agenteId?: string;
+  /** O jeito de voz da ligação: as ligações do Gemini respondem por outro endereço da Agora. */
+  modo?: 'gemini' | 'tres';
+  /** O convite pra família entrar, aberto por aviso urgente ou pedido da pessoa. */
+  convite?: ConviteDaFamilia;
+}
+
+/** O convite pra família entrar na ligação. Só existe com a ligação aberta. */
+export interface ConviteDaFamilia {
+  abertoEm: string;
+  motivo: 'urgente' | 'pedido';
+  /** O tipo do aviso que abriu, pra frase de quando ninguém entra (golpe muda a frase). */
+  tipo?: TipoDeAlerta;
+  entrouEm?: string;
+  /** Quando a frase de "não conseguiu entrar" tocou. Toca uma vez só. */
+  semEntradaEm?: string;
 }
 
 /** Os tokens que o Gemini cobrou numa ligação do modo direto, somados resposta por resposta. */
@@ -220,6 +238,8 @@ export interface PainelDaFamilia {
     resumo?: string;
     emAndamento: boolean;
   } | null;
+  /** Convite aberto pra família entrar na ligação que está acontecendo agora. null quando não há. */
+  convite: { conversaId: string; abertoEm: string; motivo: ConviteDaFamilia['motivo']; entrou: boolean } | null;
   /** Não vistos primeiro, depois os mais novos. */
   alertas: Alerta[];
   /** Sete dias, do mais antigo até hoje. Dia sem dado vem com os campos vazios. */
@@ -258,6 +278,8 @@ export type AcaoDaFamilia = (
   | { acao: 'atender_sozinho'; ligado: boolean }
   /** Gera o código de 6 números pra ligar um aparelho. Responde `{ ok, ...CodigoDoAparelho }`. */
   | { acao: 'gerar_codigo' }
+  /** Entra na ligação que está acontecendo, com voz e vídeo. Responde `{ ok, ...EntradaNaLigacao }`, ou 409 sem ligação. */
+  | { acao: 'entrar_na_ligacao' }
   /** A família ensina uma lembrança. Responde `{ ok, lembranca }` ou 422 `{ ok:false, erro:'recusada', motivo }`. */
   | { acao: 'ensinar'; texto: string; categoria: CategoriaDeLembranca; sobre?: string; data?: string; hora?: string }
   /** A família corrige uma lembrança que vê. Só os campos que vierem. Responde `{ ok, lembranca }`. */
@@ -307,12 +329,16 @@ export interface FalaDaSessao {
 export type EventoDaConversa =
   | { tipo: 'fala'; conversaId: string; texto: string }
   | { tipo: 'fim'; conversaId: string; falas?: FalaDaSessao[] }
+  /** O aparelho pergunta a cada 5 s, durante a ligação, se alguém da família entrou. */
+  | { tipo: 'convite'; conversaId: string }
   | { tipo: 'tempos'; conversaId: string; tempos: TemposDaConversa };
 
 export interface RespostaDoEvento {
   ok: boolean;
   /** Vem quando a fala disparou uma regra de segurança (queda, golpe). */
   alerta?: Alerta;
+  /** Resposta do evento 'convite': se alguém da família já entrou. */
+  familiaEntrou?: boolean;
 }
 
 /** O que POST /api/invite-agent devolve além dos campos do projeto-base. */
@@ -334,6 +360,8 @@ export interface InicioDaConversa {
   direto?: InicioDireto;
   /** Teto desta ligação em milissegundos: o normal ou o que sobra do limite do dia. */
   teto_ms?: number;
+  /** O nome de quem da família pode entrar na ligação, pra tela do idoso mostrar. */
+  nomeDaFamilia?: string;
 }
 
 /** POST /api/direto devolve isto dentro de InicioDaConversa. */
@@ -422,3 +450,11 @@ export interface AparelhoPareado {
 
 /** Cabeçalho que todo pedido do aparelho do idoso manda pro servidor. */
 export const CABECALHO_DO_APARELHO = 'x-donaleda-aparelho';
+
+/** O que a família recebe pra entrar na sala da Agora em que o idoso está. */
+export interface EntradaNaLigacao {
+  appId: string;
+  canal: string;
+  uid: string;
+  token: string;
+}

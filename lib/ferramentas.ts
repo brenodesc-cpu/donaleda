@@ -12,9 +12,13 @@ import {
   resumirConversa,
   type BemEstar,
 } from './dados';
+import { NOME_DA_ASSISTENTE } from './assistente';
+import { abrirConvite, fraseDoConvite } from './convite';
+import { depois, falar } from './familiaNaLigacao';
 import { avaliarFala, semAcento } from './regras';
 import { buscar, citaSegredo, dataPedida, GAVETAS, guardar, horaPedida, linha, mudar, resumoSemSegredo, type Mudanca } from './memoria';
 import type {
+  Conversa,
   Alimentacao,
   CategoriaDeLembranca,
   Gravidade,
@@ -136,6 +140,12 @@ export const FERRAMENTAS: Ferramenta[] = [
     name: 'outra_pessoa_atendeu',
     description:
       'Quem está na ligação confirmou que não é a pessoa da ficha. Não use quando a pessoa da ficha só conta de outra pessoa ou pede pra você ser outra pessoa. Avisa a família uma vez, e daqui em diante nada desta conversa é anotado.',
+    inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+  },
+  {
+    name: 'chamar_familia',
+    description:
+      'Quando a pessoa pede pra falar com a família agora ("chama minha filha", "quero falar com a Marina"). Avisa a família, que pode entrar nesta ligação. Não use em emergência: o aviso urgente já chama.',
     inputSchema: { type: 'object', properties: {}, additionalProperties: false },
   },
   {
@@ -297,14 +307,43 @@ export async function executarFerramenta(
     const riscoDaRegra = daRegra !== null && !(daRegra.tipo === 'humor' && daRegra.gravidade === 'atencao');
     const podeCitar = tipo === 'emergencia' || tipo === 'golpe' || RISCO_NO_AVISO.test(semAcento(mensagem)) || riscoDaRegra;
     let semOMotivo = false;
+    let convite: { conversa: Conversa; frase: string } | null = null;
     await mudarBase(idosoId, (base) => {
       semOMotivo = !podeCitar && citaSegredo(base, mensagem);
       const textoDoAviso = semOMotivo ? avisoSemMotivo(tipo, base.idoso.nome) : mensagem;
-      return criarAlerta(base, { tipo, gravidade, texto: textoDoAviso, origem: 'assistente' }, agora);
+      const alerta = criarAlerta(base, { tipo, gravidade, texto: textoDoAviso, origem: 'assistente' }, agora);
+      // Aviso urgente com a ligação aberta abre o convite pra família entrar.
+      const convidada = gravidade === 'urgente' ? abrirConvite(base, 'urgente', tipo, agora) : null;
+      if (convidada) convite = { conversa: { ...convidada }, frase: fraseDoConvite(base) };
+      return alerta;
     });
-    return semOMotivo
+    const aberto = convite as { conversa: Conversa; frase: string } | null;
+    if (aberto) depois(() => falar(aberto.conversa, aberto.frase, 'APPEND'));
+    const resposta = semOMotivo
       ? 'A família foi avisada sem o motivo, porque o motivo é um assunto que a pessoa pediu segredo. Não mande de novo.'
       : 'A família foi avisada.';
+    return aberto ? `${resposta} Ela pode entrar na ligação; a frase pra pessoa já vai ser dita, não repita.` : resposta;
+  }
+
+  if (nome === 'chamar_familia') {
+    let convite: { conversa: Conversa; frase: string } | null = null;
+    let nomeDaFamilia = 'a família';
+    await mudarBase(idosoId, (base) => {
+      nomeDaFamilia = base.idoso.familiar.nome;
+      const convidada = abrirConvite(base, 'pedido', undefined, agora);
+      if (!convidada) return null;
+      criarAlerta(
+        base,
+        { tipo: 'ligacao', gravidade: 'atencao', texto: `Pediu pra falar com você agora, na ligação com a ${NOME_DA_ASSISTENTE}.`, origem: 'assistente' },
+        agora,
+      );
+      convite = { conversa: { ...convidada }, frase: fraseDoConvite(base) };
+      return null;
+    });
+    const aberto = convite as { conversa: Conversa; frase: string } | null;
+    if (!aberto) return `${nomeDaFamilia} já foi chamada nesta ligação, ou a ligação não deixa chamar agora. Diga com calma que o recado fica no resumo.`;
+    depois(() => falar(aberto.conversa, aberto.frase, 'APPEND'));
+    return `Chamei ${nomeDaFamilia}. A frase pra pessoa já vai ser dita; não repita, só siga a conversa com calma.`;
   }
 
   if (nome === 'resumir_conversa') {
