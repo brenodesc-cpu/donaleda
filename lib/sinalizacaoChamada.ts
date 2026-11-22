@@ -354,8 +354,10 @@ export async function notificarFamiliaPorPush(
     categoria: aviso.tipo,
     alertaId: aviso.alertaId ?? '',
     assistente: NOME_DA_ASSISTENTE,
-    titulo: aviso.titulo.slice(0, 120),
-    mensagem: aviso.mensagem.slice(0, 240),
+    // Texto fixo: a notificação aparece na tela bloqueada e passa pelo Google e pela Apple,
+    // então não leva o nome do idoso, o aviso nem a fala dele (revisão de 22/11).
+    titulo: urgente ? 'Aviso urgente da Dona Leda' : 'Aviso da Dona Leda',
+    mensagem: aviso.entrarAoVivo ? 'Abra o app pra entrar na ligação.' : 'Abra o app.',
     urlDestino: aviso.urlDestino ?? '/familia',
     entrarAoVivo: aviso.entrarAoVivo ? '1' : '0',
   };

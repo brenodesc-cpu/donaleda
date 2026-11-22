@@ -379,7 +379,7 @@ describe('gestão de exames, calendário de longo prazo e escalonamento em massa
     expect(montarPainel(base, AGORA).notificacoesFamiliaAtivas).toBe(true);
   });
 
-  it('inclui guardrails éticos anti-apego, episódios da semana e múltiplas conversas recentes no prompt', async () => {
+  it('inclui guardrails éticos anti-apego e conversas recentes no prompt, e deixa fora avisos e anotações de outros dias', async () => {
     const { montarInstrucoes } = await import('@/lib/persona');
     const base = baseDeExemplo(AGORA);
     const tresDiasAntes = new Date(AGORA.getTime() - 3 * 24 * 60 * 60 * 1000);
@@ -438,8 +438,9 @@ describe('gestão de exames, calendário de longo prazo e escalonamento em massa
     const instrucoes = montarInstrucoes(base, AGORA);
     expect(instrucoes).toContain('Limites éticos e vínculo saudável');
     expect(instrucoes).toContain('NUNCA alimente ilusão afetiva');
-    expect(instrucoes).toContain('Relatou tontura ao levantar de manhã.');
-    expect(instrucoes).toContain('dor 6/10 (no joelho)');
+    // Aviso de outro dia e ponto de atenção de dia anterior não viram assunto da ligação (revisão de 22/11).
+    expect(instrucoes).not.toContain('Relatou tontura ao levantar de manhã.');
+    expect(instrucoes).not.toContain('dor 6/10 (no joelho)');
     expect(instrucoes).toContain('Cardiologista no posto');
     expect(instrucoes).toContain('Ontem contou que cozinhou sopa de legumes.');
     expect(instrucoes).toContain('Hoje cedo disse que o remédio da pressão está no fim.');

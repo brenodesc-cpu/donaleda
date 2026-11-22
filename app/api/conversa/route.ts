@@ -112,13 +112,17 @@ export async function POST(request: Request) {
       const conversa = base.conversas.find((c) => c.id === evento.conversaId);
       if (!conversa) return null;
       conversa.falasDoIdoso += 1;
+      const avisosAntes = base.alertas.length;
       const alerta: Alerta | undefined = regra
         ? criarAlerta(base, { ...regra, origem: 'regra' })
         : undefined;
       // Aviso urgente com a ligação aberta abre o convite pra família entrar.
       const convidada = regra?.gravidade === 'urgente' ? abrirConvite(base, 'urgente', regra.tipo) : null;
+      // Só notifica quando o aviso nasceu agora: aviso repetido na mesma ligação não toca de novo.
+      const nasceuAgora = base.alertas.length > avisosAntes;
       const precisaNotificar =
         Boolean(alerta) &&
+        nasceuAgora &&
         ((base.aparelhosFamiliaPush?.length ?? 0) > 0 ||
           (alerta?.gravidade === 'urgente' && (base.redeDeApoio?.length ?? 0) > 0));
       return {

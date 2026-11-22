@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { LogOut, Mic, Settings, ShieldCheck, Users, X } from 'lucide-react';
+import { LogOut, Mic, Settings, ShieldCheck, X } from 'lucide-react';
 import { useAparelhoPronto } from '@/hooks/useAparelhoPronto';
 import { useChamada } from '@/hooks/useChamada';
 import { useLigacao } from '@/hooks/useLigacao';
@@ -223,13 +223,6 @@ export default function TelaDoIdoso() {
                 <Mic aria-hidden="true" className="h-5 w-5 shrink-0" />
                 Conferir permissão de microfone e som
               </button>
-              <Link
-                href="/entrar"
-                className="inline-flex min-h-12 items-center gap-3 rounded-xl border border-border bg-background px-4 text-base font-medium text-foreground hover:bg-muted"
-              >
-                <Users aria-hidden="true" className="h-5 w-5 shrink-0" />
-                Entrar no painel da família
-              </Link>
             </div>
 
             <div className="border-t border-border pt-4">
