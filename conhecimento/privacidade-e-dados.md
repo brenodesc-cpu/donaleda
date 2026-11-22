@@ -71,7 +71,7 @@ Três pontos pedem atenção.
 
 ### A chave grátis do Gemini
 
-As três chamadas ao Google usam a mesma chave, a `LIA_GEMINI_KEY` (`app/api/invite-agent/route.ts:229`, `lib/posConversa.ts:224`, `lib/documentos.ts:105`). O código não mostra qual chave está na Vercel. A central do time informou em 22/11 que é a do plano grátis.
+As três chamadas ao Google usam a mesma chave, a `LIA_GEMINI_KEY` (`app/api/invite-agent/route.ts:229`, `lib/posConversa.ts:224`, `lib/documentos.ts:105`). O código não mostra qual chave está na Vercel. A central do time informou em 22/11 que é a do plano grátis, por decisão do Breno de 21/11, e que não há chave paga disponível no hackathon.
 
 Os termos da API do Gemini, em vigor desde 23/03/2026 (aistudio.google.com/docs/terms, lidos em 22/11), dizem:
 
@@ -82,7 +82,7 @@ Os termos da API do Gemini, em vigor desde 23/03/2026 (aistudio.google.com/docs/
 
 Antes de um piloto, a chave passa a ser de um projeto com cobrança ativa. É troca de configuração na Vercel, sem mexer no código. Enquanto a chave for a grátis, voz, conversa e exame de idoso de verdade não deveriam passar por ela.
 
-O kit das ligações de 21/11 dizia que a chave grátis ficava fora das ligações com os avós (`conhecimento/validacao.md`, "Como a ligação chega no idoso"). Não deu pra conferir pelo código qual chave essas ligações usaram.
+As ligações de teste com os avós, em 21 e 22/11, rodaram nessa chave. O pedido de permissão falado à família e ao idoso passou a citar o Google na manhã de 22/11 e pede pra não falar número de documento nem senha (`conhecimento/validacao.md`, "O pedido de permissão"). Nas ligações de 21/11 ele ainda não citava, e os dados de quem participou são apagados até 23/11.
 
 ## O que o idoso já controla
 
@@ -166,7 +166,7 @@ O pitch diz que cada ligação junta 7 respostas, umas 2.555 por idoso por ano. 
 
 ## O que não deu pra conferir
 
-- Qual chave do Gemini está na Vercel e qual chave as ligações com os avós de 21 e 22/11 usaram.
+- Qual chave do Gemini está na Vercel: o código não mostra, e a informação de que é a grátis veio da central do time.
 - A região do banco no Supabase.
 - Por quanto tempo Agora, Deepgram, OpenAI, Supabase e Vercel guardam o que passa por eles. Só os termos do Gemini foram lidos.
 - Quem do time tem acesso ao Supabase e à Vercel.

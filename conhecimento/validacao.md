@@ -55,6 +55,7 @@ O teste da voz das 17h, com gente do time fazendo a idosa em duas duplas, não t
 - Alguém da família ficou do lado do idoso, e os avós e a primeira casa vêm de gente próxima do time.
 - A medição de custo usou voz gravada, e a bateria de segurança roda por texto.
 - Ninguém pagou nada: o R$ 500 e o sim aos R$ 129,90 são opinião.
+- As ligações de teste usaram a chave grátis do Gemini, em que o Google pode usar o conteúdo enviado pra melhorar os produtos dele. O pedido de permissão passou a dizer isso na manhã de 22/11, e nas ligações de 21/11 ele ainda não dizia. O mapa dos dados está em [privacidade-e-dados.md](privacidade-e-dados.md).
 
 ### Próximos passos, com data
 
@@ -83,7 +84,7 @@ O teste da voz das 17h, com gente do time fazendo a idosa em duas duplas, não t
 
 ## Como a ligação chega no idoso
 
-Os avós usam o padrão do site, o Gemini dentro da Agora, com a chave de projeto pago que o Breno põe antes das 20h. Às 19h45 o Breno avisa o time se a chave foi trocada. Se não foi, depois de parear, a família abre `donaleda.vercel.app/?modo=tres` no celular do idoso, no mesmo navegador em que o link abriu, e as ligações da noite usam as três peças. A chave grátis fica fora das ligações com os avós porque, nesse plano, o Google pode usar a conversa pra melhorar os produtos dele.
+Os avós usam o padrão do site, o Gemini dentro da Agora, com a chave de projeto pago que o Breno põe antes das 20h. Às 19h45 o Breno avisa o time se a chave foi trocada. Se não foi, depois de parear, a família abre `donaleda.vercel.app/?modo=tres` no celular do idoso, no mesmo navegador em que o link abriu, e as ligações da noite usam as três peças. A chave grátis ficaria fora das ligações com os avós porque, nesse plano, o Google pode usar a conversa pra melhorar os produtos dele. Em 22/11 a chave paga não tinha entrado, e o protótipo segue na chave grátis por decisão do Breno de 21/11. Por isso o pedido de permissão abaixo passou a citar o Google.
 
 O idoso nunca faz login. Quem faz é a pessoa do time, no celular dela:
 
@@ -101,11 +102,11 @@ O idoso nunca faz login. Quem faz é a pessoa do time, no celular dela:
 
 **Pra família** (o pai, a mãe ou quem cuida):
 
-> Oi! Estou num hackathon, uma competição de programação, e o meu time fez a Dona Leda, uma assistente virtual que liga todo dia por vídeo pro idoso pra fazer companhia e ajudar a cuidar do dia a dia dele. Ela pergunta como ele está e avisa a família quando algo não vai bem. Queria testar com a vó hoje, uns cinco a dez minutos. A vó vai saber que é um programa de computador. A gente não grava a conversa, só anota o que ela contar de como está, e apaga tudo depois do hackathon. Você topa? Consegue ficar do lado dela?
+> Oi! Estou num hackathon, uma competição de programação, e o meu time fez a Dona Leda, uma assistente virtual que liga todo dia por vídeo pro idoso pra fazer companhia e ajudar a cuidar do dia a dia dele. Ela pergunta como ele está e avisa a família quando algo não vai bem. Queria testar com a vó hoje, uns cinco a dez minutos. A vó vai saber que é um programa de computador. A gente não grava a conversa, só anota o que ela contar de como está, e apaga tudo até segunda, dia 23 de novembro. Pra ela conseguir falar, a conversa passa por um serviço do Google, e o Google pode usar o que for dito pra melhorar o serviço dele, com gente de lá podendo ler. Por isso é melhor a vó não falar número de documento nem senha. Você topa? Consegue ficar do lado dela?
 
 **Pro idoso** (quem acompanha fala, antes de ligar):
 
-> Vó, o meu time fez uma assistente virtual, a Dona Leda. É um programa de computador que liga por vídeo pra fazer companhia e ajudar a senhora no dia a dia. Hoje ela vai perguntar como a senhora está, se dormiu bem, se comeu. Dura uns cinco minutos, e a senhora pode parar quando quiser, é só dar tchau. Ninguém vai gravar. A senhora deixa eu testar com a senhora?
+> Vó, o meu time fez uma assistente virtual, a Dona Leda. É um programa de computador que liga por vídeo pra fazer companhia e ajudar a senhora no dia a dia. Hoje ela vai perguntar como a senhora está, se dormiu bem, se comeu. Dura uns cinco minutos, e a senhora pode parar quando quiser, é só dar tchau. Ninguém vai gravar. Pra ela conseguir falar, a conversa passa por um serviço do Google, que pode usar o que a senhora disser pra melhorar o serviço dele. Por isso é melhor não falar número de documento nem senha. A senhora deixa eu testar com a senhora?
 
 Só siga com um sim claro. Se a pessoa hesitar, agradeça e não ligue.
 
