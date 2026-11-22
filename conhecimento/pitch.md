@@ -111,7 +111,7 @@ A demonstração entra entre o slide 6 e o 7. A cena é uma só: a dona Helena, 
 - No ensaio do palco, conferir se a voz dela sai alta o bastante pra sala. Se o microfone do evento ficar perto do alto-falante do celular, testar antes se o som da sala volta pro celular e faz ela se interromper.
 - Os minutos da Agora não preocupam: às 20h01 de 21/11 a conta tinha usado 15 dos 300 do motor de conversa, e cada ensaio gasta de 2 a 3.
 
-### O roteiro
+### Versão A: o golpe do Pix, sem a filha
 
 | Tempo | Na tela | Quem fala |
 |---|---|---|
@@ -126,20 +126,25 @@ A demonstração entra entre o slide 6 e o 7. A cena é uma só: a dona Helena, 
 
 As falas da dona Helena são de propósito curtas e com a palavra "Pix", que a regra fixa do aviso reconhece. Elas são as mesmas do teste de voz, situações 2, 3 e 9. Se no ensaio ela não calar quando interrompida, a fala do "Espera" sai do roteiro.
 
-A família entrando na mesma ligação está no ar desde 00h11 de 22/11, conferida no site com dois navegadores. Ela entra no roteiro só se o teste com dois celulares de verdade às 8h passar e a central decidir. Até lá vale a cena do Pix acima.
+A família entrando na mesma ligação está no ar desde 00h11 de 22/11 e passou no teste de máquina às 00h13, com dois navegadores e voz gravada. Ela só entra no roteiro do palco se o teste com dois celulares de verdade passar às 8h. As duas versões estão escritas, pra decisão sair em um minuto no ensaio.
 
-### A cena com a filha na ligação, se a central aprovar às 8h
+| Versão | A cena | Tempo | Quando usar |
+|---|---|---|---|
+| A, sem a filha (acima) | O golpe do Pix, o aviso, o "Já vi" e a ficha do dia | 2:00, ou 1:45 sem a ficha | Se o teste das 8h falhar ou não acontecer |
+| B, com a filha (abaixo) | A queda, o aviso urgente, a filha entra e a Dona Leda sai | 2:00 | Se o teste das 8h passar, com o eco conferido |
 
-Ela troca o golpe do Pix pela queda, porque o botão de entrar na ligação só aparece em aviso urgente. Os primeiros 55 segundos ficam iguais, com a saudação, o sono e a interrupção.
+### Versão B: a filha entra na ligação
+
+Ela troca o golpe do Pix pela queda, porque o botão de entrar na ligação só aparece em aviso urgente. Os primeiros 55 segundos ficam iguais aos da versão A, com a saudação, o sono e a interrupção.
 
 | Tempo | Na tela | Quem fala |
 |---|---|---|
 | 0:55 a 1:10 | A ligação | Dona Helena: "Eu caí no banheiro e não consigo levantar." A Dona Leda diz que avisou a Marina, pede pra ligar pro 192 e diz que a Marina pode entrar na ligação |
 | 1:10 a 1:20 | O aviso urgente e o botão "Entrar na ligação agora" no painel | Breno: "A Marina recebeu o aviso e entra na ligação." Toca no botão |
 | 1:20 a 1:45 | A ligação com as duas | A Dona Leda diz "a Marina entrou na ligação, vou deixar vocês conversarem" e sai. Breno, como Marina: "Mãe, tô aqui. Já liguei pro 192." Dona Helena: "Tá bom, filha." E ela toca em Desligar |
-| 1:45 a 2:00 | O cartão do aviso | Breno: "O aviso chegou na hora, e a filha entrou na mesma ligação." |
+| 1:45 a 2:00 | O cartão do aviso | Breno: "O aviso chegou antes de ela desligar, e a filha entrou na mesma ligação. Pra socorro, ela pede pra ligar pro 192 e chama a família." |
 
-O que o teste das 8h precisa provar, além de a cena funcionar: o notebook e o celular na mesma sala, na mesma ligação, sem o som de um voltar pelo microfone do outro. Se voltar, o notebook usa um fone de ouvido. A cena da queda fala de socorro, então o Breno diz em voz alta que quem chama o 192 é a família e que a Dona Leda não é serviço de emergência.
+O teste das 8h confere também o eco: o notebook e o celular na mesma sala, na mesma ligação, sem o som de um voltar pelo microfone do outro. Se voltar, o notebook usa um fone de ouvido.
 
 ### O plano de reserva
 
@@ -147,6 +152,7 @@ O que o teste das 8h precisa provar, além de a cena funcionar: o notebook e o c
 - **Ela ficou muda logo no começo:** se em 5 segundos ela não cumprimentar, a dona Helena diz "Alô, Dona Leda?". Se continuar muda, o celular abre com `?modo=tres` no fim do endereço, que é a voz de reserva pela Agora, e o Breno liga de novo. Esse modo fica gravado no celular até alguém abrir com `?modo=auto`. Deixar um segundo celular já pareado nesse modo poupa esse tempo.
 - **Ela ficou muda no meio da conversa:** a dona Helena diz "Alô?" uma vez. Sem resposta, o Breno encerra a ligação, mostra no painel o que já foi anotado e põe o vídeo a partir do aviso.
 - **O aviso não apareceu em 15 segundos:** recarregar o painel uma vez. Se não aparecer, o vídeo a partir do aviso.
+- **Versão B, o botão não apareceu ou a filha não entrou em 10 segundos:** o Breno segue sem ela, toca em "Já vi" e mostra o cartão do aviso.
 - **Nunca consertar no palco.** Depois de uma tentativa, vai o vídeo. O regulamento aceita o vídeo no lugar da demonstração quando a conexão falha.
 
 ### O vídeo da entrega
@@ -172,7 +178,7 @@ Cada resposta cabe em uns 20 segundos. Os números têm fonte em `custos.md`, `p
 | Pergunta | Resposta |
 |---|---|
 | Quanto custa cada idoso por mês? | Uns R$ 38 no uso médio de 3 minutos e 20 segundos por dia, medido numa ligação de teste. Dos R$ 129,90 saem imposto e cartão e sobram R$ 67. Quem usa os 10 minutos todo dia dá uns R$ 13 de prejuízo, e uma família no uso médio cobre até cinco dessas. Quatro famílias pagam o site e o banco |
-| E o protótipo de hoje, quanto custa? Os R$ 38 incluem o motor de conversa da Agora? | A sala da Agora está em toda ligação, porque é por ela que a filha vai entrar. O motor de conversa da Agora, que é o da demonstração, soma uns R$ 59 por idoso por mês ao custo medido. O preço do motor por volume é a primeira conversa que a gente quer ter com a Agora. [A última frase depende do sim do Breno.] |
+| E o protótipo de hoje, quanto custa? Os R$ 38 incluem o motor de conversa da Agora? | A sala da Agora está em toda ligação, porque é por ela que a filha entra. O motor de conversa da Agora, que é o da demonstração, soma uns R$ 59 por idoso por mês ao custo medido. O preço do motor por volume é a primeira conversa que a gente quer ter com a Agora. [A última frase depende do sim do Breno.] |
 | E a privacidade, a LGPD? | A conversa inteira não é guardada, só a ficha do dia, as lembranças, os avisos e o resumo. Na primeira ligação ela dá o aviso de privacidade, e na memória o que a pessoa contou fica separado do que a Dona Leda deduziu. Quem cadastrou apaga tudo em Ajustes. O idoso pode pedir pra guardar um assunto íntimo, e a família só sabe que ele anda triste, sem o motivo. Risco (queda, golpe, vontade de morrer) sempre vai pra família, e ela diz isso a ele. Dado de saúde pede base legal própria na LGPD, prazo de guarda e lista de quem acessa, e isso vem antes do primeiro piloto pago |
 | Por que uma IA no lugar de uma pessoa ligando? | Ligação diária feita por gente funciona: num estudo de 2021 (JAMA Psychiatry) ela reduziu a solidão em quatro semanas. Ela custa caro pra fazer todo dia, e hoje quem faz é a filha, de graça, ou um cuidador, de R$ 2.800 a 4.500. A Dona Leda faz a ligação de todo dia por R$ 129,90 e chama a família quando precisa de gente |
 | E o idoso que não tem celular? | Esta versão é pra quem tem celular ou tablet com internet, e perto de 45% dos brasileiros com mais de 60 anos já fazem chamada pela internet. Quem não tem entra depois pela ligação de telefone comum, que é onde estão os maiores números lá fora: o CareCall, da Coreia, liga pra 30 mil idosos |
@@ -180,7 +186,7 @@ Cada resposta cabe em uns 20 segundos. Os números têm fonte em `custos.md`, `p
 | E se alguém usar a Dona Leda pra aplicar golpe? | Ela nunca pede dinheiro, senha nem código, e sempre se apresenta como assistente virtual, porque voz que finge ser gente é o jeito do golpe do falso parente. Quem diz ser a filha ou o suporte na ligação não muda nada: contato da família, avisos e horários só mudam no painel, com a conta da família. Pedido de Pix, senha, código ou cartão vira aviso na hora. Na bateria de ataque, com 55 conversas de golpe, queda, segredo e remédio, ela passou em 39 e 40 nas duas últimas rodadas, e as frases que escapavam viraram aviso por regra fixa |
 | E se outra pessoa atender o celular? | Quando quem atende diz que não é o idoso, ela não conta nada das conversas dele, não anota nada na ficha e a família recebe um aviso só: "Outra pessoa atendeu a ligação". Passou em 5 de 5 no teste. Perceber só pela voz ela ainda não consegue |
 | Lá fora já existe isso. Qual a diferença? | Lá fora quem liga pro idoso fala inglês, coreano ou japonês. A Meela tirou a ligação de companhia do site e foi pra corrida e mercado, e a Callie Care cresce nas corridas. O CareCall, da Naver, é pago por prefeitura e deixa a família de fora. A Papa manda gente de verdade, pago por plano de saúde. A ElliQ é um robô de mesa importado, US$ 249 mais mensalidade. Em português, com a família vendo o aviso e quem assumiu, a gente não achou ninguém |
-| Isso não troca o filho por uma máquina? | O risco existe. Ela se apresenta como assistente virtual, e a família fica por perto pelo painel, pelos avisos e pela ligação que pode mandar fazer na hora. |
+| Isso não troca o filho por uma máquina? | O risco existe. Ela se apresenta como assistente virtual, e a família fica por perto pelo painel, pelos avisos e pela ligação que pode mandar fazer na hora. Num aviso urgente, a filha entra na mesma ligação pela sala da Agora, e a Dona Leda sai pra deixar as duas conversarem. |
 | O filho vai pagar todo mês? | É a premissa mais arriscada, e ninguém lá fora publica quantas famílias pagam. A família já paga de R$ 189 a 249 por um botão de emergência. Nas ligações de ontem, [N] de [N] famílias disseram sim aos R$ 129,90, e [N] pediram pra começar o teste |
 | O idoso vai atender de novo depois da novidade? | É o que a ligação de domingo às 9h mediu: [N] de [N] atenderam de novo. Lá fora, no CareCall, 89% atenderam ao menos uma vez em três meses. Num estudo com uma boneca que conversa, o efeito sumiu aos seis meses, então isso se mede por mês |
 | Ela demora quanto pra responder? | Menos de 3 segundos na média, medido pelo time com voz gravada: 2,8 s de média e 4,4 s no pior caso, que é a primeira resposta da ligação. A Agora não mede esse tempo no modo do Gemini, então o número é nosso |
