@@ -4,6 +4,7 @@
 import { FUSO, NOME_DA_ASSISTENTE, dataEmBrasilia, horaEmBrasilia, somarDias } from './assistente';
 import { diaVazio, oQueFaltaSaber } from './dados';
 import { avisoDePrivacidade } from './privacidade';
+import { blocoDeDocumentos } from './documentos';
 import { blocoDeLembrancas } from './memoria';
 import type { Base, Dia } from './tipos';
 
@@ -170,6 +171,16 @@ export function resumirRemediosNoHorario(
   return linhas.join('\n');
 }
 
+function dataBrDeIso(data: string): string {
+  const [ano, mes, dia] = data.split('-');
+  if (!ano || !mes || !dia) return data;
+  const d = new Date(Date.UTC(Number(ano), Number(mes) - 1, Number(dia), 12));
+  const semana = new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC', weekday: 'long' })
+    .format(d)
+    .replace('-feira', '');
+  return `${semana}, ${dia}/${mes}/${ano}`;
+}
+
 function horaCurtaDeIso(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
@@ -229,6 +240,28 @@ export function montarRoteiroDoMomento(base: Base, agora: Date = new Date()): st
       const hora = c.hora ? ` às ${c.hora}` : '';
       linhas.push(`- Compromisso de AMANHÃ${hora}: "${c.texto}" — vale já deixar o lembrete.`);
     }
+  }
+
+  // Compromissos dos próximos 7 dias (além de hoje e amanhã) e consultas marcadas meses à frente.
+  const emSeteDias = somarDias(hojeData, 7);
+  const futuros = base.lembrancas
+    .filter((l) => l.categoria === 'compromisso' && l.data && l.data > amanhaData)
+    .sort((a, b) => `${a.data}${a.hora ?? ''}`.localeCompare(`${b.data}${b.hora ?? ''}`));
+
+  const naSemana = futuros.filter((l) => l.data! <= emSeteDias).slice(0, 3);
+  for (const c of naSemana) {
+    const hora = c.hora ? ` às ${c.hora}` : '';
+    linhas.push(
+      `- Compromisso NESTA SEMANA (${dataBrDeIso(c.data!)}${hora}): "${c.texto}" — avise com naturalidade pra não esquecer.`,
+    );
+  }
+
+  const maisAFrente = futuros.filter((l) => l.data! > emSeteDias).slice(0, 3);
+  for (const c of maisAFrente) {
+    const hora = c.hora ? ` às ${c.hora}` : '';
+    linhas.push(
+      `- Agendado mais à frente (${dataBrDeIso(c.data!)}${hora}): "${c.texto}" (use se perguntarem sobre próximas consultas/exames).`,
+    );
   }
 
   // 2. Pendências reais de hoje: remédio que já passou do horário sem confirmação.
@@ -309,6 +342,7 @@ export function montarInstrucoes(
   const lembrancas = blocoDeLembrancas(base, agora);
   const blocoDeRemedios = resumirRemediosNoHorario(remedios, agora);
   const roteiroDoMomento = montarRoteiroDoMomento(base, agora);
+  const documentos = blocoDeDocumentos(base);
 
   const ferramentas = comFerramentas
     ? `
@@ -345,6 +379,14 @@ ${falta.length ? `Ainda falta saber: ${falta.join(', ')}.` : 'Você já sabe tud
 # Remédios de ${tratamento} hoje
 ${blocoDeRemedios}
 Pergunte pelo nome dos que já passaram ou estão na hora; o de mais tarde não está atrasado.
+${
+  documentos
+    ? `
+# Exames, consultas e receitas anexados pela família
+${documentos}
+- Ao falar de um exame ou documento, explique em palavras muito simples apenas o que está escrito acima. NUNCA dê diagnóstico médico nem sugira mudar dose; sempre reforce que o médico avalia o resultado.`
+    : ''
+}
 
 # O que você sabe de ${tratamento}
 ${lembrancas || '- Ainda não sabe nada sobre a vida dela.'}

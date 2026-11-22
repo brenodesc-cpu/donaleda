@@ -14,8 +14,11 @@ import type {
   AparelhoPush,
   Base,
   CategoriaDeLembranca,
+  ContatoDeEmergencia,
   Conversa,
   Dia,
+  DocumentoClinico,
+  Escalonamento,
   Gravidade,
   Humor,
   Lembranca,
@@ -351,6 +354,9 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     chamadas: [...base.chamadas].reverse().slice(0, 10),
     aparelhoPushAtivo: (base.aparelhosPush?.length ?? 0) > 0,
     limiteDoDia: limiteDoDia(base, agora),
+    documentos: [...(base.documentos ?? [])].reverse().slice(0, 30),
+    redeDeApoio: base.redeDeApoio ?? [],
+    escalonamentos: [...(base.escalonamentos ?? [])].reverse().slice(0, 10),
     atualizadoEm: agora.toISOString(),
   };
 }
@@ -460,10 +466,79 @@ export function registrarAparelhoPush(
   return registro;
 }
 
+/** Normaliza telefone brasileiro/internacional pra E.164 (+55...) mantendo segurança. */
+export function normalizarTelefone(bruto: string): string {
+  const digitos = bruto.replace(/\D/g, '');
+  if (digitos.length < 10 || digitos.length > 15) return '';
+  if (bruto.trim().startsWith('+')) return `+${digitos}`;
+  if (digitos.length === 10 || digitos.length === 11) return `+55${digitos}`;
+  return `+${digitos}`;
+}
+
+export function adicionarDocumento(
+  base: Base,
+  entrada: Omit<DocumentoClinico, 'id' | 'criadoEm'>,
+  agora: Date = new Date(),
+): DocumentoClinico {
+  base.documentos ??= [];
+  const doc: DocumentoClinico = {
+    id: randomUUID(),
+    ...entrada,
+    criadoEm: agora.toISOString(),
+  };
+  base.documentos.push(doc);
+  if (base.documentos.length > 40) base.documentos.splice(0, base.documentos.length - 40);
+  return doc;
+}
+
+export function apagarDocumento(base: Base, documentoId: string): boolean {
+  base.documentos ??= [];
+  const i = base.documentos.findIndex((d) => d.id === documentoId);
+  if (i < 0) return false;
+  base.documentos.splice(i, 1);
+  return true;
+}
+
+export function definirRedeDeApoio(
+  base: Base,
+  contatos: { id?: string; nome: string; parentesco: string; telefone: string }[],
+): ContatoDeEmergencia[] {
+  const limpos: ContatoDeEmergencia[] = [];
+  for (const c of contatos.slice(0, 10)) {
+    const nome = String(c.nome ?? '').trim().slice(0, 60);
+    const parentesco = String(c.parentesco ?? '').trim().slice(0, 40) || 'familiar';
+    const telefone = normalizarTelefone(String(c.telefone ?? ''));
+    if (!nome || !telefone) continue;
+    limpos.push({
+      id: typeof c.id === 'string' && c.id.trim() ? c.id.trim() : randomUUID(),
+      nome,
+      parentesco,
+      telefone,
+    });
+  }
+  base.redeDeApoio = limpos;
+  return limpos;
+}
+
+export function registrarEscalonamento(base: Base, escalonamento: Escalonamento): Escalonamento {
+  base.escalonamentos ??= [];
+  const existente = base.escalonamentos.find((e) => e.chamadaId === escalonamento.chamadaId);
+  if (existente) return existente;
+  base.escalonamentos.push(escalonamento);
+  if (base.escalonamentos.length > 20) {
+    base.escalonamentos.splice(0, base.escalonamentos.length - 20);
+  }
+  return escalonamento;
+}
+
 /** Completa uma ficha gravada por versão mais antiga, que não tinha as ligações. */
 function completar(base: Base, idosoId: string): Base {
   base.chamadas ??= [];
   base.aparelhosPush ??= [];
+  base.aparelhosFamiliaPush ??= [];
+  base.documentos ??= [];
+  base.redeDeApoio ??= [];
+  base.escalonamentos ??= [];
   normalizarLembrancas(base);
   base.idoso.id = idosoId;
   base.idoso.horariosDeLigacao ??= ['09:00', '19:00'];

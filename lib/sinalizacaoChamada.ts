@@ -7,10 +7,11 @@
 // Regra de privacidade: o payload nunca carrega dados clínicos ou pessoais do idoso —
 // apenas identificador da chamada, motivo e nome da assistente.
 
-import { createSign } from 'node:crypto';
+import { createSign, randomUUID } from 'node:crypto';
 import http2 from 'node:http2';
+import { AgoraClient, Area, generateConvoAIToken, generateRtcToken } from 'agora-agents';
 import { NOME_DA_ASSISTENTE } from './assistente';
-import type { AparelhoPush, Chamada } from './tipos';
+import type { AparelhoPush, Base, Chamada, Escalonamento } from './tipos';
 
 export interface ResultadoDaSinalizacao {
   agoraSignaling: 'enviado' | 'nao_configurado' | 'erro';
@@ -311,3 +312,179 @@ export async function dispararConviteDeChamada(
   await Promise.allSettled([tarefaAgora, tarefaAndroid, tarefaIos]);
   return resultado;
 }
+
+/**
+ * Dispara ligação telefônica real (PSTN/SIP) via SDK oficial da Agora (`client.telephony.call`)
+ * para um familiar da rede de apoio quando AGORA_TELEPHONY_FROM_NUMBER estiver configurado.
+ */
+async function ligarFamiliarViaAgoraTelephony(
+  idosoId: string,
+  tratamento: string,
+  contato: { nome: string; telefone: string },
+  motivo: string,
+): Promise<boolean> {
+  const fromNumber = process.env.AGORA_TELEPHONY_FROM_NUMBER?.trim();
+  const appId = process.env.NEXT_PUBLIC_AGORA_APP_ID?.trim();
+  const appCertificate = process.env.NEXT_AGORA_APP_CERTIFICATE?.trim();
+  if (!fromNumber || !appId || !appCertificate) return false;
+
+  const customerId = process.env.NEXT_AGORA_CUSTOMER_ID?.trim();
+  const customerSecret = process.env.NEXT_AGORA_CUSTOMER_SECRET?.trim();
+  const canal = `alerta-familia-${idosoId.slice(0, 8)}-${Date.now()}-${randomUUID().slice(0, 8)}`;
+  const sipUid = 2001;
+  const agentUid = 2002;
+  const sipToken = generateRtcToken({ appId, appCertificate, channel: canal, uid: sipUid });
+  const agentToken = generateRtcToken({ appId, appCertificate, channel: canal, uid: agentUid });
+  const pipelineId = process.env.AGORA_TELEPHONY_PIPELINE_ID?.trim();
+
+  const client =
+    customerId && customerSecret
+      ? new AgoraClient({ area: Area.US, appId, appCertificate, customerId, customerSecret })
+      : new AgoraClient({
+          area: Area.US,
+          appId,
+          appCertificate,
+          authToken: generateConvoAIToken({ appId, appCertificate, channelName: canal, uid: 0 }),
+        });
+
+  const saudacao = `Olá ${contato.nome}, aqui é a ${NOME_DA_ASSISTENTE}, assistente virtual de ${tratamento}. ${motivo} Por favor, entre em contato com ${tratamento} assim que possível.`;
+  const propriedadesBase = {
+    channel: canal,
+    token: agentToken,
+    agent_rtc_uid: String(agentUid),
+    remote_rtc_uids: [String(sipUid)],
+    idle_timeout: 45,
+  };
+
+  // Contrato oficial da Agora (`CallTelephonyRequest`):
+  // - Com `pipeline_id` (AI Studio): basta channel, token, agent_rtc_uid e remote_rtc_uids.
+  // - Sem `pipeline_id`: exige configuração completa (llm + asr + tts) dentro de `properties`.
+  const openaiKey = process.env.OPENAI_API_KEY?.trim();
+  const properties = pipelineId
+    ? propriedadesBase
+    : {
+        ...propriedadesBase,
+        asr: { language: 'pt-BR' },
+        llm: {
+          url: 'https://api.openai.com/v1/chat/completions',
+          ...(openaiKey ? { api_key: openaiKey } : {}),
+          system_messages: [
+            {
+              role: 'system',
+              content: `Você é a ${NOME_DA_ASSISTENTE}, assistente virtual de voz. Avise ${contato.nome} de forma curta, calma e clara sobre o ocorrido com ${tratamento}: ${motivo} Peça para ligar ou ir verificar como ${tratamento} está.`,
+            },
+          ],
+          greeting_message: saudacao,
+          failure_message: 'Só um instante, por favor.',
+          max_history: 10,
+          params: { model: 'gpt-4o-mini' },
+        },
+        tts: {
+          vendor: 'openai',
+          params: {
+            ...(openaiKey ? { api_key: openaiKey } : {}),
+            model: 'tts-1',
+            voice: 'nova',
+          },
+        },
+      };
+
+  try {
+    await client.telephony.call({
+      appid: appId,
+      name: `escalonamento-${canal}`,
+      sip: {
+        to_number: contato.telefone,
+        from_number: fromNumber,
+        rtc_uid: String(sipUid),
+        rtc_token: sipToken,
+      },
+      ...(pipelineId ? { pipeline_id: pipelineId } : {}),
+      properties,
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Escalonamento em massa após 3 tentativas sem atendimento:
+ *   1. Aciona todos os contatos da rede de apoio via Agora Conversational AI Telephony (se configurado);
+ *   2. Dispara push crítico (Agora Signaling + FCM / APNs) pros aparelhos de familiares cadastrados;
+ *   3. Devolve registro auditável (`Escalonamento`) pra ficar visível no painel da família.
+ */
+export async function dispararEscalonamentoEmMassa(
+  idosoId: string,
+  base: Base,
+  chamada: Chamada,
+  agora: Date = new Date(),
+): Promise<Escalonamento> {
+  const hora = chamada.horario ?? '';
+  const motivo = `${base.idoso.tratamento} não atendeu ${chamada.tentativa} tentativas da ligação${hora ? ` das ${hora}` : ''}.`;
+  const contatos = base.redeDeApoio ?? [];
+  const temTelephonyAgora = Boolean(
+    process.env.AGORA_TELEPHONY_FROM_NUMBER?.trim() &&
+      process.env.NEXT_PUBLIC_AGORA_APP_ID?.trim() &&
+      process.env.NEXT_AGORA_APP_CERTIFICATE?.trim(),
+  );
+
+  // 1. Disparo de ligação telefônica em paralelo via Agora Telephony (quando configurado).
+  const resultadosContatos = await Promise.all(
+    contatos.map(async (c) => {
+      if (temTelephonyAgora) {
+        const ligou = await ligarFamiliarViaAgoraTelephony(
+          idosoId,
+          base.idoso.tratamento,
+          c,
+          motivo,
+        );
+        return {
+          nome: c.nome,
+          telefone: c.telefone,
+          canal: 'agora_telephony' as const,
+          ok: ligou,
+        };
+      }
+      return {
+        nome: c.nome,
+        telefone: c.telefone,
+        canal: 'painel' as const,
+        ok: true,
+      };
+    }),
+  );
+
+  // 2. Push de alerta urgente pros celulares de familiares cadastrados (FCM / APNs).
+  const aparelhosFamilia = base.aparelhosFamiliaPush ?? [];
+  if (aparelhosFamilia.length > 0) {
+    const payloadAlerta: Record<string, string> = {
+      tipo: 'alerta_urgente',
+      chamadaId: chamada.id,
+      assistente: NOME_DA_ASSISTENTE,
+      titulo: `Atenção: ${base.idoso.tratamento} não atendeu`,
+      mensagem: motivo,
+    };
+    const conta = lerContaDeServicoFirebase();
+    if (conta) {
+      try {
+        const token = await obterTokenOAuthGoogle(conta);
+        const androids = aparelhosFamilia.filter((a) => a.plataforma === 'android');
+        await Promise.allSettled(androids.map((a) => enviarFcmV1(conta, token, a.token, payloadAlerta)));
+      } catch {
+        // Falha silenciosa: o alerta urgente continua registrado no painel.
+      }
+    }
+    const ioss = aparelhosFamilia.filter((a) => a.plataforma === 'ios');
+    await Promise.allSettled(ioss.map((a) => enviarApnsVoip(a.token, payloadAlerta)));
+  }
+
+  return {
+    id: randomUUID(),
+    chamadaId: chamada.id,
+    criadoEm: agora.toISOString(),
+    motivo,
+    contatosAcionados: resultadosContatos,
+  };
+}
+

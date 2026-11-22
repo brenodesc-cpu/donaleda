@@ -11,11 +11,12 @@ import type { Base, Chamada, SituacaoDaChamada } from './tipos';
 
 /** Quanto tempo a ligação fica tocando antes de contar como não atendida. */
 export const TOCA_POR_MS = 45_000;
-/** Depois da hora marcada, por quantos minutos a assistente ainda tenta ligar. */
+/** Depois da hora marcada, por quantos minutos a assistente ainda tenta ligar (cabe 3 tentativas em ~8 min). */
 const JANELA_DO_HORARIO_MIN = 20;
-/** Espera entre a primeira e a segunda tentativa da mesma hora marcada. */
+/** Espera entre uma tentativa perdida e a próxima da mesma hora marcada. */
 const ESPERA_ENTRE_TENTATIVAS_MS = 3 * 60_000;
-const TENTATIVAS_POR_HORARIO = 2;
+/** Após 3 tentativas sem atendimento, a rede de apoio da família é acionada em massa. */
+export const TENTATIVAS_POR_HORARIO = 3;
 /** Conversa começada até uma hora antes da hora marcada já vale por ela. */
 const CONVERSA_VALE_POR_MIN = 60;
 export const SEGUNDOS_PRA_ATENDER_SOZINHO = 10;
@@ -75,24 +76,35 @@ function novaChamada(
   return chamada;
 }
 
-/** Marca a ligação como não atendida e, na última tentativa, avisa a família. */
-function darPorPerdida(base: Base, chamada: Chamada, agora: Date): void {
+/** Marca a ligação como não atendida e, na última tentativa (3ª), dispara alerta urgente de escalonamento. */
+function darPorPerdida(base: Base, chamada: Chamada, agora: Date): boolean {
   chamada.estado = 'perdida';
   chamada.resolvidaEm = agora.toISOString();
-  const ultimaTentativa =
-    chamada.motivo === 'familia' || chamada.tentativa >= TENTATIVAS_POR_HORARIO;
+  const esgotouTentativas =
+    chamada.motivo === 'horario' && chamada.tentativa >= TENTATIVAS_POR_HORARIO;
+  const ultimaTentativa = chamada.motivo === 'familia' || esgotouTentativas;
   if (ultimaTentativa) {
     const texto =
       chamada.motivo === 'familia'
         ? `Não atendeu a ligação que a família pediu às ${horaMinutoEmBrasilia(new Date(chamada.pedidaEm))}.`
-        : `Não atendeu a ligação das ${chamada.horario}, em ${chamada.tentativa} tentativas.`;
-    criarAlerta(base, { tipo: 'ligacao', gravidade: 'atencao', texto, origem: 'regra' }, agora);
+        : `Não atendeu a ligação das ${chamada.horario}, em ${chamada.tentativa} tentativas. Rede de apoio acionada.`;
+    criarAlerta(
+      base,
+      {
+        tipo: 'ligacao',
+        gravidade: esgotouTentativas ? 'urgente' : 'atencao',
+        texto,
+        origem: 'regra',
+      },
+      agora,
+    );
   }
+  return esgotouTentativas;
 }
 
 /**
  * Ligação que atendeu (sozinha ou com um toque) e acabou sem o idoso dizer nada vale
- * como não atendida: a segunda tentativa acontece e, na última, a família é avisada.
+ * como não atendida: a próxima tentativa acontece e, na 3ª, a rede de apoio é acionada.
  */
 export function ligacaoSemFala(base: Base, conversaId: string, agora: Date = new Date()): boolean {
   const conversa = base.conversas.find((c) => c.id === conversaId);
@@ -106,21 +118,27 @@ export function ligacaoSemFala(base: Base, conversaId: string, agora: Date = new
 
 /**
  * Faz o relógio das ligações andar: dá por perdida a ligação que tocou demais e
- * começa a ligação da hora marcada. Devolve se algo mudou, pra só então gravar.
+ * começa a ligação da hora marcada. Devolve se algo mudou e se alguma chamada
+ * atingiu 3 tentativas sem resposta (gatilho do escalonamento em massa pra família).
  */
-export function avancarChamadas(base: Base, agora: Date = new Date()): { mudou: boolean } {
+export function avancarChamadas(
+  base: Base,
+  agora: Date = new Date(),
+): { mudou: boolean; escalarChamada?: Chamada } {
   let mudou = false;
+  let escalarChamada: Chamada | undefined;
 
   for (const chamada of base.chamadas) {
     if (chamada.estado !== 'tocando') continue;
     if (agora.getTime() - new Date(chamada.pedidaEm).getTime() <= TOCA_POR_MS) continue;
-    darPorPerdida(base, chamada, agora);
+    const escalou = darPorPerdida(base, chamada, agora);
+    if (escalou) escalarChamada = chamada;
     mudou = true;
   }
 
-  if (chamadaTocando(base) || emConversa(base, agora)) return { mudou };
+  if (chamadaTocando(base) || emConversa(base, agora)) return { mudou, escalarChamada };
   // Os minutos de conversa de hoje acabaram: a hora marcada só volta amanhã.
-  if (limiteDoDia(base, agora).acabou) return { mudou };
+  if (limiteDoDia(base, agora).acabou) return { mudou, escalarChamada };
 
   const hoje = dataEmBrasilia(agora);
   const minutosAgora = emMinutos(horaMinutoEmBrasilia(agora));
@@ -149,10 +167,10 @@ export function avancarChamadas(base: Base, agora: Date = new Date()): { mudou: 
 
     if (!ultima) {
       novaChamada(base, { motivo: 'horario', horario, tentativa: 1 }, agora);
-      return { mudou: true };
+      return { mudou: true, escalarChamada };
     }
 
-    // Ligação em que a Dona Leda não conseguiu entrar também ganha a segunda tentativa.
+    // Ligação em que a Dona Leda não conseguiu entrar também ganha nova tentativa (até 3).
     const podeTentarDeNovo =
       (ultima.estado === 'perdida' || ultima.estado === 'falhou') &&
       doHorario.length < TENTATIVAS_POR_HORARIO &&
@@ -160,11 +178,11 @@ export function avancarChamadas(base: Base, agora: Date = new Date()): { mudou: 
         ESPERA_ENTRE_TENTATIVAS_MS;
     if (podeTentarDeNovo) {
       novaChamada(base, { motivo: 'horario', horario, tentativa: doHorario.length + 1 }, agora);
-      return { mudou: true };
+      return { mudou: true, escalarChamada };
     }
   }
 
-  return { mudou };
+  return { mudou, escalarChamada };
 }
 
 /** A família pede uma ligação agora. Devolve null se já está tocando ou em conversa. */

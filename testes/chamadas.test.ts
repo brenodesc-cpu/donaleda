@@ -47,11 +47,13 @@ describe('a assistente liga na hora marcada', () => {
     expect(base.alertas).toHaveLength(0);
   });
 
-  it('sem resposta, tenta de novo em 3 minutos e só então avisa a família', () => {
+  it('sem resposta, tenta 3 vezes (a cada 3 minutos) e então escala urgente pra rede de apoio', () => {
     const base = baseDeExemplo(NOVE_EM_PONTO);
     avancarChamadas(base, NOVE_EM_PONTO);
 
-    avancarChamadas(base, depois(NOVE_EM_PONTO, 46));
+    // 1ª tentativa expira sem alerta ainda
+    const r1 = avancarChamadas(base, depois(NOVE_EM_PONTO, 46));
+    expect(r1.escalarChamada).toBeUndefined();
     expect(chamadaTocando(base)).toBeNull();
     expect(base.chamadas[0].estado).toBe('perdida');
     expect(base.alertas).toHaveLength(0);
@@ -59,19 +61,34 @@ describe('a assistente liga na hora marcada', () => {
     avancarChamadas(base, depois(NOVE_EM_PONTO, 120));
     expect(chamadaTocando(base)).toBeNull();
 
-    avancarChamadas(base, depois(NOVE_EM_PONTO, 46 + 181));
+    // 2ª tentativa após 3 min
+    const t2 = 46 + 181;
+    avancarChamadas(base, depois(NOVE_EM_PONTO, t2));
     expect(chamadaTocando(base)?.tentativa).toBe(2);
 
-    avancarChamadas(base, depois(NOVE_EM_PONTO, 46 + 181 + 46));
+    const r2 = avancarChamadas(base, depois(NOVE_EM_PONTO, t2 + 46));
+    expect(r2.escalarChamada).toBeUndefined();
     expect(chamadaTocando(base)).toBeNull();
+    expect(base.alertas).toHaveLength(0);
+
+    // 3ª tentativa após mais 3 min
+    const t3 = t2 + 46 + 181;
+    avancarChamadas(base, depois(NOVE_EM_PONTO, t3));
+    expect(chamadaTocando(base)?.tentativa).toBe(3);
+
+    // Ao falhar a 3ª tentativa: alerta urgente + sinal de escalonamento em massa
+    const r3 = avancarChamadas(base, depois(NOVE_EM_PONTO, t3 + 46));
+    expect(chamadaTocando(base)).toBeNull();
+    expect(r3.escalarChamada?.tentativa).toBe(3);
     expect(base.alertas).toHaveLength(1);
     expect(base.alertas[0].tipo).toBe('ligacao');
+    expect(base.alertas[0].gravidade).toBe('urgente');
     expect(base.alertas[0].texto).toContain('09:00');
-    expect(base.alertas[0].texto).toContain('2 tentativas');
+    expect(base.alertas[0].texto).toContain('3 tentativas');
 
-    // Não existe terceira tentativa.
-    avancarChamadas(base, depois(NOVE_EM_PONTO, 46 + 181 + 46 + 200));
-    expect(base.chamadas).toHaveLength(2);
+    // Não existe quarta tentativa.
+    avancarChamadas(base, depois(NOVE_EM_PONTO, t3 + 46 + 200));
+    expect(base.chamadas).toHaveLength(3);
   });
 
   it('não toca no meio de uma conversa nem logo depois de uma', () => {
@@ -182,11 +199,12 @@ describe('ligação que atende sozinha sem ninguém falar (verificador, 21/11)',
     expect(segunda?.tentativa).toBe(2);
   });
 
-  it('depois da segunda sem fala, a família recebe o aviso de não atendeu', () => {
+  it('depois da terceira sem fala, a família recebe o aviso urgente de não atendeu', () => {
     const base = baseDeExemplo(NOVE_EM_PONTO);
     atendeSozinhaECala(base, NOVE_EM_PONTO);
     atendeSozinhaECala(base, depois(NOVE_EM_PONTO, 130 + 181));
-    expect(base.alertas.some((a) => a.tipo === 'ligacao')).toBe(true);
+    atendeSozinhaECala(base, depois(NOVE_EM_PONTO, (130 + 181) * 2));
+    expect(base.alertas.some((a) => a.tipo === 'ligacao' && a.gravidade === 'urgente')).toBe(true);
   });
 
   it('o painel não diz que ele conversou hoje', () => {

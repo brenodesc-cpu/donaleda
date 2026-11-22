@@ -1,5 +1,6 @@
 'use client';
 
+import { AgendaEDocumentos } from '@/components/familia/AgendaEDocumentos';
 import { Alertas } from '@/components/familia/Alertas';
 import { enderecoCom } from '@/components/familia/api';
 import { Esqueleto, ResumoDaConversa, Rodape } from '@/components/familia/Apoio';
@@ -24,6 +25,8 @@ export default function PainelDaFamiliaPage() {
     ensinarLembranca,
     corrigirLembranca,
     apagarLembranca,
+    anexarDocumento,
+    apagarDocumento,
   } = usePainel(idoso?.id ?? null);
   const resumo = painel?.ultimaConversa?.resumo?.trim();
 
@@ -64,6 +67,15 @@ export default function PainelDaFamiliaPage() {
           />
           <DiaDeHoje hoje={painel.hoje} />
           {resumo ? <ResumoDaConversa resumo={resumo} /> : null}
+          <AgendaEDocumentos
+            lembrancas={painel.lembrancas}
+            documentos={painel.documentos ?? []}
+            assistente={painel.assistente}
+            tratamento={painel.idoso.tratamento}
+            onAgendar={ensinarLembranca}
+            onAnexarDocumento={anexarDocumento}
+            onApagarDocumento={apagarDocumento}
+          />
           <Semana semana={painel.semana} hoje={painel.hoje.data} />
           <Lembrancas
             lembrancas={painel.lembrancas}

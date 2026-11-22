@@ -3,10 +3,10 @@
 // quando uma regra dispara, dentro do alerta que vai pra família.
 
 import { NextResponse } from 'next/server';
-import { ligacaoSemFala } from '@/lib/chamadas';
+import { ligacaoSemFala, TENTATIVAS_POR_HORARIO } from '@/lib/chamadas';
 import { abrirConvite, fraseDoConvite, fraseSemEntrada, vencerConvite } from '@/lib/convite';
 import { depois, falar } from '@/lib/familiaNaLigacao';
-import { criarAlerta, fecharConversa, lerBase, mudarBase } from '@/lib/dados';
+import { criarAlerta, fecharConversa, lerBase, mudarBase, registrarEscalonamento } from '@/lib/dados';
 import { limparTempos } from '@/lib/medicao';
 import {
   aplicarExtracaoNaBase,
@@ -15,6 +15,7 @@ import {
 } from '@/lib/posConversa';
 import { avaliarFala } from '@/lib/regras';
 import { exigirAparelho } from '@/lib/sessao';
+import { dispararEscalonamentoEmMassa } from '@/lib/sinalizacaoChamada';
 import type { Alerta, EventoDaConversa, RespostaDoEvento } from '@/lib/tipos';
 import { ehAvisoInterno } from '@/lib/saudacaoGemini';
 
@@ -50,16 +51,36 @@ export async function POST(request: Request) {
       }
     }
 
-    const conversa = await mudarBase(idosoId, (base) => {
+    const fimRes = await mudarBase(idosoId, (base) => {
       if (falas.length > 0) {
         aplicarExtracaoNaBase(base, evento.conversaId, falas, extracao);
       }
       const fechada = fecharConversa(base, evento.conversaId);
-      if (fechada) ligacaoSemFala(base, evento.conversaId);
-      return fechada;
+      const semFala = fechada ? ligacaoSemFala(base, evento.conversaId) : false;
+      const chamada =
+        semFala && fechada?.chamadaId
+          ? base.chamadas.find((c) => c.id === fechada.chamadaId)
+          : undefined;
+      const escalarChamada =
+        chamada && chamada.motivo === 'horario' && chamada.tentativa >= TENTATIVAS_POR_HORARIO
+          ? chamada
+          : undefined;
+      return {
+        fechada,
+        escalarChamada,
+        baseSnapshot: escalarChamada ? structuredClone(base) : null,
+      };
     });
-    return NextResponse.json({ ok: Boolean(conversa) } satisfies RespostaDoEvento, {
-      status: conversa ? 200 : 404,
+    if (fimRes.escalarChamada && fimRes.baseSnapshot) {
+      const esc = await dispararEscalonamentoEmMassa(
+        idosoId,
+        fimRes.baseSnapshot,
+        fimRes.escalarChamada,
+      );
+      await mudarBase(idosoId, (b) => registrarEscalonamento(b, esc));
+    }
+    return NextResponse.json({ ok: Boolean(fimRes.fechada) } satisfies RespostaDoEvento, {
+      status: fimRes.fechada ? 200 : 404,
     });
   }
 

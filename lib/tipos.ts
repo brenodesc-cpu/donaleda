@@ -212,6 +212,45 @@ export interface AparelhoPush {
   agoraRtmUserId?: string;
 }
 
+export type TipoDeDocumento = 'exame' | 'consulta' | 'receita';
+
+/** Resumo estruturado de exame, consulta ou receita (o arquivo original é descartado após leitura). */
+export interface DocumentoClinico {
+  id: string;
+  titulo: string;
+  tipo: TipoDeDocumento;
+  /** Data do exame ou consulta, "AAAA-MM-DD", quando houver. */
+  data?: string;
+  /** Explicação em linguagem simples pro idoso, sem diagnóstico médico. */
+  resumoSimples: string;
+  /** Preparo ou observação explícita do documento (ex.: jejum de 8h). */
+  orientacao?: string;
+  criadoEm: string;
+}
+
+/** Contato da rede de apoio acionado em massa se o idoso não atender 3 tentativas. */
+export interface ContatoDeEmergencia {
+  id: string;
+  nome: string;
+  parentesco: string;
+  /** Telefone com DDD (guardado em dígitos ou E.164, ex.: +5511999999999). */
+  telefone: string;
+}
+
+/** Registro auditável de escalonamento em massa pra família após 3 tentativas sem resposta. */
+export interface Escalonamento {
+  id: string;
+  chamadaId?: string;
+  criadoEm: string;
+  motivo: string;
+  contatosAcionados: {
+    nome: string;
+    telefone: string;
+    canal: 'agora_telephony' | 'agora_push' | 'painel';
+    ok: boolean;
+  }[];
+}
+
 export interface Base {
   idoso: Idoso;
   dias: Dia[];
@@ -221,6 +260,14 @@ export interface Base {
   chamadas: Chamada[];
   /** Aparelhos registrados pra receber convite de chamada via Agora Signaling / Push. */
   aparelhosPush?: AparelhoPush[];
+  /** Aparelhos de familiares cadastrados pra receber alerta crítico em massa. */
+  aparelhosFamiliaPush?: AparelhoPush[];
+  /** Exames, consultas e receitas lidos em memória (sem imagem bruta nem CPF/RG). */
+  documentos?: DocumentoClinico[];
+  /** Rede de apoio acionada em massa quando o idoso não atende 3 tentativas. */
+  redeDeApoio?: ContatoDeEmergencia[];
+  /** Histórico auditável de escalonamentos em massa acionados. */
+  escalonamentos?: Escalonamento[];
 }
 
 /** Resposta de GET /api/familia. O painel da família lê só isto. */
@@ -260,6 +307,12 @@ export interface PainelDaFamilia {
   aparelhoVistoEm?: string | null;
   /** true quando o aparelho do idoso tem push nativo (FCM / APNs VoIP) registrado. */
   aparelhoPushAtivo?: boolean;
+  /** Exames, consultas e receitas anexados pela família (mais novos primeiro). */
+  documentos?: DocumentoClinico[];
+  /** Contatos da rede de apoio acionados após 3 tentativas sem atendimento. */
+  redeDeApoio?: ContatoDeEmergencia[];
+  /** Últimos escalonamentos em massa registrados. */
+  escalonamentos?: Escalonamento[];
   atualizadoEm: string;
 }
 
@@ -286,6 +339,13 @@ export type AcaoDaFamilia = (
   | { acao: 'corrigir_lembranca'; lembrancaId: string; texto?: string; categoria?: CategoriaDeLembranca; sobre?: string; data?: string; hora?: string }
   /** A família apaga uma lembrança que vê. Responde `{ ok }`. */
   | { acao: 'apagar_lembranca'; lembrancaId: string }
+  /** A família apaga um exame/documento anexado. Responde `{ ok }`. */
+  | { acao: 'apagar_documento'; documentoId: string }
+  /** Salva os contatos de emergência da rede de apoio (acionados após 3 tentativas). */
+  | {
+      acao: 'salvar_rede_de_apoio';
+      contatos: { id?: string; nome: string; parentesco: string; telefone: string }[];
+    }
   /** Muda o perfil. Só os campos que vierem. Responde `{ ok, idoso }`. */
   | {
       acao: 'perfil';

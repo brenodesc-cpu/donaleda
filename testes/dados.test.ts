@@ -254,3 +254,114 @@ describe('leitura de QR Code de pareamento', () => {
     expect(extrairCodigoDeTexto('12345')).toBeNull();
   });
 });
+
+describe('gestão de exames, calendário de longo prazo e escalonamento em massa', () => {
+  it('remove CPF/RG dos textos de exames e injeta documentos no prompt sem diagnóstico', async () => {
+    const { limparDadosSensiveis } = await import('@/lib/documentos');
+    const { adicionarDocumento, apagarDocumento } = await import('@/lib/dados');
+
+    expect(limparDadosSensiveis('Paciente CPF 123.456.789-00 glicemia 110')).toBe(
+      'Paciente [documento oculto] glicemia 110',
+    );
+
+    const base = baseDeExemplo(AGORA);
+    const doc = adicionarDocumento(
+      base,
+      {
+        titulo: 'Exame de sangue — Glicemia',
+        tipo: 'exame',
+        data: '2026-11-20',
+        resumoSimples: 'O exame mediu a taxa de açúcar no sangue. O médico vai avaliar o resultado.',
+        orientacao: 'Levar na próxima consulta',
+      },
+      AGORA,
+    );
+    const instrucoes = montarInstrucoes(base, AGORA, true);
+    expect(instrucoes).toContain('Exames, consultas e receitas anexados pela família');
+    expect(instrucoes).toContain('Exame de sangue — Glicemia');
+    expect(instrucoes).toContain('NUNCA dê diagnóstico médico');
+
+    expect(apagarDocumento(base, doc.id)).toBe(true);
+    expect(base.documentos).toHaveLength(0);
+  });
+
+  it('lembra compromissos da semana e consultas marcadas meses à frente', async () => {
+    const { montarRoteiroDoMomento } = await import('@/lib/persona');
+    const hoje = new Date('2026-11-21T12:00:00.000Z');
+    const base = baseDeExemplo(hoje);
+    base.lembrancas.push(
+      {
+        id: 'semana',
+        numero: 201,
+        texto: 'Cardiologista no posto',
+        categoria: 'compromisso',
+        data: '2026-11-25',
+        hora: '10:00',
+        origem: 'familia',
+        criadaEm: hoje.toISOString(),
+      },
+      {
+        id: 'meses',
+        numero: 202,
+        texto: 'Retorno no oftalmologista',
+        categoria: 'compromisso',
+        data: '2027-02-14',
+        hora: '09:30',
+        origem: 'familia',
+        criadaEm: hoje.toISOString(),
+      },
+    );
+    const roteiro = montarRoteiroDoMomento(base, hoje);
+    expect(roteiro).toContain('Compromisso NESTA SEMANA');
+    expect(roteiro).toContain('Cardiologista no posto');
+    expect(roteiro).toContain('Agendado mais à frente');
+    expect(roteiro).toContain('Retorno no oftalmologista');
+  });
+
+  it('normaliza telefones da rede de apoio e registra escalonamento em massa após 3 tentativas', async () => {
+    const { definirRedeDeApoio } = await import('@/lib/dados');
+    const { dispararEscalonamentoEmMassa } = await import('@/lib/sinalizacaoChamada');
+
+    const base = baseDeExemplo(AGORA);
+    const rede = definirRedeDeApoio(base, [
+      { nome: 'Marina', parentesco: 'filha', telefone: '(11) 99999-1234' },
+      { nome: 'Paulo', parentesco: 'filho', telefone: '11988887777' },
+      { nome: 'Invalido', parentesco: 'amigo', telefone: '123' },
+    ]);
+    expect(rede).toHaveLength(2);
+    expect(rede[0].telefone).toBe('+5511999991234');
+    expect(rede[1].telefone).toBe('+5511988887777');
+
+    const esc = await dispararEscalonamentoEmMassa(
+      base.idoso.id,
+      base,
+      {
+        id: 'ch-3',
+        motivo: 'horario',
+        horario: '09:00',
+        tentativa: 3,
+        estado: 'perdida',
+        pedidaEm: AGORA.toISOString(),
+      },
+      AGORA,
+    );
+    expect(esc.contatosAcionados).toHaveLength(2);
+    expect(esc.motivo).toContain('3 tentativas');
+
+    const { registrarEscalonamento } = await import('@/lib/dados');
+    registrarEscalonamento(base, esc);
+    registrarEscalonamento(base, esc);
+    expect(base.escalonamentos).toHaveLength(1);
+  });
+
+  it('valida magic bytes reais de foto/PDF e bloqueia arquivo mascarado', async () => {
+    const { detectarMimeReal, mimeAceito } = await import('@/lib/documentos');
+
+    expect(mimeAceito('image/jpg')).toBe(true);
+    expect(detectarMimeReal(Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0, 0, 0, 0, 0]))).toBe('image/jpeg');
+    expect(detectarMimeReal(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0]))).toBe('image/png');
+    expect(detectarMimeReal(Buffer.from('RIFF\x00\x00\x00\x00WEBP', 'latin1'))).toBe('image/webp');
+    expect(detectarMimeReal(Buffer.from('%PDF-1.7\n1 0 obj', 'ascii'))).toBe('application/pdf');
+    expect(detectarMimeReal(Buffer.from('<script>alert(1)</script>', 'utf8'))).toBeNull();
+  });
+});

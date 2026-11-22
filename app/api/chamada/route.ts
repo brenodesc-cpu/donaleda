@@ -3,8 +3,9 @@
 
 import { NextResponse } from 'next/server';
 import { avancarChamadas, responderChamada, situacaoDaChamada } from '@/lib/chamadas';
-import { mudarBase, mudarBaseQuando } from '@/lib/dados';
+import { mudarBase, mudarBaseQuando, registrarEscalonamento } from '@/lib/dados';
 import { exigirAparelho } from '@/lib/sessao';
+import { dispararEscalonamentoEmMassa } from '@/lib/sinalizacaoChamada';
 import type { RespostaDaChamada } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
@@ -13,11 +14,27 @@ export async function GET(request: Request) {
   const aparelho = await exigirAparelho(request);
   if (!aparelho.ok) return aparelho.resposta;
   const agora = new Date();
-  const situacao = await mudarBaseQuando(aparelho.valor, (base) => {
-    const { mudou } = avancarChamadas(base, agora);
-    return { gravar: mudou, resultado: situacaoDaChamada(base, agora) };
+  const res = await mudarBaseQuando(aparelho.valor, (base) => {
+    const { mudou, escalarChamada } = avancarChamadas(base, agora);
+    return {
+      gravar: mudou,
+      resultado: {
+        situacao: situacaoDaChamada(base, agora),
+        escalarChamada,
+        baseSnapshot: escalarChamada ? structuredClone(base) : null,
+      },
+    };
   });
-  return NextResponse.json(situacao, { headers: { 'Cache-Control': 'no-store' } });
+  if (res.escalarChamada && res.baseSnapshot) {
+    const esc = await dispararEscalonamentoEmMassa(
+      aparelho.valor,
+      res.baseSnapshot,
+      res.escalarChamada,
+      agora,
+    );
+    await mudarBase(aparelho.valor, (b) => registrarEscalonamento(b, esc));
+  }
+  return NextResponse.json(res.situacao, { headers: { 'Cache-Control': 'no-store' } });
 }
 
 export async function POST(request: Request) {

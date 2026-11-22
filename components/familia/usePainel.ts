@@ -2,12 +2,19 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Alerta, CategoriaDeLembranca, PainelDaFamilia, RespostaDoAviso } from '@/lib/tipos';
+import type {
+  Alerta,
+  CategoriaDeLembranca,
+  ContatoDeEmergencia,
+  PainelDaFamilia,
+  RespostaDoAviso,
+} from '@/lib/tipos';
 import { arrumarHorarios } from './formatos';
 import {
   buscarPainel,
   deuCerto,
   enviarAcao,
+  enviarDocumento,
   type AcaoComIdoso,
   type PerfilDoIdoso,
 } from './api';
@@ -60,6 +67,9 @@ export function completar(dado: PainelDaFamilia): PainelDaFamilia {
     ...dado,
     chamadaTocando: dado.chamadaTocando ?? null,
     chamadas: Array.isArray(dado.chamadas) ? dado.chamadas : [],
+    documentos: Array.isArray(dado.documentos) ? dado.documentos : [],
+    redeDeApoio: Array.isArray(dado.redeDeApoio) ? dado.redeDeApoio : [],
+    escalonamentos: Array.isArray(dado.escalonamentos) ? dado.escalonamentos : [],
     reservadas: typeof dado.reservadas === 'number' ? dado.reservadas : 0,
     idoso: {
       ...idoso,
@@ -248,6 +258,55 @@ export function usePainel(idosoId: string | null) {
     [idosoId, mandarLembranca],
   );
 
+  const anexarDocumento = useCallback(
+    async (
+      arquivo: File,
+      nota?: string,
+    ): Promise<{ ok: true; compromissosCriados: number } | { ok: false; erro: string }> => {
+      if (!idosoId) return { ok: false, erro: 'Nenhum idoso selecionado.' };
+      const { status, dado } = await enviarDocumento(idosoId, arquivo, nota);
+      if (status === 401) router.replace('/entrar');
+      if (deuCerto(status) && dado?.ok) {
+        await buscarAgora.current();
+        return { ok: true, compromissosCriados: dado.compromissosCriados ?? 0 };
+      }
+      return {
+        ok: false,
+        erro: dado?.detalhe ?? 'Não consegui ler esse documento agora. Tente outra foto ou PDF.',
+      };
+    },
+    [idosoId, router],
+  );
+
+  const apagarDocumento = useCallback(
+    async (documentoId: string): Promise<boolean> => {
+      if (!idosoId) return false;
+      const ok = deuCerto(await mandar({ acao: 'apagar_documento', documentoId, idosoId }));
+      if (ok) await buscarAgora.current();
+      return ok;
+    },
+    [idosoId, mandar],
+  );
+
+  const salvarRedeDeApoio = useCallback(
+    async (
+      contatos: Omit<ContatoDeEmergencia, 'id'>[] | ContatoDeEmergencia[],
+    ): Promise<ContatoDeEmergencia[] | null> => {
+      if (!idosoId) return null;
+      const { status, dado } = await enviarAcao({ acao: 'salvar_rede_de_apoio', contatos, idosoId });
+      if (status === 401) router.replace('/entrar');
+      if (status === 0) setSemConexao(true);
+      if (!deuCerto(status)) return null;
+      await buscarAgora.current();
+      const lista =
+        dado && typeof dado === 'object' && Array.isArray((dado as { redeDeApoio?: unknown }).redeDeApoio)
+          ? ((dado as { redeDeApoio: ContatoDeEmergencia[] }).redeDeApoio)
+          : [];
+      return lista;
+    },
+    [idosoId, router],
+  );
+
   const painel = useMemo<PainelDaFamilia | null>(() => {
     if (!bruto) return null;
     return {
@@ -279,5 +338,8 @@ export function usePainel(idosoId: string | null) {
     ensinarLembranca,
     corrigirLembranca,
     apagarLembranca,
+    anexarDocumento,
+    apagarDocumento,
+    salvarRedeDeApoio,
   };
 }

@@ -8,10 +8,20 @@ import { NextResponse } from 'next/server';
 import { marcarAvisoVisto, registrarDesfecho, respostaValida } from '@/lib/avisos';
 import { arrumarHorarios, avancarChamadas, pedirChamadaDaFamilia } from '@/lib/chamadas';
 import { fraseDaEntrada, registrarEntrada } from '@/lib/convite';
-import { montarPainel, mudarBase, mudarBaseQuando } from '@/lib/dados';
+import {
+  apagarDocumento,
+  definirRedeDeApoio,
+  montarPainel,
+  mudarBase,
+  mudarBaseQuando,
+  registrarEscalonamento,
+} from '@/lib/dados';
 import { depois, entradaDaFamilia, falar, tirarAssistente } from '@/lib/familiaNaLigacao';
 import { dataPedida, GAVETAS, guardar, horaPedida, mudar } from '@/lib/memoria';
-import { dispararConviteDeChamada } from '@/lib/sinalizacaoChamada';
+import {
+  dispararConviteDeChamada,
+  dispararEscalonamentoEmMassa,
+} from '@/lib/sinalizacaoChamada';
 import { exigirIdosoDaFamilia } from '@/lib/sessao';
 import { clienteDoServidor } from '@/lib/supabase/servidor';
 import type { AcaoDaFamilia, CodigoDoAparelho } from '@/lib/tipos';
@@ -27,10 +37,17 @@ export async function GET(request: Request) {
   if (!conferido.ok) return conferido.resposta;
 
   const agora = new Date();
-  const [painel, aparelhosRes] = await Promise.all([
+  const [painelRes, aparelhosRes] = await Promise.all([
     mudarBaseQuando(conferido.valor.idosoId, (base) => {
-      const { mudou } = avancarChamadas(base, agora);
-      return { gravar: mudou, resultado: montarPainel(base, agora) };
+      const { mudou, escalarChamada } = avancarChamadas(base, agora);
+      return {
+        gravar: mudou,
+        resultado: {
+          painel: montarPainel(base, agora),
+          escalarChamada,
+          baseSnapshot: escalarChamada ? structuredClone(base) : null,
+        },
+      };
     }),
     clienteDoServidor()
       .from('aparelhos')
@@ -39,6 +56,20 @@ export async function GET(request: Request) {
       .order('visto_em', { ascending: false })
       .limit(1),
   ]);
+
+  let painel = painelRes.painel;
+  if (painelRes.escalarChamada && painelRes.baseSnapshot) {
+    const esc = await dispararEscalonamentoEmMassa(
+      conferido.valor.idosoId,
+      painelRes.baseSnapshot,
+      painelRes.escalarChamada,
+      agora,
+    );
+    painel = await mudarBase(conferido.valor.idosoId, (base) => {
+      registrarEscalonamento(base, esc);
+      return montarPainel(base, agora);
+    });
+  }
 
   const vistoEm = (aparelhosRes.data?.[0]?.visto_em as string | null | undefined) ?? null;
   const aparelhoOnline =
@@ -211,6 +242,16 @@ export async function POST(request: Request) {
       });
     }
     return NextResponse.json({ ok: true, ...entrada });
+  }
+
+  if (acao.acao === 'apagar_documento' && typeof acao.documentoId === 'string') {
+    const apagou = await mudarBase(idosoId, (base) => apagarDocumento(base, acao.documentoId));
+    return NextResponse.json({ ok: apagou }, { status: apagou ? 200 : 404 });
+  }
+
+  if (acao.acao === 'salvar_rede_de_apoio' && Array.isArray(acao.contatos)) {
+    const redeDeApoio = await mudarBase(idosoId, (base) => definirRedeDeApoio(base, acao.contatos));
+    return NextResponse.json({ ok: true, redeDeApoio });
   }
 
   if (acao.acao === 'gerar_codigo') {
