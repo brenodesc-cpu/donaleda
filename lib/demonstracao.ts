@@ -121,6 +121,8 @@ export function respostaDaAcaoDeDemonstracao(nome: string): string {
       return 'A família foi avisada.';
     case 'resumir_conversa':
       return 'Resumo guardado.';
+    case 'outra_pessoa_atendeu':
+      return 'A família foi avisada de que outra pessoa atendeu. Não conte nada da vida da pessoa da ficha e não anote o que for dito nesta ligação.';
     default:
       return 'Não consegui anotar agora. Siga a conversa normalmente.';
   }
