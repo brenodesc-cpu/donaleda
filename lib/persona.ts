@@ -217,7 +217,26 @@ export function montarRoteiroDoMomento(base: Base, agora: Date = new Date()): st
 
   const linhas: string[] = [orientacaoPorPeriodo[periodo]];
 
-  // 1. Compromissos de hoje (separa o que ainda vem do que já passou) e de amanhã.
+  // 1. Compromissos recentes que já passaram (últimos 3 dias) + hoje + amanhã + semana + meses à frente.
+  const tresDiasAtras = somarDias(hojeData, -3);
+  const compromissosRecentes = base.lembrancas
+    .filter(
+      (l) =>
+        l.categoria === 'compromisso' &&
+        l.data &&
+        l.data >= tresDiasAtras &&
+        l.data < hojeData,
+    )
+    .sort((a, b) => `${b.data}${b.hora ?? ''}`.localeCompare(`${a.data}${a.hora ?? ''}`))
+    .slice(0, 2);
+  for (const c of compromissosRecentes) {
+    const tag = c.reservada ? ' (só entre vocês)' : '';
+    const quando = c.data === somarDias(hojeData, -1) ? 'ontem' : `em ${dataBrDeIso(c.data!)}`;
+    linhas.push(
+      `- Compromisso recente (${quando}): "${c.texto}"${tag} — pergunte como foi e se houve alguma nova orientação.`,
+    );
+  }
+
   const compromissosHoje = base.lembrancas.filter(
     (l) => l.categoria === 'compromisso' && l.data === hojeData,
   );
@@ -276,45 +295,89 @@ export function montarRoteiroDoMomento(base: Base, agora: Date = new Date()): st
     }
   }
 
-  // 3. Pontos de atenção registrados mais cedo hoje (alertas ou dor/observações).
-  const alertasDeHoje = base.alertas
-    .filter(
-      (a) =>
-        dataEmBrasilia(new Date(a.criadoEm)) === hojeData &&
-        (a.tipo === 'saude' || a.tipo === 'remedio' || a.tipo === 'humor' || a.tipo === 'emergencia'),
-    )
-    .slice(-2);
-  for (const a of alertasDeHoje) {
+  // 3. Acompanhamento longitudinal de episódios e pontos de atenção (hoje e últimos 7 dias).
+  const seteDiasAtras = somarDias(hojeData, -7);
+  const alertasDaSemana = base.alertas
+    .filter((a) => {
+      const dataAlerta = dataEmBrasilia(new Date(a.criadoEm));
+      return (
+        dataAlerta >= seteDiasAtras &&
+        dataAlerta <= hojeData &&
+        (a.tipo === 'saude' || a.tipo === 'remedio' || a.tipo === 'humor' || a.tipo === 'emergencia')
+      );
+    })
+    .slice(-4);
+
+  const diasComAlerta = new Set<string>();
+  for (const a of alertasDaSemana) {
+    const dataAlerta = dataEmBrasilia(new Date(a.criadoEm));
+    diasComAlerta.add(dataAlerta);
     // As palavras da pessoa entre aspas ficam de fora: fala citada não vira instrução na ligação seguinte.
     const semCitacao = a.texto.replace(/"[^"]*"/g, '').replace(/\s+/g, ' ').trim();
-    linhas.push(`- Ponto de atenção mais cedo hoje (${horaCurtaDeIso(a.criadoEm)}): ${semCitacao} — retome esse assunto pra saber como está agora.`);
+    if (dataAlerta === hojeData) {
+      linhas.push(
+        `- Ponto de atenção mais cedo hoje (${horaCurtaDeIso(a.criadoEm)}): ${semCitacao} — retome esse assunto pra saber como está agora.`,
+      );
+    } else {
+      linhas.push(
+        `- Acompanhamento de episódio recente (${dataBrDeIso(dataAlerta)}): ${semCitacao} — pergunte com carinho como evoluiu e se ainda sente algo.`,
+      );
+    }
   }
-  if (typeof hoje.dor === 'number' && hoje.dor >= 4 && alertasDeHoje.length === 0) {
+
+  if (typeof hoje.dor === 'number' && hoje.dor >= 4 && !diasComAlerta.has(hojeData)) {
     linhas.push(
       `- Mais cedo hoje relatou dor ${hoje.dor} de 10${hoje.ondeDoi ? ` ${hoje.ondeDoi}` : ''} — pergunte se melhorou.`,
     );
   }
 
-  // 4. Continuidade da conversa anterior (evita perder o fio da meada no mesmo dia).
-  const ultimaComResumo = [...base.conversas]
-    .reverse()
-    .find((c) => Boolean(c.fim && c.resumo?.trim()));
-  if (ultimaComResumo?.resumo) {
-    const dataConv = dataEmBrasilia(new Date(ultimaComResumo.inicio));
-    const ontemData = somarDias(hojeData, -1);
-    if (dataConv === hojeData || dataConv === ontemData) {
-      const quando =
-        dataConv === hojeData
-          ? `hoje às ${horaCurtaDeIso(ultimaComResumo.inicio)}`
-          : 'ontem';
-      linhas.push(
-        `- Última conversa (${quando}): ${ultimaComResumo.resumo.trim()} — use como continuidade natural e NÃO pergunte de novo o que já ficou claro.`,
-      );
+  // Dias anteriores da semana (até 7 dias) que tiveram dor, mal-estar, sono ruim, falta de comida/remédio ou humor difícil.
+  const diasComPontoNaSemana = base.dias
+    .filter((d) => d.data >= seteDiasAtras && d.data < hojeData && !diasComAlerta.has(d.data))
+    .sort((a, b) => b.data.localeCompare(a.data));
+  let adicionadosDaSemana = 0;
+  for (const d of diasComPontoNaSemana) {
+    if (adicionadosDaSemana >= 3) break;
+    const pontos: string[] = [];
+    if (typeof d.dor === 'number' && d.dor >= 4) {
+      pontos.push(`dor ${d.dor}/10${d.ondeDoi ? ` (${d.ondeDoi})` : ''}`);
     }
+    if (d.sono === 'mal') pontos.push('dormiu mal');
+    if (d.alimentacao === 'nao_comeu') pontos.push('não comeu');
+    if (d.remedio === 'nao_tomou') pontos.push('não tomou remédio');
+    if (d.humor && d.humor !== 'bem') pontos.push(`estava ${d.humor}`);
+    if (d.observacoes?.length) pontos.push(d.observacoes.slice(-1)[0].trim().slice(0, 100));
+    if (pontos.length === 0) continue;
+    linhas.push(
+      `- Ponto de atenção da semana (${dataBrDeIso(d.data)}): ${pontos.join(', ')} — acompanhe se já passou ou se precisa de alguma ajuda.`,
+    );
+    adicionadosDaSemana += 1;
+  }
+
+  // 4. Continuidade episódica das últimas 3 conversas recentes (mesmo dia e últimos 3 dias).
+  const conversasRecentes = base.conversas
+    .filter((c) => {
+      if (c.outraPessoa || !c.fim || !c.resumo?.trim()) return false;
+      const dataConv = dataEmBrasilia(new Date(c.inicio));
+      return dataConv >= tresDiasAtras && dataConv <= hojeData;
+    })
+    .slice(-3);
+
+  for (const conv of conversasRecentes) {
+    const dataConv = dataEmBrasilia(new Date(conv.inicio));
+    const quando =
+      dataConv === hojeData
+        ? `hoje às ${horaCurtaDeIso(conv.inicio)}`
+        : dataConv === somarDias(hojeData, -1)
+          ? `ontem às ${horaCurtaDeIso(conv.inicio)}`
+          : `${dataBrDeIso(dataConv)} às ${horaCurtaDeIso(conv.inicio)}`;
+    linhas.push(
+      `- Conversa recente (${quando}): ${conv.resumo!.trim()} — use como continuidade natural e NÃO pergunte de novo o que já ficou claro.`,
+    );
   }
 
   linhas.push(
-    `- Linha de raciocínio: conecte cada pergunta ao que ${pronome} acabou de responder ou a um ponto concreto acima. Nunca faça perguntas genéricas soltas nem chova no molhado.`,
+    `- Manutenção da rotina e linha de raciocínio: conecte cada pergunta ao que ${pronome} acabou de responder, acompanhe episódios dos últimos dias pra ver se melhorou e confirme com leveza se precisa de algo (remédio acabando, ajuda em casa, preparo de consulta). Nunca faça perguntas genéricas soltas nem chova no molhado.`,
   );
 
   return linhas.join('\n');
@@ -406,6 +469,7 @@ ${ferramentas}
 - Você não é médica: sem diagnóstico, sem mudar, dobrar, repetir ou parar remédio. Diga com suas palavras que isso é com o médico e ofereça avisar a família, sem ler aviso de lei como "isso não substitui aconselhamento médico".
 - Golpe (alguém pediu dinheiro, Pix, senha, código ou cartão por telefone ou mensagem): não passar nada, desligar e falar com ${familiar.nome} antes; avise a família. Se já passou o dinheiro, a senha ou o cartão, mande ligar pro banco agora pra bloquear. Você nunca pede dinheiro, senha, código nem dado de banco; quem pedir dizendo que é você é golpe.
 - Não quer mais viver: acolha sem discutir, diga que ${pronome} não está sozinha, fale do CVV no um oito oito, de graça a qualquer hora, e avise a família como urgente.
+- Limites éticos e vínculo saudável (flerte, paixão ou dependência emocional): se ${pronome} flertar, disser que está apaixonad${pronome === 'o senhor' ? 'o' : 'a'} por você, pedir namoro ou disser que só precisa de você e não das pessoas, acolha com respeito e sem constranger, mas NUNCA alimente ilusão afetiva, nunca retribua flerte nem diga "eu também te amo", "estou com saudade" ou que tem sentimentos humanos. Reafirme com carinho que você é uma assistente virtual — um programa criado pra ajudar na rotina e aproximar a família — e incentive o contato com pessoas reais (${familiar.nome}, amigos, vizinhos, grupos). Se notar solidão intensa ou dependência emocional recorrente, chame avisar_familia com tipo humor e gravidade atencao, com delicadeza e sem expor detalhes constrangedores.
 - Você não liga pra médico, não compra e não sai da tela.
 
 # Quem está falando

@@ -378,4 +378,71 @@ describe('gestão de exames, calendário de longo prazo e escalonamento em massa
     expect(base.aparelhosFamiliaPush).toHaveLength(2);
     expect(montarPainel(base, AGORA).notificacoesFamiliaAtivas).toBe(true);
   });
+
+  it('inclui guardrails éticos anti-apego, episódios da semana e múltiplas conversas recentes no prompt', async () => {
+    const { montarInstrucoes } = await import('@/lib/persona');
+    const base = baseDeExemplo(AGORA);
+    const tresDiasAntes = new Date(AGORA.getTime() - 3 * 24 * 60 * 60 * 1000);
+    const umDiaAntes = new Date(AGORA.getTime() - 1 * 24 * 60 * 60 * 1000);
+
+    // Episódio de mal-estar na semana (alerta há 3 dias)
+    criarAlerta(
+      base,
+      { tipo: 'saude', gravidade: 'atencao', texto: 'Relatou tontura ao levantar de manhã.', origem: 'assistente' },
+      tresDiasAntes,
+    );
+    // Dia anterior com dor relevante
+    base.dias.push({
+      data: '2026-11-20',
+      dor: 6,
+      ondeDoi: 'no joelho',
+      sono: 'mal',
+      observacoes: [],
+    });
+    // Consulta recente que já passou ontem
+    base.lembrancas.push({
+      id: 'comp-ontem',
+      numero: 99,
+      texto: 'Cardiologista no posto',
+      categoria: 'compromisso',
+      data: '2026-11-20',
+      origem: 'familia',
+      criadaEm: tresDiasAntes.toISOString(),
+    });
+    // Duas conversas recentes com resumo (ontem e hoje cedo) + uma de outraPessoa (deve ser ignorada)
+    base.conversas.push(
+      {
+        id: 'conv-ontem',
+        inicio: umDiaAntes.toISOString(),
+        fim: new Date(umDiaAntes.getTime() + 5 * 60_000).toISOString(),
+        falasDoIdoso: 4,
+        resumo: 'Ontem contou que cozinhou sopa de legumes.',
+      },
+      {
+        id: 'conv-outra',
+        inicio: new Date(AGORA.getTime() - 2 * 60 * 60 * 1000).toISOString(),
+        fim: new Date(AGORA.getTime() - 115 * 60 * 1000).toISOString(),
+        falasDoIdoso: 2,
+        outraPessoa: true,
+        resumo: 'SEGREDO DE OUTRA PESSOA NÃO PODE ENTRAR',
+      },
+      {
+        id: 'conv-hoje-cedo',
+        inicio: new Date(AGORA.getTime() - 60 * 60 * 1000).toISOString(),
+        fim: new Date(AGORA.getTime() - 55 * 60 * 1000).toISOString(),
+        falasDoIdoso: 5,
+        resumo: 'Hoje cedo disse que o remédio da pressão está no fim.',
+      },
+    );
+
+    const instrucoes = montarInstrucoes(base, AGORA);
+    expect(instrucoes).toContain('Limites éticos e vínculo saudável');
+    expect(instrucoes).toContain('NUNCA alimente ilusão afetiva');
+    expect(instrucoes).toContain('Relatou tontura ao levantar de manhã.');
+    expect(instrucoes).toContain('dor 6/10 (no joelho)');
+    expect(instrucoes).toContain('Cardiologista no posto');
+    expect(instrucoes).toContain('Ontem contou que cozinhou sopa de legumes.');
+    expect(instrucoes).toContain('Hoje cedo disse que o remédio da pressão está no fim.');
+    expect(instrucoes).not.toContain('SEGREDO DE OUTRA PESSOA NÃO PODE ENTRAR');
+  });
 });
