@@ -81,7 +81,7 @@ export function AjustesDoIdoso({
     }
     setAvisoRede({
       tipo: 'salvo',
-      texto: `Rede de apoio salva (${salvos.length} contato${salvos.length === 1 ? '' : 's'}). Se não atender 3 tentativas, todos serão acionados.`,
+      texto: `Rede de apoio salva (${salvos.length} contato${salvos.length === 1 ? '' : 's'}).`,
     });
   };
 
@@ -147,11 +147,11 @@ export function AjustesDoIdoso({
 
       {onSalvarRedeDeApoio ? (
         <form onSubmit={handleSalvarRede} noValidate className="flex flex-col gap-4">
-          <Cartao titulo="Rede de apoio (após 3 tentativas sem resposta)">
+          <Cartao titulo="Rede de apoio">
             <p className="text-base text-muted-foreground">
-              Se {idoso.tratamento} não atender 3 tentativas seguidas de ligação, a Dona Leda gera
-              alerta urgente e aciona em massa todos os contatos abaixo (com suporte a ligação
-              automática via Agora Telephony).
+              Se {idoso.tratamento} não atender as 2 tentativas de uma ligação marcada, a Dona Leda
+              manda um aviso urgente pra você no painel. A ligação automática pra estes contatos
+              ainda não está ligada: por enquanto eles ficam guardados aqui.
             </p>
 
             <div className="flex flex-col gap-3">

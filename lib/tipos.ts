@@ -41,7 +41,8 @@ export interface Dia {
   atualizadoEm?: string;
 }
 
-export type OrigemDaLembranca = 'conversa' | 'familia' | 'deduzida';
+/** 'documento': tirado pela leitura de um exame ou receita que a família anexou. */
+export type OrigemDaLembranca = 'conversa' | 'familia' | 'deduzida' | 'documento';
 
 /** Algo que a Dona Leda aprendeu sobre a pessoa e usa nas próximas conversas. */
 export interface Lembranca {

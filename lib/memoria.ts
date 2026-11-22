@@ -368,6 +368,7 @@ function criadaEmCurto(iso: string): string {
 /** De onde veio a lembrança, do jeito que vai na instrução. Dedução nunca sai como fato. */
 function deOndeVeio(l: Lembranca, familiar: string): string {
   if (l.origem === 'familia') return `${familiar} contou`;
+  if (l.origem === 'documento') return `lido de um documento que ${familiar} anexou, pode ter erro de leitura: confirme antes de dar como certo`;
   if (l.origem === 'deduzida') {
     return `você deduziu da conversa de ${criadaEmCurto(l.criadaEm)} e ninguém confirmou: pergunte antes de dar como certo`;
   }

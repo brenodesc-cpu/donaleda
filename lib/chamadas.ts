@@ -11,12 +11,16 @@ import type { Base, Chamada, SituacaoDaChamada } from './tipos';
 
 /** Quanto tempo a ligação fica tocando antes de contar como não atendida. */
 export const TOCA_POR_MS = 45_000;
-/** Depois da hora marcada, por quantos minutos a assistente ainda tenta ligar (cabe 3 tentativas em ~8 min). */
+/** Depois da hora marcada, por quantos minutos a assistente ainda tenta ligar . */
 const JANELA_DO_HORARIO_MIN = 20;
 /** Espera entre uma tentativa perdida e a próxima da mesma hora marcada. */
 const ESPERA_ENTRE_TENTATIVAS_MS = 3 * 60_000;
-/** Após 3 tentativas sem atendimento, a rede de apoio da família é acionada em massa. */
-export const TENTATIVAS_POR_HORARIO = 3;
+/**
+ * Tentativas por hora marcada. Voltou a 2 em 22/11: com 3 e a janela de 20 min, uma
+ * ligação muda que vai até o teto de 10 min deixava a 3ª fora da janela, e a família
+ * ficava sem aviso nenhum.
+ */
+export const TENTATIVAS_POR_HORARIO = 2;
 /** Conversa começada até uma hora antes da hora marcada já vale por ela. */
 const CONVERSA_VALE_POR_MIN = 60;
 export const SEGUNDOS_PRA_ATENDER_SOZINHO = 10;
@@ -87,7 +91,7 @@ function darPorPerdida(base: Base, chamada: Chamada, agora: Date): boolean {
     const texto =
       chamada.motivo === 'familia'
         ? `Não atendeu a ligação que a família pediu às ${horaMinutoEmBrasilia(new Date(chamada.pedidaEm))}.`
-        : `Não atendeu a ligação das ${chamada.horario}, em ${chamada.tentativa} tentativas. Rede de apoio acionada.`;
+        : `Não atendeu a ligação das ${chamada.horario}, em ${chamada.tentativa} tentativas.`;
     criarAlerta(
       base,
       {

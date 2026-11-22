@@ -409,7 +409,7 @@ async function ligarFamiliarViaAgoraTelephony(
 }
 
 /**
- * Escalonamento em massa após 3 tentativas sem atendimento:
+ * Escalonamento quando as tentativas da hora marcada acabam sem atendimento:
  *   1. Aciona todos os contatos da rede de apoio via Agora Conversational AI Telephony (se configurado);
  *   2. Dispara push crítico (Agora Signaling + FCM / APNs) pros aparelhos de familiares cadastrados;
  *   3. Devolve registro auditável (`Escalonamento`) pra ficar visível no painel da família.
@@ -446,11 +446,12 @@ export async function dispararEscalonamentoEmMassa(
           ok: ligou,
         };
       }
+      // Sem a telefonia ligada, ninguém da rede recebeu nada: fica registrado como não acionado.
       return {
         nome: c.nome,
         telefone: c.telefone,
         canal: 'painel' as const,
-        ok: true,
+        ok: false,
       };
     }),
   );

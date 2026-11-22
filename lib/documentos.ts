@@ -213,8 +213,9 @@ export function blocoDeDocumentos(base: Base): string {
   return docs
     .map((d) => {
       const data = d.data ? ` (${d.data})` : '';
-      const orientacao = d.orientacao ? ` Preparo/nota: ${d.orientacao}.` : '';
-      return `- [${d.tipo.toUpperCase()}] ${d.titulo}${data}: ${d.resumoSimples}${orientacao}`;
+      // Na receita, o campo de preparo pode trazer dose: ele fica só no painel da família.
+      const orientacao = d.orientacao && d.tipo !== 'receita' ? ` Preparo: ${d.orientacao}.` : '';
+      return `- [${d.tipo.toUpperCase()}] ${d.titulo}${data} (lido de um documento anexado, pode ter erro de leitura): ${d.resumoSimples}${orientacao}`;
     })
     .join('\n');
 }

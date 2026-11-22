@@ -101,7 +101,7 @@ export async function POST(request: Request) {
           categoria: 'compromisso',
           data: c.data,
           hora: c.hora,
-          origem: 'familia',
+          origem: 'documento',
         },
         agora,
       );
