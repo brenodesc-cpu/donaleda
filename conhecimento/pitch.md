@@ -24,10 +24,10 @@ Versão 2 da especificação, das 21h10, depois de o Breno reprovar o conteúdo 
 | 6 | "Ao vivo" e o que a banca deve reparar: responde em menos de 3 s, pode ser interrompida, avisa a família na hora. O tempo foi medido pelo time às 21h37 e 21h40 de 21/11, com voz gravada (média de 2,8 s, pior caso de 4,4 s, a primeira resposta é a mais lenta), porque a Agora não mede esse tempo no modo do Gemini. A interrupção funcionou nas duas ligações | Voz |
 | 7 | Quatro números grandes: avós que atenderam no sábado, que atenderam de novo no domingo, famílias que aceitaram o teste e, no teste das três versões com cinco adultos, quantos dos dois que viram o aviso primeiro decidiram certo | Validação |
 | 8 | O que a gente ouviu e o que mudou: quem precisa ainda mora em casa, então a família paga e a casa indica; visitar toda semana não basta, então ela liga todo dia; aviso sem responsável não vira cuidado, então o painel mostra quem assumiu. Uma linha pro que as ligações ensinarem e os limites numa linha pequena | Validação |
-| 9 | Os R$ 129,90 numa barra só: R$ 38 de custo, R$ 24,50 de imposto e cartão e R$ 67 de sobra, com o mercado estimado numa linha | Benefício e negócio |
-| 10 | "O segundo cérebro de quem envelhece" em três tempos. Hoje: a ligação de todo dia, a memória do que ele contou e o aviso pra família. Em seguida: a filha entra na ligação, o telefone comum e as famílias que a casa indicar. Depois, marcado como visão: pedir o remédio e as compras, marcar a consulta e o aparelho próprio, como uma pulseira. O pedido à banca e a assinatura | Inovação e próximos passos |
+| 9 | Os R$ 129,90 numa barra só: R$ 38 de custo, R$ 24,50 de imposto e cartão e R$ 67 de sobra. Embaixo, quem paga: R$ 1,1 bi por ano pelas famílias e até R$ 13,6 bi por ano pelos planos de saúde, que é o teto se o plano contratar a Dona Leda pros 8,7 milhões de beneficiários com 60 anos ou mais | Benefício e negócio |
+| 10 | "O segundo cérebro de quem envelhece" em três tempos. Hoje: a ligação de todo dia, a memória do que ele contou e o aviso pra família. Em seguida: a filha entra na ligação, o telefone comum e as famílias que a casa indicar. Depois, marcado como visão: pedir o remédio e as compras, com os R$ 1,8 trilhão que quem tem 50 anos ou mais gastou em 2024, marcar a consulta e o aparelho próprio, como uma pulseira. O pedido à banca e a assinatura | Inovação e próximos passos |
 
-**Fontes:** IBGE (PNAD Contínua 2025, Censos 2010 e 2022, Projeções da População de 2024, com 2070 como projeção); Cidesp, maio de 2026 (cuidador); Mercado Mineiro, agosto de 2026 (média de R$ 5.955 em Belo Horizonte); `custos.md` (custo medido em 21/11) e `tese.md` (mercado estimado). O que da Agora está em uso foi conferido no código pela conversa "Servidor, voz e banco" às 20h58 de 21/11. O filtro de ruído saiu do slide, porque só roda no navegador. Os itens de "Em seguida" saem do `README.md` e de `conhecimento/ideias.md`, e os de "Depois" da proposta de valor e de `segundo-cerebro.md`.
+**Fontes:** IBGE (PNAD Contínua 2025, Censos 2010 e 2022, Projeções da População de 2024, com 2070 como projeção); Cidesp, maio de 2026 (cuidador); Mercado Mineiro, agosto de 2026 (média de R$ 5.955 em Belo Horizonte); `custos.md` (custo medido em 21/11) e `tese.md` (mercado estimado); IESS, fevereiro de 2026 (8,7 milhões de beneficiários de plano com 60 anos ou mais; o teto é 8,7 milhões × R$ 129,90 × 12 meses = R$ 13,6 bilhões); Data8, estudo Brasil Prateado (R$ 1,8 trilhão de consumo de quem tem 50 anos ou mais em 2024). O que da Agora está em uso foi conferido no código pela conversa "Servidor, voz e banco" às 20h58 de 21/11. O filtro de ruído saiu do slide, porque só roda no navegador. Os itens de "Em seguida" saem do `README.md` e de `conhecimento/ideias.md`, e os de "Depois" da proposta de valor e de `segundo-cerebro.md`.
 
 ## A fala de 3 minutos, cronometrada
 
@@ -37,14 +37,14 @@ São 180 segundos de fala em nove slides, e a demonstração de 2 minutos entra 
 |---:|---:|---:|---|
 | 1, a avó | 24 | 0:24 | problema, com a história que conecta |
 | 2, a Dona Leda | 21 | 0:45 | clareza |
-| 3, 6 milhões | 6 | 0:51 | problema |
-| 4, o dinheiro | 24 | 1:15 | problema e benefício |
-| 5, o fluxo | 28 | 1:43 | técnica e Agora |
+| 3, 6 milhões | 4 | 0:49 | problema |
+| 4, o dinheiro | 24 | 1:13 | problema e benefício |
+| 5, o fluxo | 23 | 1:36 | técnica e Agora |
 | 6 e a demonstração | 120 | à parte | voz |
-| 7, os números | 20 | 2:03 | validação |
-| 8, o que mudou | 23 | 2:26 | validação |
-| 9, o negócio | 15 | 2:41 | benefício e negócio |
-| 10, a visão | 21 | 3:02 | inovação e próximos passos |
+| 7, os números | 20 | 1:56 | validação |
+| 8, o que mudou | 18 | 2:14 | validação |
+| 9, o negócio | 20 | 2:34 | benefício e negócio |
+| 10, a visão | 26 | 3:00 | inovação e próximos passos |
 
 **[Slide 1, 24 s]**
 A minha avó se chama Leda. Ela tem [idade] anos e mora com o meu avô em [cidade]. [A história verdadeira, em no máximo 25 palavras: um momento do dia a dia dela que mostra a falta de companhia ou de apoio, e por que a Dona Leda serve pra ela mesmo morando com o meu avô.] Por isso a assistente que a gente construiu se chama Dona Leda.
@@ -52,14 +52,14 @@ A minha avó se chama Leda. Ela tem [idade] anos e mora com o meu avô em [cidad
 **[Slide 2, 21 s]**
 Ninguém deveria passar os últimos anos da vida parado e sozinho em casa. O nosso sonho é que todo brasileiro envelheça ativo até o fim. A Dona Leda é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, saúde, comunicação e rotina.
 
-**[Slide 3, 6 s]**
-No Brasil, 6 milhões de idosos moram sozinhos, e o país envelhece rápido.
+**[Slide 3, 4 s]**
+No Brasil, 6 milhões de idosos moram sozinhos.
 
 **[Slide 4, 24 s]**
 Hoje, pra ter quem converse com os pais e acompanhe a rotina deles todo dia, a família paga um cuidador ou uma casa de repouso. A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço.
 
-**[Slide 5, 28 s]**
-Na hora combinada, o celular toca, e o idoso só precisa atender. A chamada é uma sala da Agora, e o motor de conversa da Agora leva a voz dele pro Gemini e chama as ações dela, como anotar o dia e avisar a família. Em cada ligação ela lembra do que ele contou nas outras, e a família vê a ficha do dia e quem assumiu cada aviso.
+**[Slide 5, 23 s]**
+Na hora combinada, o celular toca, e o idoso só precisa atender. A chamada é uma sala da Agora, e o motor de conversa da Agora leva a voz dele pro Gemini e chama as ações dela, como anotar o dia e avisar a família. Em cada ligação ela lembra do que ele contou nas outras.
 
 **[Slide 6 e a demonstração, 2 minutos]**
 A primeira fala está no roteiro da demonstração, logo abaixo.
@@ -67,25 +67,25 @@ A primeira fala está no roteiro da demonstração, logo abaixo.
 **[Slide 7, 20 s]**
 Ontem a Dona Leda ligou pra [N] avós do time. [N] atenderam e conversaram [X] minutos em média, e hoje às 9h, sem ninguém pedir, [N] atenderam de novo. [N] famílias aceitaram começar o teste, e dos dois adultos que viram o aviso primeiro, [N] decidiram certo.
 
-**[Slide 8, 23 s]**
-A casa de repouso contou que quem precisa ainda mora em casa, e topou indicar as famílias. A pedido dos mentores, o painel mostra quem assumiu cada aviso. [O que as ligações com os avós ensinaram, em uma frase.] O teste durou uma noite, com poucos avós e com a família ao lado.
+**[Slide 8, 18 s]**
+A casa de repouso contou que quem precisa ainda mora em casa, e topou indicar as famílias. [O que as ligações com os avós ensinaram, em uma frase.] O teste durou uma noite, com poucos avós e com a família ao lado.
 
-**[Slide 9, 15 s]**
-A família paga 129,90 por mês. Cada idoso custa uns 38 reais, medido numa ligação de teste, e tirando imposto e cartão sobram 67.
+**[Slide 9, 20 s]**
+A família paga 129,90 por mês, e sobram 67 por idoso. O plano de saúde pode contratar a Dona Leda pros 8,7 milhões de idosos que têm plano: são até 13,6 bilhões por ano.
 
-**[Slide 10, 21 s]**
-Em seguida, as famílias que a casa parceira indicar começam o teste. Depois, com o que guardou de cada conversa, ela vira o segundo cérebro de quem envelhece e resolve coisas pela pessoa, como pedir o remédio e marcar a consulta. [O pedido à banca, em uma frase.] Dona Leda: longevidade com qualidade de vida.
+**[Slide 10, 26 s]**
+Em seguida, as famílias que a casa parceira indicar começam o teste. Depois, com o que guardou de cada conversa, ela vira o segundo cérebro de quem envelhece e resolve coisas pela pessoa, como pedir o remédio e as compras. Quem tem 50 anos ou mais gasta 1,8 trilhão por ano. [O pedido à banca, em uma frase.] Dona Leda: longevidade com qualidade de vida.
 
 ## O que cortar primeiro se o ensaio estourar
 
 Na ordem. Nunca saem: a avó e o nome no slide 1, a definição no slide 2, a Agora no slide 5, os números do slide 7, os limites do slide 8, a visão do slide 10 e o pedido à banca.
 
 1. **A demonstração, a ficha do dia no fim** (15 s). O aviso e o desfecho já fecharam a cena.
-2. **Slide 8, a frase dos mentores** (6 s). O slide mostra.
-3. **Slide 9, encurtado pra "A família paga 129,90 por mês, e sobram 67 por idoso"** (6 s). O resto fica na tela.
-4. **Slide 5, a ficha e o aviso da família** (7 s). As telas do slide mostram.
+2. **Slide 10, a frase do consumo** (5 s). O número fica na tela.
+3. **Slide 4, a frase da aposentadoria** (4 s). As colunas de preço mostram.
+4. **Slide 9, encurtado pra "O plano de saúde pode contratar a Dona Leda: são até 13,6 bilhões por ano"** (3 s). Os 8,7 milhões ficam na tela.
 
-Os anos do envelhecimento, o preço do cuidador e o mercado estimado já saíram da fala e ficaram só na tela, pra ela caber em 3 minutos com a história da avó.
+Já saíram da fala e ficaram só na tela: os anos do envelhecimento, o preço do cuidador, o mercado das famílias, a ficha e o aviso do slide 5, o pedido dos mentores no slide 8 e a conta do custo no slide 9. Os 15 segundos dos planos de saúde e do consumo saíram desses três últimos cortes e de "o país envelhece rápido" no slide 3.
 
 Se no ensaio ela não calar quando interrompida, "Pode ser interrompida" sai do slide 6 e a fala da demonstração perde o "Espera".
 
@@ -179,6 +179,7 @@ Cada resposta cabe em uns 20 segundos. Os números têm fonte em `custos.md`, `p
 |---|---|
 | Quanto custa cada idoso por mês? | Uns R$ 38 no uso médio de 3 minutos e 20 segundos por dia, medido numa ligação de teste. Dos R$ 129,90 saem imposto e cartão e sobram R$ 67. Quem usa os 10 minutos todo dia dá uns R$ 13 de prejuízo, e uma família no uso médio cobre até cinco dessas. Quatro famílias pagam o site e o banco |
 | E o protótipo de hoje, quanto custa? Os R$ 38 incluem o motor de conversa da Agora? | A sala da Agora está em toda ligação, porque é por ela que a filha entra. O motor de conversa da Agora, que é o da demonstração, soma uns R$ 59 por idoso por mês ao custo medido. O preço do motor por volume é a primeira conversa que a gente quer ter com a Agora. [A última frase depende do sim do Breno.] |
+| E os dados? Vocês vão vender os dados dos idosos? | A gente não vende dado. O plano de saúde contrata o serviço pro beneficiário dele, com o sim do idoso, e paga pela ligação de todo dia. A LGPD proíbe passar dado de saúde entre empresas pra ganhar dinheiro e proíbe o plano de usar dado de saúde pra escolher quem aceita, e antes do primeiro contrato com plano isso passa por advogado |
 | E a privacidade, a LGPD? | A conversa inteira não é guardada, só a ficha do dia, as lembranças, os avisos e o resumo. Na primeira ligação ela dá o aviso de privacidade, e na memória o que a pessoa contou fica separado do que a Dona Leda deduziu. Quem cadastrou apaga tudo em Ajustes. O idoso pode pedir pra guardar um assunto íntimo, e a família só sabe que ele anda triste, sem o motivo. Risco (queda, golpe, vontade de morrer) sempre vai pra família, e ela diz isso a ele. Dado de saúde pede base legal própria na LGPD, prazo de guarda e lista de quem acessa, e isso vem antes do primeiro piloto pago |
 | Por que uma IA no lugar de uma pessoa ligando? | Ligação diária feita por gente funciona: num estudo de 2021 (JAMA Psychiatry) ela reduziu a solidão em quatro semanas. Ela custa caro pra fazer todo dia, e hoje quem faz é a filha, de graça, ou um cuidador, de R$ 2.800 a 4.500. A Dona Leda faz a ligação de todo dia por R$ 129,90 e chama a família quando precisa de gente |
 | E o idoso que não tem celular? | Esta versão é pra quem tem celular ou tablet com internet, e perto de 45% dos brasileiros com mais de 60 anos já fazem chamada pela internet. Quem não tem entra depois pela ligação de telefone comum, que é onde estão os maiores números lá fora: o CareCall, da Coreia, liga pra 30 mil idosos |
