@@ -209,6 +209,7 @@ export default function Conversa({
     localMicrophoneTrack,
     encerrarComFalas,
     avisarFimDaLigacao,
+    dados.tetoMs,
   );
   const legenda = useMemo(
     () => legendaDaAssistente(transcript, uidDaAssistente),

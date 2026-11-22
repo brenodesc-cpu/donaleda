@@ -89,7 +89,11 @@ export const FERRAMENTAS: Ferramenta[] = [
       type: 'object',
       properties: {
         numero: { type: 'integer', description: 'O número da lembrança, o que aparece entre colchetes.' },
-        acao: { type: 'string', enum: ['corrigir', 'esquecer', 'reservar', 'liberar'] },
+        acao: {
+          type: 'string',
+          enum: ['corrigir', 'esquecer', 'reservar', 'liberar'],
+          description: 'corrigir sem texto novo confirma uma lembrança que você tinha deduzido e a pessoa disse que está certa.',
+        },
         texto: { type: 'string', description: 'Na correção: a frase certa, inteira.' },
         data: { type: 'string', description: 'Na correção de compromisso: a data como a pessoa disse.' },
         hora: { type: 'string', description: 'Na correção de compromisso: a hora como a pessoa disse.' },
@@ -264,7 +268,7 @@ export async function executarFerramenta(
     if (!numero || !acao) return 'Nada mudou: faltou o número ou o que fazer.';
     const mudanca: Mudanca =
       acao === 'corrigir'
-        ? { acao, texto: texto(a.texto, 240), data: dataPedida(texto(a.data, 40), agora), hora: horaPedida(texto(a.hora, 20)) }
+        ? { acao, texto: texto(a.texto, 240), data: dataPedida(texto(a.data, 40), agora), hora: horaPedida(texto(a.hora, 20)), por: 'conversa' }
         : { acao };
     const r = await mudarBase(idosoId, (base) => mudar(base, { numero }, mudanca, agora));
     if (!r.ok) return `Nada mudou: ${r.motivo}.`;

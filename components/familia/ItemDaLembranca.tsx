@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { NOME_DA_ASSISTENTE } from '@/lib/assistente';
 import type { Lembranca } from '@/lib/tipos';
 import { diaEMes, dataDeBrasilia, gavetaDe, quandoDoCompromisso } from './formatos';
 import { Erro } from './campos';
@@ -16,9 +17,13 @@ interface ItemDaLembrancaProps {
 
 type Modo = 'ver' | 'corrigir' | 'confirmar_apagar';
 
-function quemContou(lembranca: Lembranca, tratamento: string): string {
-  const quem = lembranca.origem === 'familia' ? 'A família contou' : `${tratamento} contou`;
+export function quemContou(lembranca: Lembranca, tratamento: string): string {
   const quando = dataDeBrasilia(lembranca.criadaEm);
+  if (lembranca.origem === 'deduzida') {
+    const daConversa = quando ? `da conversa de ${diaEMes(quando)}` : 'da conversa';
+    return `A ${NOME_DA_ASSISTENTE} entendeu ${daConversa}.`;
+  }
+  const quem = lembranca.origem === 'familia' ? 'A família contou' : `${tratamento} contou`;
   const quemComMaiuscula = quem.charAt(0).toLocaleUpperCase('pt-BR') + quem.slice(1);
   return quando ? `${quemComMaiuscula} em ${diaEMes(quando)}` : quemComMaiuscula;
 }
@@ -92,6 +97,20 @@ export function ItemDaLembranca({ lembranca, tratamento, onCorrigir, onApagar }:
         </div>
       ) : (
         <div className="-ml-2 flex flex-wrap gap-2">
+          {lembranca.origem === 'deduzida' ? (
+            <button
+              type="button"
+              onClick={async () => {
+                setFalhou(false);
+                const resultado = await onCorrigir(lembranca.id, {});
+                if (!resultado.ok) setFalhou(true);
+              }}
+              aria-label={`Está certo: ${lembranca.texto}`}
+              className={`${CLASSE_DO_LINK} text-foreground`}
+            >
+              Está certo
+            </button>
+          ) : null}
           <button
             type="button"
             onClick={() => setModo('corrigir')}
@@ -110,7 +129,7 @@ export function ItemDaLembranca({ lembranca, tratamento, onCorrigir, onApagar }:
           </button>
         </div>
       )}
-      <Erro texto={falhou ? 'Não deu pra apagar agora. Tente de novo.' : null} />
+      <Erro texto={falhou ? 'Não deu certo agora. Tente de novo.' : null} />
     </li>
   );
 }

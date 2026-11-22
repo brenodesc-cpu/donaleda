@@ -190,7 +190,9 @@ export function aplicarExtracaoNaBase(
         hora: horaPedida(item.hora),
         // O que cita um assunto que a pessoa já pediu segredo fica reservado também.
         reservada: item.reservada || pediuSegredo || citaSegredo(base, item.texto) || undefined,
-        origem: 'conversa',
+        // Quem tirou isto da conversa foi uma segunda IA, depois do fim: é dedução,
+        // não o que a pessoa contou com essas palavras. Só vira fato quando alguém confirma.
+        origem: 'deduzida',
       },
       agora,
     );

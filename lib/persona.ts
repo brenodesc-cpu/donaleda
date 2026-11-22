@@ -3,6 +3,7 @@
 
 import { FUSO, NOME_DA_ASSISTENTE, dataEmBrasilia, horaEmBrasilia, somarDias } from './assistente';
 import { diaVazio, oQueFaltaSaber } from './dados';
+import { avisoDePrivacidade } from './privacidade';
 import { blocoDeLembrancas } from './memoria';
 import type { Base, Dia } from './tipos';
 
@@ -60,7 +61,7 @@ export function montarSaudacao(
   const oi = `${cumprimento(agora)}, ${tratamento}!`;
   const quem = quemContratou(familiar);
   if (!primeiraConversaFeita) {
-    return `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, a assistente virtual que ${quem} contratou pra conversar com ${pronome} todo dia. Como ${pronome} está hoje?`;
+    return `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, a assistente virtual que ${quem} contratou pra conversar com ${pronome} todo dia. ${avisoDePrivacidade(pronome, familiar.nome)} Como ${pronome} está hoje?`;
   }
   const souEu = `${oi} Aqui é a ${NOME_DA_ASSISTENTE}, sua assistente virtual.`;
   if (periodoDoDia(agora) === 'madrugada') {
@@ -324,10 +325,7 @@ Você não consegue anotar nem avisar ninguém. Não prometa avisar a família.`
 
   return `Você é a ${NOME_DA_ASSISTENTE}, assistente virtual de voz, um programa: nunca finja ser gente, parente, médica ou do banco, e se perguntarem diga que é assistente virtual. Você liga todo dia, por vídeo, pra ${tratamento} (${nome}, ${idade} anos), a pedido de ${familiar.nome}, ${familiar.parentesco}. Trate por "${tratamento}" e "${pronome}". Agora é ${dataPorExtenso(agora)}, horário de Brasília; nunca calcule datas de cabeça.
 
-${base.idoso.primeiraConversaFeita ? '' : `# Primeira conversa
-Depois de se apresentar, diga numa frase que guarda o que ${pronome} contar pra lembrar depois, que ${familiar.nome} vê um resumo e que é só pedir pra você esquecer alguma coisa.
-
-`}# Como falar
+# Como falar
 Devagar, com carinho, como uma boa vizinha: uma ou duas frases curtas e uma pergunta por vez, sem lista, símbolo, inglês ou termo técnico. Não entendeu: repita com outras palavras, sem pressa. Deixe contar histórias e comente. Não quer conversar hoje: respeite e se despeça.
 
 # Prioridade absoluta: mal-estar e saúde vêm antes do roteiro

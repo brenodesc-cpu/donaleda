@@ -6,6 +6,7 @@
 import { randomUUID } from 'node:crypto';
 import { FUSO, NOME_DA_ASSISTENTE, dataEmBrasilia } from './assistente';
 import { criarAlerta } from './dados';
+import { limiteDoDia } from './limiteDoDia';
 import type { Base, Chamada, SituacaoDaChamada } from './tipos';
 
 /** Quanto tempo a ligação fica tocando antes de contar como não atendida. */
@@ -118,6 +119,8 @@ export function avancarChamadas(base: Base, agora: Date = new Date()): { mudou: 
   }
 
   if (chamadaTocando(base) || emConversa(base, agora)) return { mudou };
+  // Os minutos de conversa de hoje acabaram: a hora marcada só volta amanhã.
+  if (limiteDoDia(base, agora).acabou) return { mudou };
 
   const hoje = dataEmBrasilia(agora);
   const minutosAgora = emMinutos(horaMinutoEmBrasilia(agora));
@@ -203,21 +206,30 @@ export function responderChamada(
   return chamada;
 }
 
-function proximaLigacao(base: Base, agora: Date): string | null {
+/** A próxima hora marcada e se ela é só amanhã (passou de todas, ou o limite de hoje acabou). */
+export function proximaLigacao(
+  base: Base,
+  agora: Date,
+): { horario: string | null; eAmanha: boolean } {
   const horarios = arrumarHorarios(base.idoso.horariosDeLigacao);
-  if (horarios.length === 0) return null;
+  if (horarios.length === 0) return { horario: null, eAmanha: false };
+  if (limiteDoDia(base, agora).acabou) return { horario: horarios[0], eAmanha: true };
   const agoraEmMinutos = emMinutos(horaMinutoEmBrasilia(agora));
-  return horarios.find((h) => emMinutos(h) > agoraEmMinutos) ?? horarios[0];
+  const deHoje = horarios.find((h) => emMinutos(h) > agoraEmMinutos);
+  return deHoje ? { horario: deHoje, eAmanha: false } : { horario: horarios[0], eAmanha: true };
 }
 
 export function situacaoDaChamada(base: Base, agora: Date = new Date()): SituacaoDaChamada {
+  const proxima = proximaLigacao(base, agora);
   return {
     assistente: NOME_DA_ASSISTENTE,
     tratamento: base.idoso.tratamento,
     chamada: chamadaTocando(base),
     atenderSozinhoEm: base.idoso.atenderSozinho ? SEGUNDOS_PRA_ATENDER_SOZINHO : null,
-    proximaLigacao: proximaLigacao(base, agora),
+    proximaLigacao: proxima.horario,
+    proximaEAmanha: proxima.eAmanha,
     horariosDeLigacao: arrumarHorarios(base.idoso.horariosDeLigacao),
+    limiteDoDia: limiteDoDia(base, agora),
   };
 }
 

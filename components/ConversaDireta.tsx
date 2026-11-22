@@ -230,6 +230,7 @@ export default function ConversaDireta({
     microfoneNaSala as IMicrophoneAudioTrack | null,
     encerrarComFalas,
     avisarEncerramento,
+    dados.tetoMs,
   );
 
   const legenda = useMemo(

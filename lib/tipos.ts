@@ -41,6 +41,8 @@ export interface Dia {
   atualizadoEm?: string;
 }
 
+export type OrigemDaLembranca = 'conversa' | 'familia' | 'deduzida';
+
 /** Algo que a Dona Leda aprendeu sobre a pessoa e usa nas próximas conversas. */
 export interface Lembranca {
   id: string;
@@ -55,8 +57,13 @@ export interface Lembranca {
   hora?: string;
   /** O idoso pediu pra não contar à família. A família vê só quantas são. */
   reservada?: boolean;
-  /** Quem contou: o idoso na conversa ou a família no painel. */
-  origem?: 'conversa' | 'familia';
+  /**
+   * Quem contou: o idoso na conversa, a família no painel, ou a Dona Leda deduziu da
+   * conversa depois que ela acabou (lib/posConversa.ts), sem ninguém confirmar.
+   * Dedução nunca é tratada como fato: a assistente confirma antes, e o painel mostra
+   * separado até alguém da família tocar em "Está certo" ou corrigir.
+   */
+  origem?: OrigemDaLembranca;
   criadaEm: string;
   atualizadaEm?: string;
   exemplo?: boolean;
@@ -149,6 +156,11 @@ export interface Idoso {
   remedios: { nome: string; horario: string }[];
   /** A primeira conversa leva a apresentação completa da assistente virtual. */
   primeiraConversaFeita: boolean;
+  /**
+   * Quando o idoso ouviu o aviso de privacidade (lib/privacidade.ts): na saudação da
+   * primeira ligação em que ele falou. A versão diz qual texto foi dito.
+   */
+  avisoDePrivacidade?: { dadoEm: string; versao: number };
   /** Horas em que a assistente liga todo dia, "HH:MM" no horário de Brasília. */
   horariosDeLigacao: string[];
   /** Quando ligado, a ligação é atendida sozinha depois de alguns segundos tocando. */
@@ -220,6 +232,8 @@ export interface PainelDaFamilia {
   chamadaTocando: Chamada | null;
   /** As últimas ligações, da mais nova pra mais antiga. */
   chamadas: Chamada[];
+  /** Os minutos de conversa de hoje, somando as ligações, contra o limite do plano. */
+  limiteDoDia?: LimiteDoDia;
   /** true quando o aparelho do idoso consultou o servidor nos últimos 30 s (app aberto). */
   aparelhoOnline?: boolean;
   /** Último instante em que o aparelho do idoso respondeu ao servidor, ou null. */
@@ -271,7 +285,11 @@ export interface SituacaoDaChamada {
   atenderSozinhoEm: number | null;
   /** Próxima hora marcada de hoje ou de amanhã, "HH:MM", ou null. */
   proximaLigacao: string | null;
+  /** true quando a próxima ligação marcada é só amanhã. */
+  proximaEAmanha?: boolean;
   horariosDeLigacao: string[];
+  /** Os minutos de conversa de hoje: quando acaba, o idoso não começa outra conversa. */
+  limiteDoDia?: LimiteDoDia;
 }
 
 /** POST /api/chamada: o aparelho do idoso conta o que aconteceu com a ligação. */
@@ -314,6 +332,8 @@ export interface InicioDaConversa {
   modo?: 'gemini' | 'tres' | 'direto';
   /** Só no modo direto: o que o aparelho precisa pra abrir a conversa com o Gemini. */
   direto?: InicioDireto;
+  /** Teto desta ligação em milissegundos: o normal ou o que sobra do limite do dia. */
+  teto_ms?: number;
 }
 
 /** POST /api/direto devolve isto dentro de InicioDaConversa. */
@@ -346,6 +366,18 @@ export interface PedidoDeUso {
   conversaId: string;
   uso: UsoDoGemini;
   segundos: number;
+}
+
+/**
+ * Minutos de conversa do dia contra o limite do plano (lib/limiteDoDia.ts). A ligação
+ * pedida pela família no "Ligar agora" passa mesmo quando o limite acabou.
+ */
+export interface LimiteDoDia {
+  limiteMin: number;
+  usadoMin: number;
+  restanteMs: number;
+  /** Sobra menos de 1 minuto: ligação marcada e ligação do idoso não começam mais hoje. */
+  acabou: boolean;
 }
 
 // ---------- Contas, idosos e aparelhos (21/11, contrato entre servidor, painel e app) ----------

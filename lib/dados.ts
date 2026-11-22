@@ -5,6 +5,8 @@ import { avisoAberto } from './avisos';
 import { randomUUID } from 'node:crypto';
 import { citaSegredo, guardar, normalizarLembrancas, paraOPainel } from './memoria';
 import { NOME_DA_ASSISTENTE, dataEmBrasilia, somarDias } from './assistente';
+import { limiteDoDia } from './limiteDoDia';
+import { VERSAO_DO_AVISO_DE_PRIVACIDADE } from './privacidade';
 import type {
   Alerta,
   Alimentacao,
@@ -264,7 +266,14 @@ export function fecharConversa(
   delete conversa.diaNoInicio;
   delete conversa.lembrancasNoInicio;
   delete conversa.alertasNoInicio;
-  if (conversa.falasDoIdoso > 0 && !conversa.outraPessoa) base.idoso.primeiraConversaFeita = true;
+  if (conversa.falasDoIdoso > 0 && !conversa.outraPessoa) {
+    // A saudação desta conversa levou o aviso de privacidade: fica a data na ficha.
+    // Quando outra pessoa atendeu, quem ouviu o aviso não foi o idoso.
+    if (!base.idoso.primeiraConversaFeita) {
+      base.idoso.avisoDePrivacidade ??= { dadoEm: conversa.inicio, versao: VERSAO_DO_AVISO_DE_PRIVACIDADE };
+    }
+    base.idoso.primeiraConversaFeita = true;
+  }
   return conversa;
 }
 
@@ -329,6 +338,7 @@ export function montarPainel(base: Base, agora: Date = new Date()): PainelDaFami
     chamadaTocando: base.chamadas.find((c) => c.estado === 'tocando') ?? null,
     chamadas: [...base.chamadas].reverse().slice(0, 10),
     aparelhoPushAtivo: (base.aparelhosPush?.length ?? 0) > 0,
+    limiteDoDia: limiteDoDia(base, agora),
     atualizadoEm: agora.toISOString(),
   };
 }

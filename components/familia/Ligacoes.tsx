@@ -55,6 +55,18 @@ function BotaoDeLigar({ painel, pedido, onLigar }: Omit<LigacoesProps, 'idosoId'
   );
 }
 
+/** Os minutos de conversa de hoje contra o limite do plano, em português de gente. */
+export function frasesDoLimite(limite: PainelDaFamilia['limiteDoDia']): string | null {
+  if (!limite) return null;
+  // Antes da primeira conversa de verdade do dia, a linha não aparece (os dados de
+  // exemplo não gastam minutos e não diriam "0 de 10" ao lado da conversa de exemplo).
+  if (!limite.acabou && limite.usadoMin === 0) return null;
+  if (limite.acabou) {
+    return `Os ${limite.limiteMin} minutos de conversa de hoje acabaram. As ligações marcadas voltam amanhã. O botão de ligar agora continua funcionando, pra uma urgência.`;
+  }
+  return `Hoje: ${limite.usadoMin} de ${limite.limiteMin} minutos de conversa.`;
+}
+
 function horariosEmPalavras(horarios: string[]): string {
   const frase = horariosEmFrase(horarios);
   return frase ? `Liga todo dia ${frase}.` : 'Nenhum horário marcado.';
@@ -100,6 +112,15 @@ export function Ligacoes({ painel, idosoId, pedido, onLigar }: LigacoesProps) {
           >{resultado.texto}</p>
         ) : null}
       </div>
+      {frasesDoLimite(painel.limiteDoDia) ? (
+        <p
+          className={`text-base ${
+            painel.limiteDoDia?.acabou ? 'font-medium text-foreground' : 'text-muted-foreground'
+          }`}
+        >
+          {frasesDoLimite(painel.limiteDoDia)}
+        </p>
+      ) : null}
       <p className="text-base text-muted-foreground">
         {horariosEmPalavras(painel.idoso.horariosDeLigacao)}{' '}
         <Link
