@@ -17,16 +17,18 @@ Cada slide tem uma ideia e completa a frase que o Breno está dizendo. O deck es
 
 | # | O que aparece na tela | O que pontua |
 |---:|---|---|
-| 1 | "Quantas vezes você ainda vai ver sua mãe?" e o número 36: as visitas que restam ao Breno com a avó Leda, 4 por ano vezes 9 anos | Problema |
-| 2 | 37% dos brasileiros com 50 anos ou mais que têm filhos não veem nenhum deles toda semana. Embaixo: 18% dos idosos moram sozinhos (6,4 milhões), 1 em cada 6 se sente sozinho sempre e 1 em cada 4 cai pelo menos uma vez por ano | Problema |
-| 3 | "Saber como ela está custa caro": R$ 2.800 ou mais por mês com um cuidador, R$ 6 mil numa casa de repouso, e nada do dia a dia fica registrado | Problema |
-| 4 | O disco, "Dona Leda", "A assistente de cuidado de quem envelhece", "Liga todo dia, conversa e avisa a família", "A família paga R$ 129,90 por mês" e cinco ícones: companhia, segurança, prevenção, comunicação e rotina | Clareza e benefício |
-| 5 | O celular do idoso tocando, três passos (o idoso atende, a Agora leva a voz pro Gemini ao vivo, a família vê tudo no painel) e a tela de verdade do painel da família, com o aviso | Técnica e Agora |
-| 6 | "Ao vivo" e o que a banca deve reparar: responde em uns 3 s, pode ser interrompida, avisa a família na hora | Voz |
-| 7 | "Lá fora funciona, e a gente testou". Lá fora: 89% atenderam a IA em três meses (CareCall), 85% pediram pra continuar (Callie Care, dado da empresa) e a Papa valia US$ 1,4 bi. Aqui: quantos avós atenderam no sábado, quantos atenderam de novo no domingo e 1 casa de repouso parceira, com os limites numa linha | Validação |
-| 8 | "Um produto, três caminhos até o idoso", com setas: o marketing direto e as casas de repouso levam à família, que paga R$ 129,90 por mês (B2C), e os planos e seguros contratam por beneficiário (B2B), com teto de R$ 13,6 bi por ano | Benefício e negócio |
-| 9 | "Da ligação diária ao segundo cérebro", em três etapas: os próximos 30 dias com data (provar o uso), em seguida (telefone comum, aparelho próprio, planos e seguros) e depois (outros públicos, como o pós-operatório, pedir o remédio e as compras, marcar a consulta) | Próximos passos e inovação |
-| 10 | "Quem constrói a Dona Leda": Breno, Vitor, Gustavo e Stephanie, com o que cada um traz, e o pedido à banca | Apresentação |
+| 1 | "Quantas vezes você ainda vai ver sua mãe?" e o número 36 | Problema |
+| 2 | 37% não veem um filho toda semana, 18% moram sozinhos, 1 em cada 6 se sente sozinho sempre e 1 em cada 4 cai por ano | Problema |
+| 3 | A Dona Leda, a definição e as barras de preço: cuidador R$ 2.800, casa de repouso R$ 6 mil, Dona Leda R$ 129,90 | Clareza e benefício |
+| 4 | "O idoso só precisa atender", com três telas de verdade: o celular tocando, a conversa e o painel da família | Voz e inovação |
+| 5 | A arquitetura: celular do idoso, sala de áudio e motor de conversa da Agora, Gemini ao vivo, ações da Dona Leda, banco, painel da família e mensagens ao vivo da Agora. A demonstração de 2 minutos sai daqui | Técnica e Agora |
+| 6 | "Lá fora funciona, e a gente testou": Coreia, Callie e Papa, e os números do teste com os avós, com os limites | Validação |
+| 7 | O mercado em círculos: 35,2 milhões de idosos, 6,4 milhões que moram sozinhos (R$ 10 bi por ano) e 700 mil famílias que podem pagar (R$ 1,1 bi), mais os 8,7 milhões com plano de saúde | Negócio |
+| 8 | O modelo com setas: marketing direto e casas de repouso levam à família, que paga (B2C), e planos e seguros contratam (B2B) | Negócio |
+| 9 | A evolução em três etapas com ícones: hoje, o pós-operatório e os aparelhos, e o segundo cérebro | Próximos passos e inovação |
+| 10 | O time, com a foto dos quatro e o que cada um traz | Apresentação |
+
+Os rodapés dos slides ficaram só com a fonte em poucas palavras, e o pedido à banca saiu da tela (pedido do Breno às 10h10 de 22/11). A demonstração agora entra depois do slide 5, e o slide "Ao vivo" saiu.
 
 **Fontes:** IBGE, Tábuas Completas de Mortalidade 2024 (9,0 anos de vida média aos 80); ELSI-Brasil, contato com os filhos (Rev. Saúde Pública, 2024), solidão (Cad. Saúde Pública, 2023) e quedas (Rev. Saúde Pública, 2018, 25,1% em 12 meses); IBGE, PNAD Contínua 2025 (6,4 de 35,2 milhões de pessoas com 60 anos ou mais moram sozinhas, 18%, conta sobre as tabelas 9402 e 6407); Cidesp, maio de 2026 (cuidador); Mercado Mineiro, agosto de 2026 (média de R$ 5.955 em Belo Horizonte); `concorrentes.md` (CareCall, Callie Care e Papa, lidos em 21/11); `custos.md` (custo medido); IESS, fevereiro de 2026 (8,7 milhões de beneficiários com 60 anos ou mais; teto = 8,7 milhões × R$ 129,90 × 12 meses). As ideias de evolução saem de `ideias.md` (telefone comum, caixinha de voz e pulseira) e do Breno (pós-operatório). O que cada pessoa do time traz foi informado pelo Breno em 22/11. <!-- tom-ok -->
 
@@ -34,18 +36,18 @@ Cada slide tem uma ideia e completa a frase que o Breno está dizendo. O deck es
 
 A fala tem umas 610 palavras. O Breno disse a versão anterior, de 445 palavras, em menos de 2 minutos, então a conta abaixo usa o ritmo dele, de umas 3,6 palavras por segundo, e dá 2:48. Num ritmo calmo, de 2,3 palavras por segundo, a mesma fala passaria de 4 minutos, e o ensaio com cronômetro decide.
 
-| Slide | Segundos | Acumulado | O que pontua |
-|---:|---:|---:|---|
-| 1, as visitas que restam | 16 | 0:16 | problema |
-| 2, o Brasil | 12 | 0:28 | problema |
-| 3, o custo de hoje | 16 | 0:44 | problema |
-| 4, a Dona Leda | 13 | 0:57 | clareza e benefício |
-| 5, como funciona, com o painel | 14 | 1:11 | técnica e Agora |
-| 6 e a demonstração | 120 | à parte | voz |
-| 7, a prova, lá fora e aqui | 22 | 1:33 | validação |
-| 8, o modelo: B2C e B2B | 29 | 2:02 | benefício e negócio |
-| 9, a evolução | 20 | 2:22 | próximos passos e inovação |
-| 10, o time e o pedido | 26 | 2:48 | apresentação |
+| Slide | Segundos | Acumulado |
+|---:|---:|---:|
+| 1 | 16 | 0:16 |
+| 2 | 12 | 0:28 |
+| 3 | 29 | 0:57 |
+| 4 | 11 | 1:08 |
+| 5 | 15 | 1:23 |
+| 6 | 18 | 1:41 |
+| 7 | 9 | 1:50 |
+| 8 | 29 | 2:19 |
+| 9 | 19 | 2:38 |
+| 10 | 26 | 3:04 |
 
 **[Slide 1, 16 s]**
 Quantas vezes você ainda vai ver a sua mãe? Pelo IBGE, quem chega aos 80 vive, em média, mais nove anos. No caso da minha avó, eu vejo ela quatro vezes por ano: são umas 36 visitas. Entre uma visita e outra, a família não sabe como está o dia a dia dela.
@@ -53,26 +55,26 @@ Quantas vezes você ainda vai ver a sua mãe? Pelo IBGE, quem chega aos 80 vive,
 **[Slide 2, 12 s]**
 No Brasil, mais de um terço das pessoas com 50 anos ou mais que têm filhos não veem os filhos toda semana. Temos uma população envelhecendo, e 18% dos idosos moram sozinhos: sem supervisão, com solidão e com riscos à saúde.
 
-**[Slide 3, 16 s]**
-Eu queria saber como a minha avó está no dia a dia, mas resolver isso é muito caro. Você pode pagar um cuidador ou levar o idoso pra uma casa de repouso, e mesmo assim esses processos são muito manuais: os dados não ficam guardados, e o idoso fica sem o acompanhamento que a qualidade de vida dele merece.
+**[Slide 3, 29 s]**
+Eu queria saber como a minha avó está no dia a dia, mas resolver isso é muito caro. Você pode pagar um cuidador ou levar o idoso pra uma casa de repouso, e mesmo assim esses processos são muito manuais: os dados não ficam guardados, e o idoso fica sem o acompanhamento que a qualidade de vida dele merece. Por isso a gente construiu a Dona Leda, com o nome da minha avó. Ela é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, prevenção, comunicação e rotina, por menos de um décimo do preço de um cuidador.
 
-**[Slide 4, 13 s]**
-Por isso a gente construiu a Dona Leda, com o nome da minha avó. Ela é a assistente de cuidado de quem envelhece: companhia e apoio no dia a dia, com segurança, prevenção, comunicação e rotina, por menos de um décimo do preço de um cuidador.
+**[Slide 4, 11 s]**
+É simples o bastante pro idoso só ter que atender uma ligação. Ela conversa, lembra do que ele contou e pergunta do dia, e a família vê no painel a ficha do dia, a semana e o aviso na hora.
 
-**[Slide 5, 14 s]**
-É simples o bastante pro idoso só ter que atender uma ligação. A chamada é uma sala da Agora, e o motor de conversa leva a voz pro Gemini e guarda os dados em tempo real. A família vê no painel a ficha do dia, a semana e o aviso na hora.
+**[Slide 5, 15 s]**
+Por dentro, a chamada é uma sala de áudio da Agora. O motor de conversa da Agora leva a voz pro Gemini ao vivo, aceita interrupção e chama as ações da Dona Leda, que guardam a ficha e avisam a família. A legenda na tela e o filtro de ruído também são da Agora. (Demonstração de 2 minutos: A dona Helena é a nossa idosa de exemplo, e quem faz a voz dela é [nome]. Reparem em três coisas: quanto ela demora pra responder, o que acontece quando ela é interrompida e em quanto tempo o aviso chega no painel. (Cmd+2 pro painel, toca em Ligar agora e fica calado. A dona Helena atende e espera a Dona Leda cumprimentar.))
 
-**[Slide 6 e a demonstração, 2 minutos]**
-A primeira fala está no roteiro da demonstração, logo abaixo.
+**[Slide 6, 18 s]**
+Isso já funciona lá fora. Na Coreia, 89% dos idosos atenderam a ligação de uma IA em três meses. Nos Estados Unidos, uma empresa que faz companhia pra idosos, paga por planos de saúde, chegou a valer 1,4 bilhão de dólares. Aqui, ontem a Dona Leda ligou pra [N] avós do time, e hoje [N] atenderam de novo.
 
-**[Slide 7, 22 s]**
-Isso já funciona lá fora. Na Coreia, 89% dos idosos atenderam a ligação de uma IA em três meses. Nos Estados Unidos, 85% dos que conversaram com uma assistente dessas pediram pra continuar, e uma empresa que faz companhia pra idosos, paga por planos de saúde, chegou a valer 1,4 bilhão de dólares. Aqui, ontem a Dona Leda ligou pra [N] avós do time, e hoje [N] atenderam de novo.
+**[Slide 7, 9 s]**
+São 35 milhões de idosos no Brasil, e 6,4 milhões moram sozinhos. As famílias que já podem pagar somam 1,1 bilhão de reais por ano.
 
 **[Slide 8, 29 s]**
 O nosso modelo é B2C e B2B. A família paga 129,90 por mês, e sobram 67 por idoso. Quem traz as famílias são as casas de repouso: já fechamos uma parceria com uma casa em Petrolina, que vai levar a Dona Leda pra quem não tem condição de pagar os 6 mil por mês deles, e estamos conversando com a maior rede de casas de idosos do Brasil. E os planos de saúde e as seguradoras podem contratar a Dona Leda pros clientes deles: são até 13,6 bilhões por ano.
 
-**[Slide 9, 20 s]**
-Nos próximos 30 dias, a casa parceira indica as famílias, e a gente mede quantas ligações o idoso atende. Em seguida vêm a ligação pro telefone comum e um aparelho próprio, pra quem não usa celular. Depois, a mesma ligação diária serve pra outros públicos, como o pós-operatório. Com o que guardou, ela vira o segundo cérebro de quem envelhece e passa a resolver coisas por ele, como pedir o remédio.
+**[Slide 9, 19 s]**
+Nos próximos 30 dias, a casa parceira indica as famílias, e a gente mede quantas ligações o idoso atende. Em seguida vem o pós-operatório: a mesma ligação acompanha quem acabou de sair de uma cirurgia, perguntando da dor e do remédio todo dia. Depois, com o que guardou, ela vira o segundo cérebro de quem envelhece e passa a resolver coisas por ele, como pedir o remédio.
 
 **[Slide 10, 26 s]**
 No time, o Vitor trabalha com a Terça da Serra, a maior rede de casas de idosos do Brasil. O Gustavo é desenvolvedor pelo Mackenzie e fundador de uma healthtech. A Stephanie é especialista em dados e precificação e já passou pela Microsoft e pela Livelo. E eu sou empreendedor e criador de conteúdo, com mais de 300 mil seguidores, formado em administração pelo Insper. [O pedido à banca, em uma frase.] Entre as visitas que me restam, a minha avó vai ter com quem conversar todo dia.
