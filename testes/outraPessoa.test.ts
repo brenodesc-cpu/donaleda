@@ -80,6 +80,7 @@ describe('outra pessoa atendeu a ligação', () => {
     // Quem atendeu respondeu como se fosse a idosa, antes de dizer que não era.
     await ferramentas.executarFerramenta(id, 'registrar_bem_estar', { sono: 'mal', remedio: 'nao_tomou', alimentacao: 'nao_comeu' }, AGORA);
     await ferramentas.executarFerramenta(id, 'guardar_lembranca', { texto: 'Gosta de jogar dominó com o Carlos.', categoria: 'gosto' }, AGORA);
+    await ferramentas.executarFerramenta(id, 'avisar_familia', { tipo: 'remedio', gravidade: 'atencao', mensagem: 'Disse que não tomou o remédio da pressão.' }, AGORA);
     await ferramentas.executarFerramenta(id, 'avisar_familia', { tipo: 'emergencia', gravidade: 'urgente', mensagem: 'Contou que caiu no banheiro.' }, AGORA);
     const noMeio = await ler(id);
     expect(noMeio.alertas.slice(alertasAntes).some((a) => a.tipo === 'remedio')).toBe(true);

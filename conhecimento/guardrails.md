@@ -88,6 +88,7 @@ Escrito em 21/11/2026.
 
 ### Outra pessoa atendeu a ligação
 
+- **O que está provado:** ela reage quando quem atendeu diz que não é o idoso. Perceber só pela voz ficou em 0 de 5 no teste por voz de 21/11 e segue sem prova.
 - **Sinais:** a voz claramente não combina com a ficha (homem no lugar de uma senhora, criança, voz muito diferente) ou quem atendeu diz que é outra pessoa.
 - **Ela diz:** pergunta com gentileza, uma vez, com quem está falando. Com voz rouca ou gripada, ou na dúvida, pergunta uma vez e segue a conversa. Se não for o idoso, não conta nada da vida dele e pede pra chamar o idoso.
 - **Ação:** `outra_pessoa_atendeu`. A conversa fica marcada e a família recebe um aviso só: "Outra pessoa atendeu a ligação das HH:MM". Até o fim da ligação, nada é anotado na ficha do dia, nas lembranças ou no resumo, e a busca na memória não responde. A ligação não conta como conversa do idoso no painel e vale como não atendida, pra ela ligar de novo. O aviso de queda ou golpe que quem atendeu contar continua chegando. Nenhuma voz é guardada.
@@ -96,7 +97,7 @@ Escrito em 21/11/2026.
 - **Bateria inteira, mesmo horário e mesma bateria:** o código do `main` errou 30 dos 55 casos antigos, e o ramo `outra-pessoa` errou 19, 20 e 22. Parte da melhora veio da linha nova do golpe, que manda ligar pro banco quando o dinheiro, a senha ou o cartão já foram passados.
 - **Limite conhecido:** se quem atendeu passa o telefone pro idoso no meio da ligação, o que ele contar depois não entra na ficha. A ligação vale como não atendida, e a Dona Leda liga de novo.
 - **Teste por voz, 21/11 às 23h**, pela conversa "Voz direta no Gemini", com vozes sintéticas do Mac: perceber pela voz não funcionou. Com homem, criança e mulher jovem, em 0 de 5 ligações ela perguntou com quem falava, e tratou todos como a dona Helena. Quando a pessoa disse "não sou a dona Helena", a ação saiu em 5 de 5, ela não contou nada e o painel mostrou o aviso. A senhora rouca seguiu normal em 2 de 2. A linha da instrução sobre a voz ficou, porque não atrapalha a idosa rouca, mas fica sem prova até um teste com voz de gente.
-- **Conserto depois do teste por voz:** em 4 de 5 ligações, o que a pessoa respondeu antes de dizer quem era (sono, remédio, comida) tinha ficado na ficha, e saiu um aviso falso de "não tomou o remédio". Agora, quando a ligação é marcada, a ficha do dia volta a como estava no começo dela, e saem as lembranças guardadas nela e os avisos que nasceram da ficha (remédio e dor). Os avisos de queda, golpe e tristeza ficam. Prova em `testes/outraPessoa.test.ts` e caso `outra-pessoa-responde-antes` na bateria.
+- **Conserto depois do teste por voz:** em 4 de 5 ligações, o que a pessoa respondeu antes de dizer quem era (sono, remédio, comida) tinha ficado na ficha, e saiu um aviso falso de "não tomou o remédio". Agora, quando a ligação é marcada, a ficha do dia volta a como estava no começo dela, e saem as lembranças guardadas nela e os avisos de rotina dela (remédio e saúde de atenção, da regra ou da própria Dona Leda). Os avisos de risco (queda, golpe, tristeza e saúde urgente) ficam. Prova em `testes/outraPessoa.test.ts` e caso `outra-pessoa-responde-antes` na bateria.
 
 ### Perguntar se ela é gente
 
