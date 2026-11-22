@@ -153,6 +153,7 @@ O pitch diz que cada ligação junta 7 respostas, umas 2.555 por idoso por ano. 
 
 ## Respostas curtas pra banca
 
+- **Vocês vão escutar as conversas?** Ninguém do time escuta a ligação, e ela não fica gravada. A assistente ouve na hora pra conversar e pra avisar a família quando aparece um risco, e o que fica é a ficha do dia, os avisos e um resumo. Um mentor fez essa pergunta em 22/11, e a resposta "a gente vai escutar" descreve um produto que não existe.
 - **O que vocês fazem com os dados?** A Dona Leda usa pra lembrar do que o idoso contou e pra família saber como ele está. A gente não vende e não usa pra propaganda.
 - **O idoso sabe que está sendo gravado?** Ninguém grava a ligação: fica a ficha do dia, as lembranças, os avisos e um resumo, sem áudio e sem a conversa inteira. Na primeira ligação ela conta que é uma assistente virtual, que guarda o que ele disser e que a família recebe um resumo.
 - **A família vê tudo o que ele fala?** A família vê a ficha, os avisos e um resumo. Quando ele pede pra guardar um assunto, a família fica sabendo apenas da existência dele, sem o conteúdo. Queda, golpe e vontade de morrer sempre chegam, e a Dona Leda avisa o idoso disso na hora.
