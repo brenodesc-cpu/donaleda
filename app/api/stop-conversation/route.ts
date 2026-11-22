@@ -1,37 +1,10 @@
 import { NextResponse } from 'next/server';
-import { AgoraClient, Area, generateConvoAIToken } from 'agora-agents';
 import { StopConversationRequest } from '@/types/conversation';
-import { pararAssistente } from '@/lib/pararAssistente';
+import { avisarFimDaLigacao, pararAssistente } from '@/lib/pararAssistente';
 import { exigirAparelho } from '@/lib/sessao';
 
 export const dynamic = 'force-dynamic';
 export const preferredRegion = 'iad1';
-
-const INSTRUCAO_DE_DESPEDIDA =
-  '[Aviso interno de tempo: falta cerca de um minuto pro limite desta ligação. Não interrompa a pessoa de forma brusca; na sua próxima resposta, valide com carinho o que ela acabou de contar, reforce qualquer combinado importante e encaminhe a despedida com naturalidade, dizendo quando vocês conversam de novo.]';
-
-const FALA_RESERVA_DE_DESPEDIDA =
-  'Nossa conversa está ótima, mas já estamos chegando perto do nosso tempinho de hoje. Vamos nos despedindo com calma — já já eu ligo de novo pra gente continuar!';
-
-function isAgentAlreadyStoppingOrStopped(error: unknown): boolean {
-  if (!error || typeof error !== 'object') return false;
-
-  const maybeErr = error as {
-    statusCode?: number;
-    body?: { detail?: string; reason?: string };
-    message?: string;
-  };
-
-  const statusCode = maybeErr.statusCode;
-  const reason = maybeErr.body?.reason?.toLowerCase();
-  const detail = maybeErr.body?.detail?.toLowerCase() ?? maybeErr.message?.toLowerCase() ?? '';
-
-  if (statusCode === 404) return true;
-  if (reason === 'invalidrequest' && detail.includes('already in the process of shutting down')) {
-    return true;
-  }
-  return false;
-}
 
 export async function POST(request: Request) {
   const aparelho = await exigirAparelho(request);
@@ -59,53 +32,11 @@ export async function POST(request: Request) {
       );
     }
 
-    const customerId = process.env.NEXT_AGORA_CUSTOMER_ID?.trim();
-    const customerSecret = process.env.NEXT_AGORA_CUSTOMER_SECRET?.trim();
-
     if (acao === 'avisar_fim') {
-      const client =
-        customerId && customerSecret
-          ? new AgoraClient({ area: Area.US, appId, appCertificate, customerId, customerSecret })
-          : new AgoraClient({
-              area: Area.US,
-              appId,
-              appCertificate,
-              authToken: generateConvoAIToken({
-                appId,
-                appCertificate,
-                channelName: channel_name,
-                uid: 0,
-              }),
-            });
-      try {
-        await client.agentManagement.agentThink({
-          appid: appId,
-          agentId: agent_id,
-          text: INSTRUCAO_DE_DESPEDIDA,
-          on_listening_action: 'append',
-          on_thinking_action: 'append',
-          on_speaking_action: 'append',
-          interruptable: true,
-        });
-        return NextResponse.json({ success: true, via: 'think' });
-      } catch (erroThink) {
-        if (isAgentAlreadyStoppingOrStopped(erroThink)) {
-          return NextResponse.json({ success: true, state: 'already-stopping' });
-        }
-        // Fallback: se o modo atual não aceitar agentThink, anuncia despedida suave via speak APPEND.
-        try {
-          await client.agents.speak({
-            appid: appId,
-            agentId: agent_id,
-            text: FALA_RESERVA_DE_DESPEDIDA,
-            priority: 'APPEND',
-            interruptable: true,
-          });
-          return NextResponse.json({ success: true, via: 'speak' });
-        } catch {
-          return NextResponse.json({ success: false, via: 'ignorado' });
-        }
-      }
+      const resultado = await avisarFimDaLigacao(appId, appCertificate, agent_id, channel_name);
+      if (resultado === 'avisou') return NextResponse.json({ success: true, via: 'think' });
+      if (resultado === 'ja_tinha_saido') return NextResponse.json({ success: true, state: 'already-stopping' });
+      return NextResponse.json({ success: false, via: 'ignorado' });
     }
 
     // Pede a saída nos dois endereços da Agora: o do Gemini e o de três peças.
