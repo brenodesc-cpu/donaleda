@@ -15,7 +15,11 @@ import {
 
 interface CabecalhoProps {
   painel: PainelDaFamilia;
-  onRegistrarPushFamilia?: (plataforma: 'android' | 'ios', token: string) => Promise<boolean>;
+  onRegistrarPushFamilia?: (
+    plataforma: 'android' | 'ios',
+    token: string,
+    voipToken?: string,
+  ) => Promise<boolean>;
 }
 
 function Situacao({ painel }: CabecalhoProps) {
@@ -89,7 +93,7 @@ export function Cabecalho({ painel, onRegistrarPushFamilia }: CabecalhoProps) {
     if (ehAppNativo()) {
       const reg = await registrarPushDaFamiliaNativo();
       if (reg && onRegistrarPushFamilia) {
-        const ok = await onRegistrarPushFamilia(reg.plataforma, reg.token);
+        const ok = await onRegistrarPushFamilia(reg.plataforma, reg.token, reg.voipToken);
         setEstadoNotif(ok ? 'ativo' : 'negado');
         return;
       }

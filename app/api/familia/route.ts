@@ -292,8 +292,9 @@ export async function POST(request: Request) {
     (acao.plataforma === 'android' || acao.plataforma === 'ios') &&
     typeof acao.token === 'string'
   ) {
+    const voipToken = typeof acao.voipToken === 'string' ? acao.voipToken : undefined;
     const salvou = await mudarBase(idosoId, (base) =>
-      registrarAparelhoFamiliaPush(base, acao.plataforma, acao.token),
+      registrarAparelhoFamiliaPush(base, acao.plataforma, acao.token, new Date(), voipToken),
     );
     return NextResponse.json({ ok: salvou }, { status: salvou ? 200 : 400 });
   }

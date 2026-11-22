@@ -336,7 +336,7 @@ export async function executarFerramenta(
     if (p) {
       const entrarAoVivo = Boolean(aberto);
       const urlDestino = entrarAoVivo
-        ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}`
+        ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}&auto=1`
         : `/familia?idoso=${encodeURIComponent(idosoId)}`;
       depois(async () => {
         await Promise.allSettled([
@@ -395,7 +395,7 @@ export async function executarFerramenta(
           mensagem: p.alerta.texto,
           gravidade: 'urgente',
           tipo: 'ligacao',
-          urlDestino: `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}`,
+          urlDestino: `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}&auto=1`,
           entrarAoVivo: true,
         }),
       );

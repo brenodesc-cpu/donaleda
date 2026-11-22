@@ -6,7 +6,7 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { Video } from 'lucide-react';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { destravarSom } from '@/hooks/somDoAparelho';
 import { Esqueleto } from '@/components/familia/Apoio';
 import { deuCerto, enderecoCom, entrarNaLigacao } from '@/components/familia/api';
@@ -25,10 +25,11 @@ export default function LigacaoDaFamiliaPage() {
   const [entrada, setEntrada] = useState<EntradaNaLigacao | null>(null);
   const [entrando, setEntrando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+  const autoTentou = useRef(false);
   const tratamento = painel?.idoso.tratamento ?? idoso?.nome ?? 'o idoso';
   const aoVivo = Boolean(painel?.convite);
 
-  const entrar = async () => {
+  const entrar = useCallback(async () => {
     if (!idoso) return;
     // Destrava AudioContext dentro do gesto do toque (crítico no iOS Safari/WKWebView).
     void destravarSom();
@@ -41,7 +42,18 @@ export default function LigacaoDaFamiliaPage() {
       return;
     }
     setErro(status === 409 ? 'A ligação já terminou ou não está aberta pra entrar. Você pode pedir uma ligação nova pelo painel.' : 'Não deu pra entrar agora. Tente de novo.');
-  };
+  }, [idoso]);
+
+  // Quando veio do botão "Atender" na tela cheia de chamada de emergência (?auto=1), já entra direto.
+  useEffect(() => {
+    if (!aoVivo || !idoso || entrada || entrando || autoTentou.current) return;
+    if (typeof window === 'undefined') return;
+    const auto = new URLSearchParams(window.location.search).get('auto') === '1';
+    if (!auto) return;
+    autoTentou.current = true;
+    const t = setTimeout(() => void entrar(), 0);
+    return () => clearTimeout(t);
+  }, [aoVivo, idoso, entrada, entrando, entrar]);
 
   const sair = () => {
     setEntrada(null);
@@ -59,7 +71,7 @@ export default function LigacaoDaFamiliaPage() {
           <h1 className="text-2xl font-semibold">Entrar na ligação com {tratamento}</h1>
           <p className="text-lg">
             {aoVivo
-              ? `Você entra na ligação que a ${painel.assistente} está fazendo agora com ${tratamento}. Ela conta que você entrou e sai da ligação pra vocês conversarem. A câmera de ${tratamento} fica desligada; a sua, se você ligar, aparece pra ${tratamento}.`
+              ? `Você entra na ligação que a ${painel.assistente} está fazendo agora com ${tratamento}. Ela conta que você entrou e sai da ligação pra vocês conversarem. A câmera de ${tratamento} começa desligada por privacidade; assim que você entrar, aparece um botão grande pra autorizar o vídeo se quiser.`
               : `Não tem ligação acontecendo agora com ${tratamento} em que você possa entrar.`}
           </p>
           {aoVivo ? (

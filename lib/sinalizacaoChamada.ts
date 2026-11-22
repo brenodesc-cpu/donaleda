@@ -386,9 +386,14 @@ export async function notificarFamiliaPorPush(
   const tarefaIos = (async () => {
     if (ioss.length === 0) return;
     const envios = await Promise.all(
-      ioss.map((a) =>
-        enviarApnsAlerta(a.token, payload.titulo, payload.mensagem, urgente, payload).catch(() => false),
-      ),
+      ioss.map((a) => {
+        // Em emergência ao vivo com token PushKit VoIP cadastrado, aciona CallKit em tela cheia
+        // tocando igual ligação de WhatsApp no iPhone, mesmo bloqueado ou fechado.
+        if (aviso.entrarAoVivo && a.voipToken) {
+          return enviarApnsVoip(a.voipToken, payload).catch(() => false);
+        }
+        return enviarApnsAlerta(a.token, payload.titulo, payload.mensagem, urgente, payload).catch(() => false);
+      }),
     );
     apnsEnviados = envios.filter(Boolean).length;
   })();

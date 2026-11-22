@@ -12,6 +12,7 @@ export interface AcaoDeChamadaNativa {
 
 interface TokenNativo {
   token: string;
+  voipToken?: string;
   plataforma: 'android' | 'ios';
 }
 
@@ -20,7 +21,11 @@ interface DonaLedaCallPushPlugin {
     aparelhoToken?: string;
     serverUrl?: string;
   }): Promise<{ token?: string; plataforma?: 'android' | 'ios' }>;
-  registerFamilyAlerts(): Promise<{ token?: string; plataforma?: 'android' | 'ios' }>;
+  registerFamilyAlerts(): Promise<{
+    token?: string;
+    voipToken?: string;
+    plataforma?: 'android' | 'ios';
+  }>;
   getPendingCall(): Promise<{ acao?: string; chamadaId?: string }>;
   getPendingFamilyRoute(): Promise<{ rota?: string }>;
   addListener(
@@ -51,8 +56,15 @@ export async function registrarPushDaFamiliaNativo(): Promise<TokenNativo | null
   if (!Capacitor.isNativePlatform()) return null;
   try {
     const res = await plugin.registerFamilyAlerts();
-    if (res?.token && (res.plataforma === 'android' || res.plataforma === 'ios')) {
-      return { token: res.token, plataforma: res.plataforma };
+    if (
+      (res?.token || res?.voipToken) &&
+      (res.plataforma === 'android' || res.plataforma === 'ios')
+    ) {
+      return {
+        token: res.token ?? res.voipToken ?? '',
+        ...(res.voipToken ? { voipToken: res.voipToken } : {}),
+        plataforma: res.plataforma,
+      };
     }
     return null;
   } catch {

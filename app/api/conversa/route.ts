@@ -139,7 +139,7 @@ export async function POST(request: Request) {
       const baseSnap = resultado.pushSnapshot;
       const entrarAoVivo = Boolean(convite || alerta.gravidade === 'urgente');
       const urlDestino = entrarAoVivo
-        ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}`
+        ? `/familia/ligacao?idoso=${encodeURIComponent(idosoId)}&auto=1`
         : `/familia?idoso=${encodeURIComponent(idosoId)}`;
       depois(async () => {
         await Promise.allSettled([

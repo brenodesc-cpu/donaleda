@@ -320,10 +320,16 @@ export function usePainel(idosoId: string | null) {
   );
 
   const registrarPushFamilia = useCallback(
-    async (plataforma: 'android' | 'ios', token: string): Promise<boolean> => {
-      if (!idosoId || !token.trim()) return false;
+    async (plataforma: 'android' | 'ios', token: string, voipToken?: string): Promise<boolean> => {
+      if (!idosoId || (!token.trim() && !voipToken?.trim())) return false;
       const ok = deuCerto(
-        await mandar({ acao: 'registrar_push_familia', plataforma, token: token.trim(), idosoId }),
+        await mandar({
+          acao: 'registrar_push_familia',
+          plataforma,
+          token: token.trim(),
+          ...(voipToken?.trim() ? { voipToken: voipToken.trim() } : {}),
+          idosoId,
+        }),
       );
       if (ok) await buscarAgora.current();
       return ok;

@@ -101,16 +101,20 @@ public class DonaLedaCallPushPlugin extends Plugin {
      */
     @PluginMethod
     public void registerFamilyAlerts(PluginCall call) {
+        DonaLedaConnectionService.ensurePhoneAccount(getContext());
+        DonaLedaConnectionService.ensureCallChannel(getContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && getPermissionState("notifications") != PermissionState.GRANTED) {
             requestPermissionForAlias("notifications", call, "onFamilyNotificationPermissionResult");
             return;
         }
+        promptFullScreenIntentIfNeeded();
         fetchFcmToken(call);
     }
 
     @PermissionCallback
     private void onFamilyNotificationPermissionResult(PluginCall call) {
+        promptFullScreenIntentIfNeeded();
         fetchFcmToken(call);
     }
 

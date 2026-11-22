@@ -208,6 +208,8 @@ export interface Chamada {
 export interface AparelhoPush {
   plataforma: 'android' | 'ios';
   token: string;
+  /** No iOS da família, token PushKit VoIP opcional pra abrir tela cheia CallKit em emergência. */
+  voipToken?: string;
   atualizadoEm: string;
   /** Identificador deste aparelho no Agora Signaling (RTM). */
   agoraRtmUserId?: string;
@@ -357,8 +359,8 @@ export type AcaoDaFamilia = (
       acao: 'salvar_rede_de_apoio';
       contatos: { id?: string; nome: string; parentesco: string; telefone: string }[];
     }
-  /** Registra o token FCM (Android) ou APNs Alert (iOS) do celular do familiar responsável. */
-  | { acao: 'registrar_push_familia'; plataforma: 'android' | 'ios'; token: string }
+  /** Registra o token FCM (Android) ou APNs Alert + PushKit VoIP (iOS) do celular do familiar responsável. */
+  | { acao: 'registrar_push_familia'; plataforma: 'android' | 'ios'; token: string; voipToken?: string }
   /** Muda o perfil. Só os campos que vierem. Responde `{ ok, idoso }`. */
   | {
       acao: 'perfil';
