@@ -38,60 +38,59 @@ São 180 segundos de fala em nove slides e 2 minutos de demonstração entre o s
 
 | Slide | Segundos | Acumulado | O que pontua |
 |---:|---:|---:|---|
-| 1 | 22 | 0:22 | clareza |
-| 2 | 20 | 0:42 | problema |
-| 3 | 21 | 1:03 | problema e público |
-| 4 | 18 | 1:21 | inovação |
+| 1 | 24 | 0:24 | clareza |
+| 2 | 13 | 0:37 | problema |
+| 3 | 27 | 1:04 | problema e público |
+| 4 | 16 | 1:20 | inovação |
 | 5 e a demonstração | 120 | à parte | voz |
-| 6 | 18 | 1:39 | técnica e Agora |
-| 7 | 19 | 1:58 | validação |
-| 8 | 24 | 2:22 | validação |
-| 9 | 23 | 2:45 | problema e impacto |
-| 10 | 15 | 3:00 | apresentação |
+| 6 | 19 | 1:39 | técnica e Agora |
+| 7 | 20 | 1:59 | validação |
+| 8 | 24 | 2:23 | validação |
+| 9 | 24 | 2:47 | problema e impacto |
+| 10 | 14 | 3:01 | apresentação |
 
-Os segundos já contam o que vai entrar nos colchetes. Sem eles, a fala tem 393 palavras e dá uns 171 segundos.
+Os segundos já contam os números ditos por extenso ("cento e vinte e nove e noventa") e o que vai entrar nos colchetes, com o momento da avó em no máximo 15 palavras. Se no ensaio passar de 3 minutos e 10, entra o primeiro corte da lista abaixo.
 
-**[Slide 1, 22 s]**
+**[Slide 1, 24 s]**
 A minha avó tem [idade] anos e mora com o meu avô em [cidade]. [Um momento real, em uma frase, de um dia em que a família quis saber como ela estava e não soube.] Por isso a gente fez a Dona Leda, uma assistente virtual que liga todo dia pro seu pai ou pra sua mãe e te conta como eles estão.
 
-**[Slide 2, 20 s]**
-Você sabe como a sua mãe passou a quinta-feira? Se dormiu bem, se tomou o remédio? No Brasil, 6 milhões de idosos moram sozinhos. Eram 20,6 milhões de brasileiros com 60 anos ou mais em 2010, 32,1 milhões em 2022, e vão ser 75 milhões em 2070.
+**[Slide 2, 13 s]**
+Você sabe como a sua mãe passou a quinta-feira? Se dormiu bem, se alguém ligou pedindo um Pix? No Brasil, 6 milhões de idosos moram sozinhos, e o país envelhece rápido.
 
-**[Slide 3, 21 s]**
-Quem compra é a filha ou o filho que trabalha e só vê os pais no fim de semana. Hoje essa família paga um cuidador, de 2.800 a 4.500 reais por mês, ou uma casa de repouso, de uns 6 mil. Quem não pode pagar liga quando dá.
+**[Slide 3, 27 s]**
+Quem compra é a filha ou o filho que só vê os pais no fim de semana. Hoje, pra saber todo dia como eles estão, só pagando um cuidador, de 2.800 a 4.500 reais, ou uma casa de repouso, de uns 6 mil. Quem não pode pagar liga quando dá.
 
-**[Slide 4, 18 s]**
-Então a Dona Leda liga, e a pessoa só precisa atender, sem aplicativo pra aprender. Ela conversa com calma, uma pergunta de cada vez, lembra do que a pessoa contou nos outros dias e sempre diz que é uma assistente virtual.
+**[Slide 4, 16 s]**
+Então a Dona Leda liga, e a pessoa só precisa atender, sem aplicativo pra aprender. Ela conversa com calma, lembra do que a pessoa contou nos outros dias e sempre diz que é uma assistente virtual.
 
 **[Slide 5 e a demonstração, 2 minutos]**
 A primeira fala está no roteiro da demonstração, logo abaixo.
 
-**[Slide 6, 18 s]**
-Tudo o que vocês viram rodou na Agora. A chamada é uma sala da Agora, e o motor de conversa da Agora escutou a dona Helena, respondeu e parou quando ela interrompeu. [Como o aviso chegou no painel, se a conversa do servidor confirmar que passa pela Agora.] Está no ar, com o código aberto.
+**[Slide 6, 19 s]**
+A ligação que vocês viram rodou na Agora: a chamada é uma sala da Agora, e o motor de conversa da Agora escutou a dona Helena, respondeu com a voz do Gemini e parou quando ela interrompeu. [Como o aviso chegou no painel, se a conversa do servidor confirmar que passa pela Agora.] Está no ar, com o código aberto.
 
-**[Slide 7, 19 s]**
+**[Slide 7, 20 s]**
 Ontem a Dona Leda ligou pra [N] avós do time. [N] atenderam e conversaram [X] minutos em média, e hoje às 9h, sem ninguém pedir, [N] atenderam de novo. [N] famílias aceitaram começar o teste, e lendo o aviso, [N] de 2 adultos decidiram certo.
 
 **[Slide 8, 24 s]**
-A casa de repouso contou que quem precisa é o idoso que mora em casa, e topou indicar as famílias. Os mentores pediram pra ver quem assumiu cada aviso, e o painel passou a mostrar. É uma noite e poucos avós, com a família do lado. A partir de segunda, são 30 dias com as famílias da casa.
+A casa de repouso contou que quem precisa é o idoso que mora em casa, e topou indicar as famílias. A pedido dos mentores, o painel passou a mostrar quem assumiu cada aviso. É uma noite e poucos avós, com a família do lado. A partir de segunda, são 30 dias com as famílias da casa.
 
-**[Slide 9, 23 s]**
-A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço: 129,90 por mês. Cada idoso custa pra gente uns 38 reais, medido, e sobram 67. Pela nossa estimativa, são de 1,1 a 1,4 bilhão de reais por ano.
+**[Slide 9, 24 s]**
+A aposentadoria da maioria dos brasileiros não paga um cuidador. A Dona Leda leva esse cuidado de todo dia por menos de um décimo do preço: 129,90 por mês. Cada idoso custa uns 38 reais, medido, e tirando imposto e cartão sobram 67.
 
-**[Slide 10, 15 s]**
+**[Slide 10, 14 s]**
 Dona Leda é o nome da minha avó. [O pedido à banca, em uma frase.] Somos quatro: o Vitor, a Stephanie, o Gustavo e eu. Dona Leda: longevidade com qualidade de vida.
 
 ## O que cortar primeiro se o ensaio estourar
 
-Na ordem. Cada corte diz quantos segundos devolve e por que ele sai antes dos outros.
+Os três anos do envelhecimento, a frase do mercado e "uma pergunta de cada vez" já saíram da fala e ficaram só nos slides, a pedido do avaliador, porque a fala passava de 3 minutos. Se ainda estourar, na ordem:
 
-1. **Slide 9, a frase do mercado** (6 s). Mercado não é critério da banca, e o número fica no slide.
-2. **Slide 2, os anos** (8 s). O slide mostra os três números, e a banca lê sozinha.
-3. **Slide 4, "uma pergunta de cada vez"** (4 s). A demonstração mostra isso.
-4. **A demonstração, a ficha do dia no fim** (15 s). O aviso e o desfecho já fecharam a cena.
-5. **Slide 8, a frase dos mentores** (7 s). O slide mostra o aprendizado.
+1. **A demonstração, a ficha do dia no fim** (15 s). O aviso e o desfecho já fecharam a cena.
+2. **Slide 8, a frase dos mentores** (6 s). O slide mostra o aprendizado.
+3. **Slide 6, "Está no ar, com o código aberto"** (3 s). O slide mostra.
+4. **Slide 1, o momento da avó encurtado** pra uma frase de 10 palavras.
 
-Nunca saem: o que a Dona Leda faz no slide 1, a Agora no slide 6, os números do slide 7, os limites e o próximo passo do slide 8, e o nome da avó no fim.
+Nunca saem: o que a Dona Leda faz no slide 1, a Agora no slide 6, os números do slide 7, os limites e o próximo passo do slide 8, e o nome da avó no fim. Se no ensaio ela não calar quando interrompida, "e parou quando ela interrompeu" sai do slide 6, e "Pode ser interrompida" sai da tela do slide 5.
 
 ## A demonstração de 2 minutos
 
@@ -101,7 +100,7 @@ A cena é uma só: a dona Helena, de exemplo, conta que pediram um Pix em nome d
 
 - **O Breno narra.** Ele fala antes de tocar em "Ligar agora" e depois do tchau. Durante a ligação fica calado, porque o microfone do celular pega a voz dele e a Dona Leda responde a ela.
 - **Quem faz a voz da dona Helena** ([nome]) segura o celular perto da boca, longe do Breno, e fala as quatro falas abaixo.
-- **O notebook no projetor** tem o deck e o painel da Marina em duas janelas do Chrome, e o Breno troca entre eles com Cmd+Tab. O painel fica com o zoom em 125% pra banca ler.
+- **O notebook no projetor** tem o deck e o painel da Marina em duas abas da mesma janela do Chrome, com o Chrome em tela cheia (Ctrl+Cmd+F). O Breno troca com Cmd+1 e Cmd+2. Cmd+Tab troca de programa e sai do Chrome na frente da banca, e a tecla F do deck fecha a tela cheia quando a aba muda. O painel fica com o zoom em 125%.
 - **Se der pra espelhar o celular no projetor**, a banca vê a ligação e o painel lado a lado. Isso pede cabo e um teste no palco no domingo de manhã.
 
 ### Antes de subir
@@ -110,6 +109,7 @@ A cena é uma só: a dona Helena, de exemplo, conta que pediram um Pix em nome d
 - Um exemplo novo, criado na hora ("Ver com um exemplo" de novo, ou "Apagar os dados" em Ajustes). O mesmo aviso não aparece de novo por 30 minutos, então o ensaio da manhã apaga o cartão da tarde.
 - Ninguém do time roda teste na voz durante o pitch. Às 19h17 de 21/11 uma ligação ficou muda com uma bateria de testes rodando ao mesmo tempo na mesma chave do Gemini.
 - O tempo de resposta sai no ensaio de domingo antes das 9h, com `?medir=1` no fim do endereço do celular: ele mostra a média e o pior caso de cada resposta. O tempo pra calar quando interrompida sai no cronômetro.
+- O notebook na internet de um terceiro celular, fora do wi-fi do evento, porque o "Ligar agora" e o aviso dependem dele. Testar no ensaio do palco.
 - O vídeo da entrega baixado no notebook, aberto e pausado no primeiro quadro, sem depender da internet.
 - No ensaio do palco, conferir se a voz dela sai alta o bastante pra sala. Se o microfone do evento ficar perto do alto-falante do celular, testar antes se o som da sala volta pro celular e faz ela se interromper.
 - Os minutos da Agora não preocupam: às 20h01 de 21/11 a conta tinha usado 15 dos 300 do motor de conversa, e cada ensaio gasta de 2 a 3.
@@ -123,8 +123,8 @@ A cena é uma só: a dona Helena, de exemplo, conta que pediram um Pix em nome d
 | 0:20 a 0:40 | A ligação | A Dona Leda se apresenta como assistente virtual e pergunta como ela dormiu. Dona Helena: "Dormi mais ou menos, acordei duas vezes." |
 | 0:40 a 0:55 | A ligação | Quando a Dona Leda estiver no meio da próxima pergunta, a dona Helena fala por cima: "Espera, deixa eu te contar uma coisa." Ela tem que calar e escutar |
 | 0:55 a 1:15 | A ligação | Dona Helena: "Hoje de manhã me ligou um moço dizendo que era o meu neto e pediu um Pix." A Dona Leda diz pra não passar nada, falar com a Marina antes, e que vai avisar a Marina |
-| 1:15 a 1:25 | O aviso de golpe aparece no painel | Dona Helena: "Tá bom, obrigada. Tchau." A ligação termina |
-| 1:25 a 1:45 | O cartão do aviso | Breno: "O aviso chegou em [X] segundos. A Marina toca em 'Já vi', liga pra mãe e marca o que fez." Toca em "Já vi" e em "Liguei, está tudo bem". O painel mostra "Marina viu em [X] min. Ligou, está tudo bem." |
+| 1:15 a 1:25 | O aviso de golpe aparece no painel | Dona Helena: "Tá bom, obrigada. Tchau." E ela mesma toca em Desligar, porque a Dona Leda não desliga sozinha com o tchau. O Breno só volta a falar com a ligação fechada |
+| 1:25 a 1:45 | O cartão do aviso | Breno: "O aviso chegou antes de ela desligar. A Marina toca em 'Já vi', liga pra mãe e marca o que fez." Toca em "Já vi" e em "Liguei, está tudo bem". O painel mostra "Marina viu em menos de 1 min. Ligou, está tudo bem." |
 | 1:45 a 2:00 | A ficha do dia e a semana | Breno: "A ficha do dia saiu da conversa: o sono, o golpe e, na semana, em quantos dias ela saiu de casa e falou com alguém." |
 
 As falas da dona Helena são de propósito curtas e com a palavra "Pix", que a regra fixa do aviso reconhece. Elas são as mesmas do teste de voz, situações 2, 3 e 9. Se no ensaio ela não calar quando interrompida, a fala do "Espera" sai do roteiro.
