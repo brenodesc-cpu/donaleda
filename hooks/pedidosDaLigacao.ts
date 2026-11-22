@@ -65,6 +65,16 @@ export class LimiteDoDiaAcabou extends Error {
   }
 }
 
+/**
+ * Acorda as Lambdas críticas em iad1 (/api/invite-agent e /api/mcp) assim que o
+ * aparelho abre o app, evitando que o 1º toque em Ligar/Atender enfrente cold start.
+ */
+export function aquecerServidorDaLigacao(): void {
+  if (typeof window === 'undefined') return;
+  void fetch('/api/invite-agent', { method: 'GET', cache: 'no-store' }).catch(() => undefined);
+  void fetch('/api/mcp', { method: 'GET', cache: 'no-store' }).catch(() => undefined);
+}
+
 export async function chamarAssistente(
   token: TokenDaAgora,
   chamadaId?: string,
@@ -78,17 +88,40 @@ export async function chamarAssistente(
   // No modo direto ninguém chama o motor de conversa da Agora: o servidor abre a
   // conversa na ficha e entrega o passe do Gemini (app/api/direto/route.ts).
   const rota = modoPedido() === 'direto' ? '/api/direto' : '/api/invite-agent';
-  const resposta = await fetchDoAparelho(rota, {
+  const init: RequestInit = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(pedido),
-  });
-  if (resposta.status === 409) {
-    const corpo = (await resposta.json().catch(() => ({}))) as { error?: string };
-    if (corpo.error === 'limite_do_dia') throw new LimiteDoDiaAcabou();
+  };
+
+  for (let tentativa = 1; tentativa <= 2; tentativa += 1) {
+    let resposta: Response;
+    try {
+      resposta = await fetchDoAparelho(rota, init);
+    } catch (erro) {
+      if (tentativa === 1) {
+        await new Promise((r) => setTimeout(r, 350));
+        continue;
+      }
+      throw erro;
+    }
+
+    if (resposta.status === 409) {
+      const corpo = (await resposta.json().catch(() => ({}))) as { error?: string };
+      if (corpo.error === 'limite_do_dia') throw new LimiteDoDiaAcabou();
+    }
+    if (resposta.ok) {
+      return (await resposta.json()) as InicioDaConversa;
+    }
+    // Cold start ou falha transitória 5xx na 1ª tentativa: tenta 1 vez de novo sem mostrar erro pro idoso.
+    if (tentativa === 1 && resposta.status >= 500) {
+      await new Promise((r) => setTimeout(r, 350));
+      continue;
+    }
+    throw new Error('a assistente não entrou');
   }
-  if (!resposta.ok) throw new Error('a assistente não entrou');
-  return (await resposta.json()) as InicioDaConversa;
+
+  throw new Error('a assistente não entrou');
 }
 
 export async function ligarRtm(token: TokenDaAgora): Promise<RTMClient> {

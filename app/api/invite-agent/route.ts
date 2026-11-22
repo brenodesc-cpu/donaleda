@@ -37,6 +37,12 @@ import type { InicioDaConversa } from '@/lib/tipos';
 
 export const dynamic = 'force-dynamic';
 export const preferredRegion = 'iad1';
+export const maxDuration = 30;
+
+/** Ping levíssimo usado pelo aparelho ao abrir o app para acordar o runtime em iad1 sem cold start. */
+export function GET() {
+  return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+}
 
 const agentUid = String(DEFAULT_AGENT_UID);
 const SE_FALHAR = 'Só um instante, por favor.';
